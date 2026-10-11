@@ -221,13 +221,17 @@
             </p>
           </div>
           <div class="relative z-10 flex flex-wrap gap-2.5">
+            <button onclick="openEventModal()" class="bg-indigo-900/40 hover:bg-indigo-900/60 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-white/30 backdrop-blur-sm">
+              <i class="fa-solid fa-calendar-plus text-amber-300"></i>
+              <span>+ नया इवेंट / बैठक</span>
+            </button>
             <button onclick="openAddMemberModal()" class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-orange-200">
               <i class="fa-solid fa-user-plus text-orange-600"></i>
               <span>+ नया सदस्य जोड़ें</span>
             </button>
             <button onclick="switchAdminView('members')" class="bg-orange-700/80 hover:bg-orange-750 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-white/20">
               <i class="fa-solid fa-users"></i>
-              <span>सदस्य सूची देखें (<span id="dash-btn-count">0</span>)</span>
+              <span>सदस्य सूची (<span id="dash-btn-count">0</span>)</span>
             </button>
           </div>
           <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl font-black pointer-events-none select-none">
