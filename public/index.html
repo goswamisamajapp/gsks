@@ -849,41 +849,50 @@
     const db = firebase.firestore();
     const membersCol = db.collection('members');
 
-    // Realtime Listener: Any change on PC reflects instantly on Phone without refresh!
-    function initFirebaseRealtime() {
-      membersCol.onSnapshot(async (snapshot) => {
-        if (snapshot.empty) {
-          // First time seed 72 members to Firestore
-          try {
-            const res = await fetch('/members-data.json');
-            const initialList = await res.json();
+    // Bulletproof Dual Sync: Always load 72 members instantly + Firestore Sync
+    async function initFirebaseRealtime() {
+      // 1. Instant Guaranteed Load from Server Backup first (Never shows 0)
+      try {
+        const res = await fetch('/members-data.json?t=' + Date.now());
+        const initialList = await res.json();
+        allMembers = initialList;
+        updateStats();
+        renderMembers();
+      } catch (err) {
+        console.warn('Backup fetch warning:', err);
+      }
+
+      // 2. Connect Firestore Realtime in Background
+      try {
+        membersCol.onSnapshot(async (snapshot) => {
+          if (!snapshot.empty) {
+            const fbMembers = [];
+            snapshot.forEach(doc => fbMembers.push(doc.data()));
+            if (fbMembers.length > 0) {
+              allMembers = fbMembers;
+              allMembers.sort((a, b) => a.id.localeCompare(b.id));
+              updateStats();
+              renderMembers();
+              if (typeof renderArchivedList === 'function') {
+                renderArchivedList();
+              }
+            }
+          } else {
+            // First time auto-upload 72 members to Firestore
+            console.log('Seeding 72 members to Firestore...');
             const batch = db.batch();
-            initialList.forEach(m => {
+            allMembers.forEach(m => {
               const docRef = membersCol.doc(m.id);
               batch.set(docRef, m);
             });
             await batch.commit();
-          } catch(err) {
-            console.error('Seeding error:', err);
           }
-        } else {
-          allMembers = [];
-          snapshot.forEach(doc => {
-            allMembers.push(doc.data());
-          });
-          // Sort by ID
-          allMembers.sort((a, b) => a.id.localeCompare(b.id));
-          updateStats();
-          renderMembers();
-          if (typeof renderArchivedList === 'function') {
-            renderArchivedList();
-          }
-        }
-      }, (error) => {
-        console.error('Firebase realtime error:', error);
-        // Fallback to API if rules not yet open
-        loadMembersDataFallback();
-      });
+        }, (err) => {
+          console.warn('Firestore sync fallback mode active:', err);
+        });
+      } catch (e) {
+        console.warn('Firestore init note:', e);
+      }
     }
 
     async function loadMembersDataFallback() {
