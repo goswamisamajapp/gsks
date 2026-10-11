@@ -161,8 +161,8 @@
           <button onclick="switchAdminView('members')" id="nav-btn-members" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
             <i class="fa-solid fa-users"></i> Members (<span id="nav-members-count">72</span>)
           </button>
-          <button onclick="switchAdminView('treasury')" id="nav-btn-treasury" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
-            <i class="fa-solid fa-vault"></i> Treasury
+          <button onclick="switchAdminView('archived')" id="nav-btn-archived" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
+            <i class="fa-solid fa-box-archive"></i> Archived (<span id="nav-archived-count">0</span>)
           </button>
         </nav>
 
@@ -208,7 +208,7 @@
           <div class="relative z-10 flex gap-2">
             <button onclick="switchAdminView('members')" class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2">
               <i class="fa-solid fa-users"></i>
-              <span>सदस्य सूची देखें (72)</span>
+              <span>सदस्य सूची देखें (<span id="dash-btn-count">72</span>)</span>
             </button>
           </div>
           <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl font-black pointer-events-none select-none">
@@ -235,7 +235,7 @@
                     ₹
                   </div>
                 </div>
-                <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">₹ 1,25,450</p>
+                <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1" id="dash-total-fund">₹ 1,25,450</p>
                 <p class="text-xs text-slate-400 mt-1">कुल उपलब्ध धनराशि</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -282,7 +282,7 @@
           </div>
         </div>
 
-        <!-- Membership Stats -->
+        <!-- Membership Stats (Dynamic Breakdown) -->
         <div>
           <div class="flex items-center justify-between mb-3 px-1">
             <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
@@ -304,20 +304,20 @@
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-total-members">72</p>
-                <p class="text-xs text-slate-400 mt-0.5">सत्यापित सदस्य</p>
+                <p class="text-xs text-slate-400 mt-0.5">सत्यापित सक्रिय + प्राइम</p>
               </div>
             </div>
 
             <!-- Active Members -->
             <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 transition-all">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500">Active Members</span>
+                <span class="text-xs font-bold text-slate-500">Active & Prime</span>
                 <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
                   <i class="fa-solid fa-user-check"></i>
                 </span>
               </div>
               <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-emerald-700">72</p>
+                <p class="text-2xl sm:text-3xl font-black text-emerald-700" id="dash-active-members">72</p>
                 <p class="text-xs text-slate-400 mt-0.5">सक्रिय सदस्य</p>
               </div>
             </div>
@@ -331,22 +331,22 @@
                 </span>
               </div>
               <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-slate-600">0</p>
+                <p class="text-2xl sm:text-3xl font-black text-slate-600" id="dash-inactive-members">0</p>
                 <p class="text-xs text-slate-400 mt-0.5">निष्क्रिय सदस्य</p>
               </div>
             </div>
 
-            <!-- Pending Approvals -->
-            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-300 shadow-sm flex flex-col justify-between bg-gradient-to-br from-white to-amber-50/60">
+            <!-- Archived / Removed Members -->
+            <div onclick="switchAdminView('archived')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 transition-all">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-amber-800">Pending Approval</span>
-                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs">
-                  <i class="fa-solid fa-clock-rotate-left"></i>
+                <span class="text-xs font-bold text-rose-800">Archived</span>
+                <span class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-box-archive"></i>
                 </span>
               </div>
               <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-amber-700">0</p>
-                <p class="text-xs text-amber-600 font-semibold mt-0.5">कोई लंबित नहीं</p>
+                <p class="text-2xl sm:text-3xl font-black text-rose-700" id="dash-archived-members">0</p>
+                <p class="text-xs text-rose-600 font-semibold mt-0.5">हटाए गए सदस्य (आर्काइव)</p>
               </div>
             </div>
           </div>
@@ -371,19 +371,19 @@
                 72 सदस्य
               </span>
             </div>
-            <p class="text-xs text-slate-500 mt-0.5">समिति के सभी पंजीकृत सदस्यों का सम्पूर्ण विवरण</p>
+            <p class="text-xs text-slate-500 mt-0.5">View, Edit, Status & Delete/Archive Controls</p>
           </div>
 
           <!-- Search & Filter Controls -->
           <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <!-- Search Input -->
-            <div class="relative flex-1 sm:w-72">
+            <div class="relative flex-1 sm:w-64">
               <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
               <input 
                 type="text" 
                 id="member-search-input" 
                 oninput="handleSearchMembers(this.value)"
-                placeholder="नाम, पिता का नाम, गाँव या फोन खोजें..." 
+                placeholder="नाम, पिता, गाँव, फोन..." 
                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
               >
             </div>
@@ -402,10 +402,22 @@
               <option value="PIPRADIH">पिपराडीह (PIPRADIH)</option>
               <option value="MATHADIH">माथाडीह (MATHADIH)</option>
             </select>
+
+            <!-- Status Filter -->
+            <select 
+              id="member-status-filter" 
+              onchange="handleFilterStatus(this.value)"
+              class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+            >
+              <option value="ALL">सभी Status</option>
+              <option value="Active">Active</option>
+              <option value="Prime Member">Prime Member</option>
+              <option value="Inactive">Inactive</option>
+            </select>
           </div>
         </div>
 
-        <!-- Layout Toggle & Summary -->
+        <!-- Summary & Toggle -->
         <div class="flex items-center justify-between text-xs text-slate-500 px-1">
           <span id="filtered-count-text">72 सदस्य दिखाए जा रहे हैं</span>
           <div class="flex items-center gap-1 bg-slate-200/80 p-1 rounded-xl">
@@ -418,27 +430,28 @@
           </div>
         </div>
 
-        <!-- 1. CARDS VIEW (Responsive Grid: 1 col on mobile, 2 on tablet, 3 on PC) -->
+        <!-- CARDS VIEW -->
         <div id="members-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Dynamically populated via JavaScript -->
+          <!-- Populated via JavaScript -->
         </div>
 
-        <!-- 2. TABLE VIEW (Desktop / Tablet Friendly) -->
+        <!-- TABLE VIEW -->
         <div id="members-table-container" class="hidden bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
                 <tr>
-                  <th class="py-3 px-4">सदस्य (Member)</th>
-                  <th class="py-3 px-4">पिता का नाम (Father's Name)</th>
-                  <th class="py-3 px-4">स्थान / गाँव (Address)</th>
+                  <th class="py-3 px-4">सदस्य</th>
+                  <th class="py-3 px-4">पिता का नाम</th>
+                  <th class="py-3 px-4">गाँव / पता</th>
                   <th class="py-3 px-4">फ़ोन / WhatsApp</th>
-                  <th class="py-3 px-4">सदस्यता दिनांक (Since)</th>
-                  <th class="py-3 px-4 text-center">स्थिति</th>
+                  <th class="py-3 px-4">कुल दान / देय</th>
+                  <th class="py-3 px-4 text-center">Status</th>
+                  <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody id="members-table-body" class="divide-y divide-slate-100">
-                <!-- Dynamically populated -->
+                <!-- Populated via JavaScript -->
               </tbody>
             </table>
           </div>
@@ -446,9 +459,31 @@
 
       </div>
 
+
+      <!-- ============================================== -->
+      <!-- TAB 3: ARCHIVED MEMBERS SECTION                -->
+      <!-- ============================================== -->
+      <div id="view-archived-section" class="hidden space-y-6">
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900 font-devanagari flex items-center gap-2">
+              <i class="fa-solid fa-box-archive text-rose-600"></i> आर्काइव सदस्य (Archived Members)
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">Delete किए गए सदस्य यहाँ सुरक्षित संग्रहीत रहते हैं (Restore या Permanent Delete कर सकते हैं)</p>
+          </div>
+          <button onclick="switchAdminView('members')" class="text-xs text-orange-600 font-bold hover:underline">
+            ← वापस सक्रिय सूची में जाएं
+          </button>
+        </div>
+
+        <div id="archived-list-container" class="space-y-3">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
     </main>
 
-    <!-- Bottom Mobile Nav Bar (Phone View Only) -->
+    <!-- Bottom Mobile Nav Bar -->
     <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2 flex items-center justify-between z-40 shadow-lg">
       <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 text-orange-600">
         <i class="fa-solid fa-chart-pie text-sm"></i>
@@ -458,19 +493,231 @@
         <i class="fa-solid fa-users text-sm"></i>
         <span class="text-[10px] font-medium">Members</span>
       </button>
-      <button onclick="switchAdminView('treasury')" id="mobile-nav-treasury" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
-        <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
-        <span class="text-[10px] font-medium">Treasury</span>
+      <button onclick="switchAdminView('archived')" id="mobile-nav-archived" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+        <i class="fa-solid fa-box-archive text-sm"></i>
+        <span class="text-[10px] font-medium">Archived</span>
       </button>
     </div>
 
   </div>
 
+
+  <!-- ============================================================== -->
+  <!-- MODAL 1: VIEW FULL DETAILS (Center Big Photo, Badges & Dues)   -->
+  <!-- ============================================================== -->
+  <div id="view-member-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button onclick="closeViewModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Center Big Photo / Avatar -->
+      <div class="text-center pt-2">
+        <div class="relative inline-block mb-3">
+          <div id="view-avatar-box" class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl mx-auto flex items-center justify-center text-3xl font-black text-white shadow-xl border-4 border-white ring-4 ring-orange-100">
+            <!-- Initials -->
+          </div>
+          <span id="view-status-badge" class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[11px] font-bold shadow-sm whitespace-nowrap">
+            Active
+          </span>
+        </div>
+
+        <h3 id="view-name" class="text-xl sm:text-2xl font-black text-slate-900 mt-2">Member Name</h3>
+        <p id="view-id" class="text-xs font-mono font-bold text-orange-600">GSKS-001</p>
+      </div>
+
+      <!-- Financial Status Strip: Total Donation & Any Dues -->
+      <div class="grid grid-cols-2 gap-3 my-5">
+        <div class="bg-emerald-50 rounded-2xl p-3 border border-emerald-200 text-center">
+          <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Total Donation (कुल दान)</p>
+          <p id="view-donation" class="text-lg font-black text-emerald-800 mt-0.5">₹ 0</p>
+        </div>
+        <div class="bg-amber-50 rounded-2xl p-3 border border-amber-200 text-center">
+          <p class="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Any Dues (बकाया)</p>
+          <p id="view-dues" class="text-lg font-black text-amber-900 mt-0.5">₹ 0</p>
+        </div>
+      </div>
+
+      <!-- Detail Rows -->
+      <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-2.5 text-xs">
+        <div class="flex justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-500 font-medium"><i class="fa-solid fa-user text-orange-500 w-4"></i> पिता का नाम:</span>
+          <span id="view-father" class="font-bold text-slate-800">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-500 font-medium"><i class="fa-solid fa-location-dot text-orange-500 w-4"></i> गाँव / पता:</span>
+          <span id="view-address" class="font-bold text-slate-800">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-500 font-medium"><i class="fa-solid fa-phone text-orange-500 w-4"></i> फ़ोन / WhatsApp:</span>
+          <span id="view-phone" class="font-bold text-slate-800 font-mono">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-500 font-medium"><i class="fa-solid fa-calendar-check text-orange-500 w-4"></i> सदस्यता दिनांक:</span>
+          <span id="view-since" class="font-bold text-slate-800 font-mono">--</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-slate-500 font-medium"><i class="fa-solid fa-droplet text-rose-500 w-4"></i> ब्लड ग्रुप:</span>
+          <span id="view-blood" class="font-bold text-slate-800">--</span>
+        </div>
+      </div>
+
+      <!-- Modal Footer Action Buttons -->
+      <div class="flex items-center gap-2 mt-5">
+        <button onclick="openEditModalFromView()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+          <i class="fa-solid fa-pen-to-square"></i> Edit Details
+        </button>
+        <button onclick="closeViewModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 2: EDIT MEMBER (All Fields, Status & Password Reset)     -->
+  <!-- ============================================================== -->
+  <div id="edit-member-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <button onclick="closeEditModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-4">
+        <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm">
+          <i class="fa-solid fa-user-pen"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-slate-900">सदस्य विवरण संपादित करें (Edit Member)</h3>
+          <p id="edit-modal-sub" class="text-[11px] text-slate-500">ID: GSKS-001</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveMember(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="edit-member-id">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">सदस्य का नाम (Full Name) *</label>
+            <input type="text" id="edit-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">पिता का नाम (Father's Name) *</label>
+            <input type="text" id="edit-father" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">गाँव / पता (Address) *</label>
+            <input type="text" id="edit-address" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">फ़ोन / WhatsApp (Phone) *</label>
+            <input type="tel" id="edit-phone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-mono font-medium">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">सदस्यता स्थिति (Status) *</label>
+            <select id="edit-status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+              <option value="Active">Active (सक्रिय)</option>
+              <option value="Prime Member">Prime Member (विशिष्ट सदस्य)</option>
+              <option value="Inactive">Inactive (निष्क्रिय)</option>
+              <option value="removed">removed (हटाया गया / Archived)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">सदस्यता दिनांक (Member Since)</label>
+            <input type="text" id="edit-since" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-medium">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">कुल दान राशि (Total Donation ₹)</label>
+            <input type="number" id="edit-donation" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">बकाया शुल्क (Any Dues ₹)</label>
+            <input type="number" id="edit-dues" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold">
+          </div>
+        </div>
+
+        <!-- Password Reset Box Requirement -->
+        <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5 flex items-center justify-between">
+          <div>
+            <p class="font-bold text-amber-900">सदस्य पासवर्ड (Member Password)</p>
+            <p class="text-[11px] text-amber-700">Member Portal लॉगिन के लिए पासवर्ड रीसेट करें</p>
+          </div>
+          <button type="button" onclick="handleResetMemberPassword()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs transition-colors shadow-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-key"></i> Reset Password
+          </button>
+        </div>
+
+        <div id="password-reset-alert" class="hidden text-[11px] bg-emerald-50 text-emerald-800 p-2 rounded-xl border border-emerald-200 font-medium"></div>
+
+        <!-- Buttons -->
+        <div class="flex items-center gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold py-2.5 rounded-xl shadow-md transition-all">
+            सुरक्षित करें (Save Changes)
+          </button>
+          <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors">
+            रद्द करें (Cancel)
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 3: DELETE CONFIRMATION (Move to Archived)                -->
+  <!-- ============================================================== -->
+  <div id="delete-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fa-solid fa-box-archive"></i>
+      </div>
+
+      <h3 class="text-base font-black text-slate-900">सदस्य को आर्काइव करें?</h3>
+      <p class="text-xs text-slate-500 mt-1 mb-4">
+        <span id="delete-member-name" class="font-bold text-slate-800">Member</span> को सक्रिय सूची से हटाकर **Archived** में भेज दिया जाएगा। इसे बाद में कभी भी पुनः सक्रिय किया जा सकता है।
+      </p>
+
+      <div class="flex items-center gap-2">
+        <button onclick="confirmArchiveMember()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm">
+          हाँ, Archive करें
+        </button>
+        <button onclick="closeDeleteModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+          रद्द करें
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
   <script>
     let allMembers = [];
     let currentFilterAddress = 'ALL';
+    let currentFilterStatus = 'ALL';
     let currentSearchTerm = '';
     let currentLayout = 'cards';
+    let activeViewingMemberId = null;
+    let pendingDeleteMemberId = null;
 
     // Switch between Admin and Member login portals
     function switchPortalTab(type) {
@@ -541,36 +788,44 @@
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
-    // Navigation inside Admin Portal (Dashboard vs Members vs Treasury)
+    // Switch between Admin views: dashboard, members, archived
     function switchAdminView(view) {
       const dashSection = document.getElementById('view-dashboard-section');
       const membersSection = document.getElementById('view-members-section');
+      const archivedSection = document.getElementById('view-archived-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
       const navMembers = document.getElementById('nav-btn-members');
-      const navTreasury = document.getElementById('nav-btn-treasury');
+      const navArchived = document.getElementById('nav-btn-archived');
 
       const mobDash = document.getElementById('mobile-nav-dashboard');
       const mobMembers = document.getElementById('mobile-nav-members');
-      const mobTreasury = document.getElementById('mobile-nav-treasury');
+      const mobArchived = document.getElementById('mobile-nav-archived');
 
       // Reset desktop classes
-      [navDash, navMembers, navTreasury].forEach(btn => {
+      [navDash, navMembers, navArchived].forEach(btn => {
         if(btn) btn.className = 'px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all';
       });
 
       // Reset mobile classes
-      [mobDash, mobMembers, mobTreasury].forEach(btn => {
+      [mobDash, mobMembers, mobArchived].forEach(btn => {
         if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
       });
 
+      dashSection.classList.add('hidden');
+      membersSection.classList.add('hidden');
+      archivedSection.classList.add('hidden');
+
       if (view === 'members') {
-        dashSection.classList.add('hidden');
         membersSection.classList.remove('hidden');
         if(navMembers) navMembers.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
         if(mobMembers) mobMembers.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+      } else if (view === 'archived') {
+        archivedSection.classList.remove('hidden');
+        if(navArchived) navArchived.className = 'px-3.5 py-2 rounded-xl text-rose-700 bg-rose-50 font-bold flex items-center gap-1.5 transition-all';
+        if(mobArchived) mobArchived.className = 'flex flex-col items-center gap-1 text-rose-600 font-bold';
+        renderArchivedList();
       } else {
-        membersSection.classList.add('hidden');
         dashSection.classList.remove('hidden');
         if(navDash) navDash.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
         if(mobDash) mobDash.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
@@ -578,21 +833,46 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Load 72 members data from JSON
+    // Load members data from localStorage (or fallback to JSON)
     async function loadMembersData() {
-      try {
-        const res = await fetch('/members-data.json');
-        allMembers = await res.json();
-        
-        // Update stats
-        document.getElementById('dash-total-members').textContent = allMembers.length;
-        document.getElementById('nav-members-count').textContent = allMembers.length;
-        document.getElementById('badge-total-members').textContent = `${allMembers.length} सदस्य`;
-
+      const stored = localStorage.getItem('gsks_members_data');
+      if (stored) {
+        allMembers = JSON.parse(stored);
+        updateStats();
         renderMembers();
-      } catch (err) {
-        console.error('Error loading members data:', err);
+      } else {
+        try {
+          const res = await fetch('/members-data.json');
+          allMembers = await res.json();
+          saveLocalData();
+          updateStats();
+          renderMembers();
+        } catch (err) {
+          console.error('Error loading members data:', err);
+        }
       }
+    }
+
+    function saveLocalData() {
+      localStorage.setItem('gsks_members_data', JSON.stringify(allMembers));
+      updateStats();
+    }
+
+    function updateStats() {
+      const activeMembers = allMembers.filter(m => m.status !== 'removed');
+      const archivedMembers = allMembers.filter(m => m.status === 'removed');
+      const activeCount = allMembers.filter(m => m.status === 'Active' || m.status === 'Prime Member').length;
+      const inactiveCount = allMembers.filter(m => m.status === 'Inactive').length;
+
+      document.getElementById('dash-total-members').textContent = activeMembers.length;
+      document.getElementById('dash-btn-count').textContent = activeMembers.length;
+      document.getElementById('nav-members-count').textContent = activeMembers.length;
+      document.getElementById('badge-total-members').textContent = `${activeMembers.length} सदस्य`;
+      document.getElementById('dash-active-members').textContent = activeCount;
+      document.getElementById('dash-inactive-members').textContent = inactiveCount;
+
+      document.getElementById('nav-archived-count').textContent = archivedMembers.length;
+      document.getElementById('dash-archived-members').textContent = archivedMembers.length;
     }
 
     function handleSearchMembers(term) {
@@ -602,6 +882,11 @@
 
     function handleFilterAddress(address) {
       currentFilterAddress = address;
+      renderMembers();
+    }
+
+    function handleFilterStatus(status) {
+      currentFilterStatus = status;
       renderMembers();
     }
 
@@ -625,7 +910,6 @@
       }
     }
 
-    // Avatar generator based on initials
     function getInitials(name) {
       return name.split(' ').map(n => n[0]).slice(0, 2).join('');
     }
@@ -636,27 +920,44 @@
       return colors[index];
     }
 
+    // Status styling badge helper: Active, Prime Member, Inactive, removed
+    function getStatusBadge(status) {
+      if (status === 'Prime Member') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1"><i class="fa-solid fa-crown text-[9px] text-amber-600"></i> Prime Member</span>`;
+      } else if (status === 'Inactive') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">Inactive</span>`;
+      } else if (status === 'removed') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-300">Removed</span>`;
+      } else {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>`;
+      }
+    }
+
+    // Main Render Function
     function renderMembers() {
-      const filtered = allMembers.filter(m => {
+      // Exclude 'removed' from active directory
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+
+      const filtered = nonRemoved.filter(m => {
         const matchesAddress = currentFilterAddress === 'ALL' || m.address.toUpperCase().includes(currentFilterAddress);
+        const matchesStatus = currentFilterStatus === 'ALL' || m.status === currentFilterStatus;
         const matchesSearch = !currentSearchTerm || 
           m.name.toLowerCase().includes(currentSearchTerm) ||
           m.father.toLowerCase().includes(currentSearchTerm) ||
           m.address.toLowerCase().includes(currentSearchTerm) ||
           m.phone.includes(currentSearchTerm);
-        return matchesAddress && matchesSearch;
+        return matchesAddress && matchesStatus && matchesSearch;
       });
 
       document.getElementById('filtered-count-text').textContent = `${filtered.length} सदस्य दिखाए जा रहे हैं`;
 
-      // 1. Render Cards
+      // 1. CARDS VIEW
       const grid = document.getElementById('members-grid-container');
       grid.innerHTML = filtered.map(m => `
-        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between">
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-3">
-                <!-- Member Photo / Avatar -->
                 <div class="w-12 h-12 rounded-2xl ${getAvatarBg(m.name)} text-white font-extrabold flex items-center justify-center text-sm shadow-md flex-shrink-0">
                   ${getInitials(m.name)}
                 </div>
@@ -665,9 +966,7 @@
                   <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father}</p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                ${m.status}
-              </span>
+              <div>${getStatusBadge(m.status)}</div>
             </div>
 
             <!-- Details List -->
@@ -681,35 +980,47 @@
 
               <div class="flex items-center justify-between text-slate-600">
                 <span class="flex items-center gap-1.5 text-slate-400">
-                  <i class="fa-solid fa-calendar-check text-[11px] text-blue-500"></i> सदस्यता दिनांक:
+                  <i class="fa-solid fa-indian-rupee-sign text-[11px] text-emerald-600"></i> दान / देय:
                 </span>
-                <span class="font-semibold text-slate-700 font-mono">${m.since}</span>
+                <span class="font-semibold text-slate-800">
+                  ₹ ${m.donation || 0} <span class="text-[10px] text-slate-400">/ ₹ ${m.dues || 0}</span>
+                </span>
               </div>
             </div>
           </div>
 
-          <!-- Bottom Action Buttons: Call & WhatsApp -->
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
-            <a 
-              href="tel:${m.phone}" 
-              class="flex-1 py-2 px-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border border-slate-200"
-            >
-              <i class="fa-solid fa-phone text-slate-500"></i>
-              <span>${m.phone}</span>
-            </a>
-            <a 
-              href="https://wa.me/91${m.phone}" 
-              target="_blank" 
-              class="w-9 h-9 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl text-sm flex items-center justify-center border border-emerald-200 transition-colors"
-              title="WhatsApp Message"
-            >
-              <i class="fa-brands fa-whatsapp text-base"></i>
-            </a>
+          <!-- Actions Strip: VIEW, EDIT, DELETE & Call/WhatsApp -->
+          <div class="mt-4 pt-3 border-t border-slate-100 space-y-2">
+            
+            <!-- Admin Buttons: VIEW, EDIT, DELETE -->
+            <div class="grid grid-cols-3 gap-1.5">
+              <button onclick="openViewModal('${m.id}')" class="py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 transition-colors">
+                <i class="fa-solid fa-eye text-[10px]"></i> View
+              </button>
+              <button onclick="openEditModal('${m.id}')" class="py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 transition-colors">
+                <i class="fa-solid fa-pen text-[10px]"></i> Edit
+              </button>
+              <button onclick="openDeleteModal('${m.id}', '${m.name}')" class="py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-[11px] flex items-center justify-center gap-1 transition-colors">
+                <i class="fa-solid fa-trash-can text-[10px]"></i> Delete
+              </button>
+            </div>
+
+            <!-- Contact Strip -->
+            <div class="flex items-center gap-2">
+              <a href="tel:${m.phone}" class="flex-1 py-1.5 px-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border border-slate-200">
+                <i class="fa-solid fa-phone text-[10px] text-slate-500"></i>
+                <span class="font-mono text-[11px]">${m.phone}</span>
+              </a>
+              <a href="https://wa.me/91${m.phone}" target="_blank" class="w-8 h-8 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl text-xs flex items-center justify-center border border-emerald-200 transition-colors" title="WhatsApp Message">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+              </a>
+            </div>
+
           </div>
         </div>
       `).join('');
 
-      // 2. Render Table
+      // 2. TABLE VIEW
       const tableBody = document.getElementById('members-table-body');
       tableBody.innerHTML = filtered.map(m => `
         <tr class="hover:bg-slate-50 transition-colors">
@@ -718,7 +1029,10 @@
               <div class="w-8 h-8 rounded-xl ${getAvatarBg(m.name)} text-white font-bold flex items-center justify-center text-xs flex-shrink-0">
                 ${getInitials(m.name)}
               </div>
-              <span class="font-bold text-slate-900">${m.name}</span>
+              <div>
+                <p class="font-bold text-slate-900">${m.name}</p>
+                <p class="text-[10px] font-mono text-slate-400">${m.id}</p>
+              </div>
             </div>
           </td>
           <td class="py-3 px-4 text-slate-600 font-medium">${m.father}</td>
@@ -735,14 +1049,190 @@
               </a>
             </div>
           </td>
-          <td class="py-3 px-4 font-mono text-slate-500">${m.since}</td>
+          <td class="py-3 px-4 font-mono text-slate-700">
+            <span class="text-emerald-700 font-bold">₹${m.donation || 0}</span> / 
+            <span class="text-amber-700 font-bold">₹${m.dues || 0}</span>
+          </td>
           <td class="py-3 px-4 text-center">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              ${m.status}
-            </span>
+            ${getStatusBadge(m.status)}
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="openViewModal('${m.id}')" class="w-7 h-7 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg flex items-center justify-center text-xs" title="View Details">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button onclick="openEditModal('${m.id}')" class="w-7 h-7 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg flex items-center justify-center text-xs" title="Edit">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="openDeleteModal('${m.id}', '${m.name}')" class="w-7 h-7 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg flex items-center justify-center text-xs" title="Delete / Archive">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
           </td>
         </tr>
       `).join('');
+    }
+
+    // ==============================================
+    // 1. VIEW MODAL LOGIC (Big Photo, All Details, Dues)
+    // ==============================================
+    function openViewModal(id) {
+      const member = allMembers.find(m => m.id === id);
+      if (!member) return;
+
+      activeViewingMemberId = id;
+      const avatarBox = document.getElementById('view-avatar-box');
+      avatarBox.className = `w-28 h-28 sm:w-32 sm:h-32 rounded-3xl mx-auto flex items-center justify-center text-3xl font-black text-white shadow-xl border-4 border-white ring-4 ring-orange-100 ${getAvatarBg(member.name)}`;
+      avatarBox.textContent = getInitials(member.name);
+
+      document.getElementById('view-name').textContent = member.name;
+      document.getElementById('view-id').textContent = `Member ID: ${member.id}`;
+      document.getElementById('view-status-badge').innerHTML = getStatusBadge(member.status);
+      document.getElementById('view-donation').textContent = `₹ ${(member.donation || 0).toLocaleString('en-IN')}`;
+      document.getElementById('view-dues').textContent = `₹ ${(member.dues || 0).toLocaleString('en-IN')}`;
+      document.getElementById('view-father').textContent = member.father;
+      document.getElementById('view-address').textContent = member.address;
+      document.getElementById('view-phone').textContent = member.phone;
+      document.getElementById('view-since').textContent = member.since || '19-05-2025';
+      document.getElementById('view-blood').textContent = member.bloodGroup || 'Not Specified';
+
+      document.getElementById('view-member-modal').classList.remove('hidden');
+    }
+
+    function closeViewModal() {
+      document.getElementById('view-member-modal').classList.add('hidden');
+    }
+
+    function openEditModalFromView() {
+      closeViewModal();
+      if (activeViewingMemberId) {
+        openEditModal(activeViewingMemberId);
+      }
+    }
+
+    // ==============================================
+    // 2. EDIT MODAL LOGIC (With Reset Password)
+    // ==============================================
+    function openEditModal(id) {
+      const member = allMembers.find(m => m.id === id);
+      if (!member) return;
+
+      document.getElementById('edit-member-id').value = member.id;
+      document.getElementById('edit-modal-sub').textContent = `ID: ${member.id} • Registered Member`;
+      document.getElementById('edit-name').value = member.name;
+      document.getElementById('edit-father').value = member.father;
+      document.getElementById('edit-address').value = member.address;
+      document.getElementById('edit-phone').value = member.phone;
+      document.getElementById('edit-status').value = member.status || 'Active';
+      document.getElementById('edit-since').value = member.since || '19-05-2025';
+      document.getElementById('edit-donation').value = member.donation || 0;
+      document.getElementById('edit-dues').value = member.dues || 0;
+      document.getElementById('password-reset-alert').classList.add('hidden');
+
+      document.getElementById('edit-member-modal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-member-modal').classList.add('hidden');
+    }
+
+    function handleSaveMember(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-member-id').value;
+      const index = allMembers.findIndex(m => m.id === id);
+      if (index === -1) return;
+
+      allMembers[index].name = document.getElementById('edit-name').value.trim().toUpperCase();
+      allMembers[index].father = document.getElementById('edit-father').value.trim().toUpperCase();
+      allMembers[index].address = document.getElementById('edit-address').value.trim().toUpperCase();
+      allMembers[index].phone = document.getElementById('edit-phone').value.trim();
+      allMembers[index].status = document.getElementById('edit-status').value;
+      allMembers[index].since = document.getElementById('edit-since').value.trim();
+      allMembers[index].donation = Number(document.getElementById('edit-donation').value) || 0;
+      allMembers[index].dues = Number(document.getElementById('edit-dues').value) || 0;
+
+      saveLocalData();
+      renderMembers();
+      closeEditModal();
+    }
+
+    function handleResetMemberPassword() {
+      const id = document.getElementById('edit-member-id').value;
+      const member = allMembers.find(m => m.id === id);
+      const tempPass = `GSKS@${member.phone.slice(-4)}`;
+      const alertBox = document.getElementById('password-reset-alert');
+      alertBox.innerHTML = `✅ पासवर्ड सफलतापूर्वक रीसेट हुआ! नया डिफ़ॉल्ट पासवर्ड: <span class="font-mono font-bold text-emerald-900">${tempPass}</span> (यह बाद में यूजर लॉगिन में काम आएगा)`;
+      alertBox.classList.remove('hidden');
+    }
+
+    // ==============================================
+    // 3. DELETE / ARCHIVE LOGIC
+    // ==============================================
+    function openDeleteModal(id, name) {
+      pendingDeleteMemberId = id;
+      document.getElementById('delete-member-name').textContent = name;
+      document.getElementById('delete-confirm-modal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('delete-confirm-modal').classList.add('hidden');
+      pendingDeleteMemberId = null;
+    }
+
+    function confirmArchiveMember() {
+      if (!pendingDeleteMemberId) return;
+      const index = allMembers.findIndex(m => m.id === pendingDeleteMemberId);
+      if (index !== -1) {
+        allMembers[index].status = 'removed';
+        saveLocalData();
+        renderMembers();
+      }
+      closeDeleteModal();
+    }
+
+    // ==============================================
+    // 4. ARCHIVED LIST & RESTORE
+    // ==============================================
+    function renderArchivedList() {
+      const archived = allMembers.filter(m => m.status === 'removed');
+      const container = document.getElementById('archived-list-container');
+
+      if (archived.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-3xl p-8 border border-slate-200 text-center text-slate-400">
+            <i class="fa-solid fa-box-open text-3xl mb-2 text-slate-300"></i>
+            <p class="text-xs font-semibold">कोई भी सदस्य आर्काइव में नहीं है।</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = archived.map(m => `
+        <div class="bg-white rounded-2xl p-4 border border-rose-200 flex items-center justify-between gap-3 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 font-extrabold flex items-center justify-center text-xs">
+              ${getInitials(m.name)}
+            </div>
+            <div>
+              <h4 class="text-xs font-extrabold text-slate-800">${m.name}</h4>
+              <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father} • ${m.address}</p>
+            </div>
+          </div>
+          <button onclick="restoreMember('${m.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-emerald-200">
+            <i class="fa-solid fa-rotate-left"></i> Restore Member
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function restoreMember(id) {
+      const index = allMembers.findIndex(m => m.id === id);
+      if (index !== -1) {
+        allMembers[index].status = 'Active';
+        saveLocalData();
+        renderMembers();
+        renderArchivedList();
+      }
     }
 
     // Auto-login if session exists
