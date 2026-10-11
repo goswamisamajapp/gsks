@@ -22,7 +22,8 @@
         }
       }
     }
-  </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col">
 
@@ -773,7 +774,7 @@
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('admin-dashboard').classList.remove('hidden');
       updateDate();
-      loadMembersData();
+      initFirebaseRealtime();
     }
 
     function logoutAdmin() {
@@ -833,28 +834,81 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Central Backend API Synchronization (Shared live across PC & Phone)
-    async function loadMembersData() {
+    // Firebase Firestore Realtime Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjCaXzUGb96o47_tfBU1kSbL8hXESDugo",
+      authDomain: "goswami-samaj-kalyan-samiti.firebaseapp.com",
+      projectId: "goswami-samaj-kalyan-samiti",
+      storageBucket: "goswami-samaj-kalyan-samiti.firebasestorage.app",
+      messagingSenderId: "620489886710",
+      appId: "1:620489886710:web:715442560619857cbcd5d7",
+      measurementId: "G-WSH6P3V5RJ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const membersCol = db.collection('members');
+
+    // Realtime Listener: Any change on PC reflects instantly on Phone without refresh!
+    function initFirebaseRealtime() {
+      membersCol.onSnapshot(async (snapshot) => {
+        if (snapshot.empty) {
+          // First time seed 72 members to Firestore
+          try {
+            const res = await fetch('/members-data.json');
+            const initialList = await res.json();
+            const batch = db.batch();
+            initialList.forEach(m => {
+              const docRef = membersCol.doc(m.id);
+              batch.set(docRef, m);
+            });
+            await batch.commit();
+          } catch(err) {
+            console.error('Seeding error:', err);
+          }
+        } else {
+          allMembers = [];
+          snapshot.forEach(doc => {
+            allMembers.push(doc.data());
+          });
+          // Sort by ID
+          allMembers.sort((a, b) => a.id.localeCompare(b.id));
+          updateStats();
+          renderMembers();
+          if (typeof renderArchivedList === 'function') {
+            renderArchivedList();
+          }
+        }
+      }, (error) => {
+        console.error('Firebase realtime error:', error);
+        // Fallback to API if rules not yet open
+        loadMembersDataFallback();
+      });
+    }
+
+    async function loadMembersDataFallback() {
       try {
         const res = await fetch('/api/members');
         allMembers = await res.json();
         updateStats();
         renderMembers();
       } catch (err) {
-        console.error('Error fetching members from backend:', err);
+        console.error(err);
       }
     }
 
     async function syncMemberToBackend(memberData) {
       try {
-        await fetch('/api/members/update', {
+        // 1. Direct Realtime Firebase Update
+        await membersCol.doc(memberData.id).set(memberData, { merge: true });
+        // 2. Also keep server in sync
+        fetch('/api/members/update', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(memberData)
-        });
-        await loadMembersData();
+        }).catch(() => {});
       } catch (err) {
-        console.error('Error updating member to backend:', err);
+        console.error('Error updating member to Firebase:', err);
       }
     }
 
