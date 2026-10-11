@@ -22,6 +22,7 @@
         }
       }
     }
+  </script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script>
@@ -1037,17 +1038,17 @@
       realtimeListenerInitialized = true;
 
       try {
-        const membersMap = new Map();
-
+        console.log("Subscribing to Firestore members collection...");
         // Listen for live Firestore data
         membersCol.onSnapshot((liveSnap) => {
-          membersMap.clear();
+          console.log("Firestore snapshot received, total docs:", liveSnap.size);
+          const list = [];
           liveSnap.forEach(doc => {
-            membersMap.set(doc.id, doc.data());
+            list.push(doc.data());
           });
 
-          allMembers = Array.from(membersMap.values());
-          allMembers.sort((a, b) => a.id.localeCompare(b.id));
+          allMembers = list;
+          allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
           updateStats();
           renderMembers();
           if (typeof renderArchivedList === 'function') {
@@ -1063,6 +1064,9 @@
         loadMembersDataFallback();
       }
     }
+
+    // Auto-init immediately when page loads
+    initFirebaseRealtime();
 
     async function loadMembersDataFallback() {
       try {
@@ -1103,10 +1107,13 @@
       // 3. Persist to Firebase Firestore (Realtime Cloud)
       try {
         if (typeof membersCol !== 'undefined' && membersCol) {
+          console.log('Writing doc to Firestore:', memberData.id, memberData);
           await membersCol.doc(memberData.id).set(memberData, { merge: true });
+          console.log('Successfully saved to Firestore:', memberData.id);
         }
       } catch (err) {
-        console.warn('Firestore write warning:', err);
+        console.error('Firestore write error:', err);
+        alert('Firebase में सेव करते समय त्रुटि: ' + err.message);
       }
     }
 
