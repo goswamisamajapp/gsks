@@ -2,94 +2,464 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>गोस्वामी समाज कल्याण समिति - GSKS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>GSKS - गोस्वामी समाज कल्याण समिति</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Rozha+One&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Noto Sans Devanagari', sans-serif;
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            devanagari: ['"Yatra One"', 'cursive']
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12'
+            }
+          }
+        }
+      }
     }
-    .hindi-title {
-      font-family: 'Yatra One', cursive;
+  </script>
+  <style>
+    /* Mobile-first feel */
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-orange-100 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-gray-800">
-  
-  <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-6 sm:p-10 border border-orange-200 text-center relative overflow-hidden">
+<body class="bg-slate-100 min-h-screen text-slate-800 flex justify-center items-start antialiased">
+
+  <!-- Mobile App Frame Container (Responsive: looks like app on mobile & centered app on desktop) -->
+  <div id="app-container" class="w-full max-w-md min-h-screen bg-slate-50 flex flex-col shadow-2xl relative overflow-x-hidden border-x border-slate-200">
     
-    <!-- Top Accent Bar -->
-    <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-500 via-amber-500 to-red-500"></div>
-
-    <!-- Badge -->
-    <div class="inline-flex items-center gap-2 bg-orange-100 border border-orange-300 text-orange-700 font-bold px-5 py-1.5 rounded-full text-sm mb-6 shadow-sm">
-      <span>🚩</span>
-      <span>ॐ नमः शिवाय</span>
-    </div>
-
-    <!-- Official Logo -->
-    <div class="flex justify-center mb-6">
-      <div class="relative group">
-        <div class="absolute -inset-1 bg-gradient-to-r from-orange-600 to-amber-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-300"></div>
-        <img 
-          src="/logo.png" 
-          alt="गोस्वामी समाज कल्याण समिति लोगो" 
-          class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full object-cover shadow-xl border-4 border-white"
-        />
-      </div>
-    </div>
-
-    <!-- Main Title (Hindi) -->
-    <h1 class="text-2xl sm:text-4xl font-extrabold text-orange-800 hindi-title tracking-wide mb-2 leading-tight">
-      गोस्वामी समाज कल्याण समिति
-    </h1>
-    
-    <h2 class="text-sm sm:text-base font-semibold text-gray-600 mb-2 tracking-wide uppercase">
-      Goswami Samaj Kalyan Samiti (GSKS)
-    </h2>
-
-    <!-- Address -->
-    <div class="inline-flex items-center justify-center gap-1.5 text-orange-950 font-medium bg-amber-50 px-4 py-2 rounded-xl border border-amber-200 text-sm mb-8 shadow-sm">
-      <svg class="w-4 h-4 text-orange-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-      </svg>
-      <span>गुनघसा, गोमो, धनबाद - 828401 (झारखंड)</span>
-    </div>
-
-    <!-- System Status Badges -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-left">
-      <div class="p-3.5 bg-green-50 border border-green-200 rounded-2xl flex items-center justify-between">
-        <div>
-          <p class="text-[11px] text-green-600 font-semibold uppercase tracking-wider">GitHub</p>
-          <p class="text-xs font-bold text-green-900 mt-0.5">Connected</p>
+    <!-- ============================================== -->
+    <!-- VIEW 1: PORTAL SWITCHER & ADMIN LOGIN SCREEN -->
+    <!-- ============================================== -->
+    <div id="login-screen" class="flex-1 flex flex-col justify-between p-6">
+      
+      <!-- Top Branding -->
+      <div class="text-center pt-6">
+        <div class="inline-block relative mb-4">
+          <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-orange-500 to-amber-300 shadow-lg mx-auto">
+            <img src="/logo.png" alt="GSKS Logo" class="w-full h-full object-cover rounded-full bg-white">
+          </div>
+          <span class="absolute bottom-0 right-0 bg-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white">GSKS</span>
         </div>
-        <span class="text-base">✅</span>
+        <h1 class="text-xl font-extrabold text-orange-800 font-devanagari tracking-wide">गोस्वामी समाज कल्याण समिति</h1>
+        <p class="text-xs text-slate-500 font-medium mt-1">गुनघसा, गोमो, धनबाद - 828401</p>
       </div>
-      <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-between">
-        <div>
-          <p class="text-[11px] text-blue-600 font-semibold uppercase tracking-wider">Render</p>
-          <p class="text-xs font-bold text-blue-900 mt-0.5">Live Online</p>
+
+      <!-- Portal Tabs / Selection -->
+      <div class="my-6">
+        <div class="bg-slate-200/80 p-1 rounded-2xl flex text-xs font-semibold mb-6">
+          <button id="tab-admin" onclick="switchPortalTab('admin')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700">
+            <i class="fa-solid fa-shield-halved mr-1.5"></i> Admin Portal
+          </button>
+          <button id="tab-user" onclick="switchPortalTab('user')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900">
+            <i class="fa-solid fa-users mr-1.5"></i> Member Portal
+          </button>
         </div>
-        <span class="text-base">🚀</span>
-      </div>
-      <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between">
-        <div>
-          <p class="text-[11px] text-amber-600 font-semibold uppercase tracking-wider">Firebase</p>
-          <p class="text-xs font-bold text-amber-900 mt-0.5">Configured</p>
+
+        <!-- Admin Login Form -->
+        <div id="admin-login-box" class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 text-sm">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">Admin Login</h2>
+              <p class="text-[11px] text-slate-500">प्रबंधक पैनल में प्रवेश करें</p>
+            </div>
+          </div>
+
+          <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Admin ID</label>
+              <div class="relative">
+                <i class="fa-solid fa-user-shield absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                <input 
+                  type="text" 
+                  id="admin-id" 
+                  placeholder="Login ID दर्ज करें" 
+                  value="Admin"
+                  required
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium"
+                >
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Password</label>
+              <div class="relative">
+                <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                <input 
+                  type="password" 
+                  id="admin-password" 
+                  placeholder="Password दर्ज करें" 
+                  required
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-medium"
+                >
+                <button type="button" onclick="togglePassVisibility()" class="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 text-xs">
+                  <i id="pass-eye-icon" class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="login-error" class="hidden text-[11px] text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200 font-medium"></div>
+
+            <button 
+              type="submit" 
+              class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold text-xs tracking-wide shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <span>Login to Dashboard</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </form>
         </div>
-        <span class="text-base">🔥</span>
+
+        <!-- User Portal Placeholder -->
+        <div id="user-login-box" class="hidden bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 text-center">
+          <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-3 text-lg">
+            <i class="fa-solid fa-address-card"></i>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900">Member Portal</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-5">सदस्य लॉगिन और नया पंजीकरण शीघ्र उपलब्ध होगा</p>
+          <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 text-xs font-medium">
+            🚩 Admin Portal Setup In Progress
+          </div>
+        </div>
+
       </div>
+
+      <!-- Footer Info -->
+      <div class="text-center pb-2 text-[11px] text-slate-400">
+        <p>© 2026 GSKS Trust • All Rights Reserved</p>
+      </div>
+
     </div>
 
-    <!-- Footer Email Identity -->
-    <div class="border-t border-gray-100 pt-4 text-xs text-gray-500">
-      Official Email: <span class="font-mono text-orange-800 font-semibold">goswamisamajtrust@gmail.com</span>
+
+    <!-- ============================================== -->
+    <!-- VIEW 2: ADMIN DASHBOARD (Mobile App Style)     -->
+    <!-- ============================================== -->
+    <div id="admin-dashboard" class="hidden flex-1 flex flex-col pb-20">
+      
+      <!-- Top Sticky App Bar -->
+      <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="/logo.png" alt="GSKS" class="w-9 h-9 rounded-full object-cover border border-orange-200 shadow-sm">
+          <div>
+            <h2 class="text-xs font-bold text-slate-900 leading-tight">Admin Console</h2>
+            <p class="text-[10px] text-orange-600 font-semibold font-devanagari">गोस्वामी समाज कल्याण समिति</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <button onclick="logoutAdmin()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 flex items-center justify-center text-xs transition-colors" title="Logout">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dashboard Main Scroll Area -->
+      <div class="p-4 space-y-4">
+
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500 rounded-3xl p-4 text-white shadow-lg shadow-orange-500/20 relative overflow-hidden">
+          <div class="relative z-10">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-sm px-2.5 py-0.5 rounded-full">
+                Prabandhak Panel
+              </span>
+              <span class="text-[11px] text-orange-100 font-medium" id="current-date">Today</span>
+            </div>
+            <h3 class="text-base font-extrabold mt-1">प्रणाम, Admin जी 🙏</h3>
+            <p class="text-xs text-orange-100 mt-0.5">समिति का लाइव विवरण नीचे उपलब्ध है</p>
+          </div>
+          <!-- Decorative Shiv Trishul Accent -->
+          <div class="absolute -right-3 -bottom-4 text-white/10 text-8xl font-black pointer-events-none">
+            ॐ
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- REQUIREMENT 2: FINANCIAL FUND CARDS            -->
+        <!-- ============================================== -->
+        <div class="space-y-2">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1">
+            <i class="fa-solid fa-vault mr-1 text-orange-500"></i> Trust Treasury
+          </p>
+
+          <!-- Main Card: Total Fund Available -->
+          <div class="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold text-slate-500">Total Fund Available (कुल उपलब्ध कोष)</span>
+              <div class="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-1 mt-1">
+              <span class="text-2xl font-black text-slate-900" id="stat-total-fund">₹ 1,25,450</span>
+              <span class="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md ml-2">+100% Verified</span>
+            </div>
+
+            <!-- Sub Cards: In Bank & In Hand -->
+            <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-100">
+              <!-- Sub Card: In Bank -->
+              <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100">
+                <div class="flex items-center gap-1.5 text-slate-500 mb-1">
+                  <i class="fa-solid fa-building-columns text-[11px] text-blue-600"></i>
+                  <span class="text-[11px] font-semibold">In Bank (बैंक में)</span>
+                </div>
+                <p class="text-sm font-bold text-slate-800" id="stat-bank-fund">₹ 1,12,000</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">SBI Account</p>
+              </div>
+
+              <!-- Sub Card: In Hand -->
+              <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100">
+                <div class="flex items-center gap-1.5 text-slate-500 mb-1">
+                  <i class="fa-solid fa-hand-holding-dollar text-[11px] text-amber-600"></i>
+                  <span class="text-[11px] font-semibold">In Hand (नगद)</span>
+                </div>
+                <p class="text-sm font-bold text-slate-800" id="stat-hand-fund">₹ 13,450</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Cash in Trust</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- REQUIREMENT 2: MEMBERSHIP STATS CARDS          -->
+        <!-- ============================================== -->
+        <div class="space-y-2">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1">
+            <i class="fa-solid fa-address-book mr-1 text-orange-500"></i> Member Statistics
+          </p>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            
+            <!-- Card 1: Total Members -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-slate-500">Total Members</span>
+                <span class="w-6 h-6 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center text-[11px]">
+                  <i class="fa-solid fa-users"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl font-extrabold text-slate-900" id="stat-total-members">184</p>
+                <p class="text-[10px] text-slate-400 font-medium">कुल पंजीकृत सदस्य</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Active Members -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-slate-500">Active Members</span>
+                <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-[11px]">
+                  <i class="fa-solid fa-user-check"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl font-extrabold text-emerald-700" id="stat-active-members">162</p>
+                <p class="text-[10px] text-slate-400 font-medium">सक्रिय सदस्य</p>
+              </div>
+            </div>
+
+            <!-- Card 3: Inactive Members -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-slate-500">Inactive</span>
+                <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-[11px]">
+                  <i class="fa-solid fa-user-slash"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl font-extrabold text-slate-600" id="stat-inactive-members">14</p>
+                <p class="text-[10px] text-slate-400 font-medium">निष्क्रिय सदस्य</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Pending for Approval -->
+            <div class="bg-white rounded-2xl p-3.5 border border-amber-200 shadow-sm flex flex-col justify-between bg-gradient-to-br from-white to-amber-50/50">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-amber-800">Pending Approval</span>
+                <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-[11px] animate-pulse">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl font-extrabold text-amber-700" id="stat-pending-members">8</p>
+                <p class="text-[10px] text-amber-600 font-medium">स्वीकृति हेतु प्रतीक्षित</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Quick Admin Action Strip -->
+        <div class="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800">Quick Actions (त्वरित कार्य)</span>
+            <span class="text-[10px] text-orange-600 font-semibold cursor-pointer">Admin Actions</span>
+          </div>
+          
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <button class="flex flex-col items-center gap-1.5 p-2 rounded-2xl hover:bg-slate-50 active:scale-95 transition-all">
+              <div class="w-10 h-10 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-user-plus"></i>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-700">Add Member</span>
+            </button>
+
+            <button class="flex flex-col items-center gap-1.5 p-2 rounded-2xl hover:bg-slate-50 active:scale-95 transition-all">
+              <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-700">Approvals</span>
+            </button>
+
+            <button class="flex flex-col items-center gap-1.5 p-2 rounded-2xl hover:bg-slate-50 active:scale-95 transition-all">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-700">Add Fund</span>
+            </button>
+
+            <button class="flex flex-col items-center gap-1.5 p-2 rounded-2xl hover:bg-slate-50 active:scale-95 transition-all">
+              <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-bullhorn"></i>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-700">Notice</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Navigation Bar (Mobile App Style) -->
+      <div class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2 flex items-center justify-between z-30 shadow-lg">
+        <button class="flex flex-col items-center gap-1 text-orange-600">
+          <i class="fa-solid fa-chart-pie text-sm"></i>
+          <span class="text-[10px] font-bold">Dashboard</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-users text-sm"></i>
+          <span class="text-[10px] font-medium">Members</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
+          <span class="text-[10px] font-medium">Treasury</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-gear text-sm"></i>
+          <span class="text-[10px] font-medium">Settings</span>
+        </button>
+      </div>
+
     </div>
 
   </div>
 
+  <script>
+    // Tab switching: Admin vs Member portal
+    function switchPortalTab(type) {
+      const adminBtn = document.getElementById('tab-admin');
+      const userBtn = document.getElementById('tab-user');
+      const adminBox = document.getElementById('admin-login-box');
+      const userBox = document.getElementById('user-login-box');
+
+      if (type === 'admin') {
+        adminBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700';
+        userBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900';
+        adminBox.classList.remove('hidden');
+        userBox.classList.add('hidden');
+      } else {
+        userBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700';
+        adminBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900';
+        userBox.classList.remove('hidden');
+        adminBox.classList.add('hidden');
+      }
+    }
+
+    // Toggle Password Visibility
+    function togglePassVisibility() {
+      const input = document.getElementById('admin-password');
+      const icon = document.getElementById('pass-eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    // Admin Login logic
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById('admin-id').value.trim();
+      const pass = document.getElementById('admin-password').value;
+      const errBox = document.getElementById('login-error');
+
+      // Given exact requirement: Login id- Admin, password- Gattu@1994#
+      if (id === 'Admin' && pass === 'Gattu@1994#') {
+        errBox.classList.add('hidden');
+        sessionStorage.setItem('gsks_admin_auth', 'true');
+        showDashboard();
+      } else {
+        errBox.textContent = 'अमान्य Admin ID या Password! कृपया सही जानकारी दर्ज करें।';
+        errBox.classList.remove('hidden');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.remove('hidden');
+      updateDate();
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('gsks_admin_auth');
+      document.getElementById('admin-dashboard').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('admin-password').value = '';
+    }
+
+    function updateDate() {
+      const options = { weekday: 'short', month: 'short', day: 'numeric' };
+      document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
+    }
+
+    // Auto-login if session exists
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('gsks_admin_auth') === 'true') {
+        showDashboard();
+      }
+    });
+  </script>
 </body>
 </html>
