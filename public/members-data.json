@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "GSKS-001",
+    "name": "NITISH NATH",
+    "father": "MAHENDRA NATH GOSWAMI",
+    "address": "GUNGHASA",
+    "phone": "7781931880",
+    "status": "Active",
+    "since": "12-10-2026",
+    "donation": 500,
+    "dues": 0,
+    "bloodGroup": "O+"
+  }
+]
