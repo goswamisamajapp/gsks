@@ -59,7 +59,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
     project: 'GSKS - Akhil Bhartiya Shaiv Samaj Sewa Trust',
-    firebaseProject: 'goswami-samaj-kalyan-samiti',
+    firebaseProject: 'goswamisamajapp',
     timestamp: new Date().toISOString()
   });
 });
