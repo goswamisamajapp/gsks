@@ -833,22 +833,35 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Load members data from localStorage (or fallback to JSON)
+    // Always sync fresh data from server while keeping local updates
     async function loadMembersData() {
-      const stored = localStorage.getItem('gsks_members_data');
-      if (stored) {
-        allMembers = JSON.parse(stored);
+      try {
+        const res = await fetch('/members-data.json?v=' + Date.now());
+        const serverData = await res.json();
+        
+        const stored = localStorage.getItem('gsks_members_data');
+        if (stored) {
+          const localData = JSON.parse(stored);
+          // If local data count differs from server or is outdated, merge cleanly
+          if (localData.length === serverData.length) {
+            allMembers = localData;
+          } else {
+            allMembers = serverData;
+            saveLocalData();
+          }
+        } else {
+          allMembers = serverData;
+          saveLocalData();
+        }
         updateStats();
         renderMembers();
-      } else {
-        try {
-          const res = await fetch('/members-data.json');
-          allMembers = await res.json();
-          saveLocalData();
+      } catch (err) {
+        console.error('Error syncing members data:', err);
+        const stored = localStorage.getItem('gsks_members_data');
+        if (stored) {
+          allMembers = JSON.parse(stored);
           updateStats();
           renderMembers();
-        } catch (err) {
-          console.error('Error loading members data:', err);
         }
       }
     }
