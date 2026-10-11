@@ -192,31 +192,9 @@
       <div id="view-dashboard-section" class="space-y-6">
 
         <!-- Welcome Banner -->
-        <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 rounded-3xl p-5 sm:p-8 text-white shadow-lg shadow-orange-500/15 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden">
+        <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden flex items-center">
           <div class="relative z-10">
-            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
-              <span>🚩 प्रबंधक पैनल</span>
-              <span>•</span>
-              <span id="current-date">Today</span>
-            </div>
-            <h2 class="text-xl sm:text-3xl font-black">प्रणाम, अध्यक्ष जी 🙏</h2>
-            <p class="text-xs sm:text-sm text-orange-100 mt-1 max-w-xl">
-              गोस्वामी समाज कल्याण समिति (गुनघसा, गोमो) के सभी सजीव आंकड़े और कोष विवरण नीचे उपलब्ध हैं।
-            </p>
-          </div>
-          <div class="relative z-10 flex flex-wrap gap-2.5">
-            <button onclick="openEventModal()" class="bg-indigo-900/40 hover:bg-indigo-900/60 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-white/30 backdrop-blur-sm">
-              <i class="fa-solid fa-calendar-plus text-amber-300"></i>
-              <span>+ नया इवेंट / बैठक</span>
-            </button>
-            <button onclick="openAddMemberModal()" class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-orange-200">
-              <i class="fa-solid fa-user-plus text-orange-600"></i>
-              <span>+ नया सदस्य जोड़ें</span>
-            </button>
-            <button onclick="switchAdminView('members')" class="bg-orange-700/80 hover:bg-orange-750 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-white/20">
-              <i class="fa-solid fa-users"></i>
-              <span>सदस्य सूची (<span id="dash-btn-count">0</span>)</span>
-            </button>
+            <h2 class="text-2xl sm:text-4xl font-black tracking-tight">प्रणाम, अध्यक्ष जी 🙏</h2>
           </div>
           <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl font-black pointer-events-none select-none">
             ॐ
@@ -1200,7 +1178,8 @@
 
     function updateDate() {
       const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-      document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
+      const elDate = document.getElementById('current-date');
+      if (elDate) elDate.textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
     // Switch between Admin views: dashboard, members, prime, active, inactive, events, archived
@@ -1408,7 +1387,7 @@
       const archivedCount = allMembers.filter(m => m.status === 'removed').length;
 
       document.getElementById('dash-total-members').textContent = nonRemoved.length;
-      document.getElementById('dash-btn-count').textContent = nonRemoved.length;
+      if (document.getElementById('dash-btn-count')) document.getElementById('dash-btn-count').textContent = nonRemoved.length;
       if (document.getElementById('nav-members-count')) document.getElementById('nav-members-count').textContent = nonRemoved.length;
       document.getElementById('badge-total-members').textContent = `${nonRemoved.length} सदस्य`;
       
