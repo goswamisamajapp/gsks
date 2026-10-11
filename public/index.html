@@ -412,6 +412,10 @@
               <i class="fa-solid fa-user-plus text-xs"></i>
               <span>+ नया सदस्य</span>
             </button>
+            <button onclick="clearAllDataFromCloud()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-3 py-2 rounded-xl text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all" title="सारा डेटा साफ़ करें">
+              <i class="fa-solid fa-trash-can text-xs text-rose-600"></i>
+              <span>डेटा साफ़ करें</span>
+            </button>
             <!-- Search Input -->
             <div class="relative flex-1 sm:w-64">
               <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
@@ -1026,7 +1030,6 @@
     const db = firebase.firestore();
     const membersCol = db.collection('members');
 
-    // Pure Realtime Firestore Architecture
     let realtimeListenerInitialized = false;
 
     async function initFirebaseRealtime() {
@@ -1034,48 +1037,13 @@
       realtimeListenerInitialized = true;
 
       try {
-        // Step 1: Load base 72 members first from local server so UI never stays blank
-        const res = await fetch('/members-data.json?t=' + Date.now());
-        const baseMembers = await res.json();
-        
-        // Populate local map for fast lookup and merge
         const membersMap = new Map();
-        baseMembers.forEach(m => membersMap.set(m.id, m));
 
-        // Step 2: Fetch Firestore data
-        const snapshot = await membersCol.get();
-
-        if (snapshot.empty) {
-          // If Firestore is empty, seed all members
-          console.log('Seeding initial members to Firestore...');
-          const batch = db.batch();
-          baseMembers.forEach(m => {
-            batch.set(membersCol.doc(m.id), m);
-          });
-          await batch.commit();
-        } else {
-          // Merge Firestore docs over base members
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            membersMap.set(doc.id, { ...(membersMap.get(doc.id) || {}), ...data });
-          });
-        }
-
-        allMembers = Array.from(membersMap.values());
-        allMembers.sort((a, b) => a.id.localeCompare(b.id));
-        updateStats();
-        renderMembers();
-
-        // Step 3: Listen for live changes / new member additions from any phone/PC
+        // Listen for live Firestore data
         membersCol.onSnapshot((liveSnap) => {
-          liveSnap.docChanges().forEach((change) => {
-            const docData = change.doc.data();
-            const docId = change.doc.id;
-            if (change.type === 'removed') {
-              membersMap.delete(docId);
-            } else {
-              membersMap.set(docId, { ...(membersMap.get(docId) || {}), ...docData });
-            }
+          membersMap.clear();
+          liveSnap.forEach(doc => {
+            membersMap.set(doc.id, doc.data());
           });
 
           allMembers = Array.from(membersMap.values());
@@ -1087,6 +1055,7 @@
           }
         }, (error) => {
           console.error("Firestore onSnapshot error:", error);
+          loadMembersDataFallback();
         });
 
       } catch (err) {
@@ -1111,11 +1080,13 @@
       const index = allMembers.findIndex(m => m.id === memberData.id);
       if (index !== -1) {
         allMembers[index] = { ...allMembers[index], ...memberData };
-        updateStats();
-        renderMembers();
-        if (typeof renderArchivedList === 'function') {
-          renderArchivedList();
-        }
+      } else {
+        allMembers.push(memberData);
+      }
+      updateStats();
+      renderMembers();
+      if (typeof renderArchivedList === 'function') {
+        renderArchivedList();
       }
 
       // 2. Persist to Express Central Server API
@@ -1239,7 +1210,16 @@
 
       // 1. CARDS VIEW
       const grid = document.getElementById('members-grid-container');
-      grid.innerHTML = filtered.map(m => `
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white rounded-3xl p-10 border border-dashed border-slate-300 text-center text-slate-500">
+            <i class="fa-solid fa-users-slash text-4xl mb-3 text-slate-300"></i>
+            <h4 class="text-base font-bold text-slate-700">कोई भी सदस्य उपलब्ध नहीं है</h4>
+            <p class="text-xs text-slate-400 mt-1">शुरुआत करने के लिए ऊपर "+ नया सदस्य जोड़ें" बटन दबाकर नया सदस्य जोड़ें।</p>
+          </div>
+        `;
+      } else {
+        grid.innerHTML = filtered.map(m => `
         <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
             <div class="flex items-start justify-between gap-3">
@@ -1305,10 +1285,21 @@
           </div>
         </div>
       `).join('');
+      }
 
       // 2. TABLE VIEW
       const tableBody = document.getElementById('members-table-body');
-      tableBody.innerHTML = filtered.map(m => `
+      if (filtered.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-400">
+              <i class="fa-solid fa-users-slash text-2xl mb-2 text-slate-300"></i>
+              <p class="text-xs font-semibold">कोई भी सदस्य उपलब्ध नहीं है</p>
+            </td>
+          </tr>
+        `;
+      } else {
+        tableBody.innerHTML = filtered.map(m => `
         <tr class="hover:bg-slate-50 transition-colors">
           <td class="py-3 px-4">
             <div class="flex items-center gap-2.5">
@@ -1357,6 +1348,7 @@
           </td>
         </tr>
       `).join('');
+      }
     }
 
     // ==============================================
@@ -1577,6 +1569,38 @@
     async function restoreMember(id) {
       await syncMemberToBackend({ id: id, status: 'Active' });
       renderArchivedList();
+    }
+
+    // Clear all members from both Cloud Firestore & Central Express Server
+    async function clearAllDataFromCloud() {
+      const confirmed = confirm("⚠️ क्या आप सचमुच सभी सदस्यों का डेटा पूरी तरह साफ़ (Clear) करना चाहते हैं?\n\nइसके बाद आप 0 से नए सदस्य जोड़ सकेंगे।");
+      if (!confirmed) return;
+
+      try {
+        // 1. Delete all docs from Firestore 'members' collection
+        if (typeof membersCol !== 'undefined' && membersCol) {
+          const snap = await membersCol.get();
+          const batch = db.batch();
+          snap.forEach(doc => {
+            batch.delete(doc.ref);
+          });
+          await batch.commit();
+        }
+
+        // 2. Clear backend JSON file
+        await fetch('/api/members/clear', { method: 'POST' });
+
+        // 3. Reset local in-memory array and UI
+        allMembers = [];
+        updateStats();
+        renderMembers();
+        if (typeof renderArchivedList === 'function') renderArchivedList();
+
+        alert("✅ सभी सदस्यों का डेटा साफ़ कर दिया गया है! अब आप नए सदस्य शुरू से जोड़ सकते हैं।");
+      } catch (err) {
+        console.error('Failed to clear database:', err);
+        alert("डेटा साफ़ करते समय त्रुटि आई: " + err.message);
+      }
     }
 
     // Permanent Session: Auto-login on refresh until manual Logout

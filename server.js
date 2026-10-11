@@ -46,6 +46,15 @@ app.post('/api/members/update', (req, res) => {
   }
 });
 
+app.post('/api/members/clear', (req, res) => {
+  try {
+    fs.writeFileSync(DATA_FILE, '[]', 'utf8');
+    return res.json({ success: true, message: 'All members cleared' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to clear members' });
+  }
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
