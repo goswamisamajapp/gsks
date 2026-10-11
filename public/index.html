@@ -176,6 +176,9 @@
           <button onclick="switchAdminView('prime')" id="nav-btn-prime" class="px-3.5 py-2 rounded-xl text-amber-800 bg-amber-50 hover:bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-200">
             <i class="fa-solid fa-crown text-amber-600"></i> Prime Members (<span id="nav-prime-count">0</span>)
           </button>
+          <button onclick="switchAdminView('events')" id="nav-btn-events" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
+            <i class="fa-solid fa-calendar-days text-indigo-600"></i> Events & Meetings (<span id="nav-events-count">0</span>)
+          </button>
           <button onclick="switchAdminView('archived')" id="nav-btn-archived" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
             <i class="fa-solid fa-box-archive"></i> Archived (<span id="nav-archived-count">0</span>)
           </button>
@@ -522,6 +525,59 @@
         </div>
       </div>
 
+
+      <!-- ============================================== -->
+      <!-- TAB 4: EVENTS & MEETINGS SECTION               -->
+      <!-- ============================================== -->
+      <div id="view-events-section" class="hidden space-y-6">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  कार्यक्रम एवं बैठक प्रबंधन (Events & Meetings)
+                </h2>
+                <p class="text-xs text-slate-500">General Meeting, Special Event, Emergency Meetings & Targeted User Notifications</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openEventModal()" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>+ नया इवेंट / बैठक जोड़ें</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Chips for Events -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+          <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm transition-all">
+            सभी कार्यक्रम (<span id="event-count-all">0</span>)
+          </button>
+          <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
+          </button>
+          <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
+          </button>
+          <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
+          </button>
+        </div>
+
+        <!-- Events Cards Grid -->
+        <div id="events-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated via JavaScript -->
+        </div>
+
+      </div>
+
     </main>
 
     <!-- Bottom Mobile Nav Bar -->
@@ -534,9 +590,13 @@
         <i class="fa-solid fa-users text-sm"></i>
         <span class="text-[10px] font-medium">Members</span>
       </button>
-      <button onclick="switchAdminView('prime')" id="mobile-nav-prime" class="flex flex-col items-center gap-1 text-amber-600 hover:text-amber-700">
+      <button onclick="switchAdminView('prime')" id="mobile-nav-prime" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-crown text-sm"></i>
-        <span class="text-[10px] font-bold">Prime (<span id="mob-prime-count">3</span>)</span>
+        <span class="text-[10px] font-medium">Prime (<span id="mob-prime-count">0</span>)</span>
+      </button>
+      <button onclick="switchAdminView('events')" id="mobile-nav-events" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-600">
+        <i class="fa-solid fa-calendar-days text-sm"></i>
+        <span class="text-[10px] font-medium">Events</span>
       </button>
       <button onclick="switchAdminView('archived')" id="mobile-nav-archived" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-box-archive text-sm"></i>
@@ -876,8 +936,152 @@
   </div>
 
 
+  <!-- ============================================================== -->
+  <!-- MODAL 4: EVENT ADD / EDIT MODAL                                -->
+  <!-- ============================================================== -->
+  <div id="event-form-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <button onclick="closeEventModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-4">
+        <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-calendar-plus"></i>
+        </div>
+        <div>
+          <h3 id="event-modal-title" class="text-base font-black text-slate-900">नया कार्यक्रम / बैठक जोड़ें</h3>
+          <p class="text-[11px] text-slate-500">GSKS समिति बैठक एवं सूचना प्रबंधन</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveEvent(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="event-id">
+
+        <!-- 1. Category Selection (3 types) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">इवेंट श्रेणी (Event Category) *</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
+              <input type="radio" name="event-category" value="General Meeting" checked class="text-blue-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">General Meeting</p>
+                <p class="text-[10px] text-slate-400">सामान्य बैठक</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50/60 transition-all">
+              <input type="radio" name="event-category" value="Special Event" class="text-purple-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">Special Event</p>
+                <p class="text-[10px] text-slate-400">विशेष उत्सव/समारोह</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-rose-500 has-[:checked]:bg-rose-50/60 transition-all">
+              <input type="radio" name="event-category" value="Emergency meeting" class="text-rose-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">Emergency</p>
+                <p class="text-[10px] text-slate-400">आपातकालीन बैठक</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 2. Event Title -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">कार्यक्रम / बैठक का शीर्षक (Title) *</label>
+          <input type="text" id="event-title" required placeholder="जैसे: समिति की मासिक आम सभा एवं कोष समीक्षा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+        </div>
+
+        <!-- 3. Event Venue & Date/Time Picker -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">स्थान / वेन्यू (Venue) *</label>
+            <div class="relative">
+              <i class="fa-solid fa-location-dot absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+              <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">दिनांक एवं समय (Date & Time) *</label>
+            <input type="datetime-local" id="event-datetime" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium">
+          </div>
+        </div>
+
+        <!-- 4. Description -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / एजेंडा (Description / Agenda) *</label>
+          <textarea id="event-description" rows="3" required placeholder="बैठक के मुख्य बिंदु, विचारणीय विषय और निर्देश यहाँ दर्ज करें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium resize-none"></textarea>
+        </div>
+
+        <!-- 5. Targeted Audience Notification Selection -->
+        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+          <label class="block font-bold text-slate-700">सूचना / नोटिफिकेशन किसे प्राप्त होगी? (Audience Target) *</label>
+          <select id="event-audience" onchange="toggleSelectedMembersList(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+            <option value="All User" selected>📢 All User (समस्त सदस्य गण - All Members)</option>
+            <option value="Active User">✅ Active User (केवल सक्रिय सदस्य)</option>
+            <option value="Prime User">👑 Prime User (केवल विशिष्ट VIP सदस्य)</option>
+            <option value="Inactive User">⚠️ Inactive User (केवल निष्क्रिय सदस्य)</option>
+            <option value="Selected User">🎯 Selected User (चुनिंदा सदस्यों को चुनें)</option>
+          </select>
+
+          <!-- Dynamic Member Checkboxes for 'Selected User' -->
+          <div id="selected-users-container" class="hidden mt-2 pt-2 border-t border-slate-200">
+            <p class="text-[11px] font-bold text-slate-600 mb-1.5">सदस्यों को चुनें (Select Members):</p>
+            <div id="selected-users-checklist" class="max-h-36 overflow-y-auto space-y-1 bg-white p-2 rounded-xl border border-slate-200">
+              <!-- Checkboxes dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeEventModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span id="event-save-btn-text">सुरक्षित करें (Save Event)</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5: DELETE EVENT CONFIRMATION                             -->
+  <!-- ============================================================== -->
+  <div id="delete-event-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center animate-in fade-in zoom-in-95 duration-200">
+      <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fa-solid fa-calendar-xmark"></i>
+      </div>
+      <h3 class="text-base font-black text-slate-900">इवेंट को हटाना चाहते हैं?</h3>
+      <p class="text-xs text-slate-500 mt-1 mb-4">
+        <span id="delete-event-title-span" class="font-bold text-slate-800">Event</span> को स्थायी रूप से हटा दिया जाएगा।
+      </p>
+      <div class="flex items-center gap-2">
+        <button onclick="confirmDeleteEvent()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm">
+          हाँ, हटाएं
+        </button>
+        <button onclick="closeDeleteEventModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+          रद्द करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+
   <script>
     let allMembers = [];
+    let allEvents = [];
+    let currentEventFilter = 'ALL';
+    let pendingDeleteEventId = null;
     let currentFilterAddress = 'ALL';
     let currentFilterStatus = 'ALL';
     let currentSearchTerm = '';
@@ -955,35 +1159,39 @@
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
-    // Switch between Admin views: dashboard, members, prime, active, inactive, archived
+    // Switch between Admin views: dashboard, members, prime, active, inactive, events, archived
     function switchAdminView(view, statusFilter = null) {
       const dashSection = document.getElementById('view-dashboard-section');
       const membersSection = document.getElementById('view-members-section');
       const archivedSection = document.getElementById('view-archived-section');
+      const eventsSection = document.getElementById('view-events-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
       const navMembers = document.getElementById('nav-btn-members');
       const navPrime = document.getElementById('nav-btn-prime');
+      const navEvents = document.getElementById('nav-btn-events');
       const navArchived = document.getElementById('nav-btn-archived');
 
       const mobDash = document.getElementById('mobile-nav-dashboard');
       const mobMembers = document.getElementById('mobile-nav-members');
       const mobPrime = document.getElementById('mobile-nav-prime');
+      const mobEvents = document.getElementById('mobile-nav-events');
       const mobArchived = document.getElementById('mobile-nav-archived');
 
       // Reset desktop classes
-      [navDash, navMembers, navPrime, navArchived].forEach(btn => {
+      [navDash, navMembers, navPrime, navEvents, navArchived].forEach(btn => {
         if(btn) btn.className = 'px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all';
       });
 
       // Reset mobile classes
-      [mobDash, mobMembers, mobPrime, mobArchived].forEach(btn => {
+      [mobDash, mobMembers, mobPrime, mobEvents, mobArchived].forEach(btn => {
         if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
       });
 
       dashSection.classList.add('hidden');
       membersSection.classList.add('hidden');
       archivedSection.classList.add('hidden');
+      if (eventsSection) eventsSection.classList.add('hidden');
 
       if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
@@ -993,6 +1201,11 @@
         document.getElementById('member-status-filter').value = 'Prime Member';
         currentFilterStatus = 'Prime Member';
         renderMembers();
+      } else if (view === 'events') {
+        if (eventsSection) eventsSection.classList.remove('hidden');
+        if(navEvents) navEvents.className = 'px-3.5 py-2 rounded-xl text-indigo-700 bg-indigo-50 font-bold flex items-center gap-1.5 transition-all border border-indigo-200';
+        if(mobEvents) mobEvents.className = 'flex flex-col items-center gap-1 text-indigo-600 font-bold';
+        renderEventsList();
       } else if (view === 'members') {
         membersSection.classList.remove('hidden');
         if(navMembers) navMembers.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
@@ -1029,6 +1242,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const membersCol = db.collection('members');
+    const eventsCol = db.collection('events');
 
     let realtimeListenerInitialized = false;
 
@@ -1058,14 +1272,40 @@
           loadMembersDataFallback();
         });
 
+        // Listen for live Firestore events
+        eventsCol.onSnapshot((liveEventsSnap) => {
+          const eList = [];
+          liveEventsSnap.forEach(doc => eList.push(doc.data()));
+          allEvents = eList;
+          // Sort events by date descending
+          allEvents.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+          updateEventsStats();
+          renderEventsList();
+        }, (err) => {
+          console.warn("Firestore events onSnapshot error:", err);
+          loadEventsFallback();
+        });
+
       } catch (err) {
         console.error('Firestore init error, falling back:', err);
         loadMembersDataFallback();
+        loadEventsFallback();
       }
     }
 
     // Auto-init immediately when page loads
     initFirebaseRealtime();
+
+    async function loadEventsFallback() {
+      try {
+        const res = await fetch('/api/events');
+        allEvents = await res.json();
+        updateEventsStats();
+        renderEventsList();
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
     async function loadMembersDataFallback() {
       try {
@@ -1585,9 +1825,351 @@
       `).join('');
     }
 
-    async function restoreMember(id) {
-      await syncMemberToBackend({ id: id, status: 'Active' });
-      renderArchivedList();
+    // ==============================================
+    // 5. EVENTS & MEETINGS LOGIC
+    // ==============================================
+    function updateEventsStats() {
+      const allCount = allEvents.length;
+      const genCount = allEvents.filter(e => e.category === 'General Meeting').length;
+      const speCount = allEvents.filter(e => e.category === 'Special Event').length;
+      const emgCount = allEvents.filter(e => e.category === 'Emergency meeting').length;
+
+      const elNav = document.getElementById('nav-events-count');
+      const elAll = document.getElementById('event-count-all');
+      const elGen = document.getElementById('event-count-general');
+      const elSpe = document.getElementById('event-count-special');
+      const elEmg = document.getElementById('event-count-emergency');
+
+      if (elNav) elNav.textContent = allCount;
+      if (elAll) elAll.textContent = allCount;
+      if (elGen) elGen.textContent = genCount;
+      if (elSpe) elSpe.textContent = speCount;
+      if (elEmg) elEmg.textContent = emgCount;
+    }
+
+    function filterEvents(category) {
+      currentEventFilter = category;
+      const btnAll = document.getElementById('filter-event-all');
+      const btnGen = document.getElementById('filter-event-general');
+      const btnSpe = document.getElementById('filter-event-special');
+      const btnEmg = document.getElementById('filter-event-emergency');
+
+      [btnAll, btnGen, btnSpe, btnEmg].forEach(btn => {
+        if (!btn) return;
+        btn.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5';
+      });
+
+      if (category === 'General Meeting' && btnGen) {
+        btnGen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+      } else if (category === 'Special Event' && btnSpe) {
+        btnSpe.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+      } else if (category === 'Emergency meeting' && btnEmg) {
+        btnEmg.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-rose-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+      } else if (btnAll) {
+        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+      }
+
+      renderEventsList();
+    }
+
+    function toggleSelectedMembersList(val) {
+      const container = document.getElementById('selected-users-container');
+      if (val === 'Selected User') {
+        container.classList.remove('hidden');
+        renderSelectedUsersChecklist([]);
+      } else {
+        container.classList.add('hidden');
+      }
+    }
+
+    function renderSelectedUsersChecklist(preSelectedIds = []) {
+      const checklist = document.getElementById('selected-users-checklist');
+      if (!checklist) return;
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      
+      checklist.innerHTML = nonRemoved.map(m => {
+        const isChecked = preSelectedIds.includes(m.id) ? 'checked' : '';
+        return `
+          <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded-lg cursor-pointer text-xs">
+            <input type="checkbox" name="selected-member-id" value="${m.id}" ${isChecked} class="rounded text-indigo-600 focus:ring-0">
+            <span class="font-bold text-slate-800">${m.name}</span>
+            <span class="text-[10px] text-slate-400 font-mono">(${m.id})</span>
+            <span class="text-[10px] text-slate-500">• ${m.address}</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function openEventModal(eventId = null) {
+      const modal = document.getElementById('event-form-modal');
+      const modalTitle = document.getElementById('event-modal-title');
+      const btnText = document.getElementById('event-save-btn-text');
+
+      if (eventId) {
+        const ev = allEvents.find(e => e.id === eventId);
+        if (!ev) return;
+        document.getElementById('event-id').value = ev.id;
+        modalTitle.textContent = 'इवेंट / बैठक संपादित करें (Edit Event)';
+        btnText.textContent = 'अपडेट करें (Update Event)';
+
+        const catRadios = document.getElementsByName('event-category');
+        for (const r of catRadios) {
+          r.checked = (r.value === ev.category);
+        }
+
+        document.getElementById('event-title').value = ev.title;
+        document.getElementById('event-venue').value = ev.venue;
+        document.getElementById('event-datetime').value = ev.datetime;
+        document.getElementById('event-description').value = ev.description;
+        document.getElementById('event-audience').value = ev.audience;
+
+        toggleSelectedMembersList(ev.audience);
+        if (ev.audience === 'Selected User') {
+          renderSelectedUsersChecklist(ev.selectedMembers || []);
+        }
+      } else {
+        document.getElementById('event-id').value = '';
+        modalTitle.textContent = 'नया कार्यक्रम / बैठक जोड़ें (Add Event)';
+        btnText.textContent = 'सुरक्षित करें (Save Event)';
+
+        const catRadios = document.getElementsByName('event-category');
+        if (catRadios.length > 0) catRadios[0].checked = true;
+
+        document.getElementById('event-title').value = '';
+        document.getElementById('event-venue').value = '';
+        
+        // Default datetime to tomorrow at 10:00 AM
+        const now = new Date();
+        now.setDate(now.getDate() + 1);
+        now.setHours(10, 0, 0, 0);
+        const isoString = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        document.getElementById('event-datetime').value = isoString;
+
+        document.getElementById('event-description').value = '';
+        document.getElementById('event-audience').value = 'All User';
+        toggleSelectedMembersList('All User');
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeEventModal() {
+      document.getElementById('event-form-modal').classList.add('hidden');
+    }
+
+    async function handleSaveEvent(e) {
+      e.preventDefault();
+      const existingId = document.getElementById('event-id').value;
+      const id = existingId || `EVT-${Date.now()}`;
+
+      let selectedCat = 'General Meeting';
+      const catRadios = document.getElementsByName('event-category');
+      for (const r of catRadios) {
+        if (r.checked) { selectedCat = r.value; break; }
+      }
+
+      const audienceVal = document.getElementById('event-audience').value;
+      let selectedMembers = [];
+      if (audienceVal === 'Selected User') {
+        const checkboxes = document.querySelectorAll('input[name="selected-member-id"]:checked');
+        selectedMembers = Array.from(checkboxes).map(cb => cb.value);
+      }
+
+      const eventPayload = {
+        id: id,
+        category: selectedCat,
+        title: document.getElementById('event-title').value.trim(),
+        venue: document.getElementById('event-venue').value.trim(),
+        datetime: document.getElementById('event-datetime').value,
+        description: document.getElementById('event-description').value.trim(),
+        audience: audienceVal,
+        selectedMembers: selectedMembers,
+        createdAt: new Date().toISOString()
+      };
+
+      // 1. Instant local state update
+      const exIdx = allEvents.findIndex(ev => ev.id === id);
+      if (exIdx !== -1) {
+        allEvents[exIdx] = { ...allEvents[exIdx], ...eventPayload };
+      } else {
+        allEvents.unshift(eventPayload);
+      }
+      updateEventsStats();
+      renderEventsList();
+      closeEventModal();
+
+      // 2. Persist to Backend API
+      try {
+        await fetch('/api/events/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(eventPayload)
+        });
+      } catch (err) {
+        console.warn('API event save warning:', err);
+      }
+
+      // 3. Persist to Firestore Realtime
+      try {
+        if (typeof eventsCol !== 'undefined' && eventsCol) {
+          await eventsCol.doc(eventPayload.id).set(eventPayload, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore event write warning:', err);
+      }
+    }
+
+    function openDeleteEventModal(id, title) {
+      pendingDeleteEventId = id;
+      document.getElementById('delete-event-title-span').textContent = `"${title}"`;
+      document.getElementById('delete-event-modal').classList.remove('hidden');
+    }
+
+    function closeDeleteEventModal() {
+      document.getElementById('delete-event-modal').classList.add('hidden');
+      pendingDeleteEventId = null;
+    }
+
+    async function confirmDeleteEvent() {
+      if (!pendingDeleteEventId) return;
+      const id = pendingDeleteEventId;
+      closeDeleteEventModal();
+
+      // 1. Local update
+      allEvents = allEvents.filter(e => e.id !== id);
+      updateEventsStats();
+      renderEventsList();
+
+      // 2. Backend API
+      try {
+        await fetch('/api/events/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch (err) {
+        console.warn(err);
+      }
+
+      // 3. Firestore delete
+      try {
+        if (typeof eventsCol !== 'undefined' && eventsCol) {
+          await eventsCol.doc(id).delete();
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    function getEventBadge(cat) {
+      if (cat === 'Emergency meeting') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span> Emergency</span>`;
+      } else if (cat === 'Special Event') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-300 flex items-center gap-1"><i class="fa-solid fa-star text-[9px] text-purple-600"></i> Special Event</span>`;
+      }
+      return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1"><i class="fa-solid fa-users text-[9px] text-blue-600"></i> General Meeting</span>`;
+    }
+
+    function getAudienceBadge(aud, selectedCount) {
+      if (aud === 'Selected User') {
+        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1"><i class="fa-solid fa-crosshairs"></i> ${selectedCount || 0} चयनित सदस्य</span>`;
+      } else if (aud === 'Prime User') {
+        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1"><i class="fa-solid fa-crown text-amber-600"></i> Prime Members Only</span>`;
+      } else if (aud === 'Active User') {
+        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i class="fa-solid fa-user-check text-emerald-600"></i> Active Members Only</span>`;
+      } else if (aud === 'Inactive User') {
+        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1"><i class="fa-solid fa-user-slash text-slate-500"></i> Inactive Members</span>`;
+      }
+      return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1"><i class="fa-solid fa-bullhorn text-blue-600"></i> समस्त सदस्य (All Members)</span>`;
+    }
+
+    function formatEventDate(dtStr) {
+      if (!dtStr) return '--';
+      try {
+        const d = new Date(dtStr);
+        return d.toLocaleString('hi-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      } catch (e) {
+        return dtStr;
+      }
+    }
+
+    function renderEventsList() {
+      const container = document.getElementById('events-cards-grid');
+      if (!container) return;
+
+      const filtered = allEvents.filter(e => {
+        if (currentEventFilter === 'ALL') return true;
+        return e.category === currentEventFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full bg-white rounded-3xl p-12 border border-dashed border-slate-200 text-center text-slate-400">
+            <div class="w-16 h-16 rounded-3xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl mx-auto mb-3">
+              <i class="fa-regular fa-calendar-plus"></i>
+            </div>
+            <h4 class="text-sm font-bold text-slate-700">कोई भी कार्यक्रम / बैठक निर्धारित नहीं है</h4>
+            <p class="text-xs text-slate-400 mt-1">नया कार्यक्रम जोड़ने के लिए ऊपर <b>"+ नया इवेंट / बैठक जोड़ें"</b> बटन पर क्लिक करें।</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(e => `
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between group">
+          <div>
+            <!-- Top Strip: Category Badge & Actions -->
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <div>
+                ${getEventBadge(e.category)}
+              </div>
+              <div class="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                <button onclick="openEventModal('${e.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors" title="Edit Event">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="openDeleteEventModal('${e.id}', '${e.title}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors" title="Delete Event">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Event Title -->
+            <h3 class="text-sm font-extrabold text-slate-900 group-hover:text-indigo-900 transition-colors leading-snug">
+              ${e.title}
+            </h3>
+
+            <!-- Date, Time & Venue -->
+            <div class="mt-3 space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+              <div class="flex items-center gap-2">
+                <i class="fa-regular fa-clock text-indigo-600 text-xs w-3.5"></i>
+                <span class="font-bold text-slate-800 font-mono">${formatEventDate(e.datetime)}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-orange-500 text-xs w-3.5"></i>
+                <span class="font-medium text-slate-700">${e.venue}</span>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p class="mt-3 text-xs text-slate-600 line-clamp-3 leading-relaxed">
+              ${e.description}
+            </p>
+          </div>
+
+          <!-- Bottom Audience strip -->
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-slate-400 font-medium">अधिसूचना लक्षित:</span>
+            ${getAudienceBadge(e.audience, e.selectedMembers ? e.selectedMembers.length : 0)}
+          </div>
+        </div>
+      `).join('');
     }
 
     // Clear all members from both Cloud Firestore & Central Express Server
