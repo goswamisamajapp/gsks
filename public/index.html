@@ -219,8 +219,12 @@
               गोस्वामी समाज कल्याण समिति (गुनघसा, गोमो) के सभी सजीव आंकड़े और कोष विवरण नीचे उपलब्ध हैं।
             </p>
           </div>
-          <div class="relative z-10 flex gap-2">
-            <button onclick="switchAdminView('members')" class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2">
+          <div class="relative z-10 flex flex-wrap gap-2.5">
+            <button onclick="openAddMemberModal()" class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-orange-200">
+              <i class="fa-solid fa-user-plus text-orange-600"></i>
+              <span>+ नया सदस्य जोड़ें</span>
+            </button>
+            <button onclick="switchAdminView('members')" class="bg-orange-700/80 hover:bg-orange-750 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2 border border-white/20">
               <i class="fa-solid fa-users"></i>
               <span>सदस्य सूची देखें (<span id="dash-btn-count">72</span>)</span>
             </button>
@@ -402,8 +406,12 @@
             <p class="text-xs text-slate-500 mt-0.5">View, Edit, Status & Delete/Archive Controls</p>
           </div>
 
-          <!-- Search & Filter Controls -->
+          <!-- Search, Filter & Add Controls -->
           <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <button onclick="openAddMemberModal()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all">
+              <i class="fa-solid fa-user-plus text-xs"></i>
+              <span>+ नया सदस्य</span>
+            </button>
             <!-- Search Input -->
             <div class="relative flex-1 sm:w-64">
               <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
@@ -727,6 +735,112 @@
 
     </div>
   </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 2.5: ADD NEW MEMBER MODAL (नया सदस्य जोड़ें)             -->
+  <!-- ============================================================== -->
+  <div id="add-member-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <button onclick="closeAddMemberModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-4">
+        <div class="w-10 h-10 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
+          <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-slate-900">नया सदस्य जोड़ें (Add New Member)</h3>
+          <p class="text-[11px] text-slate-500">गोस्वामी समाज कल्याण समिति पंजीकरण</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleAddNewMember(event)" class="space-y-3.5 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">सदस्य का नाम (Full Name) *</label>
+            <input type="text" id="add-name" required placeholder="जैसे: RAMESH GOSWAMI" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">पिता का नाम (Father's Name) *</label>
+            <input type="text" id="add-father" required placeholder="जैसे: LATE SHYAM GOSWAMI" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">गाँव / पता (Address) *</label>
+            <input type="text" id="add-address" required placeholder="जैसे: GUNGHASA, GOMOH" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">फ़ोन / WhatsApp (Phone) *</label>
+            <input type="tel" id="add-phone" required placeholder="10 अंकों का मोबाइल नंबर" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-mono font-medium">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">सदस्यता श्रेणी (Status) *</label>
+            <select id="add-status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+              <option value="Active" selected>Active (सक्रिय)</option>
+              <option value="Prime Member">Prime Member (विशिष्ट सदस्य - VIP)</option>
+              <option value="Inactive">Inactive (निष्क्रिय)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">सदस्यता दिनांक (Member Since)</label>
+            <input type="text" id="add-since" value="" placeholder="DD-MM-YYYY" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-medium">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">प्रारंभिक दान (₹)</label>
+            <input type="number" id="add-donation" value="500" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">बकाया शुल्क (₹)</label>
+            <input type="number" id="add-dues" value="0" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ब्लड ग्रुप</label>
+            <select id="add-blood" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+              <option value="">चुनें</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-3 bg-orange-50 rounded-2xl border border-orange-200 flex items-center gap-2 text-[11px] text-orange-900 font-medium">
+          <i class="fa-solid fa-circle-info text-orange-600 text-xs"></i>
+          <span>नया सदस्य आईडी (जैसे: GSKS-073) सिस्टम द्वारा स्वचालित असाइन किया जाएगा।</span>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="flex items-center gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span>सदस्य पंजीकृत करें (Add Member)</span>
+          </button>
+          <button type="button" onclick="closeAddMemberModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors">
+            रद्द करें
+          </button>
+        </div>
+      </form>
 
 
   <!-- ============================================================== -->
@@ -1286,6 +1400,62 @@
 
     function closeEditModal() {
       document.getElementById('edit-member-modal').classList.add('hidden');
+    }
+
+    // ==============================================
+    // 2.5 ADD MEMBER MODAL LOGIC
+    // ==============================================
+    function openAddMemberModal() {
+      // Default date to today formatted DD-MM-YYYY
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      
+      document.getElementById('add-name').value = '';
+      document.getElementById('add-father').value = '';
+      document.getElementById('add-address').value = '';
+      document.getElementById('add-phone').value = '';
+      document.getElementById('add-status').value = 'Active';
+      document.getElementById('add-since').value = `${dd}-${mm}-${yyyy}`;
+      document.getElementById('add-donation').value = 500;
+      document.getElementById('add-dues').value = 0;
+      document.getElementById('add-blood').value = '';
+
+      document.getElementById('add-member-modal').classList.remove('hidden');
+    }
+
+    function closeAddMemberModal() {
+      document.getElementById('add-member-modal').classList.add('hidden');
+    }
+
+    async function handleAddNewMember(e) {
+      e.preventDefault();
+      // Generate next Sequential ID (e.g., GSKS-073)
+      const nextNum = allMembers.length + 1;
+      const newId = `GSKS-${String(nextNum).padStart(3, '0')}`;
+
+      const newMember = {
+        id: newId,
+        name: document.getElementById('add-name').value.trim().toUpperCase(),
+        father: document.getElementById('add-father').value.trim().toUpperCase(),
+        address: document.getElementById('add-address').value.trim().toUpperCase(),
+        phone: document.getElementById('add-phone').value.trim(),
+        status: document.getElementById('add-status').value,
+        since: document.getElementById('add-since').value.trim() || '2026',
+        donation: Number(document.getElementById('add-donation').value) || 0,
+        dues: Number(document.getElementById('add-dues').value) || 0,
+        bloodGroup: document.getElementById('add-blood').value
+      };
+
+      // Add to array
+      allMembers.push(newMember);
+      updateStats();
+      renderMembers();
+      closeAddMemberModal();
+
+      // Sync to Backend & Firebase
+      await syncMemberToBackend(newMember);
     }
 
     async function handleSaveMember(e) {
