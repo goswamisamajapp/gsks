@@ -907,17 +907,35 @@
     }
 
     async function syncMemberToBackend(memberData) {
+      // 1. Instant local array update & UI render (Never fails, immediate reflection)
+      const index = allMembers.findIndex(m => m.id === memberData.id);
+      if (index !== -1) {
+        allMembers[index] = { ...allMembers[index], ...memberData };
+        updateStats();
+        renderMembers();
+        if (typeof renderArchivedList === 'function') {
+          renderArchivedList();
+        }
+      }
+
+      // 2. Persist to Express Central Server API
       try {
-        // 1. Direct Realtime Firebase Update
-        await membersCol.doc(memberData.id).set(memberData, { merge: true });
-        // 2. Also keep server in sync
-        fetch('/api/members/update', {
+        await fetch('/api/members/update', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(memberData)
-        }).catch(() => {});
+        });
       } catch (err) {
-        console.error('Error updating member to Firebase:', err);
+        console.warn('API sync warning:', err);
+      }
+
+      // 3. Persist to Firebase Firestore (Realtime Cloud)
+      try {
+        if (typeof membersCol !== 'undefined' && membersCol) {
+          await membersCol.doc(memberData.id).set(memberData, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore write warning:', err);
       }
     }
 
