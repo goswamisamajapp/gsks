@@ -1026,51 +1026,46 @@
     const db = firebase.firestore();
     const membersCol = db.collection('members');
 
-    // Bulletproof Dual Sync: Always load 72 members instantly + Firestore Sync
+    // Bulletproof Dynamic Dual Sync: Live database that grows seamlessly
     async function initFirebaseRealtime() {
-      // 1. Instant Guaranteed Load from Server Backup first (Never shows 0)
+      // 1. Always load full database from API first
       try {
-        const res = await fetch('/members-data.json?t=' + Date.now());
-        const initialList = await res.json();
-        allMembers = initialList;
-        updateStats();
-        renderMembers();
+        const res = await fetch('/api/members');
+        const list = await res.json();
+        if (Array.isArray(list) && list.length > 0) {
+          allMembers = list;
+          updateStats();
+          renderMembers();
+        }
       } catch (err) {
-        console.warn('Backup fetch warning:', err);
+        console.warn('API fetch warning:', err);
       }
 
-      // 2. Auto-sync to Firebase Firestore directly without waiting
+      // 2. Realtime Firestore Sync
       try {
-        // Direct write check to create collection automatically
-        membersCol.get().then(async (snapshot) => {
-          if (snapshot.empty) {
-            console.log('Auto-populating Firebase collection members...');
-            for (const m of allMembers) {
-              await membersCol.doc(m.id).set(m);
-            }
-          }
-        }).catch(err => console.warn('Firestore initial check:', err));
-
-        // Realtime Listener
         membersCol.onSnapshot((snapshot) => {
           if (!snapshot.empty) {
-            const fbMembers = [];
-            snapshot.forEach(doc => fbMembers.push(doc.data()));
-            if (fbMembers.length > 0) {
-              allMembers = fbMembers;
-              allMembers.sort((a, b) => a.id.localeCompare(b.id));
-              updateStats();
-              renderMembers();
-              if (typeof renderArchivedList === 'function') {
-                renderArchivedList();
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              const idx = allMembers.findIndex(m => m.id === data.id);
+              if (idx !== -1) {
+                allMembers[idx] = data;
+              } else {
+                allMembers.push(data);
               }
+            });
+            allMembers.sort((a, b) => a.id.localeCompare(b.id));
+            updateStats();
+            renderMembers();
+            if (typeof renderArchivedList === 'function') {
+              renderArchivedList();
             }
           }
         }, (err) => {
-          console.warn('Firestore listener fallback:', err);
+          console.warn('Firestore realtime listener error:', err);
         });
       } catch (e) {
-        console.warn('Firestore error:', e);
+        console.warn('Firestore init note:', e);
       }
     }
 

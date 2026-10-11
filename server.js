@@ -26,22 +26,23 @@ app.get('/api/members', (req, res) => {
   }
 });
 
-// API 2: Update member (edit / archive / restore)
+// API 2: Update or Add member
 app.post('/api/members/update', (req, res) => {
   try {
-    const updatedMember = req.body;
+    const incomingMember = req.body;
     const raw = fs.readFileSync(DATA_FILE, 'utf8');
     let members = JSON.parse(raw);
     
-    const index = members.findIndex(m => m.id === updatedMember.id);
+    const index = members.findIndex(m => m.id === incomingMember.id);
     if (index !== -1) {
-      members[index] = { ...members[index], ...updatedMember };
-      fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2), 'utf8');
-      return res.json({ success: true, member: members[index] });
+      members[index] = { ...members[index], ...incomingMember };
+    } else {
+      members.push(incomingMember);
     }
-    res.status(404).json({ error: 'Member not found' });
+    fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2), 'utf8');
+    return res.json({ success: true, member: incomingMember, total: members.length });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to update member' });
+    res.status(500).json({ error: 'Failed to save member' });
   }
 });
 
