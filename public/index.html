@@ -18,18 +18,6 @@
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             devanagari: ['"Yatra One"', 'cursive']
-          },
-          colors: {
-            brand: {
-              50: '#fff7ed',
-              100: '#ffedd5',
-              200: '#fed7aa',
-              500: '#f97316',
-              600: '#ea580c',
-              700: '#c2410c',
-              800: '#9a3412',
-              900: '#7c2d12'
-            }
           }
         }
       }
@@ -39,7 +27,7 @@
 <body class="bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col">
 
   <!-- ============================================== -->
-  <!-- VIEW 1: LOGIN SCREEN (Responsive: Card on PC, Full on Mobile) -->
+  <!-- VIEW 1: LOGIN SCREEN                           -->
   <!-- ============================================== -->
   <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-amber-50 via-slate-50 to-orange-50">
     <div class="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/80">
@@ -144,11 +132,11 @@
 
 
   <!-- ============================================== -->
-  <!-- VIEW 2: ADMIN DASHBOARD (True Responsive Layout)-->
+  <!-- VIEW 2: ADMIN APP / PORTAL                     -->
   <!-- ============================================== -->
   <div id="admin-dashboard" class="hidden flex-1 flex flex-col w-full">
     
-    <!-- Top Global Header (Full Width on PC, Compact on Mobile) -->
+    <!-- Top Global Header -->
     <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
@@ -165,20 +153,17 @@
           </div>
         </div>
 
-        <!-- Center: Desktop Nav Links -->
-        <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600">
-          <a href="#" class="text-orange-600 font-bold border-b-2 border-orange-600 pb-1 flex items-center gap-1.5">
+        <!-- Center: Desktop Nav Tabs -->
+        <nav class="hidden md:flex items-center gap-2 text-xs font-semibold">
+          <button onclick="switchAdminView('dashboard')" id="nav-btn-dashboard" class="px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all">
             <i class="fa-solid fa-chart-pie"></i> Dashboard
-          </a>
-          <a href="#" class="hover:text-orange-600 transition-colors flex items-center gap-1.5">
-            <i class="fa-solid fa-users"></i> Members
-          </a>
-          <a href="#" class="hover:text-orange-600 transition-colors flex items-center gap-1.5">
+          </button>
+          <button onclick="switchAdminView('members')" id="nav-btn-members" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
+            <i class="fa-solid fa-users"></i> Members (<span id="nav-members-count">72</span>)
+          </button>
+          <button onclick="switchAdminView('treasury')" id="nav-btn-treasury" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
             <i class="fa-solid fa-vault"></i> Treasury
-          </a>
-          <a href="#" class="hover:text-orange-600 transition-colors flex items-center gap-1.5">
-            <i class="fa-solid fa-bullhorn"></i> Notices
-          </a>
+          </button>
         </nav>
 
         <!-- Right: Admin Status & Logout -->
@@ -199,247 +184,295 @@
       </div>
     </header>
 
-    <!-- Main Content Container (Expands gracefully up to full 7xl on PC) -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 pb-20 md:pb-8">
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 pb-24 md:pb-8">
 
-      <!-- Welcome Banner -->
-      <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 rounded-3xl p-5 sm:p-8 text-white shadow-lg shadow-orange-500/15 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden">
-        <div class="relative z-10">
-          <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
-            <span>🚩 प्रबंधक पैनल</span>
-            <span>•</span>
-            <span id="current-date">Today</span>
+      <!-- ============================================== -->
+      <!-- TAB 1: DASHBOARD OVERVIEW                      -->
+      <!-- ============================================== -->
+      <div id="view-dashboard-section" class="space-y-6">
+
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 rounded-3xl p-5 sm:p-8 text-white shadow-lg shadow-orange-500/15 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative overflow-hidden">
+          <div class="relative z-10">
+            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+              <span>🚩 प्रबंधक पैनल</span>
+              <span>•</span>
+              <span id="current-date">Today</span>
+            </div>
+            <h2 class="text-xl sm:text-3xl font-black">प्रणाम, अध्यक्ष जी 🙏</h2>
+            <p class="text-xs sm:text-sm text-orange-100 mt-1 max-w-xl">
+              गोस्वामी समाज कल्याण समिति (गुनघसा, गोमो) के सभी सजीव आंकड़े और कोष विवरण नीचे उपलब्ध हैं।
+            </p>
           </div>
-          <h2 class="text-xl sm:text-3xl font-black">प्रणाम, अध्यक्ष जी 🙏</h2>
-          <p class="text-xs sm:text-sm text-orange-100 mt-1 max-w-xl">
-            गोस्वामी समाज कल्याण समिति (गुनघसा, गोमो) के सभी सजीव आंकड़े और कोष विवरण नीचे उपलब्ध हैं।
-          </p>
+          <div class="relative z-10 flex gap-2">
+            <button onclick="switchAdminView('members')" class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2">
+              <i class="fa-solid fa-users"></i>
+              <span>सदस्य सूची देखें (72)</span>
+            </button>
+          </div>
+          <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl font-black pointer-events-none select-none">
+            ॐ
+          </div>
         </div>
-        <div class="relative z-10 flex gap-2">
-          <button class="bg-white text-orange-700 hover:bg-orange-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center gap-2">
-            <i class="fa-solid fa-user-plus"></i>
-            <span>नया सदस्य जोड़ें</span>
-          </button>
+
+        <!-- Treasury Section -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i class="fa-solid fa-vault text-orange-500 text-sm"></i> Trust Treasury (समिति का कोष)
+            </h3>
+            <span class="text-xs text-slate-400 font-medium">Auto-updated</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Total Fund Available -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-slate-500 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider">Total Fund Available</span>
+                  <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-black">
+                    ₹
+                  </div>
+                </div>
+                <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">₹ 1,25,450</p>
+                <p class="text-xs text-slate-400 mt-1">कुल उपलब्ध धनराशि</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold">Verified Balance</span>
+                <span class="text-slate-400 text-[11px]">Bank + Cash</span>
+              </div>
+            </div>
+
+            <!-- In Bank -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-slate-500 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider">In Bank</span>
+                  <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-building-columns"></i>
+                  </div>
+                </div>
+                <p class="text-2xl sm:text-3xl font-black text-blue-900 mt-1">₹ 1,12,000</p>
+                <p class="text-xs text-slate-400 mt-1">बैंक खाते में जमा राशि</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md font-semibold">SBI Trust A/C</span>
+                <span class="text-slate-400 text-[11px]">Gomoh Branch</span>
+              </div>
+            </div>
+
+            <!-- In Hand -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-slate-500 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider">In Hand</span>
+                  <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                  </div>
+                </div>
+                <p class="text-2xl sm:text-3xl font-black text-amber-900 mt-1">₹ 13,450</p>
+                <p class="text-xs text-slate-400 mt-1">कोषाध्यक्ष के पास नगद</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md font-semibold">Cash in Hand</span>
+                <span class="text-slate-400 text-[11px]">Petty Cash</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <!-- Shiv Accent Background Watermark -->
-        <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl font-black pointer-events-none select-none">
-          ॐ
+
+        <!-- Membership Stats -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i class="fa-solid fa-address-book text-orange-500 text-sm"></i> Member Statistics (सदस्य विवरण)
+            </h3>
+            <button onclick="switchAdminView('members')" class="text-xs text-orange-600 font-semibold hover:underline">
+              पूरी सूची देखें →
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <!-- Total Members -->
+            <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-orange-400 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-500">Total Members</span>
+                <span class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-users"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-total-members">72</p>
+                <p class="text-xs text-slate-400 mt-0.5">सत्यापित सदस्य</p>
+              </div>
+            </div>
+
+            <!-- Active Members -->
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-500">Active Members</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-user-check"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-emerald-700">72</p>
+                <p class="text-xs text-slate-400 mt-0.5">सक्रिय सदस्य</p>
+              </div>
+            </div>
+
+            <!-- Inactive Members -->
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-500">Inactive</span>
+                <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-user-slash"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-slate-600">0</p>
+                <p class="text-xs text-slate-400 mt-0.5">निष्क्रिय सदस्य</p>
+              </div>
+            </div>
+
+            <!-- Pending Approvals -->
+            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-300 shadow-sm flex flex-col justify-between bg-gradient-to-br from-white to-amber-50/60">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-800">Pending Approval</span>
+                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-amber-700">0</p>
+                <p class="text-xs text-amber-600 font-semibold mt-0.5">कोई लंबित नहीं</p>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
 
-      <!-- ============================================== -->
-      <!-- SECTION 1: FINANCIAL TREASURY (Full Grid on PC)-->
-      <!-- ============================================== -->
-      <div>
-        <div class="flex items-center justify-between mb-3 px-1">
-          <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-            <i class="fa-solid fa-vault text-orange-500 text-sm"></i> Trust Treasury (समिति का कोष)
-          </h3>
-          <span class="text-xs text-slate-400 font-medium">Auto-updated</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          
-          <!-- Main Card: Total Fund Available -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between md:col-span-1">
-            <div>
-              <div class="flex items-center justify-between text-slate-500 mb-2">
-                <span class="text-xs font-bold uppercase tracking-wider">Total Fund Available</span>
-                <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-black">
-                  ₹
-                </div>
-              </div>
-              <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1" id="stat-total-fund">₹ 1,25,450</p>
-              <p class="text-xs text-slate-400 mt-1">कुल उपलब्ध धनराशि</p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold">100% Verified Balance</span>
-              <span class="text-slate-400 text-[11px]">Bank + Cash</span>
-            </div>
-          </div>
-
-          <!-- Sub Card 1: In Bank -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between text-slate-500 mb-2">
-                <span class="text-xs font-bold uppercase tracking-wider">In Bank</span>
-                <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
-                  <i class="fa-solid fa-building-columns"></i>
-                </div>
-              </div>
-              <p class="text-2xl sm:text-3xl font-black text-blue-900 mt-1" id="stat-bank-fund">₹ 1,12,000</p>
-              <p class="text-xs text-slate-400 mt-1">बैंक खाते में जमा राशि</p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span class="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md font-semibold">SBI Trust A/C</span>
-              <span class="text-slate-400 text-[11px]">Gomoh Branch</span>
-            </div>
-          </div>
-
-          <!-- Sub Card 2: In Hand -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between text-slate-500 mb-2">
-                <span class="text-xs font-bold uppercase tracking-wider">In Hand</span>
-                <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
-                  <i class="fa-solid fa-hand-holding-dollar"></i>
-                </div>
-              </div>
-              <p class="text-2xl sm:text-3xl font-black text-amber-900 mt-1" id="stat-hand-fund">₹ 13,450</p>
-              <p class="text-xs text-slate-400 mt-1">कोषाध्यक्ष के पास नगद</p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md font-semibold">Cash in Hand</span>
-              <span class="text-slate-400 text-[11px]">Petty Cash</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
 
       <!-- ============================================== -->
-      <!-- SECTION 2: MEMBER STATS (4-Grid on PC, 2 on Phone)-->
+      <!-- TAB 2: MEMBERS DIRECTORY PAGE                  -->
       <!-- ============================================== -->
-      <div>
-        <div class="flex items-center justify-between mb-3 px-1">
-          <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-            <i class="fa-solid fa-address-book text-orange-500 text-sm"></i> Member Statistics (सदस्य विवरण)
-          </h3>
-          <span class="text-xs text-orange-600 font-semibold cursor-pointer hover:underline">View All Members →</span>
+      <div id="view-members-section" class="hidden space-y-6">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                गोस्वामी समाज सदस्य सूची
+              </h2>
+              <span id="badge-total-members" class="px-2.5 py-0.5 bg-orange-100 text-orange-800 text-xs font-bold rounded-full">
+                72 सदस्य
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">समिति के सभी पंजीकृत सदस्यों का सम्पूर्ण विवरण</p>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <!-- Search Input -->
+            <div class="relative flex-1 sm:w-72">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="member-search-input" 
+                oninput="handleSearchMembers(this.value)"
+                placeholder="नाम, पिता का नाम, गाँव या फोन खोजें..." 
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
+              >
+            </div>
+            
+            <!-- Address Filter -->
+            <select 
+              id="member-address-filter" 
+              onchange="handleFilterAddress(this.value)"
+              class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+            >
+              <option value="ALL">सभी गाँव / क्षेत्र</option>
+              <option value="GUNGHASA">गुनघसा (GUNGHASA)</option>
+              <option value="CHIRABAD">चिराबाड़ (CHIRABAD)</option>
+              <option value="AZAD NAGAR">आजाद नगर (AZAD NAGAR)</option>
+              <option value="KALYANPUR">कल्याणपुर (KALYANPUR)</option>
+              <option value="PIPRADIH">पिपराडीह (PIPRADIH)</option>
+              <option value="MATHADIH">माथाडीह (MATHADIH)</option>
+            </select>
+          </div>
         </div>
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          
-          <!-- Card 1: Total Members -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-orange-300 transition-all">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500">Total Members</span>
-              <span class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs">
-                <i class="fa-solid fa-users"></i>
-              </span>
-            </div>
-            <div class="mt-3">
-              <p class="text-2xl sm:text-3xl font-black text-slate-900" id="stat-total-members">184</p>
-              <p class="text-xs text-slate-400 mt-0.5">कुल पंजीकृत सदस्य</p>
-            </div>
+        <!-- Layout Toggle & Summary -->
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span id="filtered-count-text">72 सदस्य दिखाए जा रहे हैं</span>
+          <div class="flex items-center gap-1 bg-slate-200/80 p-1 rounded-xl">
+            <button onclick="setMemberLayout('cards')" id="btn-layout-cards" class="px-2.5 py-1 rounded-lg bg-white text-orange-700 font-bold shadow-sm transition-all flex items-center gap-1">
+              <i class="fa-solid fa-grip"></i> Cards
+            </button>
+            <button onclick="setMemberLayout('table')" id="btn-layout-table" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1">
+              <i class="fa-solid fa-table-list"></i> Table
+            </button>
           </div>
-
-          <!-- Card 2: Active Members -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-300 transition-all">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500">Active Members</span>
-              <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
-                <i class="fa-solid fa-user-check"></i>
-              </span>
-            </div>
-            <div class="mt-3">
-              <p class="text-2xl sm:text-3xl font-black text-emerald-700" id="stat-active-members">162</p>
-              <p class="text-xs text-slate-400 mt-0.5">सक्रिय सदस्य</p>
-            </div>
-          </div>
-
-          <!-- Card 3: Inactive Members -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-300 transition-all">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-500">Inactive</span>
-              <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs">
-                <i class="fa-solid fa-user-slash"></i>
-              </span>
-            </div>
-            <div class="mt-3">
-              <p class="text-2xl sm:text-3xl font-black text-slate-600" id="stat-inactive-members">14</p>
-              <p class="text-xs text-slate-400 mt-0.5">निष्क्रिय सदस्य</p>
-            </div>
-          </div>
-
-          <!-- Card 4: Pending for Approval -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-300 shadow-sm flex flex-col justify-between bg-gradient-to-br from-white to-amber-50/60 hover:border-amber-400 transition-all">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-amber-800">Pending Approval</span>
-              <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs animate-pulse">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-              </span>
-            </div>
-            <div class="mt-3">
-              <p class="text-2xl sm:text-3xl font-black text-amber-700" id="stat-pending-members">8</p>
-              <p class="text-xs text-amber-600 font-semibold mt-0.5">स्वीकृति हेतु प्रतीक्षित</p>
-            </div>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Quick Action Panel -->
-      <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm">
-        <h4 class="text-xs sm:text-sm font-bold text-slate-800 mb-4">त्वरित प्रबंधन कार्य (Admin Actions)</h4>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <button class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-orange-50 hover:text-orange-700 transition-all text-left group border border-slate-100">
-            <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-user-plus"></i>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-slate-800 group-hover:text-orange-700">Add Member</p>
-              <p class="text-[11px] text-slate-400">नया सदस्य प्रविष्टि</p>
-            </div>
-          </button>
-
-          <button class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-amber-50 hover:text-amber-700 transition-all text-left group border border-slate-100">
-            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-id-card"></i>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-slate-800 group-hover:text-amber-700">Approvals (8)</p>
-              <p class="text-[11px] text-slate-400">नए आवेदनों की जांच</p>
-            </div>
-          </button>
-
-          <button class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:text-emerald-700 transition-all text-left group border border-slate-100">
-            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-receipt"></i>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-slate-800 group-hover:text-emerald-700">Add Fund / Daan</p>
-              <p class="text-[11px] text-slate-400">कोष में दान जोड़ें</p>
-            </div>
-          </button>
-
-          <button class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50 hover:text-blue-700 transition-all text-left group border border-slate-100">
-            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-bullhorn"></i>
-            </div>
-            <div>
-              <p class="text-xs font-bold text-slate-800 group-hover:text-blue-700">Notice Board</p>
-              <p class="text-[11px] text-slate-400">नई सूचना जारी करें</p>
-            </div>
-          </button>
+        <!-- 1. CARDS VIEW (Responsive Grid: 1 col on mobile, 2 on tablet, 3 on PC) -->
+        <div id="members-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Dynamically populated via JavaScript -->
         </div>
+
+        <!-- 2. TABLE VIEW (Desktop / Tablet Friendly) -->
+        <div id="members-table-container" class="hidden bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
+                <tr>
+                  <th class="py-3 px-4">सदस्य (Member)</th>
+                  <th class="py-3 px-4">पिता का नाम (Father's Name)</th>
+                  <th class="py-3 px-4">स्थान / गाँव (Address)</th>
+                  <th class="py-3 px-4">फ़ोन / WhatsApp</th>
+                  <th class="py-3 px-4">सदस्यता दिनांक (Since)</th>
+                  <th class="py-3 px-4 text-center">स्थिति</th>
+                </tr>
+              </thead>
+              <tbody id="members-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
 
     </main>
 
-    <!-- Bottom Navigation Bar (ONLY on Mobile, Hidden on PC) -->
+    <!-- Bottom Mobile Nav Bar (Phone View Only) -->
     <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2 flex items-center justify-between z-40 shadow-lg">
-      <button class="flex flex-col items-center gap-1 text-orange-600">
+      <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 text-orange-600">
         <i class="fa-solid fa-chart-pie text-sm"></i>
         <span class="text-[10px] font-bold">Dashboard</span>
       </button>
-      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+      <button onclick="switchAdminView('members')" id="mobile-nav-members" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-users text-sm"></i>
         <span class="text-[10px] font-medium">Members</span>
       </button>
-      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+      <button onclick="switchAdminView('treasury')" id="mobile-nav-treasury" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
         <span class="text-[10px] font-medium">Treasury</span>
-      </button>
-      <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
-        <i class="fa-solid fa-gear text-sm"></i>
-        <span class="text-[10px] font-medium">Settings</span>
       </button>
     </div>
 
   </div>
 
   <script>
+    let allMembers = [];
+    let currentFilterAddress = 'ALL';
+    let currentSearchTerm = '';
+    let currentLayout = 'cards';
+
+    // Switch between Admin and Member login portals
     function switchPortalTab(type) {
       const adminBtn = document.getElementById('tab-admin');
       const userBtn = document.getElementById('tab-user');
@@ -493,6 +526,7 @@
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('admin-dashboard').classList.remove('hidden');
       updateDate();
+      loadMembersData();
     }
 
     function logoutAdmin() {
@@ -507,6 +541,211 @@
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
+    // Navigation inside Admin Portal (Dashboard vs Members vs Treasury)
+    function switchAdminView(view) {
+      const dashSection = document.getElementById('view-dashboard-section');
+      const membersSection = document.getElementById('view-members-section');
+      
+      const navDash = document.getElementById('nav-btn-dashboard');
+      const navMembers = document.getElementById('nav-btn-members');
+      const navTreasury = document.getElementById('nav-btn-treasury');
+
+      const mobDash = document.getElementById('mobile-nav-dashboard');
+      const mobMembers = document.getElementById('mobile-nav-members');
+      const mobTreasury = document.getElementById('mobile-nav-treasury');
+
+      // Reset desktop classes
+      [navDash, navMembers, navTreasury].forEach(btn => {
+        if(btn) btn.className = 'px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all';
+      });
+
+      // Reset mobile classes
+      [mobDash, mobMembers, mobTreasury].forEach(btn => {
+        if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
+      });
+
+      if (view === 'members') {
+        dashSection.classList.add('hidden');
+        membersSection.classList.remove('hidden');
+        if(navMembers) navMembers.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
+        if(mobMembers) mobMembers.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+      } else {
+        membersSection.classList.add('hidden');
+        dashSection.classList.remove('hidden');
+        if(navDash) navDash.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
+        if(mobDash) mobDash.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Load 72 members data from JSON
+    async function loadMembersData() {
+      try {
+        const res = await fetch('/members-data.json');
+        allMembers = await res.json();
+        
+        // Update stats
+        document.getElementById('dash-total-members').textContent = allMembers.length;
+        document.getElementById('nav-members-count').textContent = allMembers.length;
+        document.getElementById('badge-total-members').textContent = `${allMembers.length} सदस्य`;
+
+        renderMembers();
+      } catch (err) {
+        console.error('Error loading members data:', err);
+      }
+    }
+
+    function handleSearchMembers(term) {
+      currentSearchTerm = term.trim().toLowerCase();
+      renderMembers();
+    }
+
+    function handleFilterAddress(address) {
+      currentFilterAddress = address;
+      renderMembers();
+    }
+
+    function setMemberLayout(type) {
+      currentLayout = type;
+      const grid = document.getElementById('members-grid-container');
+      const table = document.getElementById('members-table-container');
+      const btnCards = document.getElementById('btn-layout-cards');
+      const btnTable = document.getElementById('btn-layout-table');
+
+      if (type === 'cards') {
+        grid.classList.remove('hidden');
+        table.classList.add('hidden');
+        btnCards.className = 'px-2.5 py-1 rounded-lg bg-white text-orange-700 font-bold shadow-sm transition-all flex items-center gap-1';
+        btnTable.className = 'px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1';
+      } else {
+        grid.classList.add('hidden');
+        table.classList.remove('hidden');
+        btnTable.className = 'px-2.5 py-1 rounded-lg bg-white text-orange-700 font-bold shadow-sm transition-all flex items-center gap-1';
+        btnCards.className = 'px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1';
+      }
+    }
+
+    // Avatar generator based on initials
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).slice(0, 2).join('');
+    }
+
+    function getAvatarBg(name) {
+      const colors = ['bg-orange-500', 'bg-amber-500', 'bg-emerald-600', 'bg-blue-600', 'bg-purple-600', 'bg-rose-500'];
+      const index = name.charCodeAt(0) % colors.length;
+      return colors[index];
+    }
+
+    function renderMembers() {
+      const filtered = allMembers.filter(m => {
+        const matchesAddress = currentFilterAddress === 'ALL' || m.address.toUpperCase().includes(currentFilterAddress);
+        const matchesSearch = !currentSearchTerm || 
+          m.name.toLowerCase().includes(currentSearchTerm) ||
+          m.father.toLowerCase().includes(currentSearchTerm) ||
+          m.address.toLowerCase().includes(currentSearchTerm) ||
+          m.phone.includes(currentSearchTerm);
+        return matchesAddress && matchesSearch;
+      });
+
+      document.getElementById('filtered-count-text').textContent = `${filtered.length} सदस्य दिखाए जा रहे हैं`;
+
+      // 1. Render Cards
+      const grid = document.getElementById('members-grid-container');
+      grid.innerHTML = filtered.map(m => `
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <!-- Member Photo / Avatar -->
+                <div class="w-12 h-12 rounded-2xl ${getAvatarBg(m.name)} text-white font-extrabold flex items-center justify-center text-sm shadow-md flex-shrink-0">
+                  ${getInitials(m.name)}
+                </div>
+                <div>
+                  <h4 class="text-sm font-extrabold text-slate-900 leading-snug">${m.name}</h4>
+                  <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father}</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                ${m.status}
+              </span>
+            </div>
+
+            <!-- Details List -->
+            <div class="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs">
+              <div class="flex items-center justify-between text-slate-600">
+                <span class="flex items-center gap-1.5 text-slate-400">
+                  <i class="fa-solid fa-location-dot text-[11px] text-orange-500"></i> गाँव / पता:
+                </span>
+                <span class="font-bold text-slate-800">${m.address}</span>
+              </div>
+
+              <div class="flex items-center justify-between text-slate-600">
+                <span class="flex items-center gap-1.5 text-slate-400">
+                  <i class="fa-solid fa-calendar-check text-[11px] text-blue-500"></i> सदस्यता दिनांक:
+                </span>
+                <span class="font-semibold text-slate-700 font-mono">${m.since}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons: Call & WhatsApp -->
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+            <a 
+              href="tel:${m.phone}" 
+              class="flex-1 py-2 px-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border border-slate-200"
+            >
+              <i class="fa-solid fa-phone text-slate-500"></i>
+              <span>${m.phone}</span>
+            </a>
+            <a 
+              href="https://wa.me/91${m.phone}" 
+              target="_blank" 
+              class="w-9 h-9 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-xl text-sm flex items-center justify-center border border-emerald-200 transition-colors"
+              title="WhatsApp Message"
+            >
+              <i class="fa-brands fa-whatsapp text-base"></i>
+            </a>
+          </div>
+        </div>
+      `).join('');
+
+      // 2. Render Table
+      const tableBody = document.getElementById('members-table-body');
+      tableBody.innerHTML = filtered.map(m => `
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl ${getAvatarBg(m.name)} text-white font-bold flex items-center justify-center text-xs flex-shrink-0">
+                ${getInitials(m.name)}
+              </div>
+              <span class="font-bold text-slate-900">${m.name}</span>
+            </div>
+          </td>
+          <td class="py-3 px-4 text-slate-600 font-medium">${m.father}</td>
+          <td class="py-3 px-4">
+            <span class="font-semibold text-orange-950 bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-200">
+              ${m.address}
+            </span>
+          </td>
+          <td class="py-3 px-4 font-mono font-bold text-slate-800">
+            <div class="flex items-center gap-2">
+              <a href="tel:${m.phone}" class="hover:underline text-blue-600">${m.phone}</a>
+              <a href="https://wa.me/91${m.phone}" target="_blank" class="text-emerald-600 hover:scale-110">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </div>
+          </td>
+          <td class="py-3 px-4 font-mono text-slate-500">${m.since}</td>
+          <td class="py-3 px-4 text-center">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              ${m.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Auto-login if session exists
     window.addEventListener('DOMContentLoaded', () => {
       if (sessionStorage.getItem('gsks_admin_auth') === 'true') {
         showDashboard();
