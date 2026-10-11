@@ -314,63 +314,63 @@
 
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             <!-- Card 1: Total Members -->
-            <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-orange-400 transition-all">
+            <div onclick="switchAdminView('members', 'ALL')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-orange-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-500">Total Members</span>
-                <span class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs">
+                <span class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform">
                   <i class="fa-solid fa-users"></i>
                 </span>
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-total-members">0</p>
-                <p class="text-xs text-slate-400 mt-0.5">कुल सदस्य</p>
+                <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">कुल सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-orange-500"></i></p>
               </div>
             </div>
 
             <!-- Card 2: Active Members -->
-            <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 transition-all">
+            <div onclick="switchAdminView('members', 'Active')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500">Active</span>
-                <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                <span class="text-xs font-bold text-emerald-800">Active</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform">
                   <i class="fa-solid fa-user-check"></i>
                 </span>
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-emerald-700" id="dash-active-members">0</p>
-                <p class="text-xs text-slate-400 mt-0.5">सक्रिय सामान्य सदस्य</p>
+                <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">सक्रिय सामान्य सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-emerald-500"></i></p>
               </div>
             </div>
 
             <!-- Card 3: Prime Members (DEDICATED VIP CARD) -->
-            <div onclick="switchAdminView('prime')" class="cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50/40 rounded-3xl p-4 sm:p-5 border border-amber-300 shadow-sm flex flex-col justify-between hover:border-amber-500 hover:shadow-md transition-all">
+            <div onclick="switchAdminView('prime')" class="cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50/40 rounded-3xl p-4 sm:p-5 border border-amber-300 shadow-sm flex flex-col justify-between hover:border-amber-500 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-amber-900">Prime Members</span>
-                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs shadow-sm">
+                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs shadow-sm group-hover:scale-110 transition-transform">
                   <i class="fa-solid fa-crown text-amber-600"></i>
                 </span>
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-amber-800" id="dash-prime-members">0</p>
-                <p class="text-xs text-amber-700 font-semibold mt-0.5">विशिष्ट सदस्य (VIP)</p>
+                <p class="text-xs text-amber-700 font-semibold mt-0.5 flex items-center gap-1">विशिष्ट सदस्य (VIP) <i class="fa-solid fa-arrow-right text-[10px] text-amber-600"></i></p>
               </div>
             </div>
 
             <!-- Card 4: Inactive Members -->
-            <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 transition-all">
+            <div onclick="switchAdminView('members', 'Inactive')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500">Inactive</span>
-                <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs">
+                <span class="text-xs font-bold text-slate-600">Inactive</span>
+                <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs group-hover:scale-110 transition-transform">
                   <i class="fa-solid fa-user-slash"></i>
                 </span>
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-slate-600" id="dash-inactive-members">0</p>
-                <p class="text-xs text-slate-400 mt-0.5">निष्क्रिय सदस्य</p>
+                <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">निष्क्रिय सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-slate-500"></i></p>
               </div>
             </div>
 
             <!-- Card 5: Archived Members -->
-            <div onclick="switchAdminView('archived')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 transition-all">
+            <div onclick="switchAdminView('archived')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-rose-800">Archived</span>
                 <span class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xs">
@@ -955,8 +955,8 @@
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
-    // Switch between Admin views: dashboard, members, prime, archived
-    function switchAdminView(view) {
+    // Switch between Admin views: dashboard, members, prime, active, inactive, archived
+    function switchAdminView(view, statusFilter = null) {
       const dashSection = document.getElementById('view-dashboard-section');
       const membersSection = document.getElementById('view-members-section');
       const archivedSection = document.getElementById('view-archived-section');
@@ -985,12 +985,11 @@
       membersSection.classList.add('hidden');
       archivedSection.classList.add('hidden');
 
-      if (view === 'prime') {
+      if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
         if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
         if(mobPrime) mobPrime.className = 'flex flex-col items-center gap-1 text-amber-700 font-bold';
         
-        // Filter specifically to Prime Members
         document.getElementById('member-status-filter').value = 'Prime Member';
         currentFilterStatus = 'Prime Member';
         renderMembers();
@@ -999,9 +998,9 @@
         if(navMembers) navMembers.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
         if(mobMembers) mobMembers.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
         
-        // Reset status filter to ALL
-        document.getElementById('member-status-filter').value = 'ALL';
-        currentFilterStatus = 'ALL';
+        const filterVal = statusFilter || 'ALL';
+        document.getElementById('member-status-filter').value = filterVal;
+        currentFilterStatus = filterVal;
         renderMembers();
       } else if (view === 'archived') {
         archivedSection.classList.remove('hidden');
