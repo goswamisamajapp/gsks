@@ -1026,46 +1026,72 @@
     const db = firebase.firestore();
     const membersCol = db.collection('members');
 
-    // Bulletproof Dynamic Dual Sync: Live database that grows seamlessly
+    // Pure Realtime Firestore Architecture
+    let realtimeListenerInitialized = false;
+
     async function initFirebaseRealtime() {
-      // 1. Always load full database from API first
+      if (realtimeListenerInitialized) return;
+      realtimeListenerInitialized = true;
+
       try {
-        const res = await fetch('/api/members');
-        const list = await res.json();
-        if (Array.isArray(list) && list.length > 0) {
-          allMembers = list;
+        // Step 1: Load base 72 members first from local server so UI never stays blank
+        const res = await fetch('/members-data.json?t=' + Date.now());
+        const baseMembers = await res.json();
+        
+        // Populate local map for fast lookup and merge
+        const membersMap = new Map();
+        baseMembers.forEach(m => membersMap.set(m.id, m));
+
+        // Step 2: Fetch Firestore data
+        const snapshot = await membersCol.get();
+
+        if (snapshot.empty) {
+          // If Firestore is empty, seed all members
+          console.log('Seeding initial members to Firestore...');
+          const batch = db.batch();
+          baseMembers.forEach(m => {
+            batch.set(membersCol.doc(m.id), m);
+          });
+          await batch.commit();
+        } else {
+          // Merge Firestore docs over base members
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            membersMap.set(doc.id, { ...(membersMap.get(doc.id) || {}), ...data });
+          });
+        }
+
+        allMembers = Array.from(membersMap.values());
+        allMembers.sort((a, b) => a.id.localeCompare(b.id));
+        updateStats();
+        renderMembers();
+
+        // Step 3: Listen for live changes / new member additions from any phone/PC
+        membersCol.onSnapshot((liveSnap) => {
+          liveSnap.docChanges().forEach((change) => {
+            const docData = change.doc.data();
+            const docId = change.doc.id;
+            if (change.type === 'removed') {
+              membersMap.delete(docId);
+            } else {
+              membersMap.set(docId, { ...(membersMap.get(docId) || {}), ...docData });
+            }
+          });
+
+          allMembers = Array.from(membersMap.values());
+          allMembers.sort((a, b) => a.id.localeCompare(b.id));
           updateStats();
           renderMembers();
-        }
-      } catch (err) {
-        console.warn('API fetch warning:', err);
-      }
-
-      // 2. Realtime Firestore Sync
-      try {
-        membersCol.onSnapshot((snapshot) => {
-          if (!snapshot.empty) {
-            snapshot.forEach(doc => {
-              const data = doc.data();
-              const idx = allMembers.findIndex(m => m.id === data.id);
-              if (idx !== -1) {
-                allMembers[idx] = data;
-              } else {
-                allMembers.push(data);
-              }
-            });
-            allMembers.sort((a, b) => a.id.localeCompare(b.id));
-            updateStats();
-            renderMembers();
-            if (typeof renderArchivedList === 'function') {
-              renderArchivedList();
-            }
+          if (typeof renderArchivedList === 'function') {
+            renderArchivedList();
           }
-        }, (err) => {
-          console.warn('Firestore realtime listener error:', err);
+        }, (error) => {
+          console.error("Firestore onSnapshot error:", error);
         });
-      } catch (e) {
-        console.warn('Firestore init note:', e);
+
+      } catch (err) {
+        console.error('Firestore init error, falling back:', err);
+        loadMembersDataFallback();
       }
     }
 
@@ -1426,8 +1452,15 @@
 
     async function handleAddNewMember(e) {
       e.preventDefault();
-      // Generate next Sequential ID (e.g., GSKS-073)
-      const nextNum = allMembers.length + 1;
+      // Calculate highest numeric ID among existing members
+      let maxNum = 0;
+      allMembers.forEach(m => {
+        if (m.id && m.id.startsWith('GSKS-')) {
+          const num = parseInt(m.id.replace('GSKS-', ''), 10);
+          if (!isNaN(num) && num > maxNum) maxNum = num;
+        }
+      });
+      const nextNum = maxNum + 1;
       const newId = `GSKS-${String(nextNum).padStart(3, '0')}`;
 
       const newMember = {
