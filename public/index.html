@@ -914,9 +914,20 @@
         console.warn('Backup fetch warning:', err);
       }
 
-      // 2. Connect Firestore Realtime in Background
+      // 2. Auto-sync to Firebase Firestore directly without waiting
       try {
-        membersCol.onSnapshot(async (snapshot) => {
+        // Direct write check to create collection automatically
+        membersCol.get().then(async (snapshot) => {
+          if (snapshot.empty) {
+            console.log('Auto-populating Firebase collection members...');
+            for (const m of allMembers) {
+              await membersCol.doc(m.id).set(m);
+            }
+          }
+        }).catch(err => console.warn('Firestore initial check:', err));
+
+        // Realtime Listener
+        membersCol.onSnapshot((snapshot) => {
           if (!snapshot.empty) {
             const fbMembers = [];
             snapshot.forEach(doc => fbMembers.push(doc.data()));
@@ -929,21 +940,12 @@
                 renderArchivedList();
               }
             }
-          } else {
-            // First time auto-upload 72 members to Firestore
-            console.log('Seeding 72 members to Firestore...');
-            const batch = db.batch();
-            allMembers.forEach(m => {
-              const docRef = membersCol.doc(m.id);
-              batch.set(docRef, m);
-            });
-            await batch.commit();
           }
         }, (err) => {
-          console.warn('Firestore sync fallback mode active:', err);
+          console.warn('Firestore listener fallback:', err);
         });
       } catch (e) {
-        console.warn('Firestore init note:', e);
+        console.warn('Firestore error:', e);
       }
     }
 
