@@ -664,15 +664,30 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">कुल दान राशि (Total Donation ₹)</label>
+            <label class="block font-bold text-slate-700 mb-1">कुल दान (Donation ₹)</label>
             <input type="number" id="edit-donation" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold">
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1">बकाया शुल्क (Any Dues ₹)</label>
+            <label class="block font-bold text-slate-700 mb-1">बकाया शुल्क (Dues ₹)</label>
             <input type="number" id="edit-dues" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">ब्लड ग्रुप (Blood Group)</label>
+            <select id="edit-blood" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+              <option value="">चुनें / Not Set</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
           </div>
         </div>
 
@@ -1250,6 +1265,7 @@
       document.getElementById('edit-since').value = member.since || '19-05-2025';
       document.getElementById('edit-donation').value = member.donation || 0;
       document.getElementById('edit-dues').value = member.dues || 0;
+      document.getElementById('edit-blood').value = member.bloodGroup || '';
       document.getElementById('password-reset-alert').classList.add('hidden');
 
       document.getElementById('edit-member-modal').classList.remove('hidden');
@@ -1274,7 +1290,8 @@
         status: document.getElementById('edit-status').value,
         since: document.getElementById('edit-since').value.trim(),
         donation: Number(document.getElementById('edit-donation').value) || 0,
-        dues: Number(document.getElementById('edit-dues').value) || 0
+        dues: Number(document.getElementById('edit-dues').value) || 0,
+        bloodGroup: document.getElementById('edit-blood').value
       };
 
       closeEditModal();
