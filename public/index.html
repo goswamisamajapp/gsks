@@ -160,7 +160,10 @@
             <i class="fa-solid fa-chart-pie"></i> Dashboard
           </button>
           <button onclick="switchAdminView('members')" id="nav-btn-members" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
-            <i class="fa-solid fa-users"></i> Members (<span id="nav-members-count">72</span>)
+            <i class="fa-solid fa-users"></i> All Members (<span id="nav-members-count">72</span>)
+          </button>
+          <button onclick="switchAdminView('prime')" id="nav-btn-prime" class="px-3.5 py-2 rounded-xl text-amber-800 bg-amber-50 hover:bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-200">
+            <i class="fa-solid fa-crown text-amber-600"></i> Prime Members (<span id="nav-prime-count">3</span>)
           </button>
           <button onclick="switchAdminView('archived')" id="nav-btn-archived" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all">
             <i class="fa-solid fa-box-archive"></i> Archived (<span id="nav-archived-count">0</span>)
@@ -294,8 +297,8 @@
             </button>
           </div>
 
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <!-- Total Members -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Card 1: Total Members -->
             <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-orange-400 transition-all">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-500">Total Members</span>
@@ -305,26 +308,40 @@
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-slate-900" id="dash-total-members">72</p>
-                <p class="text-xs text-slate-400 mt-0.5">सत्यापित सक्रिय + प्राइम</p>
+                <p class="text-xs text-slate-400 mt-0.5">कुल सदस्य</p>
               </div>
             </div>
 
-            <!-- Active Members -->
-            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 transition-all">
+            <!-- Card 2: Active Members -->
+            <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 transition-all">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500">Active & Prime</span>
+                <span class="text-xs font-bold text-slate-500">Active</span>
                 <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
                   <i class="fa-solid fa-user-check"></i>
                 </span>
               </div>
               <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-emerald-700" id="dash-active-members">72</p>
-                <p class="text-xs text-slate-400 mt-0.5">सक्रिय सदस्य</p>
+                <p class="text-2xl sm:text-3xl font-black text-emerald-700" id="dash-active-members">69</p>
+                <p class="text-xs text-slate-400 mt-0.5">सक्रिय सामान्य सदस्य</p>
               </div>
             </div>
 
-            <!-- Inactive Members -->
-            <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 transition-all">
+            <!-- Card 3: Prime Members (DEDICATED VIP CARD) -->
+            <div onclick="switchAdminView('prime')" class="cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50/40 rounded-3xl p-4 sm:p-5 border border-amber-300 shadow-sm flex flex-col justify-between hover:border-amber-500 hover:shadow-md transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">Prime Members</span>
+                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xs shadow-sm">
+                  <i class="fa-solid fa-crown text-amber-600"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-amber-800" id="dash-prime-members">3</p>
+                <p class="text-xs text-amber-700 font-semibold mt-0.5">विशिष्ट सदस्य (VIP)</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Inactive Members -->
+            <div onclick="switchAdminView('members')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 transition-all">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-500">Inactive</span>
                 <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs">
@@ -337,7 +354,7 @@
               </div>
             </div>
 
-            <!-- Archived / Removed Members -->
+            <!-- Card 5: Archived Members -->
             <div onclick="switchAdminView('archived')" class="cursor-pointer bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 transition-all">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-rose-800">Archived</span>
@@ -347,7 +364,7 @@
               </div>
               <div class="mt-3">
                 <p class="text-2xl sm:text-3xl font-black text-rose-700" id="dash-archived-members">0</p>
-                <p class="text-xs text-rose-600 font-semibold mt-0.5">हटाए गए सदस्य (आर्काइव)</p>
+                <p class="text-xs text-rose-600 font-semibold mt-0.5">हटाए गए सदस्य</p>
               </div>
             </div>
           </div>
@@ -485,7 +502,7 @@
     </main>
 
     <!-- Bottom Mobile Nav Bar -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2 flex items-center justify-between z-40 shadow-lg">
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex items-center justify-between z-40 shadow-lg">
       <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 text-orange-600">
         <i class="fa-solid fa-chart-pie text-sm"></i>
         <span class="text-[10px] font-bold">Dashboard</span>
@@ -493,6 +510,10 @@
       <button onclick="switchAdminView('members')" id="mobile-nav-members" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-users text-sm"></i>
         <span class="text-[10px] font-medium">Members</span>
+      </button>
+      <button onclick="switchAdminView('prime')" id="mobile-nav-prime" class="flex flex-col items-center gap-1 text-amber-600 hover:text-amber-700">
+        <i class="fa-solid fa-crown text-sm"></i>
+        <span class="text-[10px] font-bold">Prime (<span id="mob-prime-count">3</span>)</span>
       </button>
       <button onclick="switchAdminView('archived')" id="mobile-nav-archived" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-box-archive text-sm"></i>
@@ -789,7 +810,7 @@
       document.getElementById('current-date').textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
-    // Switch between Admin views: dashboard, members, archived
+    // Switch between Admin views: dashboard, members, prime, archived
     function switchAdminView(view) {
       const dashSection = document.getElementById('view-dashboard-section');
       const membersSection = document.getElementById('view-members-section');
@@ -797,19 +818,21 @@
       
       const navDash = document.getElementById('nav-btn-dashboard');
       const navMembers = document.getElementById('nav-btn-members');
+      const navPrime = document.getElementById('nav-btn-prime');
       const navArchived = document.getElementById('nav-btn-archived');
 
       const mobDash = document.getElementById('mobile-nav-dashboard');
       const mobMembers = document.getElementById('mobile-nav-members');
+      const mobPrime = document.getElementById('mobile-nav-prime');
       const mobArchived = document.getElementById('mobile-nav-archived');
 
       // Reset desktop classes
-      [navDash, navMembers, navArchived].forEach(btn => {
+      [navDash, navMembers, navPrime, navArchived].forEach(btn => {
         if(btn) btn.className = 'px-3.5 py-2 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all';
       });
 
       // Reset mobile classes
-      [mobDash, mobMembers, mobArchived].forEach(btn => {
+      [mobDash, mobMembers, mobPrime, mobArchived].forEach(btn => {
         if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
       });
 
@@ -817,10 +840,24 @@
       membersSection.classList.add('hidden');
       archivedSection.classList.add('hidden');
 
-      if (view === 'members') {
+      if (view === 'prime') {
+        membersSection.classList.remove('hidden');
+        if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
+        if(mobPrime) mobPrime.className = 'flex flex-col items-center gap-1 text-amber-700 font-bold';
+        
+        // Filter specifically to Prime Members
+        document.getElementById('member-status-filter').value = 'Prime Member';
+        currentFilterStatus = 'Prime Member';
+        renderMembers();
+      } else if (view === 'members') {
         membersSection.classList.remove('hidden');
         if(navMembers) navMembers.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
         if(mobMembers) mobMembers.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+        
+        // Reset status filter to ALL
+        document.getElementById('member-status-filter').value = 'ALL';
+        currentFilterStatus = 'ALL';
+        renderMembers();
       } else if (view === 'archived') {
         archivedSection.classList.remove('hidden');
         if(navArchived) navArchived.className = 'px-3.5 py-2 rounded-xl text-rose-700 bg-rose-50 font-bold flex items-center gap-1.5 transition-all';
@@ -940,20 +977,25 @@
     }
 
     function updateStats() {
-      const activeMembers = allMembers.filter(m => m.status !== 'removed');
-      const archivedMembers = allMembers.filter(m => m.status === 'removed');
-      const activeCount = allMembers.filter(m => m.status === 'Active' || m.status === 'Prime Member').length;
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      const activeCount = allMembers.filter(m => m.status === 'Active').length;
+      const primeCount = allMembers.filter(m => m.status === 'Prime Member').length;
       const inactiveCount = allMembers.filter(m => m.status === 'Inactive').length;
+      const archivedCount = allMembers.filter(m => m.status === 'removed').length;
 
-      document.getElementById('dash-total-members').textContent = activeMembers.length;
-      document.getElementById('dash-btn-count').textContent = activeMembers.length;
-      document.getElementById('nav-members-count').textContent = activeMembers.length;
-      document.getElementById('badge-total-members').textContent = `${activeMembers.length} सदस्य`;
+      document.getElementById('dash-total-members').textContent = nonRemoved.length;
+      document.getElementById('dash-btn-count').textContent = nonRemoved.length;
+      document.getElementById('nav-members-count').textContent = nonRemoved.length;
+      document.getElementById('badge-total-members').textContent = `${nonRemoved.length} सदस्य`;
+      
       document.getElementById('dash-active-members').textContent = activeCount;
-      document.getElementById('dash-inactive-members').textContent = inactiveCount;
+      document.getElementById('dash-prime-members').textContent = primeCount;
+      if (document.getElementById('nav-prime-count')) document.getElementById('nav-prime-count').textContent = primeCount;
+      if (document.getElementById('mob-prime-count')) document.getElementById('mob-prime-count').textContent = primeCount;
 
-      document.getElementById('nav-archived-count').textContent = archivedMembers.length;
-      document.getElementById('dash-archived-members').textContent = archivedMembers.length;
+      document.getElementById('dash-inactive-members').textContent = inactiveCount;
+      document.getElementById('nav-archived-count').textContent = archivedCount;
+      document.getElementById('dash-archived-members').textContent = archivedCount;
     }
 
     function handleSearchMembers(term) {
