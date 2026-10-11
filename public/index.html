@@ -798,7 +798,7 @@
 
       if (id === 'Admin' && pass === 'Gattu@1994#') {
         errBox.classList.add('hidden');
-        sessionStorage.setItem('gsks_admin_auth', 'true');
+        localStorage.setItem('gsks_admin_auth', 'true');
         showDashboard();
       } else {
         errBox.textContent = 'अमान्य Admin ID या Password! कृपया सही जानकारी दर्ज करें।';
@@ -814,7 +814,7 @@
     }
 
     function logoutAdmin() {
-      sessionStorage.removeItem('gsks_admin_auth');
+      localStorage.removeItem('gsks_admin_auth');
       document.getElementById('admin-dashboard').classList.add('hidden');
       document.getElementById('login-screen').classList.remove('hidden');
       document.getElementById('admin-password').value = '';
@@ -1368,9 +1368,12 @@
       renderArchivedList();
     }
 
-    // Auto-login if session exists
+    // Permanent Session: Auto-login on refresh until manual Logout
+    if (localStorage.getItem('gsks_admin_auth') === 'true') {
+      showDashboard();
+    }
     window.addEventListener('DOMContentLoaded', () => {
-      if (sessionStorage.getItem('gsks_admin_auth') === 'true') {
+      if (localStorage.getItem('gsks_admin_auth') === 'true') {
         showDashboard();
       }
     });
