@@ -1640,10 +1640,29 @@
       }
     }
 
+    function closeAllModals() {
+      const modalIds = [
+        'view-member-modal',
+        'edit-member-modal',
+        'add-member-modal',
+        'delete-confirm-modal',
+        'event-form-modal',
+        'delete-event-modal'
+      ];
+      modalIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('hidden');
+          el.style.display = 'none';
+        }
+      });
+    }
+
     // ==============================================
     // 1. VIEW MODAL LOGIC (Big Photo, All Details, Dues)
     // ==============================================
     function openViewModal(id) {
+      closeAllModals();
       const member = allMembers.find(m => m.id === id);
       if (!member) return;
 
@@ -1663,11 +1682,19 @@
       document.getElementById('view-since').textContent = member.since || '19-05-2025';
       document.getElementById('view-blood').textContent = member.bloodGroup || 'Not Specified';
 
-      document.getElementById('view-member-modal').classList.remove('hidden');
+      const modal = document.getElementById('view-member-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
     }
 
     function closeViewModal() {
-      document.getElementById('view-member-modal').classList.add('hidden');
+      const modal = document.getElementById('view-member-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
 
     function openEditModalFromView() {
@@ -1681,6 +1708,7 @@
     // 2. EDIT MODAL LOGIC (With Reset Password)
     // ==============================================
     function openEditModal(id) {
+      closeAllModals();
       const member = allMembers.find(m => m.id === id);
       if (!member) return;
 
@@ -1697,17 +1725,27 @@
       document.getElementById('edit-blood').value = member.bloodGroup || '';
       document.getElementById('password-reset-alert').classList.add('hidden');
 
-      document.getElementById('edit-member-modal').classList.remove('hidden');
+      const modal = document.getElementById('edit-member-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
     }
 
     function closeEditModal() {
-      document.getElementById('edit-member-modal').classList.add('hidden');
+      const modal = document.getElementById('edit-member-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
 
     // ==============================================
     // 2.5 ADD MEMBER MODAL LOGIC
     // ==============================================
     function openAddMemberModal() {
+      closeAllModals();
+
       // Default date to today formatted DD-MM-YYYY
       const today = new Date();
       const dd = String(today.getDate()).padStart(2, '0');
@@ -1724,12 +1762,23 @@
       document.getElementById('add-dues').value = 0;
       document.getElementById('add-blood').value = '';
 
-      document.getElementById('add-member-modal').classList.remove('hidden');
+      const modal = document.getElementById('add-member-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
     }
 
     function closeAddMemberModal() {
-      document.getElementById('add-member-modal').classList.add('hidden');
+      const modal = document.getElementById('add-member-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
+
+    window.openAddMemberModal = openAddMemberModal;
+    window.closeAddMemberModal = closeAddMemberModal;
 
     async function handleAddNewMember(e) {
       e.preventDefault();
@@ -1934,6 +1983,7 @@
 
     function openEventModal(eventId = null) {
       try {
+        closeAllModals();
         const modal = document.getElementById('event-form-modal');
         if (!modal) return;
         const modalTitle = document.getElementById('event-modal-title');
