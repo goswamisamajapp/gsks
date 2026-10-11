@@ -937,6 +937,9 @@
         </div>
       </form>
 
+    </div>
+  </div>
+
 
   <!-- ============================================================== -->
   <!-- MODAL 3: DELETE CONFIRMATION (Move to Archived)                -->
@@ -969,7 +972,7 @@
   <!-- ============================================================== -->
   <!-- MODAL 4: EVENT ADD / EDIT MODAL                                -->
   <!-- ============================================================== -->
-  <div id="event-form-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div id="event-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       
       <button onclick="closeEventModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
@@ -1934,61 +1937,74 @@
     }
 
     function openEventModal(eventId = null) {
-      const modal = document.getElementById('event-form-modal');
-      const modalTitle = document.getElementById('event-modal-title');
-      const btnText = document.getElementById('event-save-btn-text');
+      try {
+        const modal = document.getElementById('event-form-modal');
+        if (!modal) return;
+        const modalTitle = document.getElementById('event-modal-title');
+        const btnText = document.getElementById('event-save-btn-text');
 
-      if (eventId) {
-        const ev = allEvents.find(e => e.id === eventId);
-        if (!ev) return;
-        document.getElementById('event-id').value = ev.id;
-        modalTitle.textContent = 'इवेंट / बैठक संपादित करें (Edit Event)';
-        btnText.textContent = 'अपडेट करें (Update Event)';
+        if (eventId) {
+          const ev = allEvents.find(e => e.id === eventId);
+          if (!ev) return;
+          if (document.getElementById('event-id')) document.getElementById('event-id').value = ev.id;
+          if (modalTitle) modalTitle.textContent = 'इवेंट / बैठक संपादित करें (Edit Event)';
+          if (btnText) btnText.textContent = 'अपडेट करें (Update Event)';
 
-        const catRadios = document.getElementsByName('event-category');
-        for (const r of catRadios) {
-          r.checked = (r.value === ev.category);
+          const catRadios = document.getElementsByName('event-category');
+          for (const r of catRadios) {
+            r.checked = (r.value === ev.category);
+          }
+
+          if (document.getElementById('event-title')) document.getElementById('event-title').value = ev.title || '';
+          if (document.getElementById('event-venue')) document.getElementById('event-venue').value = ev.venue || '';
+          if (document.getElementById('event-datetime')) document.getElementById('event-datetime').value = ev.datetime || '';
+          if (document.getElementById('event-description')) document.getElementById('event-description').value = ev.description || '';
+          if (document.getElementById('event-audience')) document.getElementById('event-audience').value = ev.audience || 'All User';
+
+          toggleSelectedMembersList(ev.audience || 'All User');
+          if (ev.audience === 'Selected User') {
+            renderSelectedUsersChecklist(ev.selectedMembers || []);
+          }
+        } else {
+          if (document.getElementById('event-id')) document.getElementById('event-id').value = '';
+          if (modalTitle) modalTitle.textContent = 'नया कार्यक्रम / बैठक जोड़ें (Add Event)';
+          if (btnText) btnText.textContent = 'सुरक्षित करें (Save Event)';
+
+          const catRadios = document.getElementsByName('event-category');
+          if (catRadios.length > 0) catRadios[0].checked = true;
+
+          if (document.getElementById('event-title')) document.getElementById('event-title').value = '';
+          if (document.getElementById('event-venue')) document.getElementById('event-venue').value = '';
+          
+          // Default datetime to tomorrow at 10:00 AM
+          const now = new Date();
+          now.setDate(now.getDate() + 1);
+          now.setHours(10, 0, 0, 0);
+          const isoString = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+          if (document.getElementById('event-datetime')) document.getElementById('event-datetime').value = isoString;
+
+          if (document.getElementById('event-description')) document.getElementById('event-description').value = '';
+          if (document.getElementById('event-audience')) document.getElementById('event-audience').value = 'All User';
+          toggleSelectedMembersList('All User');
         }
 
-        document.getElementById('event-title').value = ev.title;
-        document.getElementById('event-venue').value = ev.venue;
-        document.getElementById('event-datetime').value = ev.datetime;
-        document.getElementById('event-description').value = ev.description;
-        document.getElementById('event-audience').value = ev.audience;
-
-        toggleSelectedMembersList(ev.audience);
-        if (ev.audience === 'Selected User') {
-          renderSelectedUsersChecklist(ev.selectedMembers || []);
-        }
-      } else {
-        document.getElementById('event-id').value = '';
-        modalTitle.textContent = 'नया कार्यक्रम / बैठक जोड़ें (Add Event)';
-        btnText.textContent = 'सुरक्षित करें (Save Event)';
-
-        const catRadios = document.getElementsByName('event-category');
-        if (catRadios.length > 0) catRadios[0].checked = true;
-
-        document.getElementById('event-title').value = '';
-        document.getElementById('event-venue').value = '';
-        
-        // Default datetime to tomorrow at 10:00 AM
-        const now = new Date();
-        now.setDate(now.getDate() + 1);
-        now.setHours(10, 0, 0, 0);
-        const isoString = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-        document.getElementById('event-datetime').value = isoString;
-
-        document.getElementById('event-description').value = '';
-        document.getElementById('event-audience').value = 'All User';
-        toggleSelectedMembersList('All User');
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      } catch (err) {
+        console.error('Error opening event modal:', err);
       }
-
-      modal.classList.remove('hidden');
     }
 
     function closeEventModal() {
-      document.getElementById('event-form-modal').classList.add('hidden');
+      const modal = document.getElementById('event-form-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
+
+    window.openEventModal = openEventModal;
+    window.closeEventModal = closeEventModal;
 
     async function handleSaveEvent(e) {
       e.preventDefault();
