@@ -24,6 +24,16 @@
     }
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    // Instant session check before DOM renders to prevent login screen showing on refresh
+    if (localStorage.getItem('gsks_admin_auth') === 'true') {
+      document.documentElement.classList.add('admin-logged-in');
+    }
+  </script>
+  <style>
+    .admin-logged-in #login-screen { display: none !important; }
+    .admin-logged-in #admin-dashboard { display: flex !important; }
+  </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col">
 
@@ -815,6 +825,7 @@
 
     function logoutAdmin() {
       localStorage.removeItem('gsks_admin_auth');
+      document.documentElement.classList.remove('admin-logged-in');
       document.getElementById('admin-dashboard').classList.add('hidden');
       document.getElementById('login-screen').classList.remove('hidden');
       document.getElementById('admin-password').value = '';
