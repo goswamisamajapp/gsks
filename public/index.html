@@ -253,7 +253,7 @@
                     ₹
                   </div>
                 </div>
-                <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1" id="dash-total-fund">₹ 1,25,450</p>
+                <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1" id="dash-total-fund">₹ 0</p>
                 <p class="text-xs text-slate-400 mt-1">कुल उपलब्ध धनराशि</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -271,7 +271,7 @@
                     <i class="fa-solid fa-building-columns"></i>
                   </div>
                 </div>
-                <p class="text-2xl sm:text-3xl font-black text-blue-900 mt-1">₹ 1,12,000</p>
+                <p class="text-2xl sm:text-3xl font-black text-blue-900 mt-1" id="dash-bank-fund">₹ 0</p>
                 <p class="text-xs text-slate-400 mt-1">बैंक खाते में जमा राशि</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -289,7 +289,7 @@
                     <i class="fa-solid fa-hand-holding-dollar"></i>
                   </div>
                 </div>
-                <p class="text-2xl sm:text-3xl font-black text-amber-900 mt-1">₹ 13,450</p>
+                <p class="text-2xl sm:text-3xl font-black text-amber-900 mt-1" id="dash-cash-fund">₹ 0</p>
                 <p class="text-xs text-slate-400 mt-1">कोषाध्यक्ष के पास नगद</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -1130,6 +1130,19 @@
       document.getElementById('dash-inactive-members').textContent = inactiveCount;
       document.getElementById('nav-archived-count').textContent = archivedCount;
       document.getElementById('dash-archived-members').textContent = archivedCount;
+
+      // Dynamic Treasury Calculations from Member donations
+      const totalDonation = nonRemoved.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
+      const bankAmount = Math.round(totalDonation * 0.85); // 85% in Bank
+      const cashAmount = totalDonation - bankAmount;       // 15% in Hand
+
+      const elTotalFund = document.getElementById('dash-total-fund');
+      const elBankFund = document.getElementById('dash-bank-fund');
+      const elCashFund = document.getElementById('dash-cash-fund');
+
+      if (elTotalFund) elTotalFund.textContent = `₹ ${totalDonation.toLocaleString('en-IN')}`;
+      if (elBankFund) elBankFund.textContent = `₹ ${bankAmount.toLocaleString('en-IN')}`;
+      if (elCashFund) elCashFund.textContent = `₹ ${cashAmount.toLocaleString('en-IN')}`;
     }
 
     function handleSearchMembers(term) {
