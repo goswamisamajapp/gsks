@@ -833,42 +833,29 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Always sync fresh data from server while keeping local updates
+    // Central Backend API Synchronization (Shared live across PC & Phone)
     async function loadMembersData() {
       try {
-        const res = await fetch('/members-data.json?v=' + Date.now());
-        const serverData = await res.json();
-        
-        const stored = localStorage.getItem('gsks_members_data');
-        if (stored) {
-          const localData = JSON.parse(stored);
-          // If local data count differs from server or is outdated, merge cleanly
-          if (localData.length === serverData.length) {
-            allMembers = localData;
-          } else {
-            allMembers = serverData;
-            saveLocalData();
-          }
-        } else {
-          allMembers = serverData;
-          saveLocalData();
-        }
+        const res = await fetch('/api/members');
+        allMembers = await res.json();
         updateStats();
         renderMembers();
       } catch (err) {
-        console.error('Error syncing members data:', err);
-        const stored = localStorage.getItem('gsks_members_data');
-        if (stored) {
-          allMembers = JSON.parse(stored);
-          updateStats();
-          renderMembers();
-        }
+        console.error('Error fetching members from backend:', err);
       }
     }
 
-    function saveLocalData() {
-      localStorage.setItem('gsks_members_data', JSON.stringify(allMembers));
-      updateStats();
+    async function syncMemberToBackend(memberData) {
+      try {
+        await fetch('/api/members/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(memberData)
+        });
+        await loadMembersData();
+      } catch (err) {
+        console.error('Error updating member to backend:', err);
+      }
     }
 
     function updateStats() {
@@ -1149,24 +1136,26 @@
       document.getElementById('edit-member-modal').classList.add('hidden');
     }
 
-    function handleSaveMember(e) {
+    async function handleSaveMember(e) {
       e.preventDefault();
       const id = document.getElementById('edit-member-id').value;
       const index = allMembers.findIndex(m => m.id === id);
       if (index === -1) return;
 
-      allMembers[index].name = document.getElementById('edit-name').value.trim().toUpperCase();
-      allMembers[index].father = document.getElementById('edit-father').value.trim().toUpperCase();
-      allMembers[index].address = document.getElementById('edit-address').value.trim().toUpperCase();
-      allMembers[index].phone = document.getElementById('edit-phone').value.trim();
-      allMembers[index].status = document.getElementById('edit-status').value;
-      allMembers[index].since = document.getElementById('edit-since').value.trim();
-      allMembers[index].donation = Number(document.getElementById('edit-donation').value) || 0;
-      allMembers[index].dues = Number(document.getElementById('edit-dues').value) || 0;
+      const updatedPayload = {
+        id: id,
+        name: document.getElementById('edit-name').value.trim().toUpperCase(),
+        father: document.getElementById('edit-father').value.trim().toUpperCase(),
+        address: document.getElementById('edit-address').value.trim().toUpperCase(),
+        phone: document.getElementById('edit-phone').value.trim(),
+        status: document.getElementById('edit-status').value,
+        since: document.getElementById('edit-since').value.trim(),
+        donation: Number(document.getElementById('edit-donation').value) || 0,
+        dues: Number(document.getElementById('edit-dues').value) || 0
+      };
 
-      saveLocalData();
-      renderMembers();
       closeEditModal();
+      await syncMemberToBackend(updatedPayload);
     }
 
     function handleResetMemberPassword() {
@@ -1192,15 +1181,11 @@
       pendingDeleteMemberId = null;
     }
 
-    function confirmArchiveMember() {
+    async function confirmArchiveMember() {
       if (!pendingDeleteMemberId) return;
-      const index = allMembers.findIndex(m => m.id === pendingDeleteMemberId);
-      if (index !== -1) {
-        allMembers[index].status = 'removed';
-        saveLocalData();
-        renderMembers();
-      }
+      const id = pendingDeleteMemberId;
       closeDeleteModal();
+      await syncMemberToBackend({ id: id, status: 'removed' });
     }
 
     // ==============================================
@@ -1238,14 +1223,9 @@
       `).join('');
     }
 
-    function restoreMember(id) {
-      const index = allMembers.findIndex(m => m.id === id);
-      if (index !== -1) {
-        allMembers[index].status = 'Active';
-        saveLocalData();
-        renderMembers();
-        renderArchivedList();
-      }
+    async function restoreMember(id) {
+      await syncMemberToBackend({ id: id, status: 'Active' });
+      renderArchivedList();
     }
 
     // Auto-login if session exists
