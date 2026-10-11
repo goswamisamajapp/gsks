@@ -1,0 +1,15 @@
+{
+  "name": "gsks",
+  "version": "1.0.0",
+  "description": "GSKS - Akhil Bhartiya Shaiv Samaj Sewa Trust Web App",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Build step complete'"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "firebase": "^11.4.0"
+  }
+}
