@@ -2420,9 +2420,16 @@
           <input type="text" id="fundtransfer-party" placeholder="जैसे: वेंडर / टेंट वाले / कोषाध्यक्ष / स्वैच्छिक" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
         </div>
 
-        <!-- Purpose / Remarks -->
+        <!-- Purpose / Fund Type Selection & Remarks -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">विवरण / उद्देश्य (Purpose / Remarks)</label>
+          <label class="block font-bold text-slate-700 mb-1">उद्देश्य / कोष प्रकार (Purpose / Fund Type) *</label>
+          <select id="fundtransfer-remarks-select" onchange="handleFundTransferRemarksSelect(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+            <!-- Dynamically populated from masterSettings.fundTypes -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">अतिरिक्त विवरण / टिप्पणी (Optional Remarks)</label>
           <input type="text" id="fundtransfer-remarks" placeholder="जैसे: मासिक सभा व्यय, टेंट किराया, लाउडस्पीकर आदि" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
         </div>
 
@@ -4786,6 +4793,9 @@
       }
 
       populateDonationSchemeDropdowns();
+      if (typeof populateFundTransferPurposeDropdown === 'function') {
+        populateFundTransferPurposeDropdown();
+      }
     }
 
     // ==============================================
@@ -5368,11 +5378,42 @@
       }).join('');
     }
 
+    // Populate Purpose / Fund Type Dropdown in Fund Transfer Modal
+    function populateFundTransferPurposeDropdown(selectedVal = '') {
+      const select = document.getElementById('fundtransfer-remarks-select');
+      if (!select) return;
+      const types = (masterSettings && masterSettings.fundTypes) ? masterSettings.fundTypes : [
+        { name: 'Self' }, { name: 'Bank' }, { name: 'Cash in Hand' }, { name: 'Loan' }, { name: 'Investment' }
+      ];
+
+      select.innerHTML = `<option value="">-- उद्देश्य / फंड प्रकार चुनें (Select Purpose) --</option>` +
+        types.map(ft => `<option value="${ft.name}">${ft.name} (${ft.description || 'कोष खाता'})</option>`).join('') +
+        `<option value="Special Event / Festival">Special Event / Festival (उत्सव व समारोह व्यय)</option>` +
+        `<option value="General Meeting / Office">General Meeting / Office (कार्यालय व सभा व्यय)</option>` +
+        `<option value="Emergency Relief">Emergency Relief (आपातकालीन सहायता)</option>` +
+        `<option value="Other">अन्य (Other / Custom Purpose)</option>`;
+
+      if (selectedVal) {
+        select.value = selectedVal;
+      } else {
+        select.selectedIndex = 1;
+      }
+    }
+
+    function handleFundTransferRemarksSelect(val) {
+      const customInput = document.getElementById('fundtransfer-remarks');
+      if (!customInput) return;
+      if (val === 'Other') {
+        customInput.focus();
+      }
+    }
+
     // --- Fund Transfers Functions ---
     function openFundTransferModal(transferId = null) {
       closeAllModals();
       const modal = document.getElementById('fund-transfer-modal');
       const heading = document.getElementById('fundtransfer-modal-heading');
+      populateFundTransferPurposeDropdown();
 
       if (transferId) {
         const item = allFundTransfers.find(t => t.id === transferId);
@@ -5383,6 +5424,12 @@
         document.getElementById('fundtransfer-amount').value = item.amount;
         document.getElementById('fundtransfer-date').value = item.date;
         document.getElementById('fundtransfer-party').value = item.party || '';
+        
+        // Match remarks dropdown or fallback to text
+        const select = document.getElementById('fundtransfer-remarks-select');
+        if (select && item.purpose) {
+          select.value = item.purpose;
+        }
         document.getElementById('fundtransfer-remarks').value = item.remarks || '';
       } else {
         if (heading) heading.innerHTML = '<i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> नया फंड ट्रांसफर / खर्च दर्ज करें';
@@ -5430,7 +5477,11 @@
       const amount = parseFloat(document.getElementById('fundtransfer-amount').value) || 0;
       const date = document.getElementById('fundtransfer-date').value;
       const party = document.getElementById('fundtransfer-party').value.trim();
-      const remarks = document.getElementById('fundtransfer-remarks').value.trim();
+      
+      const purposeSelect = document.getElementById('fundtransfer-remarks-select');
+      const selectedPurpose = purposeSelect ? purposeSelect.value : '';
+      const customRemarks = document.getElementById('fundtransfer-remarks').value.trim();
+      const finalRemarks = customRemarks ? (selectedPurpose ? `${selectedPurpose} - ${customRemarks}` : customRemarks) : (selectedPurpose || 'सामान्य कोष अंतरण');
 
       if (amount <= 0 || !date) {
         alert("कृपया वैध राशि एवं दिनांक दर्ज करें!");
@@ -5444,7 +5495,8 @@
         amount,
         date,
         party: party || (type.includes('Hand to Bank') ? 'SBI Trust Bank A/C' : (type.includes('Bank to Hand') ? 'कोषाध्यक्ष (Cashier)' : 'विविध')),
-        remarks,
+        purpose: selectedPurpose,
+        remarks: finalRemarks,
         createdAt: new Date().toISOString()
       };
 
@@ -5631,6 +5683,8 @@
     window.openFundTransferModal = openFundTransferModal;
     window.closeFundTransferModal = closeFundTransferModal;
     window.handleTransferTypeChange = handleTransferTypeChange;
+    window.handleFundTransferRemarksSelect = handleFundTransferRemarksSelect;
+    window.populateFundTransferPurposeDropdown = populateFundTransferPurposeDropdown;
     window.handleSaveFundTransfer = handleSaveFundTransfer;
     window.deleteFundTransferItem = deleteFundTransferItem;
     window.filterFundTransfers = filterFundTransfers;
