@@ -4312,6 +4312,8 @@
           `<option value="removed">removed (हटाया गया / Archived)</option>`;
         editSelect.value = curVal;
       }
+
+      populateDonationSchemeDropdowns();
     }
 
     // ==============================================
@@ -4762,6 +4764,40 @@
         console.warn('Firestore donation delete warning:', err);
       }
     }
+
+    // Master Settings window exports
+    window.switchSettingsTab = switchSettingsTab;
+    window.openAddSchemeModal = openAddSchemeModal;
+    window.editSchemeItem = editSchemeItem;
+    window.closeSchemeModal = closeSchemeModal;
+    window.handleSaveScheme = handleSaveScheme;
+    window.deleteSchemeItem = deleteSchemeItem;
+    window.filterSchemes = filterSchemes;
+    window.toggleSchemeAmountType = toggleSchemeAmountType;
+
+    window.openAddStatusModal = openAddStatusModal;
+    window.editStatusItem = editStatusItem;
+    window.closeStatusModal = closeStatusModal;
+    window.handleSaveStatus = handleSaveStatus;
+    window.deleteStatusMasterItem = deleteStatusMasterItem;
+
+    window.openAddEventCatModal = openAddEventCatModal;
+    window.editEventCatItem = editEventCatItem;
+    window.closeEventCatModal = closeEventCatModal;
+    window.handleSaveEventCat = handleSaveEventCat;
+    window.deleteEventCatItem = deleteEventCatItem;
+
+    window.openAddEventTitleModal = openAddEventTitleModal;
+    window.editEventTitleItem = editEventTitleItem;
+    window.closeEventTitleModal = closeEventTitleModal;
+    window.handleSaveEventTitle = handleSaveEventTitle;
+    window.deleteEventTitleItem = deleteEventTitleItem;
+
+    window.openAddVenueModal = openAddVenueModal;
+    window.editEventVenueItem = editEventVenueItem;
+    window.closeEventVenueModal = closeEventVenueModal;
+    window.handleSaveEventVenue = handleSaveEventVenue;
+    window.deleteEventVenueItem = deleteEventVenueItem;
 
     window.handleDonationMemberSelect = handleDonationMemberSelect;
     window.handleDonationSchemeSelect = handleDonationSchemeSelect;
