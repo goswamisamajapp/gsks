@@ -570,20 +570,41 @@
           </div>
         </div>
 
-        <!-- Filter Chips for Events -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-          <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm transition-all">
-            सभी कार्यक्रम (<span id="event-count-all">0</span>)
-          </button>
-          <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
-          </button>
-          <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
-          </button>
-          <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
-          </button>
+        <!-- Filter Chips for Events: Status & Category -->
+        <div class="space-y-2.5">
+          <!-- Status Filters (Open, Upcoming, Closed) -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+            <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap mr-1">स्टेटस:</span>
+            <button onclick="filterEventStatus('ALL')" id="filter-event-status-all" class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm transition-all whitespace-nowrap">
+              सभी (<span id="event-status-count-all">0</span>)
+            </button>
+            <button onclick="filterEventStatus('Open')" id="filter-event-status-open" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Open / जारी (<span id="event-status-count-open">0</span>)
+            </button>
+            <button onclick="filterEventStatus('Upcoming')" id="filter-event-status-upcoming" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span> Upcoming / आगामी (<span id="event-status-count-upcoming">0</span>)
+            </button>
+            <button onclick="filterEventStatus('Closed')" id="filter-event-status-closed" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span> Closed / समाप्त (<span id="event-status-count-closed">0</span>)
+            </button>
+          </div>
+
+          <!-- Category Filters -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+            <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider whitespace-nowrap mr-1">श्रेणी:</span>
+            <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3 py-1 rounded-lg font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap">
+              सभी श्रेणी (<span id="event-count-all">0</span>)
+            </button>
+            <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3 py-1 rounded-lg font-medium bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
+            </button>
+            <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3 py-1 rounded-lg font-medium bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
+            </button>
+            <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3 py-1 rounded-lg font-medium bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
+            </button>
+          </div>
         </div>
 
         <!-- Events Cards Grid -->
@@ -1283,6 +1304,36 @@
           <textarea id="event-description" rows="3" required placeholder="बैठक के मुख्य बिंदु, विचारणीय विषय और निर्देश यहाँ दर्ज करें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium resize-none"></textarea>
         </div>
 
+        <!-- 4B. Event Status Selection (Upcoming, Open, Closed) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">इवेंट स्थिति (Event Status) *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/70 transition-all">
+              <input type="radio" name="event-status" value="Upcoming" checked class="text-blue-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 text-xs leading-tight">Upcoming</p>
+                <p class="text-[10px] text-slate-400">आगामी बैठक</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/70 transition-all">
+              <input type="radio" name="event-status" value="Open" class="text-emerald-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 text-xs leading-tight">Open</p>
+                <p class="text-[10px] text-slate-400">वर्तमान जारी</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-slate-500 has-[:checked]:bg-slate-100 transition-all">
+              <input type="radio" name="event-status" value="Closed" class="text-slate-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 text-xs leading-tight">Closed</p>
+                <p class="text-[10px] text-slate-400">समाप्त/संपन्न</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <!-- 5. Targeted Audience Notification Selection -->
         <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
           <label class="block font-bold text-slate-700">सूचना / नोटिफिकेशन किसे प्राप्त होगी? (Audience Target) *</label>
@@ -1356,7 +1407,10 @@
           <i class="fa-solid fa-calendar-check"></i>
         </div>
         <div>
-          <span id="view-event-category-badge"></span>
+          <div class="flex items-center gap-2">
+            <span id="view-event-category-badge"></span>
+            <span id="view-event-status-badge"></span>
+          </div>
           <h3 id="view-event-title" class="text-base font-black text-slate-900 mt-1 leading-snug"></h3>
         </div>
       </div>
@@ -1670,6 +1724,7 @@
     let allMembers = [];
     let allEvents = [];
     let currentEventFilter = 'ALL';
+    let currentEventStatusFilter = 'ALL';
     let pendingDeleteEventId = null;
     let currentFilterAddress = 'ALL';
     let currentFilterStatus = 'ALL';
@@ -2568,6 +2623,10 @@
       const speCount = allEvents.filter(e => e.category === 'Special Event').length;
       const emgCount = allEvents.filter(e => e.category === 'Emergency meeting').length;
 
+      const stOpenCount = allEvents.filter(e => (e.status || 'Upcoming') === 'Open').length;
+      const stUpCount = allEvents.filter(e => (e.status || 'Upcoming') === 'Upcoming').length;
+      const stClosedCount = allEvents.filter(e => (e.status || 'Upcoming') === 'Closed').length;
+
       const elNav = document.getElementById('nav-events-count');
       const elQuick = document.getElementById('quick-events-count');
       const elAll = document.getElementById('event-count-all');
@@ -2575,12 +2634,22 @@
       const elSpe = document.getElementById('event-count-special');
       const elEmg = document.getElementById('event-count-emergency');
 
+      const elStAll = document.getElementById('event-status-count-all');
+      const elStOpen = document.getElementById('event-status-count-open');
+      const elStUp = document.getElementById('event-status-count-upcoming');
+      const elStClosed = document.getElementById('event-status-count-closed');
+
       if (elNav) elNav.textContent = allCount;
       if (elQuick) elQuick.textContent = allCount;
       if (elAll) elAll.textContent = allCount;
       if (elGen) elGen.textContent = genCount;
       if (elSpe) elSpe.textContent = speCount;
       if (elEmg) elEmg.textContent = emgCount;
+
+      if (elStAll) elStAll.textContent = allCount;
+      if (elStOpen) elStOpen.textContent = stOpenCount;
+      if (elStUp) elStUp.textContent = stUpCount;
+      if (elStClosed) elStClosed.textContent = stClosedCount;
     }
 
     function filterEvents(category) {
@@ -2592,21 +2661,48 @@
 
       [btnAll, btnGen, btnSpe, btnEmg].forEach(btn => {
         if (!btn) return;
-        btn.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5';
+        btn.className = 'px-3 py-1 rounded-lg font-medium bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap';
       });
 
       if (category === 'General Meeting' && btnGen) {
-        btnGen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+        btnGen.className = 'px-3 py-1 rounded-lg font-bold bg-blue-600 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap';
       } else if (category === 'Special Event' && btnSpe) {
-        btnSpe.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+        btnSpe.className = 'px-3 py-1 rounded-lg font-bold bg-purple-600 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap';
       } else if (category === 'Emergency meeting' && btnEmg) {
-        btnEmg.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-rose-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+        btnEmg.className = 'px-3 py-1 rounded-lg font-bold bg-rose-600 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap';
       } else if (btnAll) {
-        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm transition-all flex items-center gap-1.5';
+        btnAll.className = 'px-3 py-1 rounded-lg font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap';
       }
 
       renderEventsList();
     }
+
+    function filterEventStatus(status) {
+      currentEventStatusFilter = status;
+      const btnAll = document.getElementById('filter-event-status-all');
+      const btnOpen = document.getElementById('filter-event-status-open');
+      const btnUp = document.getElementById('filter-event-status-upcoming');
+      const btnClosed = document.getElementById('filter-event-status-closed');
+
+      [btnAll, btnOpen, btnUp, btnClosed].forEach(btn => {
+        if (!btn) return;
+        btn.className = 'px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap';
+      });
+
+      if (status === 'Open' && btnOpen) {
+        btnOpen.className = 'px-3 py-1.5 rounded-xl font-bold bg-emerald-600 text-white shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap';
+      } else if (status === 'Upcoming' && btnUp) {
+        btnUp.className = 'px-3 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap';
+      } else if (status === 'Closed' && btnClosed) {
+        btnClosed.className = 'px-3 py-1.5 rounded-xl font-bold bg-slate-700 text-white shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap';
+      } else if (btnAll) {
+        btnAll.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm transition-all whitespace-nowrap';
+      }
+
+      renderEventsList();
+    }
+
+    window.filterEventStatus = filterEventStatus;
 
     function toggleSelectedMembersList(val) {
       const container = document.getElementById('selected-users-container');
@@ -2670,6 +2766,12 @@
             r.checked = (r.value === ev.category);
           }
 
+          const stRadios = document.getElementsByName('event-status');
+          const targetStatus = ev.status || 'Upcoming';
+          for (const r of stRadios) {
+            r.checked = (r.value === targetStatus);
+          }
+
           if (document.getElementById('event-title')) document.getElementById('event-title').value = ev.title || '';
           if (document.getElementById('event-venue')) document.getElementById('event-venue').value = ev.venue || '';
           if (document.getElementById('event-datetime')) document.getElementById('event-datetime').value = ev.datetime || '';
@@ -2687,6 +2789,9 @@
 
           const catRadios = document.getElementsByName('event-category');
           if (catRadios.length > 0) catRadios[0].checked = true;
+
+          const stRadios = document.getElementsByName('event-status');
+          if (stRadios.length > 0) stRadios[0].checked = true;
 
           if (document.getElementById('event-title')) document.getElementById('event-title').value = '';
           if (document.getElementById('event-venue')) document.getElementById('event-venue').value = '';
@@ -2732,6 +2837,12 @@
         if (r.checked) { selectedCat = r.value; break; }
       }
 
+      let selectedStatus = 'Upcoming';
+      const stRadios = document.getElementsByName('event-status');
+      for (const r of stRadios) {
+        if (r.checked) { selectedStatus = r.value; break; }
+      }
+
       const audienceVal = document.getElementById('event-audience').value;
       let selectedMembers = [];
       if (audienceVal === 'Selected User') {
@@ -2742,6 +2853,7 @@
       const eventPayload = {
         id: id,
         category: selectedCat,
+        status: selectedStatus,
         title: document.getElementById('event-title').value.trim(),
         venue: document.getElementById('event-venue').value.trim(),
         datetime: document.getElementById('event-datetime').value,
@@ -2825,6 +2937,16 @@
       }
     }
 
+    function getEventStatusBadge(status) {
+      const st = status || 'Upcoming';
+      if (st === 'Open') {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> Open</span>`;
+      } else if (st === 'Closed') {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1"><i class="fa-solid fa-lock text-[9px] text-slate-500"></i> Closed</span>`;
+      }
+      return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><i class="fa-regular fa-clock text-[9px] text-blue-600"></i> Upcoming</span>`;
+    }
+
     function getEventBadge(cat) {
       if (cat === 'Emergency meeting') {
         return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span> Emergency</span>`;
@@ -2869,6 +2991,10 @@
       if (!ev) return;
 
       document.getElementById('view-event-category-badge').innerHTML = getEventBadge(ev.category);
+      const stBadgeEl = document.getElementById('view-event-status-badge');
+      if (stBadgeEl) {
+        stBadgeEl.innerHTML = getEventStatusBadge(ev.status);
+      }
       document.getElementById('view-event-title').textContent = ev.title || 'शीर्षक उपलब्ध नहीं';
       document.getElementById('view-event-datetime').textContent = formatEventDate(ev.datetime);
       document.getElementById('view-event-venue').textContent = ev.venue || 'स्थान उपलब्ध नहीं';
@@ -2933,8 +3059,10 @@
       if (!container) return;
 
       const filtered = allEvents.filter(e => {
-        if (currentEventFilter === 'ALL') return true;
-        return e.category === currentEventFilter;
+        const matchesCategory = (currentEventFilter === 'ALL' || e.category === currentEventFilter);
+        const eventStatus = e.status || 'Upcoming';
+        const matchesStatus = (currentEventStatusFilter === 'ALL' || eventStatus === currentEventStatusFilter);
+        return matchesCategory && matchesStatus;
       });
 
       if (filtered.length === 0) {
@@ -2953,10 +3081,11 @@
       container.innerHTML = filtered.map(e => `
         <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
-            <!-- Top Strip: Category Badge & Actions (View, Edit, Delete) -->
+            <!-- Top Strip: Category Badge, Status Badge & Actions (View, Edit, Delete) -->
             <div class="flex items-start justify-between gap-2 mb-3">
-              <div>
+              <div class="flex items-center gap-1.5 flex-wrap">
                 ${getEventBadge(e.category)}
+                ${getEventStatusBadge(e.status)}
               </div>
               <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
                 <!-- 1. View Button -->
