@@ -26,6 +26,18 @@ const DEFAULT_SETTINGS = {
     { id: 'ft_4', name: 'Loan', isSystem: false, description: 'ऋण / अग्रिम निधि' },
     { id: 'ft_5', name: 'Investment', isSystem: false, description: 'निवेश / सावधि जमा (FD)' }
   ],
+  bankAccounts: [
+    {
+      id: 'ba_1',
+      accountNumber: '38294710293',
+      bankName: 'State Bank of India (SBI)',
+      branchName: 'Gomoh Branch',
+      ifsc: 'SBIN0001234',
+      accountType: 'Joint',
+      members: ['अमित कुमार गोस्वामी (अध्यक्ष)', 'रोहित गोस्वामी (कोषाध्यक्ष)'],
+      remarks: 'ट्रस्ट आधिकारिक मुख्य चालू खाता'
+    }
+  ],
   statuses: [
     { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
     { id: 'st_2', name: 'Prime Member', badgeColor: 'amber', isSystem: true, description: 'विशिष्ट सदस्य (VIP)' },

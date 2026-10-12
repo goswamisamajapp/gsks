@@ -1182,6 +1182,26 @@
             </div>
           </div>
 
+          <!-- Section 1B: Bank Accounts (बैंक खाते प्रबंधन) -->
+          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-building-columns text-blue-600"></i> बैंक खाते (Bank Accounts)
+                </h3>
+                <p class="text-xs text-slate-500">ट्रस्ट के अधिकृत बैंक खाते, खाता नंबर, खाताधारक सदस्य एवं प्रकार (Single / Joint)</p>
+              </div>
+              <button onclick="openAddBankAccountModal()" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नया बैंक खाता जोड़ें (Add Bank Account)</span>
+              </button>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5" id="bank-accounts-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
           <!-- Section 2: Fund Transfers / Transactions Register -->
           <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
@@ -2372,6 +2392,87 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL 8B: ADD/EDIT BANK ACCOUNT MODAL                           -->
+  <!-- ============================================================== -->
+  <div id="bankaccount-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="bankaccount-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-building-columns text-blue-600"></i> नया बैंक खाता जोड़ें (Add Bank Account)
+        </h3>
+        <button onclick="closeBankAccountModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveBankAccount(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="bankaccount-id">
+
+        <!-- Bank Name & Account Number -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">बैंक का नाम (Bank Name) *</label>
+            <input type="text" id="bankaccount-bankname" required placeholder="जैसे: State Bank of India, HDFC" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">खाता संख्या (Account Number) *</label>
+            <input type="text" id="bankaccount-accnumber" required placeholder="जैसे: 38294710293" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          </div>
+        </div>
+
+        <!-- Account Type (Single / Joint) & Branch / IFSC -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">खाता प्रकार (Account Type) *</label>
+            <select id="bankaccount-acctype" onchange="handleAccountTypeChange(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+              <option value="Single">👤 एकल खाता (Single Account)</option>
+              <option value="Joint" selected>👥 संयुक्त खाता (Joint Account)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">शाखा / IFSC कोड (Branch / IFSC)</label>
+            <input type="text" id="bankaccount-branch" placeholder="जैसे: Gomoh Branch (SBIN0001234)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          </div>
+        </div>
+
+        <!-- Account Member Names (With + Button for adding multiple names) -->
+        <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <label class="block font-bold text-slate-700">खाताधारक सदस्य का नाम (Account Member Names) *</label>
+              <p class="text-[10px] text-slate-400">एक से अधिक नाम जोड़ने के लिए '+' बटन दबाएं</p>
+            </div>
+            <button type="button" onclick="addBankMemberNameRow()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-xs">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <span>+ नाम जोड़ें</span>
+            </button>
+          </div>
+
+          <!-- Dynamic Container for Member Name inputs -->
+          <div id="bankaccount-members-container" class="space-y-2 pt-1 max-h-40 overflow-y-auto pr-1">
+            <!-- Dynamic Rows with Remove button -->
+          </div>
+        </div>
+
+        <!-- Optional Remarks -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / टिप्पणी (Remarks / Purpose)</label>
+          <input type="text" id="bankaccount-remarks" placeholder="जैसे: समिति मुख्य संचालन खाता, चंदा संग्रह" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeBankAccountModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 transition-all">
+            खाता सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL 9: FUND TRANSFER / TRANSACTION MODAL                      -->
   <!-- ============================================================== -->
   <div id="fund-transfer-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -2473,6 +2574,17 @@
         { id: 'ft_3', name: 'Cash in Hand', isSystem: true, description: 'कोषाध्यक्ष के पास नगद' },
         { id: 'ft_4', name: 'Loan', isSystem: false, description: 'ऋण / अग्रिम निधि' },
         { id: 'ft_5', name: 'Investment', isSystem: false, description: 'निवेश / सावधि जमा (FD)' }
+      ],
+      bankAccounts: [
+        {
+          id: 'ba_1',
+          accountNumber: '38294710293',
+          bankName: 'State Bank of India (SBI)',
+          branchName: 'Gomoh Branch',
+          accountType: 'Joint',
+          members: ['अमित कुमार गोस्वामी (अध्यक्ष)', 'रोहित गोस्वामी (कोषाध्यक्ष)'],
+          remarks: 'ट्रस्ट आधिकारिक मुख्य खाता'
+        }
       ],
       statuses: [
         { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
@@ -3218,6 +3330,7 @@
         'view-donation-modal',
         'delete-donation-modal',
         'fundtype-master-modal',
+        'bankaccount-modal',
         'fund-transfer-modal'
       ];
       modalIds.forEach(id => {
@@ -4076,6 +4189,7 @@
         if (tabBtnFund) tabBtnFund.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-teal-600 text-white shadow-sm flex-shrink-0';
         if (pageFund) pageFund.classList.remove('hidden');
         renderFundTypesGrid();
+        renderBankAccountsGrid();
         renderFundTransfersList();
       } else {
         if (tabBtnStatus) tabBtnStatus.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-orange-500 text-white shadow-sm flex-shrink-0';
@@ -4103,6 +4217,7 @@
 
       // Render Fund Tab Components
       renderFundTypesGrid();
+      renderBankAccountsGrid();
       renderFundTransfersList();
 
       // 2. Render Status Master Table
@@ -5378,6 +5493,237 @@
       }).join('');
     }
 
+    // ==============================================================
+    // BANK ACCOUNTS MASTER LOGIC (Add, Edit, Delete, Multiple Members)
+    // ==============================================================
+    function addBankMemberNameRow(initialVal = '') {
+      const container = document.getElementById('bankaccount-members-container');
+      if (!container) return;
+
+      const rowId = 'bm_row_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const row = document.createElement('div');
+      row.id = rowId;
+      row.className = 'flex items-center gap-2 bank-member-row';
+      row.innerHTML = `
+        <div class="relative flex-1">
+          <i class="fa-solid fa-user absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+          <input type="text" value="${initialVal ? initialVal.replace(/"/g, '&quot;') : ''}" required placeholder="खाताधारक सदस्य का नाम (जैसे: अमित गोस्वामी - अध्यक्ष)" class="bank-member-name-input w-full bg-white border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+        </div>
+        <button type="button" onclick="removeBankMemberNameRow('${rowId}')" class="w-8 h-8 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-colors text-xs flex-shrink-0" title="नाम हटाएं">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      `;
+      container.appendChild(row);
+    }
+
+    function removeBankMemberNameRow(rowId) {
+      const container = document.getElementById('bankaccount-members-container');
+      const row = document.getElementById(rowId);
+      if (container && row) {
+        if (container.children.length <= 1) {
+          alert("कम से कम एक खाताधारक सदस्य का नाम अनिवार्य है!");
+          return;
+        }
+        row.remove();
+      }
+    }
+
+    function handleAccountTypeChange(type) {
+      const container = document.getElementById('bankaccount-members-container');
+      if (!container) return;
+      if (type === 'Joint' && container.children.length === 1) {
+        addBankMemberNameRow();
+      }
+    }
+
+    function openAddBankAccountModal() {
+      closeAllModals();
+      const modal = document.getElementById('bankaccount-modal');
+      const heading = document.getElementById('bankaccount-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> नया बैंक खाता जोड़ें (Add Bank Account)';
+
+      document.getElementById('bankaccount-id').value = '';
+      document.getElementById('bankaccount-bankname').value = '';
+      document.getElementById('bankaccount-accnumber').value = '';
+      document.getElementById('bankaccount-acctype').value = 'Joint';
+      document.getElementById('bankaccount-branch').value = '';
+      document.getElementById('bankaccount-remarks').value = '';
+
+      const membersContainer = document.getElementById('bankaccount-members-container');
+      if (membersContainer) {
+        membersContainer.innerHTML = '';
+        addBankMemberNameRow();
+        addBankMemberNameRow();
+      }
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function editBankAccountItem(id) {
+      const item = (masterSettings.bankAccounts || []).find(b => b.id === id);
+      if (!item) return;
+
+      closeAllModals();
+      const modal = document.getElementById('bankaccount-modal');
+      const heading = document.getElementById('bankaccount-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक खाता संपादित करें (Edit Bank Account)';
+
+      document.getElementById('bankaccount-id').value = item.id;
+      document.getElementById('bankaccount-bankname').value = item.bankName || '';
+      document.getElementById('bankaccount-accnumber').value = item.accountNumber || '';
+      document.getElementById('bankaccount-acctype').value = item.accountType || 'Single';
+      document.getElementById('bankaccount-branch').value = item.branchName || '';
+      document.getElementById('bankaccount-remarks').value = item.remarks || '';
+
+      const membersContainer = document.getElementById('bankaccount-members-container');
+      if (membersContainer) {
+        membersContainer.innerHTML = '';
+        const membersList = Array.isArray(item.members) && item.members.length > 0 ? item.members : [item.member || ''];
+        membersList.forEach(m => addBankMemberNameRow(m));
+      }
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function closeBankAccountModal() {
+      const modal = document.getElementById('bankaccount-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveBankAccount(e) {
+      e.preventDefault();
+      const id = document.getElementById('bankaccount-id').value;
+      const bankName = document.getElementById('bankaccount-bankname').value.trim();
+      const accountNumber = document.getElementById('bankaccount-accnumber').value.trim();
+      const accountType = document.getElementById('bankaccount-acctype').value;
+      const branchName = document.getElementById('bankaccount-branch').value.trim();
+      const remarks = document.getElementById('bankaccount-remarks').value.trim();
+
+      // Collect members from all rows
+      const memberInputs = document.querySelectorAll('.bank-member-name-input');
+      const members = [];
+      memberInputs.forEach(inp => {
+        const val = inp.value.trim();
+        if (val) members.push(val);
+      });
+
+      if (!bankName || !accountNumber) {
+        alert("कृपया बैंक का नाम और खाता संख्या दर्ज करें!");
+        return;
+      }
+
+      if (members.length === 0) {
+        alert("कृपया कम से कम एक खाताधारक सदस्य का नाम दर्ज करें!");
+        return;
+      }
+
+      if (!masterSettings.bankAccounts) masterSettings.bankAccounts = [];
+
+      const accountData = {
+        id: id || 'ba_' + Date.now(),
+        bankName,
+        accountNumber,
+        accountType,
+        branchName,
+        members,
+        remarks
+      };
+
+      if (id) {
+        const idx = masterSettings.bankAccounts.findIndex(b => b.id === id);
+        if (idx !== -1) {
+          masterSettings.bankAccounts[idx] = accountData;
+        }
+      } else {
+        masterSettings.bankAccounts.push(accountData);
+      }
+
+      closeBankAccountModal();
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteBankAccountItem(id) {
+      if (!confirm("क्या आप इस बैंक खाते को हटाना चाहते हैं?")) return;
+      masterSettings.bankAccounts = (masterSettings.bankAccounts || []).filter(b => b.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    function renderBankAccountsGrid() {
+      const grid = document.getElementById('bank-accounts-cards-grid');
+      if (!grid) return;
+      const accounts = masterSettings.bankAccounts || [];
+
+      if (accounts.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-8 text-center text-slate-400 text-xs">
+            <i class="fa-solid fa-building-columns text-2xl mb-2 text-slate-300"></i>
+            <p class="font-bold text-slate-600">कोई बैंक खाता दर्ज नहीं है।</p>
+            <p class="text-[11px] text-slate-400 mt-1">खाता जोड़ने के लिए ऊपर <b>"+ नया बैंक खाता जोड़ें"</b> पर क्लिक करें।</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = accounts.map(b => {
+        const isJoint = (b.accountType || '').toLowerCase() === 'joint';
+        const membersList = Array.isArray(b.members) && b.members.length > 0 ? b.members : (b.member ? [b.member] : []);
+
+        const membersBadges = membersList.map(m => `
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50 text-blue-900 border border-blue-200/80 text-[11px] font-semibold">
+            <i class="fa-solid fa-user text-[9px] text-blue-600"></i>
+            <span>${m}</span>
+          </div>
+        `).join('');
+
+        return `
+          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center text-sm shadow-sm flex-shrink-0">
+                    <i class="fa-solid fa-building-columns"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <h4 class="font-bold text-slate-900 text-xs truncate">${b.bankName}</h4>
+                    <p class="text-[10px] text-slate-400 truncate">${b.branchName || 'शाखा विवरण नहीं'}</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isJoint ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'} flex-shrink-0">
+                  ${isJoint ? '👥 Joint' : '👤 Single'}
+                </span>
+              </div>
+
+              <!-- Account Number -->
+              <div class="mt-3 bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex items-center justify-between">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">A/C No.</span>
+                <span class="font-mono font-black text-slate-900 text-xs tracking-wider">${b.accountNumber}</span>
+              </div>
+
+              <!-- Account Members -->
+              <div class="mt-3">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">खाताधारक सदस्य (Account Members):</p>
+                <div class="flex flex-wrap gap-1.5">
+                  ${membersBadges || '<span class="text-xs text-slate-400">सदस्य नाम उपलब्ध नहीं</span>'}
+                </div>
+              </div>
+
+              ${b.remarks ? `<p class="text-[11px] text-slate-500 mt-2.5 italic border-t border-slate-100 pt-2"><i class="fa-solid fa-circle-info text-[9px] text-slate-400 mr-1"></i>${b.remarks}</p>` : ''}
+            </div>
+
+            <!-- Action buttons -->
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-1">
+              <button onclick="editBankAccountItem('${b.id}')" class="text-blue-700 hover:text-blue-900 text-xs p-1.5 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-1 font-semibold" title="संपादित करें (Edit)">
+                <i class="fa-solid fa-pen-to-square"></i> <span>Edit</span>
+              </button>
+              <button onclick="deleteBankAccountItem('${b.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors flex items-center gap-1 font-semibold" title="हटाएं (Delete)">
+                <i class="fa-solid fa-trash-can"></i> <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     // Populate Purpose / Fund Type Dropdown in Fund Transfer Modal
     function populateFundTransferPurposeDropdown(selectedVal = '') {
       const select = document.getElementById('fundtransfer-remarks-select');
@@ -5679,6 +6025,16 @@
     window.handleSaveFundType = handleSaveFundType;
     window.deleteFundTypeItem = deleteFundTypeItem;
     window.renderFundTypesGrid = renderFundTypesGrid;
+
+    window.openAddBankAccountModal = openAddBankAccountModal;
+    window.editBankAccountItem = editBankAccountItem;
+    window.closeBankAccountModal = closeBankAccountModal;
+    window.addBankMemberNameRow = addBankMemberNameRow;
+    window.removeBankMemberNameRow = removeBankMemberNameRow;
+    window.handleAccountTypeChange = handleAccountTypeChange;
+    window.handleSaveBankAccount = handleSaveBankAccount;
+    window.deleteBankAccountItem = deleteBankAccountItem;
+    window.renderBankAccountsGrid = renderBankAccountsGrid;
 
     window.openFundTransferModal = openFundTransferModal;
     window.closeFundTransferModal = closeFundTransferModal;
