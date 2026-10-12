@@ -931,17 +931,39 @@
           </div>
         </div>
 
-        <!-- 3. Monthly Tabs Bar (Sep 2025 to Feb 2028 - Total 30 Months) -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-2.5 shadow-xs">
-          <div class="flex items-center justify-between px-2 pb-2 border-b border-slate-100">
+        <!-- 3. Monthly Tabs Grid (Sep 2025 to Feb 2028 - Total 30 Months in 3 Rows of 10) -->
+        <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-xs space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <i class="fa-solid fa-calendar-days text-indigo-600 text-xs"></i>
-              <span class="text-xs font-bold text-slate-800">मासिक विवरण चुनें (Select Month):</span>
-              <span class="text-[10px] text-slate-400 font-semibold">(Sep 2025 से Feb 2028 तक कुल 30 माह)</span>
+              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-calendar-days"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-slate-800">मासिक विवरण चुनें (Select Month):</span>
+                <span class="text-[10px] text-slate-400 font-semibold ml-1">(30 माह • 3 पंक्तियों में 10-10 माह)</span>
+              </div>
             </div>
-            <span class="text-[11px] font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-100" id="pariwarik-active-month-badge">महीना: --</span>
+            
+            <!-- Legend Indicators -->
+            <div class="flex items-center gap-3 text-[11px] font-bold">
+              <div class="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
+                <span>All Paid (पूर्ण जमा)</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600 ring-2 ring-blue-200"></span>
+                <span>Current / Selected (सक्रिय)</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-lg border border-rose-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-rose-200"></span>
+                <span>Unpaid / Dues (लंबित)</span>
+              </div>
+              <span class="text-[11px] font-mono font-black text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-200 ml-1" id="pariwarik-active-month-badge">महीना: --</span>
+            </div>
           </div>
-          <div class="flex items-center gap-2 overflow-x-auto pt-2 pb-1 scrollbar-thin" id="pariwarik-months-tabs-bar">
+          
+          <!-- 3 Rows x 10 Columns Grid for 30 Months -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2" id="pariwarik-months-tabs-bar">
             <!-- Dynamically populated via JS -->
           </div>
         </div>
@@ -6379,16 +6401,50 @@
       const container = document.getElementById('pariwarik-months-tabs-bar');
       if (!container) return;
 
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      const pariwarikMembers = nonRemoved.filter(m => isPariwarikMember(m));
+      const totalMembers = pariwarikMembers.length;
+
       container.innerHTML = PARIWARIK_MONTHS.map((m, idx) => {
-        const isSelected = m.key === currentPariwarikMonth;
-        const activeClass = isSelected
-          ? 'bg-indigo-600 text-white font-black shadow-md shadow-indigo-600/30 ring-2 ring-indigo-400'
-          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold';
-        
+        const isCurrentSelected = (m.key === currentPariwarikMonth);
+
+        // Check how many members have paid for this specific month
+        let paidCount = 0;
+        if (totalMembers > 0) {
+          paidCount = pariwarikMembers.filter(mem => isPariwarikPaidForMonth(mem, m.key)).length;
+        }
+        const isAllPaid = (totalMembers > 0 && paidCount === totalMembers);
+
+        // Color coding rules:
+        // 1. Current / Selected month = Blue
+        // 2. All paid month = Light Green (emerald/green)
+        // 3. Unpaid / Dues month = Light Red (rose/red)
+        let themeClass = '';
+        let dotColor = '';
+
+        if (isCurrentSelected) {
+          themeClass = 'bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/30 ring-2 ring-blue-400 ring-offset-1 border-blue-600';
+          dotColor = 'bg-white';
+        } else if (isAllPaid) {
+          themeClass = 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold border border-emerald-300/80 shadow-xs';
+          dotColor = 'bg-emerald-500';
+        } else {
+          themeClass = 'bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold border border-rose-200/80 shadow-xs';
+          dotColor = 'bg-rose-500';
+        }
+
         return `
-          <button type="button" onclick="selectPariwarikMonth('${m.key}')" class="px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 ${activeClass}">
-            <span>${m.label}</span>
-            <span class="text-[9px] opacity-75">(${idx + 1})</span>
+          <button type="button" onclick="selectPariwarikMonth('${m.key}')" 
+                  class="p-2 sm:p-2.5 rounded-xl text-center transition-all flex flex-col items-center justify-center relative cursor-pointer ${themeClass}"
+                  title="${m.label} (${idx + 1}/30) - ${paidCount}/${totalMembers} Paid">
+            <div class="flex items-center gap-1.5 leading-none">
+              <span class="w-2 h-2 rounded-full shrink-0 ${dotColor}"></span>
+              <span class="text-[11px] sm:text-xs truncate">${m.label}</span>
+            </div>
+            <div class="text-[9px] mt-1 opacity-80 font-mono flex items-center justify-between w-full px-1">
+              <span>#${idx + 1}</span>
+              <span>${isAllPaid ? 'Paid' : (paidCount > 0 ? `${paidCount}P` : 'Dues')}</span>
+            </div>
           </button>
         `;
       }).join('');
