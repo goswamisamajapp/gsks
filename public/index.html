@@ -1244,9 +1244,9 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-            <button type="button" id="btn-record-bank-deposit" onclick="openBankDepositModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+            <button type="button" id="btn-add-bank-record" onclick="openBankRecordModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
               <i class="fa-solid fa-plus text-xs"></i>
-              <span>+ बैंक में जमा दर्ज करें (Record Bank Deposit)</span>
+              <span>+ रिकॉर्ड जोड़ें (Add Record)</span>
             </button>
             <button onclick="openFundTransferModal()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3.5 py-2.5 rounded-xl text-xs border border-slate-200 flex items-center justify-center gap-1.5 transition-all cursor-pointer">
               <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i>
@@ -3393,13 +3393,13 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- MODAL: RECORD BANK DEPOSIT (बैंक में सीधी जमा दर्ज करें)       -->
+  <!-- MODAL: BANK RECORD (रिकॉर्ड जोड़ें - Cash In / Cash Out)          -->
   <!-- ============================================================== -->
   <div id="bank-deposit-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
         <h3 id="bank-deposit-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)
+          <i class="fa-solid fa-building-columns text-blue-600"></i> बैंक रिकॉर्ड जोड़ें (Add Bank Record)
         </h3>
         <button type="button" onclick="closeBankDepositModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
@@ -3409,10 +3409,19 @@
       <form onsubmit="handleSaveBankDeposit(event)" class="space-y-3.5 text-xs">
         <input type="hidden" id="bank-deposit-id">
 
+        <!-- 1. Transaction Type (Cash In / Cash Out) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">लेनदेन प्रकार (Transaction Type) *</label>
+          <select id="bank-tx-direction" onchange="handleBankDirectionChange()" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+            <option value="CASH_IN">📥 कैश इन / बैंक जमा (Cash In - Deposit)</option>
+            <option value="CASH_OUT">📤 कैश आउट / बैंक निकासी या खर्च (Cash Out - Withdrawal/Expense)</option>
+          </select>
+        </div>
+
         <!-- Bank Account Selector -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">जमा खाता (Bank Account) *</label>
-          <select id="bank-deposit-account-select" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          <label class="block font-bold text-slate-700 mb-1">बैंक खाता (Bank Account) *</label>
+          <select id="bank-deposit-account-select" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
             <!-- Dynamically populated from masterSettings.bankAccounts -->
           </select>
         </div>
@@ -3420,61 +3429,78 @@
         <!-- Amount & Date -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">जमा राशि (Amount in ₹) *</label>
+            <label class="block font-bold text-slate-700 mb-1">राशि (Amount in ₹) *</label>
             <div class="relative">
               <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
               <input type="number" id="bank-deposit-amount" required min="1" step="any" placeholder="0.00" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
             </div>
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">जमा दिनांक (Deposit Date) *</label>
-            <input type="date" id="bank-deposit-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+            <label class="block font-bold text-slate-700 mb-1">दिनांक (Date) *</label>
+            <input type="date" id="bank-deposit-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
           </div>
         </div>
 
-        <!-- Deposited By / Source -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">जमाकर्ता / स्रोत (Deposited By / Source) *</label>
-          <input type="text" id="bank-deposit-source" required placeholder="जैसे: रोहित गोस्वामी (कोषाध्यक्ष) / सीधे बैंक चालान जमा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
-        </div>
+        <!-- CASH IN BLOCK: Deposited By -->
+        <div id="bank-cashin-fields" class="space-y-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">जमाकर्ता (Deposited By) *</label>
+            <select id="bank-deposited-by-type" onchange="handleBankDepositedByTypeChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+              <option value="Admin">एडमिन (Admin)</option>
+              <option value="Koshadhyaksh">कोषाध्यक्ष (Koshadhyaksh)</option>
+              <option value="Member">ट्रस्ट सदस्य (Member)</option>
+              <option value="Other">अन्य (Other)</option>
+            </select>
+          </div>
 
-        <!-- Deposit Mode -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">जमा विधि (Deposit Method) *</label>
-          <div class="grid grid-cols-3 gap-2">
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
-              <input type="radio" name="bank-deposit-method" value="Cash Deposit" checked class="text-blue-600 focus:ring-0">
-              <span class="font-bold text-slate-800 text-[11px]">💵 नगद चालान (CDM)</span>
-            </label>
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
-              <input type="radio" name="bank-deposit-method" value="Online Transfer / NEFT" class="text-blue-600 focus:ring-0">
-              <span class="font-bold text-slate-800 text-[11px]">📱 NEFT / RTGS</span>
-            </label>
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
-              <input type="radio" name="bank-deposit-method" value="Cheque" class="text-blue-600 focus:ring-0">
-              <span class="font-bold text-slate-800 text-[11px]">📝 चेक (Cheque)</span>
-            </label>
+          <!-- If Member Selected: Member Select Dropdown -->
+          <div id="bank-member-select-wrap" class="hidden">
+            <label class="block font-bold text-slate-700 mb-1">सदस्य चुनें (Select Member) *</label>
+            <select id="bank-member-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+              <option value="">-- सदस्य चुनें --</option>
+            </select>
+          </div>
+
+          <!-- If Other Selected: Custom Name Input -->
+          <div id="bank-other-name-wrap" class="hidden">
+            <label class="block font-bold text-slate-700 mb-1">जमाकर्ता का नाम (Person / Source Name) *</label>
+            <input type="text" id="bank-other-name-input" placeholder="नाम दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
           </div>
         </div>
 
-        <!-- UTR / Slip / Ref No -->
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">जमा पर्ची / UTR / चेक नंबर (Ref / UTR / Slip No.)</label>
-          <input type="text" id="bank-deposit-ref" placeholder="जैसे: UTR# 4920192849 / Slip #502" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+        <!-- CASH OUT BLOCK: Purpose (from Expense Categories/Schemes) & Payee -->
+        <div id="bank-cashout-fields" class="hidden space-y-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">निकासी/खर्च उद्देश्य (Purpose / Expense Head) *</label>
+            <select id="bank-cashout-purpose" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+              <!-- Dynamically populated from masterSettings.expenseSchemes / vendors -->
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">प्राप्तकर्ता / वेंडर / विवरण (Paid To / Payee)</label>
+            <input type="text" id="bank-cashout-payee" placeholder="जैसे: वेंडर का नाम या कोषाध्यक्ष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+          </div>
         </div>
 
-        <!-- Remarks / Purpose -->
+        <!-- Reference / UTR Number -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">पर्ची / UTR / चेक / संदर्भ नंबर (Ref / UTR / Cheque No.)</label>
+          <input type="text" id="bank-deposit-ref" placeholder="जैसे: UTR# 4920192849 / Cheque #102938" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
+        </div>
+
+        <!-- Remarks -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">विवरण / टिप्पणी (Remarks)</label>
-          <input type="text" id="bank-deposit-remarks" placeholder="जैसे: बैठक में एकत्रित नकद बैंक खाते में जमा किया गया" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          <input type="text" id="bank-deposit-remarks" placeholder="आवश्यक टिप्पणी दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs">
         </div>
 
+        <!-- Action Buttons -->
         <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
           <button type="button" onclick="closeBankDepositModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
             रद्द करें
           </button>
-          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 transition-all">
-            बैंक जमा सुरक्षित करें
+          <button type="submit" id="bank-record-submit-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 transition-all">
+            सुरक्षित करें (Save Record)
           </button>
         </div>
       </form>
@@ -4237,11 +4263,13 @@
       // Bank to Party: Bank decreases
       // Cash to Party: Cash decreases
       // Bank Deposit: Direct deposit into Bank (increases Bank)
+      // Bank Cash Out: Withdrawal or expense from Bank (decreases Bank)
       let bankToHand = 0;
       let handToBank = 0;
       let bankToParty = 0;
       let cashToParty = 0;
       let bankDirectDeposits = 0;
+      let bankCashOut = 0;
 
       if (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers)) {
         allFundTransfers.forEach(ft => {
@@ -4249,14 +4277,14 @@
           if (ft.type === 'Bank to Hand') bankToHand += amt;
           else if (ft.type === 'Hand to Bank') handToBank += amt;
           else if (ft.type === 'Bank Deposit') bankDirectDeposits += amt;
-          else if (ft.type === 'Bank to Party') bankToParty += amt;
+          else if (ft.type === 'Bank to Party' || ft.type === 'Bank Cash Out') bankCashOut += amt;
           else if (ft.type === 'Cash to Party') cashToParty += amt;
         });
       }
 
       // Net In Hand Cash & Bank Fund (Including Opening Balances minus Expenses)
       const netCashInHand = Math.max(0, openCash + donationCashTotal + bankToHand - handToBank - cashToParty - expenseCashTotal);
-      const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank + bankDirectDeposits - bankToHand - bankToParty - expenseOnlineTotal);
+      const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank + bankDirectDeposits - bankToHand - bankToParty - bankCashOut - expenseOnlineTotal);
       const totalAvailableFund = netCashInHand + netBankAmount;
 
       const elTotalFund = document.getElementById('dash-total-fund');
@@ -6623,7 +6651,7 @@
     // ==============================================================
 
     // ==============================================================
-    // BANK DEPOSIT MODAL FUNCTIONS (Record Bank Deposit)
+    // BANK RECORD MODAL FUNCTIONS (Add Record - Cash In / Cash Out)
     // ==============================================================
     function populateBankDepositAccountDropdown() {
       const select = document.getElementById('bank-deposit-account-select');
@@ -6639,7 +6667,79 @@
       `).join('');
     }
 
-    function openBankDepositModal(depositId = null) {
+    function populateBankMembersDropdown(selectedVal = '') {
+      const select = document.getElementById('bank-member-select');
+      if (!select) return;
+      const members = (typeof allMembers !== 'undefined' && Array.isArray(allMembers))
+        ? allMembers.filter(m => m.status !== 'removed')
+        : [];
+      
+      let html = '<option value="">-- सदस्य चुनें (Select Member) --</option>';
+      members.forEach(m => {
+        const sel = (m.name === selectedVal || m.id === selectedVal) ? 'selected' : '';
+        html += `<option value="${m.name} (${m.id})" ${sel}>${m.name} [ID: ${m.id}] - ${m.address || ''}</option>`;
+      });
+      select.innerHTML = html;
+    }
+
+    function populateBankExpensesPurposeDropdown(selectedVal = '') {
+      const select = document.getElementById('bank-cashout-purpose');
+      if (!select) return;
+      const schemes = (masterSettings && masterSettings.expenseSchemes && masterSettings.expenseSchemes.length > 0)
+        ? masterSettings.expenseSchemes
+        : [
+            { id: 'sc_1', name: 'कार्यालय खर्च (Office Expense)' },
+            { id: 'sc_2', name: 'कार्यक्रम/उत्सव खर्च (Event Expense)' },
+            { id: 'sc_3', name: 'पार्टी/वेंडर भुगतान (Vendor Payment)' },
+            { id: 'sc_4', name: 'बैंक से नगद निकासी (Bank to Hand Cashier)' },
+            { id: 'sc_5', name: 'विविध व्यय (Miscellaneous)' }
+          ];
+
+      let html = '<option value="">-- उद्देश्य / खर्च मद चुनें --</option>';
+      schemes.forEach(sc => {
+        const sel = (sc.name === selectedVal) ? 'selected' : '';
+        html += `<option value="${sc.name}" ${sel}>${sc.name}</option>`;
+      });
+      select.innerHTML = html;
+    }
+
+    function handleBankDirectionChange() {
+      const dir = document.getElementById('bank-tx-direction') ? document.getElementById('bank-tx-direction').value : 'CASH_IN';
+      const cashInBlock = document.getElementById('bank-cashin-fields');
+      const cashOutBlock = document.getElementById('bank-cashout-fields');
+      const submitBtn = document.getElementById('bank-record-submit-btn');
+
+      if (dir === 'CASH_IN') {
+        if (cashInBlock) cashInBlock.classList.remove('hidden');
+        if (cashOutBlock) cashOutBlock.classList.add('hidden');
+        if (submitBtn) submitBtn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-emerald-500/20 transition-all';
+      } else {
+        if (cashInBlock) cashInBlock.classList.add('hidden');
+        if (cashOutBlock) cashOutBlock.classList.remove('hidden');
+        populateBankExpensesPurposeDropdown();
+        if (submitBtn) submitBtn.className = 'flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-rose-500/20 transition-all';
+      }
+    }
+
+    function handleBankDepositedByTypeChange() {
+      const byType = document.getElementById('bank-deposited-by-type') ? document.getElementById('bank-deposited-by-type').value : 'Admin';
+      const memWrap = document.getElementById('bank-member-select-wrap');
+      const otherWrap = document.getElementById('bank-other-name-wrap');
+
+      if (byType === 'Member') {
+        if (memWrap) memWrap.classList.remove('hidden');
+        if (otherWrap) otherWrap.classList.add('hidden');
+        populateBankMembersDropdown();
+      } else if (byType === 'Other') {
+        if (memWrap) memWrap.classList.add('hidden');
+        if (otherWrap) otherWrap.classList.remove('hidden');
+      } else {
+        if (memWrap) memWrap.classList.add('hidden');
+        if (otherWrap) otherWrap.classList.add('hidden');
+      }
+    }
+
+    function openBankRecordModal(recordId = null) {
       try {
         closeAllModals();
         const modal = document.getElementById('bank-deposit-modal');
@@ -6647,20 +6747,25 @@
         
         try {
           populateBankDepositAccountDropdown();
+          populateBankMembersDropdown();
+          populateBankExpensesPurposeDropdown();
         } catch (e) {
-          console.warn("Dropdown population error:", e);
+          console.warn("Dropdown initialization notice:", e);
         }
 
-        if (depositId) {
+        if (recordId) {
           const item = (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers))
-            ? allFundTransfers.find(t => t.id === depositId)
+            ? allFundTransfers.find(t => t.id === recordId)
             : null;
           if (item) {
-            if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक जमा रिकॉर्ड संपादित करें';
+            if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक रिकॉर्ड संपादित करें (Edit Record)';
             const idEl = document.getElementById('bank-deposit-id'); if (idEl) idEl.value = item.id;
+            const dirEl = document.getElementById('bank-tx-direction'); 
+            if (dirEl) {
+              dirEl.value = (item.type === 'Bank to Hand' || item.type === 'Bank to Party' || item.type === 'Bank Cash Out') ? 'CASH_OUT' : 'CASH_IN';
+            }
             const amtEl = document.getElementById('bank-deposit-amount'); if (amtEl) amtEl.value = item.amount || '';
             const dtEl = document.getElementById('bank-deposit-date'); if (dtEl) dtEl.value = item.date || '';
-            const srcEl = document.getElementById('bank-deposit-source'); if (srcEl) srcEl.value = item.party || '';
             const refEl = document.getElementById('bank-deposit-ref'); if (refEl) refEl.value = item.refNo || '';
             const remEl = document.getElementById('bank-deposit-remarks'); if (remEl) remEl.value = item.remarks || '';
 
@@ -6669,22 +6774,55 @@
               if (accSel) accSel.value = item.bankAccount;
             }
 
-            const radios = document.getElementsByName('bank-deposit-method');
-            for (const r of radios) {
-              r.checked = (r.value === (item.method || 'Cash Deposit'));
+            handleBankDirectionChange();
+
+            // Populate specific fields based on direction
+            if (dirEl && dirEl.value === 'CASH_IN') {
+              const byTypeEl = document.getElementById('bank-deposited-by-type');
+              if (byTypeEl) {
+                if (item.depositedByType) {
+                  byTypeEl.value = item.depositedByType;
+                } else if (item.party && item.party.includes('एडमिन')) {
+                  byTypeEl.value = 'Admin';
+                } else if (item.party && item.party.includes('कोषाध्यक्ष')) {
+                  byTypeEl.value = 'Koshadhyaksh';
+                } else if (item.memberId || (item.party && item.party.includes('['))) {
+                  byTypeEl.value = 'Member';
+                } else {
+                  byTypeEl.value = 'Other';
+                }
+                handleBankDepositedByTypeChange();
+              }
+              if (item.depositedByType === 'Member') {
+                populateBankMembersDropdown(item.party);
+              } else if (item.depositedByType === 'Other') {
+                const othEl = document.getElementById('bank-other-name-input');
+                if (othEl) othEl.value = item.party || '';
+              }
+            } else {
+              // Cash Out
+              const purpEl = document.getElementById('bank-cashout-purpose');
+              if (purpEl) purpEl.value = item.purpose || '';
+              const payeeEl = document.getElementById('bank-cashout-payee');
+              if (payeeEl) payeeEl.value = item.party || '';
             }
           }
         } else {
-          if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)';
+          // Fresh Add Record
+          if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> बैंक रिकॉर्ड जोड़ें (Add Bank Record)';
           const idEl = document.getElementById('bank-deposit-id'); if (idEl) idEl.value = '';
+          const dirEl = document.getElementById('bank-tx-direction'); if (dirEl) dirEl.value = 'CASH_IN';
           const amtEl = document.getElementById('bank-deposit-amount'); if (amtEl) amtEl.value = '';
           const dtEl = document.getElementById('bank-deposit-date'); if (dtEl) dtEl.value = new Date().toISOString().split('T')[0];
-          const srcEl = document.getElementById('bank-deposit-source'); if (srcEl) srcEl.value = '';
+          const byTypeEl = document.getElementById('bank-deposited-by-type'); if (byTypeEl) byTypeEl.value = 'Admin';
+          const othEl = document.getElementById('bank-other-name-input'); if (othEl) othEl.value = '';
+          const purpEl = document.getElementById('bank-cashout-purpose'); if (purpEl) purpEl.value = '';
+          const payeeEl = document.getElementById('bank-cashout-payee'); if (payeeEl) payeeEl.value = '';
           const refEl = document.getElementById('bank-deposit-ref'); if (refEl) refEl.value = '';
           const remEl = document.getElementById('bank-deposit-remarks'); if (remEl) remEl.value = '';
-          
-          const radios = document.getElementsByName('bank-deposit-method');
-          if (radios.length > 0) radios[0].checked = true;
+
+          handleBankDirectionChange();
+          handleBankDepositedByTypeChange();
         }
 
         if (modal) {
@@ -6692,13 +6830,18 @@
           modal.style.display = 'flex';
         }
       } catch (err) {
-        console.error("Error in openBankDepositModal:", err);
+        console.error("Error in openBankRecordModal:", err);
         const modal = document.getElementById('bank-deposit-modal');
         if (modal) {
           modal.classList.remove('hidden');
           modal.style.display = 'flex';
         }
       }
+    }
+
+    // Alias for backward compatibility
+    function openBankDepositModal(id = null) {
+      openBankRecordModal(id);
     }
 
     function closeBankDepositModal() {
@@ -6708,79 +6851,138 @@
 
     async function handleSaveBankDeposit(e) {
       if (e && e.preventDefault) e.preventDefault();
-      const idInput = document.getElementById('bank-deposit-id') ? document.getElementById('bank-deposit-id').value : '';
-      const bankAccount = document.getElementById('bank-deposit-account-select') ? document.getElementById('bank-deposit-account-select').value : '';
-      const amount = parseFloat(document.getElementById('bank-deposit-amount') ? document.getElementById('bank-deposit-amount').value : 0) || 0;
-      const date = document.getElementById('bank-deposit-date') ? document.getElementById('bank-deposit-date').value : '';
-      const source = document.getElementById('bank-deposit-source') ? document.getElementById('bank-deposit-source').value.trim() : '';
-      const refNo = document.getElementById('bank-deposit-ref') ? document.getElementById('bank-deposit-ref').value.trim() : '';
-      const remarks = document.getElementById('bank-deposit-remarks') ? document.getElementById('bank-deposit-remarks').value.trim() : '';
-
-      let method = 'Cash Deposit';
-      const radios = document.getElementsByName('bank-deposit-method');
-      for (const r of radios) {
-        if (r.checked) {
-          method = r.value;
-          break;
-        }
-      }
-
-      if (amount <= 0 || !date || !source) {
-        alert("कृपया वैध राशि, दिनांक एवं जमाकर्ता/स्रोत दर्ज करें!");
-        return;
-      }
-
-      const id = idInput || 'DEP-' + Date.now().toString().slice(-6);
-      const depositData = {
-        id,
-        type: 'Bank Deposit',
-        amount,
-        date,
-        party: source,
-        bankAccount,
-        method,
-        refNo,
-        remarks: remarks || `बैंक जमा (${method})`,
-        purpose: 'Bank Deposit',
-        createdAt: new Date().toISOString()
-      };
-
-      // 1. Instant local array update
-      const existingIdx = allFundTransfers.findIndex(item => item.id === id);
-      if (existingIdx !== -1) {
-        allFundTransfers[existingIdx] = depositData;
-      } else {
-        allFundTransfers.unshift(depositData);
-      }
-
-      closeBankDepositModal();
-      updateStats();
-      renderFundTransfersList();
-      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
-
-      // 2. Persist to Express Backend
       try {
-        await fetch('/api/fund-transfers/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(depositData)
-        });
-      } catch (err) {
-        console.warn('API fund transfer save warning:', err);
-      }
+        const idInput = document.getElementById('bank-deposit-id') ? document.getElementById('bank-deposit-id').value : '';
+        const direction = document.getElementById('bank-tx-direction') ? document.getElementById('bank-tx-direction').value : 'CASH_IN';
+        const bankAccount = document.getElementById('bank-deposit-account-select') ? document.getElementById('bank-deposit-account-select').value : '';
+        const amount = parseFloat(document.getElementById('bank-deposit-amount') ? document.getElementById('bank-deposit-amount').value : 0) || 0;
+        const date = document.getElementById('bank-deposit-date') ? document.getElementById('bank-deposit-date').value : '';
+        const refNo = document.getElementById('bank-deposit-ref') ? document.getElementById('bank-deposit-ref').value.trim() : '';
+        const remarks = document.getElementById('bank-deposit-remarks') ? document.getElementById('bank-deposit-remarks').value.trim() : '';
 
-      // 3. Persist to Firestore Realtime
-      try {
-        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
-          await fundTransfersCol.doc(id).set(depositData, { merge: true });
+        if (amount <= 0 || !date) {
+          alert("कृपया वैध राशि और दिनांक दर्ज करें!");
+          return;
         }
+
+        let party = '';
+        let depositedByType = '';
+        let purpose = '';
+        let recordType = '';
+
+        if (direction === 'CASH_IN') {
+          recordType = 'Bank Deposit';
+          depositedByType = document.getElementById('bank-deposited-by-type') ? document.getElementById('bank-deposited-by-type').value : 'Admin';
+          
+          if (depositedByType === 'Admin') {
+            party = 'एडमिन (Admin)';
+          } else if (depositedByType === 'Koshadhyaksh') {
+            party = 'कोषाध्यक्ष (Koshadhyaksh)';
+          } else if (depositedByType === 'Member') {
+            party = document.getElementById('bank-member-select') ? document.getElementById('bank-member-select').value : 'सदस्य जमा';
+            if (!party) {
+              alert("कृपया सूची से सदस्य का चयन करें!");
+              return;
+            }
+          } else {
+            party = document.getElementById('bank-other-name-input') ? document.getElementById('bank-other-name-input').value.trim() : 'अन्य';
+            if (!party) {
+              alert("कृपया जमाकर्ता का नाम दर्ज करें!");
+              return;
+            }
+          }
+          purpose = 'Bank Deposit (Cash In)';
+        } else {
+          // Cash Out
+          recordType = 'Bank Cash Out';
+          purpose = document.getElementById('bank-cashout-purpose') ? document.getElementById('bank-cashout-purpose').value : 'सामान्य व्यय';
+          party = document.getElementById('bank-cashout-payee') ? document.getElementById('bank-cashout-payee').value.trim() : (purpose || 'निकासी');
+          if (!purpose) {
+            purpose = 'बैंक निकासी / खर्च';
+          }
+        }
+
+        const id = idInput || 'BR-' + Date.now().toString().slice(-6);
+        const recordData = {
+          id,
+          type: recordType,
+          direction,
+          amount,
+          date,
+          party: party || (direction === 'CASH_IN' ? 'बैंक जमा' : 'बैंक निकासी'),
+          depositedByType,
+          purpose,
+          bankAccount,
+          refNo: refNo || (direction === 'CASH_IN' ? 'Cash In' : 'Cash Out'),
+          remarks: remarks || (direction === 'CASH_IN' ? `बैंक में जमा (${party})` : `बैंक निकासी (${purpose})`),
+          createdAt: new Date().toISOString()
+        };
+
+        // 1. Local update
+        const existingIdx = allFundTransfers.findIndex(item => item.id === id);
+        if (existingIdx !== -1) {
+          allFundTransfers[existingIdx] = recordData;
+        } else {
+          allFundTransfers.unshift(recordData);
+        }
+
+        closeBankDepositModal();
+        updateStats();
+        renderFundTransfersList();
+        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+
+        // 2. Persist to Express Backend
+        try {
+          await fetch('/api/fund-transfers/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(recordData)
+          });
+        } catch (err) {
+          console.warn('API fund transfer save warning:', err);
+        }
+
+        // 3. Persist to Firestore Realtime
+        try {
+          if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
+            await fundTransfersCol.doc(id).set(recordData, { merge: true });
+          }
+        } catch (err) {
+          console.warn('Firestore fund transfer save warning:', err);
+        }
+
+        alert(`✅ बैंक रिकॉर्ड (${direction === 'CASH_IN' ? 'कैश इन' : 'कैश आउट'}) सफलतापूर्वक सुरक्षित हो गया!`);
       } catch (err) {
-        console.warn('Firestore fund transfer save warning:', err);
+        console.error("Save bank record error:", err);
+        alert("त्रुटि: " + err.message);
       }
     }
 
+    function viewBankRecordItem(id) {
+      const item = (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers))
+        ? allFundTransfers.find(t => t.id === id)
+        : null;
+      if (!item) return;
+
+      const isCredit = (item.type === 'Bank Deposit' || item.direction === 'CASH_IN' || item.type === 'Hand to Bank');
+      const msg = `
+📌 बैंक लेनदेन विवरण (Bank Transaction Details)
+----------------------------------------
+ID: ${item.id}
+दिनांक: ${item.date || '-'}
+प्रकार: ${isCredit ? '📥 कैश इन (Credit / Deposit)' : '📤 कैश आउट (Debit / Outflow)'}
+राशि: ₹ ${parseFloat(item.amount || 0).toLocaleString('en-IN')}
+स्रोत / व्यक्ति / वेंडर: ${item.party || '-'}
+उद्देश्य / मद: ${item.purpose || '-'}
+खाता: ${item.bankAccount || 'SBI Gomoh'}
+संदर्भ / UTR / पर्ची: ${item.refNo || '-'}
+टिप्पणी: ${item.remarks || '-'}
+      `.trim();
+      alert(msg);
+    }
+
     async function deleteBankDepositItem(id) {
-      if (!confirm(`क्या आप इस बैंक जमा रिकॉर्ड (${id}) को हटाना चाहते हैं?`)) return;
+      if (!confirm(`क्या आप इस बैंक रिकॉर्ड (${id}) को हटाना चाहते हैं?`)) return;
 
       allFundTransfers = allFundTransfers.filter(item => item.id !== id);
       updateStats();
@@ -8748,16 +8950,17 @@
               rawItem: ft,
               canEdit: true
             });
-          } else if (ft.type === 'Bank to Party') {
+          } else if (ft.type === 'Bank to Party' || ft.type === 'Bank Cash Out') {
+            const isDirectCashOut = (ft.type === 'Bank Cash Out');
             list.push({
               id: ft.id,
               date: ft.date || ft.createdAt || '',
-              type: 'TRANSFER',
-              typeLabel: '🏦➡️👤 Bank to Party',
-              badgeClass: 'bg-purple-50 text-purple-800 border-purple-200',
-              title: ft.party || 'बैंक द्वारा पार्टी भुगतान',
-              description: ft.remarks || 'पार्टी/वेंडर भुगतान',
-              refNo: ft.refNo || ft.purpose || 'Bank Transfer',
+              type: 'EXPENSE',
+              typeLabel: isDirectCashOut ? '📤 बैंक कैश आउट' : '🏦➡️👤 Bank to Party',
+              badgeClass: 'bg-rose-50 text-rose-800 border-rose-200',
+              title: ft.party || (isDirectCashOut ? 'बैंक निकासी' : 'बैंक द्वारा पार्टी भुगतान'),
+              description: ft.purpose ? `${ft.purpose}${ft.remarks ? ` - ${ft.remarks}` : ''}` : (ft.remarks || 'बैंक कैश आउट'),
+              refNo: ft.refNo || (isDirectCashOut ? 'Cash Out' : 'Bank Transfer'),
               credit: 0,
               debit: amt,
               rawItem: ft,
@@ -8945,10 +9148,13 @@
 
         let actionBtns = '';
         if (t.canEdit && t.rawItem) {
-          if (t.rawItem.type === 'Bank Deposit') {
+          if (t.rawItem.type === 'Bank Deposit' || t.rawItem.type === 'Bank Cash Out') {
             actionBtns = `
-              <div class="flex items-center justify-center gap-1.5">
-                <button onclick="openBankDepositModal('${t.rawItem.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संपादित करें (Edit)">
+              <div class="flex items-center justify-center gap-1">
+                <button onclick="viewBankRecordItem('${t.rawItem.id}')" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण देखें (View Details)">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button onclick="openBankRecordModal('${t.rawItem.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संपादित करें (Edit)">
                   <i class="fa-solid fa-pen"></i>
                 </button>
                 <button onclick="deleteBankDepositItem('${t.rawItem.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete)">
@@ -8958,7 +9164,10 @@
             `;
           } else {
             actionBtns = `
-              <div class="flex items-center justify-center gap-1.5">
+              <div class="flex items-center justify-center gap-1">
+                <button onclick="viewBankRecordItem('${t.rawItem.id}')" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण देखें (View Details)">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
                 <button onclick="openFundTransferModal('${t.rawItem.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="फंड ट्रांसफर संपादित करें">
                   <i class="fa-solid fa-pen"></i>
                 </button>
@@ -9031,9 +9240,13 @@
     window.renderBankTransactionsView = renderBankTransactionsView;
     window.filterBankTransactions = filterBankTransactions;
     window.handleBankSearch = handleBankSearch;
+    window.openBankRecordModal = openBankRecordModal;
     window.openBankDepositModal = openBankDepositModal;
     window.closeBankDepositModal = closeBankDepositModal;
+    window.handleBankDirectionChange = handleBankDirectionChange;
+    window.handleBankDepositedByTypeChange = handleBankDepositedByTypeChange;
     window.handleSaveBankDeposit = handleSaveBankDeposit;
+    window.viewBankRecordItem = viewBankRecordItem;
     window.deleteBankDepositItem = deleteBankDepositItem;
     window.renderExpensesView = renderExpensesView;
     window.openExpenseModal = openExpenseModal;
@@ -9062,11 +9275,11 @@
     window.deleteExpenseSchemeItem = deleteExpenseSchemeItem;
 
     window.addEventListener('DOMContentLoaded', () => {
-      const btnDeposit = document.getElementById('btn-record-bank-deposit');
+      const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
       if (btnDeposit) {
         btnDeposit.addEventListener('click', (e) => {
           e.preventDefault();
-          openBankDepositModal();
+          openBankRecordModal();
         });
       }
 
