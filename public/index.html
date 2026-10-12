@@ -1524,24 +1524,57 @@
           <label class="block font-bold text-slate-700 mb-1">योजना का नाम (Scheme Name) *</label>
           <input type="text" id="scheme-item-name" required placeholder="जैसे: मासिक सहयोग कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">राशि (₹ Amount) *</label>
-            <input type="number" id="scheme-item-amount" required value="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none">
+        <!-- Amount Type: Fixed vs Custom -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">राशि का प्रकार (Amount Type) *</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/60 transition-all">
+              <input type="radio" name="scheme-amount-type" id="scheme-type-fixed" value="fixed" checked onchange="toggleSchemeAmountType('fixed')" class="text-amber-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">1. Fixed (निश्चित)</p>
+                <p class="text-[10px] text-slate-400">तयशुदा राशि (जैसे ₹100, ₹500)</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/60 transition-all">
+              <input type="radio" name="scheme-amount-type" id="scheme-type-custom" value="custom" onchange="toggleSchemeAmountType('custom')" class="text-amber-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">2. Custom (स्वैच्छिक)</p>
+                <p class="text-[10px] text-slate-400">जितनी मर्ज़ी उतना दान</p>
+              </div>
+            </label>
           </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Fixed Amount Box -->
+          <div id="scheme-fixed-amount-box">
+            <label class="block font-bold text-slate-700 mb-1">निर्धारित राशि (₹ Amount) *</label>
+            <input type="number" id="scheme-item-amount" required value="100" placeholder="राशि दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          </div>
+
+          <!-- Custom Donation Placeholder Info (shown when custom is selected) -->
+          <div id="scheme-custom-amount-box" class="hidden">
+            <label class="block font-bold text-slate-700 mb-1">राशि का नियम</label>
+            <div class="w-full bg-amber-50/60 border border-amber-200/80 rounded-xl px-3 py-2 text-amber-900 font-bold text-[11px] flex items-center gap-1.5">
+              <i class="fa-solid fa-heart text-amber-500"></i>
+              <span>स्वैच्छिक (Open Donation)</span>
+            </div>
+          </div>
+
           <div>
             <label class="block font-bold text-slate-700 mb-1">आवृति (Frequency) *</label>
-            <select id="scheme-item-freq" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
+            <select id="scheme-item-freq" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+              <option value="One-Time">One-Time (एकमुश्त)</option>
               <option value="Monthly">Monthly (मासिक)</option>
               <option value="Yearly">Yearly (वार्षिक)</option>
-              <option value="One-Time">One-Time (एकमुश्त)</option>
-              <option value="Open">Open (स्वैच्छिक)</option>
+              <option value="Open">Open (खुला/कभी भी)</option>
             </select>
           </div>
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">योजना विवरण (Description)</label>
-          <textarea id="scheme-item-desc" rows="2" placeholder="योजना का उद्देश्य एवं लाभ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none resize-none"></textarea>
+          <textarea id="scheme-item-desc" rows="2" placeholder="योजना का उद्देश्य एवं विवरण..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-none"></textarea>
         </div>
         <div class="flex items-center gap-2 pt-2">
           <button type="button" onclick="closeSchemeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
@@ -3015,18 +3048,37 @@
       // 6. Render Schemes
       const schemesGrid = document.getElementById('schemes-cards-grid');
       if (schemesGrid) {
-        schemesGrid.innerHTML = (masterSettings.schemes || []).map(sc => `
-          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between space-y-2">
+        schemesGrid.innerHTML = (masterSettings.schemes || []).map(sc => {
+          const isCustom = sc.amountType === 'custom' || (!sc.amount && sc.amount !== 0) || sc.amount === 0;
+          return `
+          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between space-y-2 hover:shadow-md transition-shadow">
             <div class="flex items-start justify-between">
               <div>
-                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
-                  ${sc.frequency || 'Monthly'}
-                </span>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                    ${sc.frequency || 'One-Time'}
+                  </span>
+                  ${isCustom ? `
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 flex items-center gap-1">
+                      <i class="fa-solid fa-hand-holding-dollar text-[9px]"></i> Custom (स्वैच्छिक दान)
+                    </span>
+                  ` : `
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                      <i class="fa-solid fa-lock text-[9px]"></i> Fixed (निश्चित)
+                    </span>
+                  `}
+                </div>
                 <h4 class="font-bold text-slate-900 text-sm mt-1.5">${sc.name}</h4>
               </div>
               <div class="text-right">
-                <p class="text-base font-black text-amber-600 font-mono">₹${sc.amount}</p>
-                <div class="flex items-center justify-end gap-1 mt-1">
+                ${isCustom ? `
+                  <p class="text-xs font-black text-purple-700 font-sans bg-purple-50 px-2 py-1 rounded-lg border border-purple-200">
+                    स्वैच्छिक दान
+                  </p>
+                ` : `
+                  <p class="text-base font-black text-amber-600 font-mono">₹${sc.amount}</p>
+                `}
+                <div class="flex items-center justify-end gap-1 mt-1.5">
                   <button onclick="editSchemeItem('${sc.id}')" class="text-amber-700 hover:text-amber-900 text-xs p-1 rounded hover:bg-amber-50" title="संपादित करें (Edit)">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
@@ -3038,7 +3090,8 @@
             </div>
             <p class="text-xs text-slate-500">${sc.description || ''}</p>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
     }
 
@@ -3196,6 +3249,35 @@
       if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
     }
 
+    // Toggle Scheme Amount Mode: Fixed vs Custom
+    function toggleSchemeAmountType(type) {
+      const fixedBox = document.getElementById('scheme-fixed-amount-box');
+      const customBox = document.getElementById('scheme-custom-amount-box');
+      const amountInput = document.getElementById('scheme-item-amount');
+      const radioFixed = document.getElementById('scheme-type-fixed');
+      const radioCustom = document.getElementById('scheme-type-custom');
+
+      if (type === 'custom') {
+        if (radioCustom) radioCustom.checked = true;
+        if (fixedBox) fixedBox.classList.add('hidden');
+        if (customBox) customBox.classList.remove('hidden');
+        if (amountInput) {
+          amountInput.removeAttribute('required');
+          amountInput.value = '0';
+        }
+      } else {
+        if (radioFixed) radioFixed.checked = true;
+        if (fixedBox) fixedBox.classList.remove('hidden');
+        if (customBox) customBox.classList.add('hidden');
+        if (amountInput) {
+          amountInput.setAttribute('required', 'true');
+          if (amountInput.value === '0' || !amountInput.value) {
+            amountInput.value = '100';
+          }
+        }
+      }
+    }
+
     function openAddSchemeModal() {
       closeAllModals();
       const modal = document.getElementById('scheme-master-modal');
@@ -3205,6 +3287,8 @@
       document.getElementById('scheme-item-name').value = '';
       document.getElementById('scheme-item-amount').value = '100';
       document.getElementById('scheme-item-desc').value = '';
+      document.getElementById('scheme-item-freq').value = 'One-Time';
+      toggleSchemeAmountType('fixed');
       if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
     }
 
@@ -3217,9 +3301,17 @@
       if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-amber-600"></i> योजना संपादित करें';
       document.getElementById('scheme-item-id').value = item.id;
       document.getElementById('scheme-item-name').value = item.name;
-      document.getElementById('scheme-item-amount').value = item.amount || 0;
-      document.getElementById('scheme-item-freq').value = item.frequency || 'Monthly';
+      document.getElementById('scheme-item-freq').value = item.frequency || 'One-Time';
       document.getElementById('scheme-item-desc').value = item.description || '';
+
+      const isCustom = item.amountType === 'custom' || item.amount === 0;
+      if (isCustom) {
+        document.getElementById('scheme-item-amount').value = '0';
+        toggleSchemeAmountType('custom');
+      } else {
+        document.getElementById('scheme-item-amount').value = item.amount || 100;
+        toggleSchemeAmountType('fixed');
+      }
       if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
     }
 
@@ -3353,7 +3445,11 @@
       e.preventDefault();
       const id = document.getElementById('scheme-item-id').value;
       const name = document.getElementById('scheme-item-name').value.trim();
-      const amount = parseFloat(document.getElementById('scheme-item-amount').value) || 0;
+      
+      const isCustom = document.getElementById('scheme-type-custom').checked;
+      const amountType = isCustom ? 'custom' : 'fixed';
+      const amount = isCustom ? 0 : (parseFloat(document.getElementById('scheme-item-amount').value) || 0);
+
       const freq = document.getElementById('scheme-item-freq').value;
       const desc = document.getElementById('scheme-item-desc').value.trim();
 
@@ -3366,6 +3462,7 @@
           masterSettings.schemes[idx] = {
             ...masterSettings.schemes[idx],
             name,
+            amountType,
             amount,
             frequency: freq,
             description: desc
@@ -3375,6 +3472,7 @@
         masterSettings.schemes.push({
           id: 'sc_' + Date.now(),
           name,
+          amountType,
           amount,
           frequency: freq,
           description: desc,
