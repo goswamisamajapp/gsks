@@ -17,6 +17,7 @@ const EVENTS_FILE = path.join(__dirname, 'public', 'events-data.json');
 const SETTINGS_FILE = path.join(__dirname, 'public', 'settings-data.json');
 const DONATIONS_FILE = path.join(__dirname, 'public', 'donations-data.json');
 const FUND_TRANSFERS_FILE = path.join(__dirname, 'public', 'fund-transfers-data.json');
+const EXPENSES_FILE = path.join(__dirname, 'public', 'expenses-data.json');
 
 const DEFAULT_SETTINGS = {
   fundTypes: [
@@ -64,6 +65,23 @@ const DEFAULT_SETTINGS = {
     { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Active' },
     { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Active' },
     { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Active' }
+  ],
+  openingBalances: {
+    cash: 34025,
+    bank: 0,
+    remarks: 'वर्ष 2025 से पूर्व संचित कोष'
+  },
+  vendors: [
+    { id: 'ven_1', name: 'टेंट हाउस एवं डेकोरेशन', phone: '', category: 'Tent & Sound', address: 'गोमो' },
+    { id: 'ven_2', name: 'साउंड एवं लाउडस्पीकर सिस्टम', phone: '', category: 'Sound', address: 'गोमो' },
+    { id: 'ven_3', name: 'पूजा सामग्री व फूल भंडार', phone: '', category: 'Pooja Items', address: 'गुनघसा' },
+    { id: 'ven_4', name: 'प्रिंटिंग प्रेस (रसीद बही/बैनर)', phone: '', category: 'Printing', address: 'धनबाद' }
+  ],
+  expenseSchemes: [
+    { id: 'exs_1', name: 'उत्सव एवं समारोह व्यय (Event/Festival)', description: 'वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय' },
+    { id: 'exs_2', name: 'बैठक एवं कार्यालय व्यय (Meeting/Office)', description: 'चाय-नाश्ता, रजिस्टर, स्टेशनरी व व्यवस्था व्यय' },
+    { id: 'exs_3', name: 'आपातकालीन चिकित्सा व सहायता अनुदान', description: 'ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता' },
+    { id: 'exs_4', name: 'सामाजिक विकास एवं विविध व्यय', description: 'सामुदायिक कार्य एवं अन्य आकस्मिक व्यय' }
   ]
 };
 
@@ -261,6 +279,53 @@ app.post('/api/fund-transfers/delete', (req, res) => {
     return res.json({ success: true, message: 'Transfer deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete transfer' });
+  }
+});
+
+// EXPENSES APIS
+app.get('/api/expenses', (req, res) => {
+  try {
+    if (!fs.existsSync(EXPENSES_FILE)) fs.writeFileSync(EXPENSES_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(EXPENSES_FILE, 'utf8');
+    const expenses = JSON.parse(raw);
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.json(expenses);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read expenses' });
+  }
+});
+
+app.post('/api/expenses/save', (req, res) => {
+  try {
+    const item = req.body;
+    if (!fs.existsSync(EXPENSES_FILE)) fs.writeFileSync(EXPENSES_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(EXPENSES_FILE, 'utf8');
+    let expenses = JSON.parse(raw);
+
+    const index = expenses.findIndex(e => e.id === item.id);
+    if (index !== -1) {
+      expenses[index] = { ...expenses[index], ...item };
+    } else {
+      expenses.unshift(item);
+    }
+    fs.writeFileSync(EXPENSES_FILE, JSON.stringify(expenses, null, 2), 'utf8');
+    return res.json({ success: true, expense: item });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save expense' });
+  }
+});
+
+app.post('/api/expenses/delete', (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!fs.existsSync(EXPENSES_FILE)) fs.writeFileSync(EXPENSES_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(EXPENSES_FILE, 'utf8');
+    let expenses = JSON.parse(raw);
+    expenses = expenses.filter(e => e.id !== id);
+    fs.writeFileSync(EXPENSES_FILE, JSON.stringify(expenses, null, 2), 'utf8');
+    return res.json({ success: true, message: 'Expense deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete expense' });
   }
 });
 

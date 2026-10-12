@@ -229,7 +229,7 @@
             <span class="text-xs text-slate-400 font-medium">1-Click Controls</span>
           </div>
 
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
             <!-- Action 1: Events & Meetings -->
             <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
@@ -269,14 +269,28 @@
               </div>
             </button>
 
-            <!-- Action 4: Pariwarik Arthik Yojna (पारिवारिक आर्थिक योजना) -->
+            <!-- Action 4: Expenses (खर्च एवं भुगतान) -->
+            <button onclick="switchAdminView('expenses')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-50/40 hover:from-rose-100 hover:to-pink-100 text-left border border-rose-200/80 hover:border-rose-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm shadow-md shadow-rose-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-950 truncate">खर्च (Expenses)</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-200/80 text-rose-900" id="quick-expenses-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">खर्च देखें व जोड़ें →</p>
+              </div>
+            </button>
+
+            <!-- Action 5: Pariwarik Arthik Yojna (पारिवारिक आर्थिक योजना) -->
             <button onclick="switchAdminView('pariwarik')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-50/40 hover:from-cyan-100 hover:to-sky-100 text-left border border-cyan-200/80 hover:border-cyan-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-sm shadow-md shadow-cyan-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
                 <i class="fa-solid fa-users-rectangle"></i>
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5">
-                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-cyan-950 truncate">पारिवारिक आर्थिक योजना</h4>
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-cyan-950 truncate">पारिवारिक योजना</h4>
                 </div>
                 <p class="text-[11px] text-slate-500 truncate">योजना विवरण व सहायता →</p>
               </div>
@@ -293,21 +307,21 @@
             <span class="text-xs text-slate-400 font-medium">Auto-updated</span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
             <!-- Total Fund Available -->
             <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider">Total Fund Available</span>
+                  <span class="text-xs font-bold uppercase tracking-wider">Total Available</span>
                   <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-black">
                     ₹
                   </div>
                 </div>
                 <p class="text-2xl sm:text-3xl font-black text-slate-900 mt-1" id="dash-total-fund">₹ 0</p>
-                <p class="text-xs text-slate-400 mt-1">कुल उपलब्ध धनराशि</p>
+                <p class="text-xs text-slate-400 mt-1">कुल शुद्ध उपलब्ध धनराशि</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold">Verified Balance</span>
+                <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold">Net Balance</span>
                 <span class="text-slate-400 text-[11px]">Bank + Cash</span>
               </div>
             </div>
@@ -322,7 +336,7 @@
                   </div>
                 </div>
                 <p class="text-2xl sm:text-3xl font-black text-blue-900 mt-1" id="dash-bank-fund">₹ 0</p>
-                <p class="text-xs text-slate-400 mt-1">बैंक खाते में जमा राशि</p>
+                <p class="text-xs text-slate-400 mt-1">बैंक खाते में शेष राशि</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span class="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md font-semibold">SBI Trust A/C</span>
@@ -334,7 +348,7 @@
             <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider">In Hand</span>
+                  <span class="text-xs font-bold uppercase tracking-wider">In Hand (नगद)</span>
                   <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
                     <i class="fa-solid fa-hand-holding-dollar"></i>
                   </div>
@@ -344,25 +358,43 @@
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md font-semibold">Cash in Hand</span>
-                <span class="text-slate-400 text-[11px]">Petty Cash</span>
+                <span class="text-slate-400 text-[11px]">नगद कोष</span>
               </div>
             </div>
 
-            <!-- 4th Card: Dues Amount -->
+            <!-- Total Expenses -->
+            <div onclick="switchAdminView('expenses')" class="cursor-pointer bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 transition-all group">
+              <div>
+                <div class="flex items-center justify-between text-slate-500 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-rose-800">Total Expenses</span>
+                  <div class="w-8 h-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-receipt"></i>
+                  </div>
+                </div>
+                <p class="text-2xl sm:text-3xl font-black text-rose-700 mt-1" id="dash-expenses-total">₹ 0</p>
+                <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">कुल खर्च <i class="fa-solid fa-arrow-right text-[10px] text-rose-500"></i></p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md font-semibold">Expenses Out</span>
+                <span class="text-slate-400 text-[11px]" id="dash-expenses-split">Cash / Bank</span>
+              </div>
+            </div>
+
+            <!-- 5th Card: Dues Amount -->
             <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between text-slate-500 mb-2">
                   <span class="text-xs font-bold uppercase tracking-wider">Dues Amount</span>
-                  <div class="w-8 h-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-sm">
+                  <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-sm">
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                   </div>
                 </div>
-                <p class="text-2xl sm:text-3xl font-black text-rose-600 mt-1" id="dash-dues-fund">₹ 0</p>
-                <p class="text-xs text-slate-400 mt-1">कुल बकाया राशि</p>
+                <p class="text-2xl sm:text-3xl font-black text-slate-700 mt-1" id="dash-dues-fund">₹ 0</p>
+                <p class="text-xs text-slate-400 mt-1">कुल सदस्यों की बकाया राशि</p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md font-semibold">Pending Dues</span>
-                <span class="text-slate-400 text-[11px]">Total Dues</span>
+                <span class="text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md font-semibold">Pending Dues</span>
+                <span class="text-slate-400 text-[11px]">Uncollected</span>
               </div>
             </div>
           </div>
@@ -1041,6 +1073,142 @@
       </div>
 
       <!-- ============================================== -->
+      <!-- TAB 4C: EXPENSES MANAGEMENT SECTION (खर्च प्रबंधन) -->
+      <!-- ============================================== -->
+      <div id="view-expenses-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  समिति खर्च एवं व्यय प्रबंधन (Expenses Register)
+                </h2>
+                <p class="text-xs text-slate-500">सभी योजनाओं के खर्च, वेंडर भुगतान, नकद व ऑनलाइन व्यय एवं पारदर्शी हिसाब-किताब</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openExpenseModal()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-rose-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>+ नया खर्च दर्ज करें (Add New Expense)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Expenses Summary 4-Cards Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <!-- Total Expenses -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-rose-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल खर्च (Total)</p>
+              <h3 class="text-base sm:text-xl font-black text-rose-700 font-mono mt-0.5">₹<span id="exp-stat-total">0</span></h3>
+              <p class="text-[10px] text-slate-400 font-medium"><span id="exp-stat-count">0</span> कुल बिल/खर्च</p>
+            </div>
+          </div>
+
+          <!-- Cash Expenses -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">नकद खर्च (Cash)</p>
+              <h3 class="text-base sm:text-xl font-black text-amber-900 font-mono mt-0.5">₹<span id="exp-stat-cash">0</span></h3>
+              <p class="text-[10px] text-amber-600 font-semibold">हाथ से भुगतान</p>
+            </div>
+          </div>
+
+          <!-- Online Expenses -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-blue-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">बैंक/ऑनलाइन (Online)</p>
+              <h3 class="text-base sm:text-xl font-black text-blue-900 font-mono mt-0.5">₹<span id="exp-stat-online">0</span></h3>
+              <p class="text-[10px] text-blue-600 font-semibold">बैंक ट्रांसफर / UPI</p>
+            </div>
+          </div>
+
+          <!-- This Month Expenses -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-purple-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">इस माह खर्च</p>
+              <h3 class="text-base sm:text-xl font-black text-purple-900 font-mono mt-0.5">₹<span id="exp-stat-month">0</span></h3>
+              <p class="text-[10px] text-purple-600 font-semibold">Current Month</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Controls & Search/Filter Strip -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <!-- Search Box -->
+          <div class="relative flex-1 min-w-[200px]">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+            <input type="text" id="expense-search-input" oninput="renderExpensesList()" placeholder="खर्च विवरण, वेंडर, मद या ID खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium">
+          </div>
+
+          <!-- Filter Dropdowns -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <select id="expense-method-filter" onchange="renderExpensesList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+              <option value="ALL">सभी माध्यम (Cash + Online)</option>
+              <option value="Cash">💵 केवल नकद (Cash)</option>
+              <option value="Online">📱 केवल बैंक/ऑनलाइन (Online)</option>
+            </select>
+
+            <select id="expense-scheme-filter" onchange="renderExpensesList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[200px]">
+              <option value="ALL">सभी खर्च योजनाएं/मद</option>
+            </select>
+
+            <select id="expense-vendor-filter" onchange="renderExpensesList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
+              <option value="ALL">सभी वेंडर (All Vendors)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Expenses List Table -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-rose-600"></i> खर्च रजिस्टर (हाल के खर्च - Recent to Old)
+            </h3>
+            <span class="text-xs text-slate-400 font-medium font-mono" id="expenses-table-count">0 प्रविष्टियां</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                  <th class="p-3.5 pl-5">क्र. / दिनांक</th>
+                  <th class="p-3.5">खर्च योजना / मद (Expense Head)</th>
+                  <th class="p-3.5">वेंडर / विवरण (Vendor & Details)</th>
+                  <th class="p-3.5">माध्यम (Payment Method)</th>
+                  <th class="p-3.5 font-mono text-right">राशि (Amount)</th>
+                  <th class="p-3.5 pr-5 text-center">कार्रवाई</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-table-body" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
       <!-- TAB 5: SYSTEM & MASTER SETTINGS PAGE           -->
       <!-- ============================================== -->
       <div id="view-settings-section" class="hidden space-y-6 animate-in fade-in duration-200">
@@ -1106,6 +1274,15 @@
             <i class="fa-solid fa-vault"></i>
             <span>4. Fund Management (कोष प्रबंधन)</span>
             <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200" id="badge-count-fund">0</span>
+          </button>
+          <button 
+            onclick="switchSettingsTab('expense')" 
+            id="tab-btn-expense"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+          >
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>5. Expense Master (खर्च मास्टर)</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-700 font-bold" id="badge-count-expense">Master</span>
           </button>
         </div>
 
@@ -1408,6 +1585,104 @@
 
         </div>
 
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 5: EXPENSE MASTER (खर्च एवं वेंडर मास्टर) -->
+        <!-- ========================================== -->
+        <div id="settings-page-expense" class="hidden space-y-6">
+          
+          <!-- Opening Balances Card (2025 Opening Fund) -->
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-md">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-white/20">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                  <h3 class="text-base sm:text-lg font-black tracking-wide">प्रारंभिक कोष (Opening Balance - 2025 से पूर्व संचित कोष)</h3>
+                </div>
+                <p class="text-xs text-amber-100 mt-1" id="opening-balance-remarks-text">समिति 2025 से पूर्व संचालित है - प्रारंभिक जमा राशि</p>
+              </div>
+              <button onclick="openEditOpeningBalanceModal()" class="px-4 py-2 bg-white text-orange-800 hover:bg-orange-50 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>प्रारंभिक कोष संशोधित करें (Edit Opening Balance)</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-4">
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">नगद प्रारंभिक कोष (Cash Opening Balance)</p>
+                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-cash">₹ 34,025</h4>
+                <p class="text-[10px] text-amber-100 mt-0.5">स्वयं जमा / Self Fund Cash</p>
+              </div>
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">बैंक प्रारंभिक कोष (Bank Opening Balance)</p>
+                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-bank">₹ 0</h4>
+                <p class="text-[10px] text-amber-100 mt-0.5">SBI / बैंक खाता प्रारंभिक शेष</p>
+              </div>
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between">
+                <div>
+                  <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">कुल प्रारंभिक संचित कोष</p>
+                  <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-total">₹ 34,025</h4>
+                </div>
+                <p class="text-[10px] text-emerald-200 font-bold mt-1">✓ मुख्य कोष में स्वतः सम्मिलित</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 1: Expense Schemes / Heads Master -->
+          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-shapes text-rose-600"></i> खर्च की योजना / मद मास्टर (Expense Schemes / Heads)
+                </h3>
+                <p class="text-xs text-slate-500">समिति के खर्च मद (उत्सव/समारोह, बैठक व्यवस्था, चिकित्सा सहायता, विविध आदि)</p>
+              </div>
+              <button onclick="openAddExpenseSchemeModal()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नई खर्च योजना जोड़ें (Add Expense Head)</span>
+              </button>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="expense-schemes-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 2: Vendor / Party Master -->
+          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-store text-indigo-600"></i> वेंडर / डीलर मास्टर (Vendors & Suppliers)
+                </h3>
+                <p class="text-xs text-slate-500">ट्रस्ट सामान/सेवा आपूर्तिकर्ता (टेंट हाउस, साउंड, पूजा सामग्री, प्रिंटिंग प्रेस आदि)</p>
+              </div>
+              <button onclick="openAddVendorModal()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नया वेंडर जोड़ें (Add Vendor)</span>
+              </button>
+            </div>
+
+            <div class="mt-4 overflow-x-auto rounded-2xl border border-slate-100">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th class="p-3 pl-4">#</th>
+                    <th class="p-3">वेंडर / फर्म का नाम</th>
+                    <th class="p-3">श्रेणी / Category</th>
+                    <th class="p-3">मोबाइल नंबर</th>
+                    <th class="p-3">पता / स्थान</th>
+                    <th class="p-3 text-center pr-4">कार्रवाई</th>
+                  </tr>
+                </thead>
+                <tbody id="vendors-master-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
     </main>
@@ -1429,6 +1704,10 @@
       <button onclick="switchAdminView('events')" id="mobile-nav-events" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-600">
         <i class="fa-solid fa-calendar-days text-sm"></i>
         <span class="text-[10px] font-medium">Events</span>
+      </button>
+      <button onclick="switchAdminView('expenses')" id="mobile-nav-expenses" class="flex flex-col items-center gap-1 text-slate-400 hover:text-rose-600">
+        <i class="fa-solid fa-receipt text-sm"></i>
+        <span class="text-[10px] font-medium">Expenses</span>
       </button>
       <button onclick="switchAdminView('archived')" id="mobile-nav-archived" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-box-archive text-sm"></i>
@@ -2793,8 +3072,250 @@
         <button type="button" onclick="closePariwarikBulkWhatsAppModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors">
           बंद करें
         </button>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD / EDIT EXPENSE (खर्च दर्ज/संशोधित करें)            -->
+  <!-- ============================================================== -->
+  <div id="expense-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="expense-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-receipt text-rose-600"></i> नया खर्च दर्ज करें (Add New Expense)
+        </h3>
+        <button onclick="closeExpenseModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
+      <form onsubmit="handleSaveExpense(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="expense-id">
+
+        <!-- Expense Scheme / Head -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">खर्च की योजना / मद (Expense Head / Scheme) *</label>
+          <div class="flex items-center gap-2">
+            <select id="expense-scheme-select" required class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+              <!-- Populated via JS -->
+            </select>
+            <button type="button" onclick="openAddExpenseSchemeModal()" class="px-2.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl font-bold" title="नया मद जोड़ें">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vendor Selection & Custom Vendor Name -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">वेंडर / पार्टी का नाम (Vendor / Party Name) *</label>
+          <div class="flex items-center gap-2 mb-2">
+            <select id="expense-vendor-select" onchange="handleExpenseVendorSelect(this.value)" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+              <!-- Populated via JS -->
+            </select>
+            <button type="button" onclick="openAddVendorModal()" class="px-2.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl font-bold" title="नया वेंडर जोड़ें">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <input type="text" id="expense-vendor-name" required placeholder="वेंडर / दुकानदार / प्राप्तकर्ता का नाम दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+        </div>
+
+        <!-- Amount & Date -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">खर्च राशि (₹ Amount) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
+              <input type="number" id="expense-amount" required min="1" step="any" placeholder="0.00" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 text-sm">
+            </div>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">भुगतान दिनांक (Date) *</label>
+            <input type="date" id="expense-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+          </div>
+        </div>
+
+        <!-- Payment Method: Cash vs Online -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">भुगतान माध्यम (Payment Method) *</label>
+          <div class="grid grid-cols-2 gap-2.5">
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/60 transition-all">
+              <input type="radio" name="expense-method" value="Cash" checked class="text-amber-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">💵 नकद (Cash)</p>
+                <p class="text-[10px] text-slate-400">Cash In Hand से घटेगा</p>
+              </div>
+            </label>
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
+              <input type="radio" name="expense-method" value="Online" class="text-blue-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 leading-tight">📱 बैंक / Online (UPI)</p>
+                <p class="text-[10px] text-slate-400">Bank Balance से घटेगा</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Bill / Receipt Number -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">बिल / रसीद वाउचर नंबर (Bill / Voucher No. Optional)</label>
+          <input type="text" id="expense-bill" placeholder="जैसे: Bill #104 / वाउचर 2026/05" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+        </div>
+
+        <!-- Description / Remarks -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">खर्च का विस्तृत विवरण (Remarks / Purpose)</label>
+          <textarea id="expense-remarks" rows="2" placeholder="जैसे: शिव चर्चा बैठक में चाय-नाश्ता, साउंड किराया 2 दिन" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"></textarea>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeExpenseModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-rose-500/20 transition-all">
+            खर्च सुरक्षित करें (Save Expense)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: EDIT OPENING BALANCES (प्रारंभिक कोष संशोधन)            -->
+  <!-- ============================================================== -->
+  <div id="opening-balance-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-vault text-amber-600"></i> प्रारंभिक कोष संशोधित करें (Opening Balance)
+        </h3>
+        <button onclick="closeEditOpeningBalanceModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveOpeningBalance(event)" class="space-y-3.5 text-xs">
+        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-amber-900">
+          <p class="font-bold">💡 समिति स्थापना 2025 संचित कोष:</p>
+          <p class="text-[11px] mt-0.5 text-amber-800">यहाँ दर्ज राशि आपके डैशबोर्ड के कुल कोष एवं In Hand / Bank में स्वतः जोड़ दी जाती है।</p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">नगद प्रारंभिक राशि (Cash Opening Balance) *</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
+            <input type="number" id="opening-bal-cash-input" required min="0" step="any" placeholder="34025" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">बैंक प्रारंभिक राशि (Bank Opening Balance) *</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
+            <input type="number" id="opening-bal-bank-input" required min="0" step="any" placeholder="0" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / नोट (Remarks)</label>
+          <input type="text" id="opening-bal-remarks-input" placeholder="जैसे: वर्ष 2025 से पूर्व संचित कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeEditOpeningBalanceModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all">
+            सुरक्षित करें (Save Balance)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD / EDIT VENDOR (वेंडर जोड़ें/संपादित करें)          -->
+  <!-- ============================================================== -->
+  <div id="vendor-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="vendor-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-store text-indigo-600"></i> नया वेंडर जोड़ें
+        </h3>
+        <button onclick="closeVendorModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveVendor(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="vendor-item-id">
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">वेंडर / दुकान / फर्म का नाम *</label>
+          <input type="text" id="vendor-item-name" required placeholder="जैसे: राज टेंट हाउस एवं साउंड" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">श्रेणी / Category</label>
+          <input type="text" id="vendor-item-category" placeholder="जैसे: Tent & Sound, Pooja, Printing, Grocery" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">मोबाइल नंबर</label>
+          <input type="tel" id="vendor-item-phone" placeholder="जैसे: 9876543210" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">पता / स्थान</label>
+          <input type="text" id="vendor-item-address" placeholder="जैसे: गोमो बाज़ार, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeVendorModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-indigo-500/20 transition-all">
+            वेंडर सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD / EDIT EXPENSE SCHEME HEAD                          -->
+  <!-- ============================================================== -->
+  <div id="expensescheme-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="expensescheme-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-shapes text-rose-600"></i> नई खर्च योजना / मद जोड़ें
+        </h3>
+        <button onclick="closeExpenseSchemeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveExpenseScheme(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="expensescheme-item-id">
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">खर्च मद / योजना का नाम *</label>
+          <input type="text" id="expensescheme-item-name" required placeholder="जैसे: उत्सव एवं समारोह व्यय" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / उद्देश्य (Description)</label>
+          <textarea id="expensescheme-item-desc" rows="2" placeholder="जैसे: वार्षिक महोत्सव, पूजा, चाय-नाश्ता आदि" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"></textarea>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeExpenseSchemeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-rose-500/20 transition-all">
+            मद सुरक्षित करें
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -2804,6 +3325,11 @@
     let allEvents = [];
     let allDonations = [];
     let allFundTransfers = [];
+    let allExpenses = [];
+    let currentExpenseMethodFilter = 'ALL';
+    let currentExpenseSchemeFilter = 'ALL';
+    let currentExpenseVendorFilter = 'ALL';
+    let currentExpenseSearchTerm = '';
     let currentFundTransferFilter = 'ALL';
     let currentEventFilter = 'ALL';
     let currentEventStatusFilter = 'ALL';
@@ -2939,6 +3465,23 @@
         { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amountType: 'fixed', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Open' },
         { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amountType: 'fixed', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Open' },
         { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amountType: 'custom', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Open' }
+      ],
+      openingBalances: {
+        cash: 34025,
+        bank: 0,
+        remarks: 'वर्ष 2025 से पूर्व संचित कोष'
+      },
+      vendors: [
+        { id: 'ven_1', name: 'टेंट हाउस एवं डेकोरेशन', phone: '', category: 'Tent & Sound', address: 'गोमो' },
+        { id: 'ven_2', name: 'साउंड एवं लाउडस्पीकर सिस्टम', phone: '', category: 'Sound', address: 'गोमो' },
+        { id: 'ven_3', name: 'पूजा सामग्री व फूल भंडार', phone: '', category: 'Pooja Items', address: 'गुनघसा' },
+        { id: 'ven_4', name: 'प्रिंटिंग प्रेस (रसीद बही/बैनर)', phone: '', category: 'Printing', address: 'धनबाद' }
+      ],
+      expenseSchemes: [
+        { id: 'exs_1', name: 'उत्सव एवं समारोह व्यय (Event/Festival)', description: 'वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय' },
+        { id: 'exs_2', name: 'बैठक एवं कार्यालय व्यय (Meeting/Office)', description: 'चाय-नाश्ता, रजिस्टर, स्टेशनरी व व्यवस्था व्यय' },
+        { id: 'exs_3', name: 'आपातकालीन चिकित्सा व सहायता अनुदान', description: 'ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता' },
+        { id: 'exs_4', name: 'सामाजिक विकास एवं विविध व्यय', description: 'सामुदायिक कार्य एवं अन्य आकस्मिक व्यय' }
       ]
     };
 
@@ -3020,6 +3563,7 @@
       const archivedSection = document.getElementById('view-archived-section');
       const eventsSection = document.getElementById('view-events-section');
       const donationsSection = document.getElementById('view-donations-section');
+      const expensesSection = document.getElementById('view-expenses-section');
       const pariwarikSection = document.getElementById('view-pariwarik-section');
       const settingsSection = document.getElementById('view-settings-section');
       
@@ -3034,6 +3578,7 @@
       const mobMembers = document.getElementById('mobile-nav-members');
       const mobPrime = document.getElementById('mobile-nav-prime');
       const mobEvents = document.getElementById('mobile-nav-events');
+      const mobExpenses = document.getElementById('mobile-nav-expenses');
       const mobArchived = document.getElementById('mobile-nav-archived');
       const mobSettings = document.getElementById('mobile-nav-settings');
 
@@ -3044,7 +3589,7 @@
       if(navSettings) navSettings.className = 'px-3.5 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200';
 
       // Reset mobile classes
-      [mobDash, mobMembers, mobPrime, mobEvents, mobArchived, mobSettings].forEach(btn => {
+      [mobDash, mobMembers, mobPrime, mobEvents, mobExpenses, mobArchived, mobSettings].forEach(btn => {
         if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
       });
 
@@ -3053,6 +3598,7 @@
       archivedSection.classList.add('hidden');
       if (eventsSection) eventsSection.classList.add('hidden');
       if (donationsSection) donationsSection.classList.add('hidden');
+      if (expensesSection) expensesSection.classList.add('hidden');
       if (pariwarikSection) pariwarikSection.classList.add('hidden');
       if (settingsSection) settingsSection.classList.add('hidden');
 
@@ -3067,6 +3613,10 @@
       } else if (view === 'donations') {
         if (donationsSection) donationsSection.classList.remove('hidden');
         renderDonationsView();
+      } else if (view === 'expenses') {
+        if (expensesSection) expensesSection.classList.remove('hidden');
+        if (mobExpenses) mobExpenses.className = 'flex flex-col items-center gap-1 text-rose-600 font-bold';
+        renderExpensesView();
       } else if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
         if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
@@ -3118,6 +3668,7 @@
     const membersCol = db.collection('members');
     const eventsCol = db.collection('events');
     const donationsCol = db.collection('donations');
+    const expensesCol = db.collection('expenses');
     const fundTransfersCol = db.collection('fund_transfers');
     const settingsCol = db.collection('settings');
 
@@ -3181,6 +3732,20 @@
           loadDonationsFallback();
         });
 
+        // Listen for live Firestore expenses
+        expensesCol.onSnapshot((liveExpensesSnap) => {
+          const expList = [];
+          liveExpensesSnap.forEach(doc => expList.push(doc.data()));
+          allExpenses = expList;
+          allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          updateStats();
+          updateExpensesStats();
+          renderExpensesList();
+        }, (err) => {
+          console.warn("Firestore expenses onSnapshot error:", err);
+          loadExpensesFallback();
+        });
+
         // Listen for live Firestore fund transfers
         fundTransfersCol.onSnapshot((liveSnap) => {
           const ftList = [];
@@ -3212,6 +3777,7 @@
         loadMembersDataFallback();
         loadEventsFallback();
         loadDonationsFallback();
+        loadExpensesFallback();
         loadFundTransfersFallback();
         loadSettingsFallback();
       }
@@ -3229,6 +3795,19 @@
         renderFundTransfersList();
       } catch (err) {
         console.error('Failed to load fund transfers fallback:', err);
+      }
+    }
+
+    async function loadExpensesFallback() {
+      try {
+        const res = await fetch('/api/expenses');
+        allExpenses = await res.json();
+        allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+        updateStats();
+        updateExpensesStats();
+        renderExpensesList();
+      } catch (err) {
+        console.error('Failed to load expenses fallback:', err);
       }
     }
 
@@ -3351,7 +3930,11 @@
       if (document.getElementById('nav-archived-count')) document.getElementById('nav-archived-count').textContent = archivedCount;
       document.getElementById('dash-archived-members').textContent = archivedCount;
 
-      // Dynamic Treasury Calculations from actual Donations and Member records
+      // Dynamic Treasury Calculations from Opening Balance, actual Donations, Fund Transfers, and Expenses
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0 };
+      const openCash = parseFloat(openBalances.cash) || 0;
+      const openBank = parseFloat(openBalances.bank) || 0;
+
       let donationCashTotal = 0;
       let donationOnlineTotal = 0;
       if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
@@ -3368,6 +3951,21 @@
       // Member legacy donations (if any records have donation field not tracked in donations collection)
       const memberDonationsSum = nonRemoved.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
       const grossDonations = Math.max(donationCashTotal + donationOnlineTotal, memberDonationsSum);
+
+      // Account for Expenses:
+      let expenseCashTotal = 0;
+      let expenseOnlineTotal = 0;
+      if (typeof allExpenses !== 'undefined' && Array.isArray(allExpenses)) {
+        allExpenses.forEach(exp => {
+          const amt = parseFloat(exp.amount) || 0;
+          if (exp.method === 'Cash') {
+            expenseCashTotal += amt;
+          } else {
+            expenseOnlineTotal += amt;
+          }
+        });
+      }
+      const totalExpenses = expenseCashTotal + expenseOnlineTotal;
 
       // Account for Fund Transfers:
       // Bank to Hand: Bank decreases, Cash increases
@@ -3389,15 +3987,18 @@
         });
       }
 
-      // Net In Hand Cash & Bank Fund
-      const netCashInHand = Math.max(0, donationCashTotal + bankToHand - handToBank - cashToParty);
-      const netBankAmount = Math.max(0, donationOnlineTotal + handToBank - bankToHand - bankToParty);
+      // Net In Hand Cash & Bank Fund (Including Opening Balances minus Expenses)
+      const netCashInHand = Math.max(0, openCash + donationCashTotal + bankToHand - handToBank - cashToParty - expenseCashTotal);
+      const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank - bankToHand - bankToParty - expenseOnlineTotal);
       const totalAvailableFund = netCashInHand + netBankAmount;
 
       const elTotalFund = document.getElementById('dash-total-fund');
       const elBankFund = document.getElementById('dash-bank-fund');
       const elCashFund = document.getElementById('dash-cash-fund');
       const elDuesFund = document.getElementById('dash-dues-fund');
+      const elExpensesTotal = document.getElementById('dash-expenses-total');
+      const elExpensesSplit = document.getElementById('dash-expenses-split');
+      const elQuickExpensesCount = document.getElementById('quick-expenses-count');
 
       // Calculate total pending dues (from all active/nonRemoved members)
       const totalDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
@@ -3406,6 +4007,9 @@
       if (elBankFund) elBankFund.textContent = `₹ ${netBankAmount.toLocaleString('en-IN')}`;
       if (elCashFund) elCashFund.textContent = `₹ ${netCashInHand.toLocaleString('en-IN')}`;
       if (elDuesFund) elDuesFund.textContent = `₹ ${totalDuesAmount.toLocaleString('en-IN')}`;
+      if (elExpensesTotal) elExpensesTotal.textContent = `₹ ${totalExpenses.toLocaleString('en-IN')}`;
+      if (elExpensesSplit) elExpensesSplit.textContent = `नकद: ₹${expenseCashTotal.toLocaleString('en-IN')} | बैंक: ₹${expenseOnlineTotal.toLocaleString('en-IN')}`;
+      if (elQuickExpensesCount) elQuickExpensesCount.textContent = (typeof allExpenses !== 'undefined' ? allExpenses.length : 0);
 
       // Update counters on Fund Management Page as well
       const fundStatTotal = document.getElementById('fund-stat-total');
@@ -4518,14 +5122,16 @@
       const tabBtnEvent = document.getElementById('tab-btn-event');
       const tabBtnScheme = document.getElementById('tab-btn-scheme');
       const tabBtnFund = document.getElementById('tab-btn-fund');
+      const tabBtnExpense = document.getElementById('tab-btn-expense');
 
       const pageStatus = document.getElementById('settings-page-status');
       const pageEvent = document.getElementById('settings-page-event');
       const pageScheme = document.getElementById('settings-page-scheme');
       const pageFund = document.getElementById('settings-page-fund');
+      const pageExpense = document.getElementById('settings-page-expense');
 
       // Reset tabs styling
-      [tabBtnStatus, tabBtnEvent, tabBtnScheme, tabBtnFund].forEach(btn => {
+      [tabBtnStatus, tabBtnEvent, tabBtnScheme, tabBtnFund, tabBtnExpense].forEach(btn => {
         if (btn) btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0';
       });
 
@@ -4534,6 +5140,7 @@
       if (pageEvent) pageEvent.classList.add('hidden');
       if (pageScheme) pageScheme.classList.add('hidden');
       if (pageFund) pageFund.classList.add('hidden');
+      if (pageExpense) pageExpense.classList.add('hidden');
 
       if (tab === 'event') {
         if (tabBtnEvent) tabBtnEvent.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow-sm flex-shrink-0';
@@ -4547,6 +5154,10 @@
         renderFundTypesGrid();
         renderBankAccountsGrid();
         renderFundTransfersList();
+      } else if (tab === 'expense') {
+        if (tabBtnExpense) tabBtnExpense.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-rose-600 text-white shadow-sm flex-shrink-0';
+        if (pageExpense) pageExpense.classList.remove('hidden');
+        renderExpenseMasterTab();
       } else {
         if (tabBtnStatus) tabBtnStatus.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-orange-500 text-white shadow-sm flex-shrink-0';
         if (pageStatus) pageStatus.classList.remove('hidden');
@@ -4571,10 +5182,11 @@
       if (bScheme) bScheme.textContent = (masterSettings.schemes || []).length;
       if (bFund) bFund.textContent = (masterSettings.fundTypes || []).length;
 
-      // Render Fund Tab Components
+      // Render Tab Components
       renderFundTypesGrid();
       renderBankAccountsGrid();
       renderFundTransfersList();
+      renderExpenseMasterTab();
 
       // 2. Render Status Master Table
       const statusTbody = document.getElementById('status-master-tbody');
@@ -6971,8 +7583,632 @@
     window.sendPariwarikWhatsAppNotification = sendPariwarikWhatsAppNotification;
     window.openPariwarikBulkWhatsAppModal = openPariwarikBulkWhatsAppModal;
     window.closePariwarikBulkWhatsAppModal = closePariwarikBulkWhatsAppModal;
-    window.openNextPendingPariwarikWhatsApp = openNextPendingPariwarikWhatsApp;
-    window.sendPariwarikPushAllNotification = sendPariwarikPushAllNotification;
+    // ==============================================================
+    // EXPENSES MANAGEMENT & EXPENSE MASTER IMPLEMENTATION
+    // ==============================================================
+    function renderExpensesView() {
+      populateExpenseFilterDropdowns();
+      updateExpensesStats();
+      renderExpensesList();
+    }
+
+    function populateExpenseFilterDropdowns() {
+      const schemeFilter = document.getElementById('expense-scheme-filter');
+      const vendorFilter = document.getElementById('expense-vendor-filter');
+
+      if (schemeFilter) {
+        const schemes = (masterSettings && masterSettings.expenseSchemes) ? masterSettings.expenseSchemes : [];
+        const prevVal = schemeFilter.value;
+        schemeFilter.innerHTML = '<option value="ALL">सभी खर्च योजनाएं/मद</option>' +
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+        schemeFilter.value = prevVal || 'ALL';
+      }
+
+      if (vendorFilter) {
+        const vendors = (masterSettings && masterSettings.vendors) ? masterSettings.vendors : [];
+        const prevVal = vendorFilter.value;
+        vendorFilter.innerHTML = '<option value="ALL">सभी वेंडर (All Vendors)</option>' +
+          vendors.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
+        vendorFilter.value = prevVal || 'ALL';
+      }
+    }
+
+    function populateExpenseModalDropdowns(selectedScheme = '', selectedVendor = '') {
+      const schemeSelect = document.getElementById('expense-scheme-select');
+      const vendorSelect = document.getElementById('expense-vendor-select');
+
+      if (schemeSelect) {
+        const schemes = (masterSettings && masterSettings.expenseSchemes) ? masterSettings.expenseSchemes : [];
+        schemeSelect.innerHTML = '<option value="">-- खर्च योजना / मद चुनें --</option>' +
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('') +
+          '<option value="अन्य सामान्य व्यय">अन्य सामान्य व्यय</option>';
+        if (selectedScheme) schemeSelect.value = selectedScheme;
+      }
+
+      if (vendorSelect) {
+        const vendors = (masterSettings && masterSettings.vendors) ? masterSettings.vendors : [];
+        vendorSelect.innerHTML = '<option value="">-- पंजीकृत वेंडर चुनें (वैकल्पिक) --</option>' +
+          vendors.map(v => `<option value="${v.name}">${v.name} (${v.category || 'वेंडर'})</option>`).join('') +
+          '<option value="__custom__">➕ अन्य वेंडर / मैनुअल नाम दर्ज करें...</option>';
+        if (selectedVendor) vendorSelect.value = selectedVendor;
+      }
+    }
+
+    function handleExpenseVendorSelect(val) {
+      const vendorInput = document.getElementById('expense-vendor-name');
+      if (!vendorInput) return;
+      if (val === '__custom__') {
+        vendorInput.value = '';
+        vendorInput.focus();
+      } else if (val) {
+        vendorInput.value = val;
+      }
+    }
+
+    function updateExpensesStats() {
+      let totalAmount = 0;
+      let cashAmount = 0;
+      let onlineAmount = 0;
+      let thisMonthAmount = 0;
+
+      const currentMonthPrefix = new Date().toISOString().slice(0, 7); // e.g. "2026-10"
+
+      allExpenses.forEach(e => {
+        const amt = parseFloat(e.amount) || 0;
+        totalAmount += amt;
+
+        if (e.method === 'Cash') {
+          cashAmount += amt;
+        } else {
+          onlineAmount += amt;
+        }
+
+        const expMonth = (e.date || e.createdAt || '').slice(0, 7);
+        if (expMonth === currentMonthPrefix) {
+          thisMonthAmount += amt;
+        }
+      });
+
+      const elTotal = document.getElementById('exp-stat-total');
+      const elCount = document.getElementById('exp-stat-count');
+      const elCash = document.getElementById('exp-stat-cash');
+      const elOnline = document.getElementById('exp-stat-online');
+      const elMonth = document.getElementById('exp-stat-month');
+      const elTableCount = document.getElementById('expenses-table-count');
+
+      if (elTotal) elTotal.textContent = totalAmount.toLocaleString('en-IN');
+      if (elCount) elCount.textContent = allExpenses.length;
+      if (elCash) elCash.textContent = cashAmount.toLocaleString('en-IN');
+      if (elOnline) elOnline.textContent = onlineAmount.toLocaleString('en-IN');
+      if (elMonth) elMonth.textContent = thisMonthAmount.toLocaleString('en-IN');
+      if (elTableCount) elTableCount.textContent = `${allExpenses.length} प्रविष्टियां`;
+
+      if (typeof updateStats === 'function') {
+        updateStats();
+      }
+    }
+
+    function renderExpensesList() {
+      const tbody = document.getElementById('expenses-table-body');
+      if (!tbody) return;
+
+      const searchTerm = (document.getElementById('expense-search-input')?.value || '').toLowerCase().trim();
+      const methodFilter = document.getElementById('expense-method-filter')?.value || 'ALL';
+      const schemeFilter = document.getElementById('expense-scheme-filter')?.value || 'ALL';
+      const vendorFilter = document.getElementById('expense-vendor-filter')?.value || 'ALL';
+
+      const sorted = [...allExpenses].sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+
+      const filtered = sorted.filter(e => {
+        const matchesMethod = (methodFilter === 'ALL' || e.method === methodFilter);
+        const matchesScheme = (schemeFilter === 'ALL' || e.scheme === schemeFilter);
+        const matchesVendor = (vendorFilter === 'ALL' || (e.vendorName || '').includes(vendorFilter));
+
+        const vendorName = (e.vendorName || '').toLowerCase();
+        const scheme = (e.scheme || '').toLowerCase();
+        const remarks = (e.remarks || '').toLowerCase();
+        const id = (e.id || '').toLowerCase();
+        const bill = (e.billNumber || '').toLowerCase();
+
+        const matchesSearch = !searchTerm || vendorName.includes(searchTerm) || scheme.includes(searchTerm) || remarks.includes(searchTerm) || id.includes(searchTerm) || bill.includes(searchTerm);
+
+        return matchesMethod && matchesScheme && matchesVendor && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-12 text-center text-slate-400">
+              <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-2">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <p class="font-bold text-slate-700 text-xs">कोई भी खर्च रिकॉर्ड नहीं मिला</p>
+              <p class="text-[11px] text-slate-400 mt-1">नया खर्च दर्ज करने के लिए ऊपर <b>"+ नया खर्च दर्ज करें"</b> बटन दबाएं।</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(e => {
+        const methodBadge = e.method === 'Cash'
+          ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 नकद (Cash)</span>`
+          : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">📱 बैंक / Online</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-3.5 pl-5">
+              <span class="font-mono font-bold text-slate-800 text-xs block">${e.id}</span>
+              <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(e.date)}</span>
+            </td>
+            <td class="p-3.5">
+              <div class="font-bold text-slate-900">${e.scheme || 'सामान्य व्यय'}</div>
+              ${e.billNumber ? `<span class="text-[10px] text-rose-600 font-semibold bg-rose-50 px-1.5 py-0.2 rounded border border-rose-200/60 font-mono">वाउचर: ${e.billNumber}</span>` : ''}
+            </td>
+            <td class="p-3.5">
+              <div class="font-bold text-slate-900">${e.vendorName || '--'}</div>
+              ${e.remarks ? `<p class="text-[10px] text-slate-500 truncate max-w-xs mt-0.5">${e.remarks}</p>` : ''}
+            </td>
+            <td class="p-3.5">
+              ${methodBadge}
+            </td>
+            <td class="p-3.5 text-right font-mono font-black text-rose-700 text-sm">
+              ₹${(parseFloat(e.amount) || 0).toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 pr-5 text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <button onclick="openExpenseModal('${e.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संपादित करें (Edit)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="deleteExpenseItem('${e.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openExpenseModal(expenseId = null) {
+      closeAllModals();
+      const modal = document.getElementById('expense-modal');
+      const heading = document.getElementById('expense-modal-heading');
+
+      if (expenseId) {
+        const item = allExpenses.find(e => e.id === expenseId);
+        if (!item) return;
+
+        if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-rose-600"></i> खर्च विवरण संपादित करें';
+        document.getElementById('expense-id').value = item.id;
+        populateExpenseModalDropdowns(item.scheme, item.vendorName);
+        document.getElementById('expense-vendor-name').value = item.vendorName || '';
+        document.getElementById('expense-amount').value = item.amount || '';
+        document.getElementById('expense-date').value = item.date || '';
+        document.getElementById('expense-bill').value = item.billNumber || '';
+        document.getElementById('expense-remarks').value = item.remarks || '';
+
+        const radios = document.getElementsByName('expense-method');
+        for (const r of radios) {
+          r.checked = (r.value === (item.method || 'Cash'));
+        }
+      } else {
+        if (heading) heading.innerHTML = '<i class="fa-solid fa-receipt text-rose-600"></i> नया खर्च दर्ज करें (Add New Expense)';
+        document.getElementById('expense-id').value = '';
+        populateExpenseModalDropdowns();
+        document.getElementById('expense-vendor-name').value = '';
+        document.getElementById('expense-amount').value = '';
+        document.getElementById('expense-date').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('expense-bill').value = '';
+        document.getElementById('expense-remarks').value = '';
+
+        const radios = document.getElementsByName('expense-method');
+        if (radios.length > 0) radios[0].checked = true;
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeExpenseModal() {
+      const modal = document.getElementById('expense-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    async function handleSaveExpense(e) {
+      e.preventDefault();
+      const idInput = document.getElementById('expense-id').value;
+      const scheme = document.getElementById('expense-scheme-select').value.trim();
+      const vendorName = document.getElementById('expense-vendor-name').value.trim();
+      const amount = parseFloat(document.getElementById('expense-amount').value) || 0;
+      const date = document.getElementById('expense-date').value;
+      const billNumber = document.getElementById('expense-bill').value.trim();
+      const remarks = document.getElementById('expense-remarks').value.trim();
+
+      let method = 'Cash';
+      const radios = document.getElementsByName('expense-method');
+      for (const r of radios) {
+        if (r.checked) {
+          method = r.value;
+          break;
+        }
+      }
+
+      if (amount <= 0 || !date || !vendorName) {
+        alert("कृपया वैध राशि, दिनांक एवं वेंडर का नाम दर्ज करें!");
+        return;
+      }
+
+      const id = idInput || 'EXP-' + Date.now().toString().slice(-6);
+      const expenseData = {
+        id,
+        scheme: scheme || 'सामान्य व्यय',
+        vendorName,
+        amount,
+        date,
+        method,
+        billNumber,
+        remarks,
+        createdAt: new Date().toISOString()
+      };
+
+      // 1. Instant local array update
+      const existingIdx = allExpenses.findIndex(item => item.id === id);
+      if (existingIdx !== -1) {
+        allExpenses[existingIdx] = expenseData;
+      } else {
+        allExpenses.unshift(expenseData);
+      }
+
+      closeExpenseModal();
+      updateExpensesStats();
+      updateStats();
+      renderExpensesList();
+
+      alert(`✅ खर्च (${id} - ₹${amount.toLocaleString('en-IN')}) सफलतापूर्वक दर्ज कर लिया गया!`);
+
+      // 2. Persist to Central Server API
+      try {
+        await fetch('/api/expenses/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(expenseData)
+        });
+      } catch (err) {
+        console.warn('API expense save warning:', err);
+      }
+
+      // 3. Persist to Firestore Realtime
+      try {
+        if (typeof expensesCol !== 'undefined' && expensesCol) {
+          await expensesCol.doc(id).set(expenseData, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore expense save warning:', err);
+      }
+    }
+
+    async function deleteExpenseItem(id) {
+      if (!confirm(`क्या आप इस खर्च (${id}) को हटाना चाहते हैं?`)) return;
+
+      allExpenses = allExpenses.filter(item => item.id !== id);
+      updateExpensesStats();
+      updateStats();
+      renderExpensesList();
+
+      // Express API
+      try {
+        await fetch('/api/expenses/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch (err) {
+        console.warn('API expense delete warning:', err);
+      }
+
+      // Firestore
+      try {
+        if (typeof expensesCol !== 'undefined' && expensesCol) {
+          await expensesCol.doc(id).delete();
+        }
+      } catch (err) {
+        console.warn('Firestore expense delete warning:', err);
+      }
+    }
+
+    // --- EXPENSE MASTER TAB RENDERING & LOGIC ---
+    function renderExpenseMasterTab() {
+      // 1. Opening Balances Display
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+      const openCash = parseFloat(openBalances.cash) || 0;
+      const openBank = parseFloat(openBalances.bank) || 0;
+      const openTotal = openCash + openBank;
+
+      const dispCash = document.getElementById('disp-opening-cash');
+      const dispBank = document.getElementById('disp-opening-bank');
+      const dispTotal = document.getElementById('disp-opening-total');
+      const dispRemarks = document.getElementById('opening-balance-remarks-text');
+
+      if (dispCash) dispCash.textContent = `₹ ${openCash.toLocaleString('en-IN')}`;
+      if (dispBank) dispBank.textContent = `₹ ${openBank.toLocaleString('en-IN')}`;
+      if (dispTotal) dispTotal.textContent = `₹ ${openTotal.toLocaleString('en-IN')}`;
+      if (dispRemarks && openBalances.remarks) dispRemarks.textContent = openBalances.remarks;
+
+      // 2. Expense Schemes / Heads Grid
+      const schemesGrid = document.getElementById('expense-schemes-cards-grid');
+      if (schemesGrid) {
+        const list = masterSettings.expenseSchemes || [];
+        if (list.length === 0) {
+          schemesGrid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs">कोई खर्च योजना दर्ज नहीं है।</div>`;
+        } else {
+          schemesGrid.innerHTML = list.map(sc => `
+            <div class="p-3.5 rounded-2xl border border-slate-200 bg-white shadow-xs flex items-start justify-between hover:shadow-sm transition-all">
+              <div class="min-w-0 pr-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500 flex-shrink-0"></span>
+                  <h4 class="font-bold text-slate-900 text-xs truncate">${sc.name}</h4>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">${sc.description || ''}</p>
+              </div>
+              <div class="flex items-center gap-1 flex-shrink-0">
+                <button onclick="editExpenseSchemeItem('${sc.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="संपादित करें (Edit)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button onclick="deleteExpenseSchemeItem('${sc.id}')" class="text-slate-400 hover:text-rose-600 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="हटाएं (Delete)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // 3. Vendors Master Table
+      const vendorsTbody = document.getElementById('vendors-master-tbody');
+      if (vendorsTbody) {
+        const vendors = masterSettings.vendors || [];
+        if (vendors.length === 0) {
+          vendorsTbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-xs">कोई वेंडर दर्ज नहीं है।</td></tr>`;
+        } else {
+          vendorsTbody.innerHTML = vendors.map((v, idx) => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-3 pl-4 font-mono text-slate-400 font-bold">${idx + 1}</td>
+              <td class="p-3 font-bold text-slate-900">${v.name}</td>
+              <td class="p-3">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">${v.category || 'वेंडर'}</span>
+              </td>
+              <td class="p-3 font-mono text-slate-700">${v.phone || '--'}</td>
+              <td class="p-3 text-slate-600">${v.address || '--'}</td>
+              <td class="p-3 pr-4 text-center">
+                <div class="flex items-center justify-center gap-1">
+                  <button onclick="editVendorItem('${v.id}')" class="text-indigo-600 hover:text-indigo-800 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors" title="संपादित करें (Edit)">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button onclick="deleteVendorItem('${v.id}')" class="text-rose-600 hover:text-rose-800 p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="हटाएं (Delete)">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+    }
+
+    // --- Opening Balance Modal Triggers ---
+    function openEditOpeningBalanceModal() {
+      closeAllModals();
+      const modal = document.getElementById('opening-balance-modal');
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+
+      document.getElementById('opening-bal-cash-input').value = openBalances.cash !== undefined ? openBalances.cash : 34025;
+      document.getElementById('opening-bal-bank-input').value = openBalances.bank !== undefined ? openBalances.bank : 0;
+      document.getElementById('opening-bal-remarks-input').value = openBalances.remarks || '';
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeEditOpeningBalanceModal() {
+      const modal = document.getElementById('opening-balance-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveOpeningBalance(e) {
+      e.preventDefault();
+      const cash = parseFloat(document.getElementById('opening-bal-cash-input').value) || 0;
+      const bank = parseFloat(document.getElementById('opening-bal-bank-input').value) || 0;
+      const remarks = document.getElementById('opening-bal-remarks-input').value.trim() || 'वर्ष 2025 से पूर्व संचित कोष';
+
+      masterSettings.openingBalances = { cash, bank, remarks };
+      closeEditOpeningBalanceModal();
+      updateStats();
+      renderExpenseMasterTab();
+      await saveAllSettingsToCloud();
+      alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
+    }
+
+    // --- Vendor Modal Triggers ---
+    function openAddVendorModal() {
+      closeAllModals();
+      const modal = document.getElementById('vendor-master-modal');
+      const heading = document.getElementById('vendor-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-store text-indigo-600"></i> नया वेंडर जोड़ें';
+      document.getElementById('vendor-item-id').value = '';
+      document.getElementById('vendor-item-name').value = '';
+      document.getElementById('vendor-item-category').value = '';
+      document.getElementById('vendor-item-phone').value = '';
+      document.getElementById('vendor-item-address').value = '';
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function editVendorItem(id) {
+      const item = (masterSettings.vendors || []).find(v => v.id === id);
+      if (!item) return;
+      closeAllModals();
+      const modal = document.getElementById('vendor-master-modal');
+      const heading = document.getElementById('vendor-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-indigo-600"></i> वेंडर विवरण संपादित करें';
+      document.getElementById('vendor-item-id').value = item.id;
+      document.getElementById('vendor-item-name').value = item.name || '';
+      document.getElementById('vendor-item-category').value = item.category || '';
+      document.getElementById('vendor-item-phone').value = item.phone || '';
+      document.getElementById('vendor-item-address').value = item.address || '';
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function closeVendorModal() {
+      const modal = document.getElementById('vendor-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveVendor(e) {
+      e.preventDefault();
+      const id = document.getElementById('vendor-item-id').value;
+      const name = document.getElementById('vendor-item-name').value.trim();
+      const category = document.getElementById('vendor-item-category').value.trim();
+      const phone = document.getElementById('vendor-item-phone').value.trim();
+      const address = document.getElementById('vendor-item-address').value.trim();
+
+      if (!name) return;
+      if (!masterSettings.vendors) masterSettings.vendors = [];
+
+      const vendorData = {
+        id: id || 'ven_' + Date.now(),
+        name,
+        category: category || 'General',
+        phone,
+        address
+      };
+
+      if (id) {
+        const idx = masterSettings.vendors.findIndex(v => v.id === id);
+        if (idx !== -1) masterSettings.vendors[idx] = vendorData;
+      } else {
+        masterSettings.vendors.push(vendorData);
+      }
+
+      closeVendorModal();
+      renderExpenseMasterTab();
+      populateExpenseFilterDropdowns();
+      populateExpenseModalDropdowns();
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteVendorItem(id) {
+      if (!confirm("क्या आप इस वेंडर को सूची से हटाना चाहते हैं?")) return;
+      masterSettings.vendors = (masterSettings.vendors || []).filter(v => v.id !== id);
+      renderExpenseMasterTab();
+      populateExpenseFilterDropdowns();
+      populateExpenseModalDropdowns();
+      await saveAllSettingsToCloud();
+    }
+
+    // --- Expense Scheme Modal Triggers ---
+    function openAddExpenseSchemeModal() {
+      closeAllModals();
+      const modal = document.getElementById('expensescheme-master-modal');
+      const heading = document.getElementById('expensescheme-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-shapes text-rose-600"></i> नई खर्च योजना / मद जोड़ें';
+      document.getElementById('expensescheme-item-id').value = '';
+      document.getElementById('expensescheme-item-name').value = '';
+      document.getElementById('expensescheme-item-desc').value = '';
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function editExpenseSchemeItem(id) {
+      const item = (masterSettings.expenseSchemes || []).find(sc => sc.id === id);
+      if (!item) return;
+      closeAllModals();
+      const modal = document.getElementById('expensescheme-master-modal');
+      const heading = document.getElementById('expensescheme-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-rose-600"></i> खर्च योजना संपादित करें';
+      document.getElementById('expensescheme-item-id').value = item.id;
+      document.getElementById('expensescheme-item-name').value = item.name || '';
+      document.getElementById('expensescheme-item-desc').value = item.description || '';
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function closeExpenseSchemeModal() {
+      const modal = document.getElementById('expensescheme-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveExpenseScheme(e) {
+      e.preventDefault();
+      const id = document.getElementById('expensescheme-item-id').value;
+      const name = document.getElementById('expensescheme-item-name').value.trim();
+      const desc = document.getElementById('expensescheme-item-desc').value.trim();
+
+      if (!name) return;
+      if (!masterSettings.expenseSchemes) masterSettings.expenseSchemes = [];
+
+      const schemeData = {
+        id: id || 'exs_' + Date.now(),
+        name,
+        description: desc
+      };
+
+      if (id) {
+        const idx = masterSettings.expenseSchemes.findIndex(sc => sc.id === id);
+        if (idx !== -1) masterSettings.expenseSchemes[idx] = schemeData;
+      } else {
+        masterSettings.expenseSchemes.push(schemeData);
+      }
+
+      closeExpenseSchemeModal();
+      renderExpenseMasterTab();
+      populateExpenseFilterDropdowns();
+      populateExpenseModalDropdowns();
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteExpenseSchemeItem(id) {
+      if (!confirm("क्या आप इस खर्च मद को हटाना चाहते हैं?")) return;
+      masterSettings.expenseSchemes = (masterSettings.expenseSchemes || []).filter(sc => sc.id !== id);
+      renderExpenseMasterTab();
+      populateExpenseFilterDropdowns();
+      populateExpenseModalDropdowns();
+      await saveAllSettingsToCloud();
+    }
+
+    // Window Exports
+    window.renderExpensesView = renderExpensesView;
+    window.openExpenseModal = openExpenseModal;
+    window.closeExpenseModal = closeExpenseModal;
+    window.handleExpenseVendorSelect = handleExpenseVendorSelect;
+    window.handleSaveExpense = handleSaveExpense;
+    window.deleteExpenseItem = deleteExpenseItem;
+    window.renderExpensesList = renderExpensesList;
+
+    window.renderExpenseMasterTab = renderExpenseMasterTab;
+    window.openEditOpeningBalanceModal = openEditOpeningBalanceModal;
+    window.closeEditOpeningBalanceModal = closeEditOpeningBalanceModal;
+    window.handleSaveOpeningBalance = handleSaveOpeningBalance;
+
+    window.openAddVendorModal = openAddVendorModal;
+    window.editVendorItem = editVendorItem;
+    window.closeVendorModal = closeVendorModal;
+    window.handleSaveVendor = handleSaveVendor;
+    window.deleteVendorItem = deleteVendorItem;
+
+    window.openAddExpenseSchemeModal = openAddExpenseSchemeModal;
+    window.editExpenseSchemeItem = editExpenseSchemeItem;
+    window.closeExpenseSchemeModal = closeExpenseSchemeModal;
+    window.handleSaveExpenseScheme = handleSaveExpenseScheme;
+    window.deleteExpenseSchemeItem = deleteExpenseSchemeItem;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
