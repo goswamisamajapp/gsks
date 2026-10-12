@@ -229,7 +229,7 @@
             <span class="text-xs text-slate-400 font-medium">1-Click Controls</span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <!-- Action 1: Events & Meetings -->
             <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
@@ -262,10 +262,23 @@
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5">
-                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-emerald-950 truncate">दान एवं सहयोग (Donations)</h4>
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-emerald-950 truncate">दान एवं सहयोग</h4>
                   <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-emerald-200/80 text-emerald-900" id="quick-donations-count">0</span>
                 </div>
                 <p class="text-[11px] text-slate-500 truncate">दान रसीद व विवरण देखें →</p>
+              </div>
+            </button>
+
+            <!-- Action 4: Pariwarik Arthik Yojna (पारिवारिक आर्थिक योजना) -->
+            <button onclick="switchAdminView('pariwarik')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-50/40 hover:from-cyan-100 hover:to-sky-100 text-left border border-cyan-200/80 hover:border-cyan-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-sm shadow-md shadow-cyan-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-cyan-950 truncate">पारिवारिक आर्थिक योजना</h4>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">योजना विवरण व सहायता →</p>
               </div>
             </button>
           </div>
@@ -769,6 +782,108 @@
               </thead>
               <tbody id="donations-table-body" class="divide-y divide-slate-100">
                 <!-- Dynamically populated via renderDonationsList() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4C: PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) -->
+      <!-- ======================================================== -->
+      <div id="view-pariwarik-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  पारिवारिक आर्थिक योजना (Pariwarik Arthik Yojna)
+                </h2>
+                <p class="text-xs text-slate-500">पारिवारिक कल्याण एवं आर्थिक सहयोग - कुल देय, भुगतान एवं बकाया विवरण</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="switchAdminView('dashboard')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-arrow-left"></i> वापस डैशबोर्ड
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Top Summary Cards (Total, Paid, Dues) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Card 1: Total Amount -->
+          <div class="bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-cyan-100 uppercase tracking-wider">कुल योजना राशि (Total Amount)</p>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-total">₹ 0</h3>
+              <p class="text-[11px] text-cyan-100 mt-1">योजना अंतर्गत कुल निर्धारित राशि</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Paid Amount -->
+          <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-emerald-100 uppercase tracking-wider">भुगतान राशि (Paid Amount)</p>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-paid">₹ 0</h3>
+              <p class="text-[11px] text-emerald-100 mt-1">अब तक प्राप्त / जमा सहयोग</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+
+          <!-- Card 3: Dues Amount -->
+          <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-rose-100 uppercase tracking-wider">बकाया राशि (Dues Amount)</p>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-dues">₹ 0</h3>
+              <p class="text-[11px] text-rose-100 mt-1">शेष लंबित सहयोग राशि</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Members Scheme Breakdown / Status Register -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-cyan-600"></i> पारिवारिक आर्थिक योजना सदस्य विवरण (Members Scheme Register)
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">सदस्यों का अंशदान, जमा एवं शेष स्थिति</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400 font-medium font-mono" id="pariwarik-members-count">0 सदस्य</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                  <th class="p-3.5 pl-5">सदस्य ID / नाम</th>
+                  <th class="p-3.5">मोबाइल / पता</th>
+                  <th class="p-3.5">स्थिति (Status)</th>
+                  <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
+                  <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
+                  <th class="p-3.5 font-mono text-right">कुल / Total (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="pariwarik-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderPariwarikView() -->
               </tbody>
             </table>
           </div>
@@ -2452,13 +2567,14 @@
       if (elDate) elDate.textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
-    // Switch between Admin views: dashboard, members, prime, active, inactive, events, donations, archived
+    // Switch between Admin views: dashboard, members, prime, active, inactive, events, donations, pariwarik, archived
     function switchAdminView(view, statusFilter = null) {
       const dashSection = document.getElementById('view-dashboard-section');
       const membersSection = document.getElementById('view-members-section');
       const archivedSection = document.getElementById('view-archived-section');
       const eventsSection = document.getElementById('view-events-section');
       const donationsSection = document.getElementById('view-donations-section');
+      const pariwarikSection = document.getElementById('view-pariwarik-section');
       const settingsSection = document.getElementById('view-settings-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
@@ -2491,6 +2607,7 @@
       archivedSection.classList.add('hidden');
       if (eventsSection) eventsSection.classList.add('hidden');
       if (donationsSection) donationsSection.classList.add('hidden');
+      if (pariwarikSection) pariwarikSection.classList.add('hidden');
       if (settingsSection) settingsSection.classList.add('hidden');
 
       if (view === 'settings') {
@@ -2498,6 +2615,9 @@
         if (navSettings) navSettings.className = 'px-3.5 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/20';
         if (mobSettings) mobSettings.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
         renderSettingsView();
+      } else if (view === 'pariwarik') {
+        if (pariwarikSection) pariwarikSection.classList.remove('hidden');
+        renderPariwarikView();
       } else if (view === 'donations') {
         if (donationsSection) donationsSection.classList.remove('hidden');
         renderDonationsView();
@@ -5552,6 +5672,95 @@
     window.confirmDeleteDonation = confirmDeleteDonation;
     window.renderDonationsView = renderDonationsView;
     window.renderDonationsList = renderDonationsList;
+
+    // ==============================================================
+    // 9. PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) LOGIC
+    // ==============================================================
+    function renderPariwarikView() {
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      
+      // Calculate Paid (Total donations or recorded donation contributions)
+      let paidSum = 0;
+      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+        allDonations.forEach(d => {
+          paidSum += (parseFloat(d.amount) || 0);
+        });
+      }
+      if (paidSum === 0) {
+        paidSum = nonRemoved.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
+      }
+
+      // Calculate Dues (From members pending dues)
+      const duesSum = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
+      
+      // Total Amount = Paid + Dues
+      const totalSum = paidSum + duesSum;
+
+      // Update Top Summary Cards
+      const elTotal = document.getElementById('pariwarik-stat-total');
+      const elPaid = document.getElementById('pariwarik-stat-paid');
+      const elDues = document.getElementById('pariwarik-stat-dues');
+      const elCount = document.getElementById('pariwarik-members-count');
+
+      if (elTotal) elTotal.textContent = `₹ ${totalSum.toLocaleString('en-IN')}`;
+      if (elPaid) elPaid.textContent = `₹ ${paidSum.toLocaleString('en-IN')}`;
+      if (elDues) elDues.textContent = `₹ ${duesSum.toLocaleString('en-IN')}`;
+      if (elCount) elCount.textContent = `${nonRemoved.length} सदस्य`;
+
+      // Render Table Breakdown
+      const tbody = document.getElementById('pariwarik-table-body');
+      if (!tbody) return;
+
+      if (nonRemoved.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-10 text-center text-slate-400">
+              <i class="fa-solid fa-users-slash text-3xl mb-2 text-slate-300"></i>
+              <p class="text-xs font-bold text-slate-600">कोई सदस्य पंजीकृत नहीं है।</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = nonRemoved.map(m => {
+        const mPaid = Number(m.donation) || 0;
+        const mDues = Number(m.dues) || 0;
+        const mTotal = mPaid + mDues;
+        const statusClass = m.status === 'Prime Member'
+          ? 'bg-amber-100 text-amber-800'
+          : (m.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600');
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-3.5 pl-5">
+              <div class="font-bold text-slate-900">${m.name || '--'}</div>
+              <div class="text-[10px] text-slate-400 font-mono">${m.id || '--'}</div>
+            </td>
+            <td class="p-3.5 text-slate-600">
+              <div>${m.phone || '--'}</div>
+              <div class="text-[10px] text-slate-400">${m.address || '--'}</div>
+            </td>
+            <td class="p-3.5">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${statusClass}">
+                ${m.status || 'Active'}
+              </span>
+            </td>
+            <td class="p-3.5 text-right font-mono font-bold text-emerald-600">
+              ₹${mPaid.toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 text-right font-mono font-bold text-rose-600">
+              ₹${mDues.toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 text-right font-mono font-black text-slate-900">
+              ₹${mTotal.toLocaleString('en-IN')}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.renderPariwarikView = renderPariwarikView;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
