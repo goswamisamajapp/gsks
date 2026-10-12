@@ -1185,7 +1185,7 @@
   <!-- MODAL 4: EVENT ADD / EDIT MODAL                                -->
   <!-- ============================================================== -->
   <div id="event-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       
       <button onclick="closeEventModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
         <i class="fa-solid fa-xmark"></i>
@@ -1201,13 +1201,13 @@
         </div>
       </div>
 
-      <form onsubmit="handleSaveEvent(event)" class="space-y-3.5 text-xs">
+      <form onsubmit="handleSaveEvent(event)" class="space-y-4 text-xs">
         <input type="hidden" id="event-id">
 
         <!-- 1. Category Selection (3 types) -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">इवेंट श्रेणी (Event Category) *</label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <label class="block font-bold text-slate-700 mb-1.5">इवेंट श्रेणी (Event Category) *</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
               <input type="radio" name="event-category" value="General Meeting" checked class="text-blue-600 focus:ring-0">
               <div>
@@ -1236,9 +1236,9 @@
 
         <!-- 2. Event Title -->
         <div>
-          <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center justify-between mb-1.5">
             <label class="font-bold text-slate-700">कार्यक्रम / बैठक का शीर्षक (Title) *</label>
-            <select onchange="if(this.value){document.getElementById('event-title').value=this.value;}" class="bg-indigo-50 text-indigo-700 font-bold text-[11px] rounded-lg px-2 py-0.5 border border-indigo-200 focus:outline-none" id="event-title-presets">
+            <select onchange="if(this.value){document.getElementById('event-title').value=this.value;}" class="bg-indigo-50 text-indigo-700 font-bold text-[11px] rounded-lg px-2.5 py-1 border border-indigo-200 focus:outline-none cursor-pointer" id="event-title-presets">
               <option value="">⚡ मास्टर से चुनें (Preset)</option>
               <option value="मासिक आम सभा एवं कोष समीक्षा">मासिक आम सभा एवं कोष समीक्षा</option>
               <option value="वार्षिक महाधिवेशन एवं सम्मान समारोह">वार्षिक महाधिवेशन एवं सम्मान समारोह</option>
@@ -1246,15 +1246,15 @@
               <option value="शिव चर्चा एवं सामाजिक विचार-विमर्श">शिव चर्चा एवं सामाजिक विचार-विमर्श</option>
             </select>
           </div>
-          <input type="text" id="event-title" required placeholder="जैसे: समिति की मासिक आम सभा एवं कोष समीक्षा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+          <input type="text" id="event-title" required placeholder="जैसे: समिति की मासिक आम सभा एवं कोष समीक्षा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
         </div>
 
         <!-- 3. Event Venue & Date/Time Picker -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <div class="flex items-center justify-between mb-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-1.5 min-h-[26px]">
               <label class="font-bold text-slate-700">स्थान / वेन्यू (Venue) *</label>
-              <select onchange="if(this.value){document.getElementById('event-venue').value=this.value;}" class="bg-rose-50 text-rose-700 font-bold text-[11px] rounded-lg px-2 py-0.5 border border-rose-200 focus:outline-none" id="event-venue-presets">
+              <select onchange="if(this.value){document.getElementById('event-venue').value=this.value;}" class="bg-rose-50 text-rose-700 font-bold text-[11px] rounded-lg px-2.5 py-1 border border-rose-200 focus:outline-none cursor-pointer" id="event-venue-presets">
                 <option value="">⚡ मास्टर से चुनें (Preset)</option>
                 <option value="शिव मंदिर परिसर, गुनघसा">शिव मंदिर परिसर, गुनघसा</option>
                 <option value="सामुदायिक भवन, गोमो">सामुदायिक भवन, गोमो</option>
@@ -1262,14 +1262,18 @@
               </select>
             </div>
             <div class="relative">
-              <i class="fa-solid fa-location-dot absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-              <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+              <i class="fa-solid fa-location-dot absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+              <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
             </div>
           </div>
 
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">दिनांक एवं समय (Date & Time) *</label>
-            <input type="datetime-local" id="event-datetime" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium">
+          <div class="flex flex-col justify-between">
+            <div class="flex items-center mb-1.5 min-h-[26px]">
+              <label class="font-bold text-slate-700">दिनांक एवं समय (Date & Time) *</label>
+            </div>
+            <div>
+              <input type="datetime-local" id="event-datetime" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium">
+            </div>
           </div>
         </div>
 
