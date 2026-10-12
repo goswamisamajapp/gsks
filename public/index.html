@@ -1002,12 +1002,18 @@
                 <span class="text-xs text-slate-700 font-bold font-mono" id="pariwarik-members-count">0 सदस्य</span>
               </div>
               <button type="button" 
+                      onclick="sendPariwarikPushAllNotification()" 
+                      class="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer" 
+                      title="सभी बकाया सदस्यों को पुश नोटिफिकेशन भेजें (Push All Unpaid)">
+                <i class="fa-solid fa-bell text-xs"></i>
+                <span>push all</span>
+              </button>
+              <button type="button" 
                       onclick="openPariwarikBulkWhatsAppModal()" 
-                      class="shrink-0 flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer" 
-                      title="सभी बकाया सदस्यों को WhatsApp भेजें (Bulk WhatsApp Reminder)">
+                      class="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer" 
+                      title="सभी बकाया सदस्यों को WhatsApp रिमाइंडर भेजें (All Dues WhatsApp)">
                 <i class="fa-brands fa-whatsapp text-sm"></i>
-                <span class="hidden sm:inline">सभी बकाया को WhatsApp</span>
-                <span class="sm:hidden">बकाया WhatsApp</span>
+                <span>all dues</span>
               </button>
             </div>
           </div>
@@ -6927,6 +6933,20 @@
       currentUnpaidBulkIndex++;
     }
 
+    function sendPariwarikPushAllNotification() {
+      const pariwarikMembers = getPariwarikMemberList();
+      const unpaidMembers = pariwarikMembers.filter(m => !isPariwarikPaidForMonth(m, currentPariwarikMonth));
+      const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
+      const monthLabel = activeMonthCfg.label || currentPariwarikMonth;
+
+      if (unpaidMembers.length === 0) {
+        alert(`बधाई हो! ${monthLabel} माह के सभी सदस्यों का भुगतान पूर्ण है। कोई बकाया नहीं है!`);
+        return;
+      }
+
+      alert(`🔔 पुश नोटिफिकेशन ब्रॉडकास्ट (Push All):\n\nचयनित माह: ${monthLabel}\nकुल बकाया सदस्य: ${unpaidMembers.length}\nप्रति सदस्य बकाया: ₹${PARIWARIK_MONTHLY_FEE}\n\nनोट: यूजर डैशबोर्ड/मोबाइल ऐप एक्टिव होते ही इन सभी ${unpaidMembers.length} सदस्यों के मोबाइल पर एक साथ पुश अलर्ट ब्रॉडकास्ट हो जाएगा!`);
+    }
+
     window.isPariwarikMember = isPariwarikMember;
     window.isPariwarikPaidForMonth = isPariwarikPaidForMonth;
     window.selectPariwarikMonth = selectPariwarikMonth;
@@ -6939,6 +6959,7 @@
     window.openPariwarikBulkWhatsAppModal = openPariwarikBulkWhatsAppModal;
     window.closePariwarikBulkWhatsAppModal = closePariwarikBulkWhatsAppModal;
     window.openNextPendingPariwarikWhatsApp = openNextPendingPariwarikWhatsApp;
+    window.sendPariwarikPushAllNotification = sendPariwarikPushAllNotification;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
