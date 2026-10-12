@@ -817,12 +817,24 @@
           </div>
         </div>
 
-        <!-- 1. Top Summary Cards (Total, Paid, Dues) -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <!-- Card 1: Total Amount -->
+        <!-- 1. Top Summary Cards (Total Members, Total Amount, Paid Amount, Dues Amount) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Total Members -->
+          <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-indigo-100 uppercase tracking-wider">कुल सदस्य (Total Members)</p>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-members">0</h3>
+              <p class="text-[11px] text-indigo-100 mt-1">योजना में जुड़े कुल सदस्य</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Amount -->
           <div class="bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-bold text-cyan-100 uppercase tracking-wider">कुल योजना राशि (Total Amount)</p>
+              <p class="text-xs font-bold text-cyan-100 uppercase tracking-wider">कुल राशि (Total Amount)</p>
               <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-total">₹ 0</h3>
               <p class="text-[11px] text-cyan-100 mt-1">योजना अंतर्गत कुल निर्धारित राशि</p>
             </div>
@@ -831,7 +843,7 @@
             </div>
           </div>
 
-          <!-- Card 2: Paid Amount -->
+          <!-- Card 3: Paid Amount -->
           <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-emerald-100 uppercase tracking-wider">भुगतान राशि (Paid Amount)</p>
@@ -843,7 +855,7 @@
             </div>
           </div>
 
-          <!-- Card 3: Dues Amount -->
+          <!-- Card 4: Dues Amount -->
           <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-rose-100 uppercase tracking-wider">बकाया राशि (Dues Amount)</p>
@@ -6237,11 +6249,13 @@
       const totalSum = paidSum + duesSum;
 
       // Update Top Summary Cards
+      const elMembers = document.getElementById('pariwarik-stat-members');
       const elTotal = document.getElementById('pariwarik-stat-total');
       const elPaid = document.getElementById('pariwarik-stat-paid');
       const elDues = document.getElementById('pariwarik-stat-dues');
       const elCount = document.getElementById('pariwarik-members-count');
 
+      if (elMembers) elMembers.textContent = pariwarikMembers.length;
       if (elTotal) elTotal.textContent = `₹ ${totalSum.toLocaleString('en-IN')}`;
       if (elPaid) elPaid.textContent = `₹ ${paidSum.toLocaleString('en-IN')}`;
       if (elDues) elDues.textContent = `₹ ${duesSum.toLocaleString('en-IN')}`;
