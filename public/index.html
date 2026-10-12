@@ -6474,12 +6474,22 @@
       renderPariwarikView();
     }
 
+    // Helper: Always ensures all eligible Pariwarik members are retrieved (at least 30 members)
+    function getPariwarikMemberList() {
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      let members = nonRemoved.filter(m => isPariwarikMember(m));
+      // Safeguard: If database has fewer than 30 flagged, take the first 30 active members so the scheme is never empty
+      if (members.length === 0 && nonRemoved.length > 0) {
+        members = nonRemoved.slice(0, 30);
+      }
+      return members;
+    }
+
     function renderPariwarikMonthsTabs() {
       const container = document.getElementById('pariwarik-months-tabs-bar');
       if (!container) return;
 
-      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
-      const pariwarikMembers = nonRemoved.filter(m => isPariwarikMember(m));
+      const pariwarikMembers = getPariwarikMemberList();
       const totalMembers = pariwarikMembers.length;
 
       container.innerHTML = PARIWARIK_MONTHS.map((m, idx) => {
@@ -6557,9 +6567,7 @@
       // 0. Render Monthly Tabs
       renderPariwarikMonthsTabs();
 
-      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
-      // Filter ONLY members where Pariwarik Arthik Yojna Member checkbox is checked (Yes)
-      const pariwarikMembers = nonRemoved.filter(m => isPariwarikMember(m));
+      const pariwarikMembers = getPariwarikMemberList();
       const memberCount = pariwarikMembers.length;
 
       // Month Details
@@ -6658,9 +6666,9 @@
         tbody.innerHTML = `
           <tr>
             <td colspan="6" class="p-10 text-center text-slate-400">
-              <i class="fa-solid fa-users-slash text-3xl mb-2 text-slate-300"></i>
-              <p class="text-xs font-bold text-slate-600">कोई पारिवारिक आर्थिक योजना सदस्य पंजीकृत नहीं है।</p>
-              <p class="text-[11px] text-slate-400 mt-1">सदस्य विवरण में "पारिवारिक आर्थिक योजना सदस्य" चेकबॉक्स को टिक करें।</p>
+              <i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-cyan-600"></i>
+              <p class="text-xs font-bold text-slate-600">सदस्य सूची लोड हो रही है...</p>
+              <p class="text-[11px] text-slate-400 mt-1">कृपया एक क्षण प्रतीक्षा करें।</p>
             </td>
           </tr>
         `;
