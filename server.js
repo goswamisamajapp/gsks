@@ -16,8 +16,16 @@ const DATA_FILE = path.join(__dirname, 'public', 'members-data.json');
 const EVENTS_FILE = path.join(__dirname, 'public', 'events-data.json');
 const SETTINGS_FILE = path.join(__dirname, 'public', 'settings-data.json');
 const DONATIONS_FILE = path.join(__dirname, 'public', 'donations-data.json');
+const FUND_TRANSFERS_FILE = path.join(__dirname, 'public', 'fund-transfers-data.json');
 
 const DEFAULT_SETTINGS = {
+  fundTypes: [
+    { id: 'ft_1', name: 'Self', isSystem: true, description: 'स्वयं / आंतरिक निधि' },
+    { id: 'ft_2', name: 'Bank', isSystem: true, description: 'बैंक खाता कोष (SBI A/C)' },
+    { id: 'ft_3', name: 'Cash in Hand', isSystem: true, description: 'कोषाध्यक्ष के पास नगद' },
+    { id: 'ft_4', name: 'Loan', isSystem: false, description: 'ऋण / अग्रिम निधि' },
+    { id: 'ft_5', name: 'Investment', isSystem: false, description: 'निवेश / सावधि जमा (FD)' }
+  ],
   statuses: [
     { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
     { id: 'st_2', name: 'Prime Member', badgeColor: 'amber', isSystem: true, description: 'विशिष्ट सदस्य (VIP)' },
@@ -194,6 +202,53 @@ app.post('/api/donations/delete', (req, res) => {
     return res.json({ success: true, message: 'Donation deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete donation' });
+  }
+});
+
+// FUND TRANSFERS APIS
+app.get('/api/fund-transfers', (req, res) => {
+  try {
+    if (!fs.existsSync(FUND_TRANSFERS_FILE)) fs.writeFileSync(FUND_TRANSFERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(FUND_TRANSFERS_FILE, 'utf8');
+    const transfers = JSON.parse(raw);
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.json(transfers);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read fund transfers' });
+  }
+});
+
+app.post('/api/fund-transfers/save', (req, res) => {
+  try {
+    const item = req.body;
+    if (!fs.existsSync(FUND_TRANSFERS_FILE)) fs.writeFileSync(FUND_TRANSFERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(FUND_TRANSFERS_FILE, 'utf8');
+    let transfers = JSON.parse(raw);
+
+    const index = transfers.findIndex(t => t.id === item.id);
+    if (index !== -1) {
+      transfers[index] = { ...transfers[index], ...item };
+    } else {
+      transfers.unshift(item);
+    }
+    fs.writeFileSync(FUND_TRANSFERS_FILE, JSON.stringify(transfers, null, 2), 'utf8');
+    return res.json({ success: true, transfer: item });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save fund transfer' });
+  }
+});
+
+app.post('/api/fund-transfers/delete', (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!fs.existsSync(FUND_TRANSFERS_FILE)) fs.writeFileSync(FUND_TRANSFERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(FUND_TRANSFERS_FILE, 'utf8');
+    let transfers = JSON.parse(raw);
+    transfers = transfers.filter(t => t.id !== id);
+    fs.writeFileSync(FUND_TRANSFERS_FILE, JSON.stringify(transfers, null, 2), 'utf8');
+    return res.json({ success: true, message: 'Transfer deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete transfer' });
   }
 });
 
