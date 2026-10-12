@@ -179,6 +179,17 @@
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Admin Active</span>
           </div>
+          <!-- Settings Master Button -->
+          <button 
+            onclick="switchAdminView('settings')" 
+            id="nav-btn-settings"
+            title="सिस्टम सेटिंग्स (Master Settings)"
+            class="px-3.5 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200"
+          >
+            <i class="fa-solid fa-gear text-sm transition-transform hover:rotate-90"></i>
+            <span class="hidden sm:inline">Settings</span>
+          </button>
+
           <button 
             onclick="logoutAdmin()" 
             class="px-3.5 py-1.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-200"
@@ -604,6 +615,210 @@
 
       </div>
 
+      <!-- ============================================== -->
+      <!-- TAB 5: SYSTEM & MASTER SETTINGS PAGE           -->
+      <!-- ============================================== -->
+      <div id="view-settings-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-gears"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  सिस्टम मास्टर सेटिंग्स (Admin Master Controls)
+                </h2>
+                <p class="text-xs text-slate-500">स्टेटस, इवेंट प्रकार, शीर्षक, वेन्यू एवं कल्याणकारी योजनाओं का केंद्रीय प्रबंधन</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="saveAllSettingsToCloud()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>सेटिंग्स सेव करें (Save to Cloud)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Tabs Nav -->
+        <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
+          <button 
+            onclick="switchSettingsTab('status')" 
+            id="tab-btn-status"
+            class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-orange-500 text-white shadow-sm flex-shrink-0"
+          >
+            <i class="fa-solid fa-tags"></i>
+            <span>1. Status Master</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20" id="badge-count-status">3</span>
+          </button>
+          <button 
+            onclick="switchSettingsTab('event')" 
+            id="tab-btn-event"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+          >
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>2. Event Master</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200" id="badge-count-event">3+</span>
+          </button>
+          <button 
+            onclick="switchSettingsTab('scheme')" 
+            id="tab-btn-scheme"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+          >
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <span>3. Scheme Master</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200" id="badge-count-scheme">4</span>
+          </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 1: STATUS MASTER                  -->
+        <!-- ========================================== -->
+        <div id="settings-page-status" class="space-y-4">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-tags text-orange-500"></i> सदस्यता स्थिति प्रबंधन (Member Status List)
+                </h3>
+                <p class="text-xs text-slate-500">सदस्य पंजीकरण और फ़िल्टर में उपयोग होने वाले स्थिति नाम (Active, Prime, Inactive आदि)</p>
+              </div>
+              <button onclick="openAddStatusModal()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नया स्टेटस जोड़ें</span>
+              </button>
+            </div>
+
+            <!-- Status List Table/Cards -->
+            <div class="mt-4 overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold">
+                    <th class="py-2.5 px-3 rounded-l-xl">#</th>
+                    <th class="py-2.5 px-3">Status Name (अंग्रेज़ी)</th>
+                    <th class="py-2.5 px-3">विवरण / हिंदी नाम</th>
+                    <th class="py-2.5 px-3">रंग / थीम</th>
+                    <th class="py-2.5 px-3">प्रकार</th>
+                    <th class="py-2.5 px-3 text-right rounded-r-xl">कार्य</th>
+                  </tr>
+                </thead>
+                <tbody id="status-master-tbody" class="divide-y divide-slate-100">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 2: EVENT MASTER                   -->
+        <!-- ========================================== -->
+        <div id="settings-page-event" class="hidden space-y-6">
+          
+          <!-- Section 2A: Event Categories (Types) -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-layer-group text-indigo-500"></i> इवेंट श्रेणी / प्रकार (Event Categories)
+                </h3>
+                <p class="text-xs text-slate-500">General Meeting, Special Event, Emergency meeting इत्यादि के विकल्प</p>
+              </div>
+              <button onclick="openAddEventCatModal()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नई इवेंट श्रेणी</span>
+              </button>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" id="event-categories-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 2B: Event Standard Titles (Presets) -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-heading text-purple-500"></i> सामान्य इवेंट शीर्षक सुझाव (Predefined Event Titles)
+                </h3>
+                <p class="text-xs text-slate-500">मीटिंग फॉर्म भरते समय तुरंत चुनने के लिए उपयोगी मानक शीर्षक</p>
+              </div>
+              <button onclick="openAddEventTitleModal()" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नया शीर्षक जोड़ें</span>
+              </button>
+            </div>
+
+            <div class="mt-4 overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold">
+                    <th class="py-2.5 px-3 rounded-l-xl">#</th>
+                    <th class="py-2.5 px-3">शीर्षक (Title)</th>
+                    <th class="py-2.5 px-3">संबंधित श्रेणी (Category)</th>
+                    <th class="py-2.5 px-3 text-right rounded-r-xl">कार्य</th>
+                  </tr>
+                </thead>
+                <tbody id="event-titles-tbody" class="divide-y divide-slate-100">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 2C: Standard Venues (स्थान मास्टर) -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-location-dot text-rose-500"></i> मानक स्थान सूची (Standard Event Venues)
+                </h3>
+                <p class="text-xs text-slate-500">नियमित बैठक स्थल जिन्हें फॉर्म में 1-क्लिक में चुना जा सकता है</p>
+              </div>
+              <button onclick="openAddVenueModal()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नया वेन्यू जोड़ें</span>
+              </button>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" id="event-venues-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 3: SCHEME MASTER                  -->
+        <!-- ========================================== -->
+        <div id="settings-page-scheme" class="hidden space-y-4">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> कल्याणकारी योजनाएं एवं शुल्क मास्टर (Schemes Master)
+                </h3>
+                <p class="text-xs text-slate-500">सदस्य सहयोग राशि, कल्याणकारी योजनाएं, मासिक/वार्षिक सदस्यता शुल्क दरें</p>
+              </div>
+              <button onclick="openAddSchemeModal()" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>+ नई योजना जोड़ें</span>
+              </button>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4" id="schemes-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </main>
 
     <!-- Bottom Mobile Nav Bar -->
@@ -627,6 +842,10 @@
       <button onclick="switchAdminView('archived')" id="mobile-nav-archived" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
         <i class="fa-solid fa-box-archive text-sm"></i>
         <span class="text-[10px] font-medium">Archived</span>
+      </button>
+      <button onclick="switchAdminView('settings')" id="mobile-nav-settings" class="flex flex-col items-center gap-1 text-slate-400 hover:text-orange-600">
+        <i class="fa-solid fa-gear text-sm"></i>
+        <span class="text-[10px] font-medium">Settings</span>
       </button>
     </div>
 
@@ -1020,14 +1239,31 @@
 
         <!-- 2. Event Title -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">कार्यक्रम / बैठक का शीर्षक (Title) *</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold text-slate-700">कार्यक्रम / बैठक का शीर्षक (Title) *</label>
+            <select onchange="if(this.value){document.getElementById('event-title').value=this.value;}" class="bg-indigo-50 text-indigo-700 font-bold text-[11px] rounded-lg px-2 py-0.5 border border-indigo-200 focus:outline-none" id="event-title-presets">
+              <option value="">⚡ मास्टर से चुनें (Preset)</option>
+              <option value="मासिक आम सभा एवं कोष समीक्षा">मासिक आम सभा एवं कोष समीक्षा</option>
+              <option value="वार्षिक महाधिवेशन एवं सम्मान समारोह">वार्षिक महाधिवेशन एवं सम्मान समारोह</option>
+              <option value="आपातकालीन कार्यकारिणी बैठक">आपातकालीन कार्यकारिणी बैठक</option>
+              <option value="शिव चर्चा एवं सामाजिक विचार-विमर्श">शिव चर्चा एवं सामाजिक विचार-विमर्श</option>
+            </select>
+          </div>
           <input type="text" id="event-title" required placeholder="जैसे: समिति की मासिक आम सभा एवं कोष समीक्षा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
         </div>
 
         <!-- 3. Event Venue & Date/Time Picker -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">स्थान / वेन्यू (Venue) *</label>
+            <div class="flex items-center justify-between mb-1">
+              <label class="font-bold text-slate-700">स्थान / वेन्यू (Venue) *</label>
+              <select onchange="if(this.value){document.getElementById('event-venue').value=this.value;}" class="bg-rose-50 text-rose-700 font-bold text-[11px] rounded-lg px-2 py-0.5 border border-rose-200 focus:outline-none" id="event-venue-presets">
+                <option value="">⚡ मास्टर से चुनें (Preset)</option>
+                <option value="शिव मंदिर परिसर, गुनघसा">शिव मंदिर परिसर, गुनघसा</option>
+                <option value="सामुदायिक भवन, गोमो">सामुदायिक भवन, गोमो</option>
+                <option value="केंद्रीय ट्रस्ट कार्यालय, धनबाद">केंद्रीय ट्रस्ट कार्यालय, धनबाद</option>
+              </select>
+            </div>
             <div class="relative">
               <i class="fa-solid fa-location-dot absolute left-3 top-2.5 text-slate-400 text-xs"></i>
               <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
@@ -1106,6 +1342,220 @@
   </div>
 
 
+  <!-- ============================================================== -->
+  <!-- MODAL 6: ADD/EDIT STATUS MASTER MODAL                          -->
+  <!-- ============================================================== -->
+  <div id="status-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="status-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-tags text-orange-500"></i> नया स्टेटस जोड़ें
+        </h3>
+        <button onclick="closeStatusMasterModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveStatus(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="status-item-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Status Name (अंग्रेज़ी में) *</label>
+          <input type="text" id="status-item-name" required placeholder="जैसे: Honorary Member" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / हिंदी नाम *</label>
+          <input type="text" id="status-item-desc" required placeholder="जैसे: मानद सदस्य / संरक्षक" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">रंग / थीम (Badge Color) *</label>
+          <select id="status-item-color" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
+            <option value="emerald">Emerald Green (हरा)</option>
+            <option value="amber">Amber Gold (सुनहरा/VIP)</option>
+            <option value="blue">Blue (नीला)</option>
+            <option value="purple">Purple (बैंगनी)</option>
+            <option value="rose">Rose Red (लाल)</option>
+            <option value="slate">Slate Gray (धूसर)</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeStatusMasterModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-orange-500/20">
+            सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 7: ADD/EDIT EVENT CATEGORY MODAL                         -->
+  <!-- ============================================================== -->
+  <div id="eventcat-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="eventcat-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-layer-group text-indigo-500"></i> नई इवेंट श्रेणी जोड़ें
+        </h3>
+        <button onclick="closeEventCatModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveEventCategory(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="eventcat-item-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">श्रेणी का नाम (Category Name) *</label>
+          <input type="text" id="eventcat-item-name" required placeholder="जैसे: Youth Camp" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">हिंदी विवरण (Description) *</label>
+          <input type="text" id="eventcat-item-desc" required placeholder="जैसे: युवा सम्मेलन एवं कार्यशाला" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">रंग (Category Color) *</label>
+          <select id="eventcat-item-color" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
+            <option value="blue">Blue (नीला)</option>
+            <option value="purple">Purple (बैंगनी)</option>
+            <option value="rose">Rose (लाल/आपातकालीन)</option>
+            <option value="emerald">Emerald (हरा)</option>
+            <option value="amber">Amber (नारंगी)</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeEventCatModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-indigo-500/20">
+            सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 8: ADD/EDIT EVENT TITLE PRESET MODAL                     -->
+  <!-- ============================================================== -->
+  <div id="eventtitle-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-heading text-purple-500"></i> मानक शीर्षक जोड़ें
+        </h3>
+        <button onclick="closeEventTitleModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveEventTitle(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="eventtitle-item-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">शीर्षक (Event Title) *</label>
+          <input type="text" id="eventtitle-item-title" required placeholder="जैसे: शिवरात्रि महोत्सव योजना बैठक" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">संबंधित श्रेणी *</label>
+          <select id="eventtitle-item-cat" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeEventTitleModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-purple-500/20">
+            सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 9: ADD/EDIT EVENT VENUE MODAL                            -->
+  <!-- ============================================================== -->
+  <div id="eventvenue-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-location-dot text-rose-500"></i> मानक वेन्यू जोड़ें
+        </h3>
+        <button onclick="closeEventVenueModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveEventVenue(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="eventvenue-item-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">स्थान का नाम (Venue Name) *</label>
+          <input type="text" id="eventvenue-item-name" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeEventVenueModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-rose-500/20">
+            सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- MODAL 10: ADD/EDIT SCHEME MODAL                                -->
+  <!-- ============================================================== -->
+  <div id="scheme-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="scheme-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> कल्याणकारी योजना जोड़ें
+        </h3>
+        <button onclick="closeSchemeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveScheme(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="scheme-item-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">योजना का नाम (Scheme Name) *</label>
+          <input type="text" id="scheme-item-name" required placeholder="जैसे: मासिक सहयोग कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">राशि (₹ Amount) *</label>
+            <input type="number" id="scheme-item-amount" required value="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">आवृति (Frequency) *</label>
+            <select id="scheme-item-freq" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
+              <option value="Monthly">Monthly (मासिक)</option>
+              <option value="Yearly">Yearly (वार्षिक)</option>
+              <option value="One-Time">One-Time (एकमुश्त)</option>
+              <option value="Open">Open (स्वैच्छिक)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">योजना विवरण (Description)</label>
+          <textarea id="scheme-item-desc" rows="2" placeholder="योजना का उद्देश्य एवं लाभ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none resize-none"></textarea>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeSchemeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-amber-500/20">
+            सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <script>
     let allMembers = [];
     let allEvents = [];
@@ -1117,6 +1567,38 @@
     let currentLayout = 'cards';
     let activeViewingMemberId = null;
     let pendingDeleteMemberId = null;
+
+    // Master Settings State
+    let currentSettingsTab = 'status';
+    let masterSettings = {
+      statuses: [
+        { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
+        { id: 'st_2', name: 'Prime Member', badgeColor: 'amber', isSystem: true, description: 'विशिष्ट सदस्य (VIP)' },
+        { id: 'st_3', name: 'Inactive', badgeColor: 'slate', isSystem: true, description: 'निष्क्रिय सदस्य' }
+      ],
+      eventCategories: [
+        { id: 'ec_1', name: 'General Meeting', color: 'blue', isSystem: true, description: 'सामान्य बैठक' },
+        { id: 'ec_2', name: 'Special Event', color: 'purple', isSystem: true, description: 'विशेष उत्सव/समारोह' },
+        { id: 'ec_3', name: 'Emergency meeting', color: 'rose', isSystem: true, description: 'आपातकालीन बैठक' }
+      ],
+      eventTitles: [
+        { id: 'et_1', title: 'मासिक आम सभा एवं कोष समीक्षा', category: 'General Meeting' },
+        { id: 'et_2', title: 'वार्षिक महाधिवेशन एवं सम्मान समारोह', category: 'Special Event' },
+        { id: 'et_3', title: 'आपातकालीन कार्यकारिणी बैठक', category: 'Emergency meeting' },
+        { id: 'et_4', title: 'शिव चर्चा एवं सामाजिक विचार-विमर्श', category: 'General Meeting' }
+      ],
+      eventVenues: [
+        { id: 'ev_1', venue: 'शिव मंदिर परिसर, गुनघसा' },
+        { id: 'ev_2', venue: 'सामुदायिक भवन, गोमो' },
+        { id: 'ev_3', venue: 'केंद्रीय ट्रस्ट कार्यालय, धनबाद' }
+      ],
+      schemes: [
+        { id: 'sc_1', name: 'मासिक सहयोग कोष (Monthly Sewa)', amount: 100, frequency: 'Monthly', description: 'प्रति माह नियमित ट्रस्ट सेवा सहायता', status: 'Active' },
+        { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Active' },
+        { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Active' },
+        { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Active' }
+      ]
+    };
 
     // Switch between Admin and Member login portals
     function switchPortalTab(type) {
@@ -1195,26 +1677,30 @@
       const membersSection = document.getElementById('view-members-section');
       const archivedSection = document.getElementById('view-archived-section');
       const eventsSection = document.getElementById('view-events-section');
+      const settingsSection = document.getElementById('view-settings-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
       const navMembers = document.getElementById('nav-btn-members');
       const navPrime = document.getElementById('nav-btn-prime');
       const navEvents = document.getElementById('nav-btn-events');
       const navArchived = document.getElementById('nav-btn-archived');
+      const navSettings = document.getElementById('nav-btn-settings');
 
       const mobDash = document.getElementById('mobile-nav-dashboard');
       const mobMembers = document.getElementById('mobile-nav-members');
       const mobPrime = document.getElementById('mobile-nav-prime');
       const mobEvents = document.getElementById('mobile-nav-events');
       const mobArchived = document.getElementById('mobile-nav-archived');
+      const mobSettings = document.getElementById('mobile-nav-settings');
 
       // Reset desktop classes
       [navDash, navMembers, navPrime, navEvents, navArchived].forEach(btn => {
         if(btn) btn.className = 'px-3 py-1.5 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-slate-50 flex items-center gap-1.5 transition-all text-xs font-semibold';
       });
+      if(navSettings) navSettings.className = 'px-3.5 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200';
 
       // Reset mobile classes
-      [mobDash, mobMembers, mobPrime, mobEvents, mobArchived].forEach(btn => {
+      [mobDash, mobMembers, mobPrime, mobEvents, mobArchived, mobSettings].forEach(btn => {
         if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
       });
 
@@ -1222,8 +1708,14 @@
       membersSection.classList.add('hidden');
       archivedSection.classList.add('hidden');
       if (eventsSection) eventsSection.classList.add('hidden');
+      if (settingsSection) settingsSection.classList.add('hidden');
 
-      if (view === 'prime' || statusFilter === 'Prime Member') {
+      if (view === 'settings') {
+        if (settingsSection) settingsSection.classList.remove('hidden');
+        if (navSettings) navSettings.className = 'px-3.5 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/20';
+        if (mobSettings) mobSettings.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+        renderSettingsView();
+      } else if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
         if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
         if(mobPrime) mobPrime.className = 'flex flex-col items-center gap-1 text-amber-700 font-bold';
@@ -1273,6 +1765,7 @@
     const db = firebase.firestore();
     const membersCol = db.collection('members');
     const eventsCol = db.collection('events');
+    const settingsCol = db.collection('settings');
 
     let realtimeListenerInitialized = false;
 
@@ -1316,10 +1809,24 @@
           loadEventsFallback();
         });
 
+        // Listen for live Firestore settings
+        settingsCol.doc('master').onSnapshot((docSnap) => {
+          if (docSnap.exists) {
+            const data = docSnap.data();
+            applySettings(data);
+          } else {
+            loadSettingsFallback();
+          }
+        }, (err) => {
+          console.warn("Firestore settings onSnapshot error:", err);
+          loadSettingsFallback();
+        });
+
       } catch (err) {
         console.error('Firestore init error, falling back:', err);
         loadMembersDataFallback();
         loadEventsFallback();
+        loadSettingsFallback();
       }
     }
 
@@ -1347,6 +1854,29 @@
         console.error(err);
       }
     }
+
+    async function loadSettingsFallback() {
+      try {
+        const res = await fetch('/api/settings');
+        const data = await res.json();
+        applySettings(data);
+      } catch (err) {
+        console.warn('Fallback loading settings failed:', err);
+      }
+    }
+
+    async function saveSettingsToBackend(data) {
+      try {
+        await fetch('/api/settings/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {
+        console.warn('Failed saving settings to server API:', err);
+      }
+    }
+
 
     async function syncMemberToBackend(memberData) {
       // 1. Instant local array update & UI render (Never fails, immediate reflection)
@@ -1466,17 +1996,26 @@
       return colors[index];
     }
 
-    // Status styling badge helper: Active, Prime Member, Inactive, removed
+    // Status styling badge helper: dynamically checks Master Settings or falls back
     function getStatusBadge(status) {
+      if (status === 'removed') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-300">Removed</span>`;
+      }
       if (status === 'Prime Member') {
         return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1"><i class="fa-solid fa-crown text-[9px] text-amber-600"></i> Prime Member</span>`;
-      } else if (status === 'Inactive') {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">Inactive</span>`;
-      } else if (status === 'removed') {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-300">Removed</span>`;
-      } else {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>`;
       }
+      if (masterSettings && masterSettings.statuses) {
+        const found = masterSettings.statuses.find(s => s.name === status);
+        if (found) {
+          const colorClass = getStatusColorClass(found.badgeColor);
+          const dotClass = getStatusDotClass(found.badgeColor);
+          return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${colorClass} inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full ${dotClass}"></span> ${found.name}</span>`;
+        }
+      }
+      if (status === 'Inactive') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">Inactive</span>`;
+      }
+      return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>`;
     }
 
     // Main Render Function
@@ -1647,7 +2186,12 @@
         'add-member-modal',
         'delete-confirm-modal',
         'event-form-modal',
-        'delete-event-modal'
+        'delete-event-modal',
+        'status-master-modal',
+        'eventcat-master-modal',
+        'eventtitle-master-modal',
+        'eventvenue-master-modal',
+        'scheme-master-modal'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);
@@ -1989,6 +2533,20 @@
         const modalTitle = document.getElementById('event-modal-title');
         const btnText = document.getElementById('event-save-btn-text');
 
+        // Populate preset dropdowns from Event Master
+        const titlePresets = document.getElementById('event-title-presets');
+        if (titlePresets && masterSettings.eventTitles) {
+          titlePresets.innerHTML = `<option value="">⚡ मास्टर से चुनें (Preset)</option>` +
+            masterSettings.eventTitles.map(t => `<option value="${t.title}">${t.title}</option>`).join('');
+          titlePresets.value = '';
+        }
+        const venuePresets = document.getElementById('event-venue-presets');
+        if (venuePresets && masterSettings.eventVenues) {
+          venuePresets.innerHTML = `<option value="">⚡ मास्टर से चुनें (Preset)</option>` +
+            masterSettings.eventVenues.map(v => `<option value="${v.venue}">${v.venue}</option>`).join('');
+          venuePresets.value = '';
+        }
+
         if (eventId) {
           const ev = allEvents.find(e => e.id === eventId);
           if (!ev) return;
@@ -2299,10 +2857,424 @@
       }
     }
 
-    // Permanent Session: Auto-login on refresh until manual Logout
-    if (localStorage.getItem('gsks_admin_auth') === 'true') {
-      showDashboard();
+    // ==============================================================
+    // MASTER SETTINGS FUNCTIONS (Status, Event, Scheme Masters)
+    // ==============================================================
+    function switchSettingsTab(tab) {
+      currentSettingsTab = tab;
+      const tabBtnStatus = document.getElementById('tab-btn-status');
+      const tabBtnEvent = document.getElementById('tab-btn-event');
+      const tabBtnScheme = document.getElementById('tab-btn-scheme');
+
+      const pageStatus = document.getElementById('settings-page-status');
+      const pageEvent = document.getElementById('settings-page-event');
+      const pageScheme = document.getElementById('settings-page-scheme');
+
+      // Reset tabs styling
+      [tabBtnStatus, tabBtnEvent, tabBtnScheme].forEach(btn => {
+        if (btn) btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0';
+      });
+
+      // Hide all pages
+      if (pageStatus) pageStatus.classList.add('hidden');
+      if (pageEvent) pageEvent.classList.add('hidden');
+      if (pageScheme) pageScheme.classList.add('hidden');
+
+      if (tab === 'event') {
+        if (tabBtnEvent) tabBtnEvent.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow-sm flex-shrink-0';
+        if (pageEvent) pageEvent.classList.remove('hidden');
+      } else if (tab === 'scheme') {
+        if (tabBtnScheme) tabBtnScheme.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-amber-600 text-white shadow-sm flex-shrink-0';
+        if (pageScheme) pageScheme.classList.remove('hidden');
+      } else {
+        if (tabBtnStatus) tabBtnStatus.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-orange-500 text-white shadow-sm flex-shrink-0';
+        if (pageStatus) pageStatus.classList.remove('hidden');
+      }
     }
+
+    function applySettings(data) {
+      if (!data) return;
+      masterSettings = { ...masterSettings, ...data };
+      updateDropdownsFromSettings();
+      renderSettingsView();
+    }
+
+    function renderSettingsView() {
+      // 1. Update Badges
+      const bStatus = document.getElementById('badge-count-status');
+      const bEvent = document.getElementById('badge-count-event');
+      const bScheme = document.getElementById('badge-count-scheme');
+      if (bStatus) bStatus.textContent = (masterSettings.statuses || []).length;
+      if (bEvent) bEvent.textContent = (masterSettings.eventCategories || []).length;
+      if (bScheme) bScheme.textContent = (masterSettings.schemes || []).length;
+
+      // 2. Render Status Master Table
+      const statusTbody = document.getElementById('status-master-tbody');
+      if (statusTbody) {
+        statusTbody.innerHTML = (masterSettings.statuses || []).map((s, idx) => `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-3 px-3 font-mono text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-3 px-3 font-bold text-slate-900">${s.name}</td>
+            <td class="py-3 px-3 text-slate-600">${s.description || '-'}</td>
+            <td class="py-3 px-3">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${getStatusColorClass(s.badgeColor)}">
+                <span class="w-2 h-2 rounded-full ${getStatusDotClass(s.badgeColor)}"></span>
+                ${s.badgeColor || 'slate'}
+              </span>
+            </td>
+            <td class="py-3 px-3">
+              ${s.isSystem ? '<span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold">Standard</span>' : '<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">Custom</span>'}
+            </td>
+            <td class="py-3 px-3 text-right">
+              ${s.isSystem ? '<span class="text-[11px] text-slate-400 font-medium">Default</span>' : `
+                <button onclick="deleteStatusMasterItem('${s.id}')" class="text-rose-600 hover:text-rose-800 p-1 rounded hover:bg-rose-50" title="हटाएं">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              `}
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // 3. Render Event Categories
+      const catGrid = document.getElementById('event-categories-grid');
+      if (catGrid) {
+        catGrid.innerHTML = (masterSettings.eventCategories || []).map(c => `
+          <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-start justify-between">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full ${getStatusDotClass(c.color)}"></span>
+                <h4 class="font-bold text-slate-800 text-xs">${c.name}</h4>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1">${c.description || ''}</p>
+            </div>
+            ${c.isSystem ? '<span class="text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold">Core</span>' : `
+              <button onclick="deleteEventCatItem('${c.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            `}
+          </div>
+        `).join('');
+      }
+
+      // 4. Render Event Standard Titles
+      const titlesTbody = document.getElementById('event-titles-tbody');
+      if (titlesTbody) {
+        titlesTbody.innerHTML = (masterSettings.eventTitles || []).map((t, idx) => `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-2.5 px-3 font-mono text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${t.title}</td>
+            <td class="py-2.5 px-3 text-slate-600">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">${t.category}</span>
+            </td>
+            <td class="py-2.5 px-3 text-right">
+              <button onclick="deleteEventTitleItem('${t.id}')" class="text-rose-600 hover:text-rose-800 p-1" title="हटाएं">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // 5. Render Event Venues
+      const venuesGrid = document.getElementById('event-venues-grid');
+      if (venuesGrid) {
+        venuesGrid.innerHTML = (masterSettings.eventVenues || []).map(v => `
+          <div class="p-3 rounded-2xl border border-slate-200 bg-slate-50/50 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-location-dot text-rose-500 text-xs"></i>
+              <span class="font-bold text-slate-800 text-xs">${v.venue}</span>
+            </div>
+            <button onclick="deleteEventVenueItem('${v.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1" title="हटाएं">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // 6. Render Schemes
+      const schemesGrid = document.getElementById('schemes-cards-grid');
+      if (schemesGrid) {
+        schemesGrid.innerHTML = (masterSettings.schemes || []).map(sc => `
+          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between space-y-2">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                  ${sc.frequency || 'Monthly'}
+                </span>
+                <h4 class="font-bold text-slate-900 text-sm mt-1.5">${sc.name}</h4>
+              </div>
+              <div class="text-right">
+                <p class="text-base font-black text-amber-600 font-mono">₹${sc.amount}</p>
+                <button onclick="deleteSchemeItem('${sc.id}')" class="text-rose-600 hover:text-rose-800 text-xs mt-1" title="हटाएं">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500">${sc.description || ''}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    function getStatusColorClass(color) {
+      if (color === 'emerald') return 'bg-emerald-100 text-emerald-800 border border-emerald-300';
+      if (color === 'amber') return 'bg-amber-100 text-amber-900 border border-amber-300';
+      if (color === 'blue') return 'bg-blue-100 text-blue-800 border border-blue-300';
+      if (color === 'purple') return 'bg-purple-100 text-purple-800 border border-purple-300';
+      if (color === 'rose') return 'bg-rose-100 text-rose-800 border border-rose-300';
+      return 'bg-slate-100 text-slate-700 border border-slate-300';
+    }
+
+    function getStatusDotClass(color) {
+      if (color === 'emerald') return 'bg-emerald-500';
+      if (color === 'amber') return 'bg-amber-500';
+      if (color === 'blue') return 'bg-blue-500';
+      if (color === 'purple') return 'bg-purple-500';
+      if (color === 'rose') return 'bg-rose-500';
+      return 'bg-slate-500';
+    }
+
+    // Modal Triggers for Masters
+    function openAddStatusModal() {
+      closeAllModals();
+      const modal = document.getElementById('status-master-modal');
+      document.getElementById('status-item-id').value = '';
+      document.getElementById('status-item-name').value = '';
+      document.getElementById('status-item-desc').value = '';
+      document.getElementById('status-item-color').value = 'blue';
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+    function closeStatusMasterModal() {
+      const modal = document.getElementById('status-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    function openAddEventCatModal() {
+      closeAllModals();
+      const modal = document.getElementById('eventcat-master-modal');
+      document.getElementById('eventcat-item-id').value = '';
+      document.getElementById('eventcat-item-name').value = '';
+      document.getElementById('eventcat-item-desc').value = '';
+      document.getElementById('eventcat-item-color').value = 'blue';
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+    function closeEventCatModal() {
+      const modal = document.getElementById('eventcat-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    function openAddEventTitleModal() {
+      closeAllModals();
+      const modal = document.getElementById('eventtitle-master-modal');
+      const catSelect = document.getElementById('eventtitle-item-cat');
+      if (catSelect) {
+        catSelect.innerHTML = (masterSettings.eventCategories || []).map(c => `
+          <option value="${c.name}">${c.name}</option>
+        `).join('');
+      }
+      document.getElementById('eventtitle-item-id').value = '';
+      document.getElementById('eventtitle-item-title').value = '';
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+    function closeEventTitleModal() {
+      const modal = document.getElementById('eventtitle-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    function openAddVenueModal() {
+      closeAllModals();
+      const modal = document.getElementById('eventvenue-master-modal');
+      document.getElementById('eventvenue-item-id').value = '';
+      document.getElementById('eventvenue-item-name').value = '';
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+    function closeEventVenueModal() {
+      const modal = document.getElementById('eventvenue-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    function openAddSchemeModal() {
+      closeAllModals();
+      const modal = document.getElementById('scheme-master-modal');
+      document.getElementById('scheme-item-id').value = '';
+      document.getElementById('scheme-item-name').value = '';
+      document.getElementById('scheme-item-amount').value = '100';
+      document.getElementById('scheme-item-desc').value = '';
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+    function closeSchemeModal() {
+      const modal = document.getElementById('scheme-master-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    // Handlers for Save in Masters
+    async function handleSaveStatus(e) {
+      e.preventDefault();
+      const name = document.getElementById('status-item-name').value.trim();
+      const desc = document.getElementById('status-item-desc').value.trim();
+      const color = document.getElementById('status-item-color').value;
+
+      if (!name) return;
+      if (!masterSettings.statuses) masterSettings.statuses = [];
+      masterSettings.statuses.push({
+        id: 'st_' + Date.now(),
+        name,
+        description: desc,
+        badgeColor: color,
+        isSystem: false
+      });
+      closeStatusMasterModal();
+      await saveAllSettingsToCloud();
+    }
+
+    async function handleSaveEventCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('eventcat-item-name').value.trim();
+      const desc = document.getElementById('eventcat-item-desc').value.trim();
+      const color = document.getElementById('eventcat-item-color').value;
+
+      if (!name) return;
+      if (!masterSettings.eventCategories) masterSettings.eventCategories = [];
+      masterSettings.eventCategories.push({
+        id: 'ec_' + Date.now(),
+        name,
+        description: desc,
+        color,
+        isSystem: false
+      });
+      closeEventCatModal();
+      await saveAllSettingsToCloud();
+    }
+
+    async function handleSaveEventTitle(e) {
+      e.preventDefault();
+      const title = document.getElementById('eventtitle-item-title').value.trim();
+      const category = document.getElementById('eventtitle-item-cat').value;
+
+      if (!title) return;
+      if (!masterSettings.eventTitles) masterSettings.eventTitles = [];
+      masterSettings.eventTitles.push({
+        id: 'et_' + Date.now(),
+        title,
+        category
+      });
+      closeEventTitleModal();
+      await saveAllSettingsToCloud();
+    }
+
+    async function handleSaveEventVenue(e) {
+      e.preventDefault();
+      const venue = document.getElementById('eventvenue-item-name').value.trim();
+      if (!venue) return;
+      if (!masterSettings.eventVenues) masterSettings.eventVenues = [];
+      masterSettings.eventVenues.push({
+        id: 'ev_' + Date.now(),
+        venue
+      });
+      closeEventVenueModal();
+      await saveAllSettingsToCloud();
+    }
+
+    async function handleSaveScheme(e) {
+      e.preventDefault();
+      const name = document.getElementById('scheme-item-name').value.trim();
+      const amount = parseFloat(document.getElementById('scheme-item-amount').value) || 0;
+      const freq = document.getElementById('scheme-item-freq').value;
+      const desc = document.getElementById('scheme-item-desc').value.trim();
+
+      if (!name) return;
+      if (!masterSettings.schemes) masterSettings.schemes = [];
+      masterSettings.schemes.push({
+        id: 'sc_' + Date.now(),
+        name,
+        amount,
+        frequency: freq,
+        description: desc,
+        status: 'Active'
+      });
+      closeSchemeModal();
+      await saveAllSettingsToCloud();
+    }
+
+    // Delete Item from Masters
+    async function deleteStatusMasterItem(id) {
+      if (!confirm("क्या आप इस स्टेटस को हटाना चाहते हैं?")) return;
+      masterSettings.statuses = (masterSettings.statuses || []).filter(s => s.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteEventCatItem(id) {
+      if (!confirm("क्या आप इस इवेंट श्रेणी को हटाना चाहते हैं?")) return;
+      masterSettings.eventCategories = (masterSettings.eventCategories || []).filter(c => c.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteEventTitleItem(id) {
+      masterSettings.eventTitles = (masterSettings.eventTitles || []).filter(t => t.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteEventVenueItem(id) {
+      masterSettings.eventVenues = (masterSettings.eventVenues || []).filter(v => v.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteSchemeItem(id) {
+      if (!confirm("क्या आप इस योजना को हटाना चाहते हैं?")) return;
+      masterSettings.schemes = (masterSettings.schemes || []).filter(sc => sc.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    // Save All Settings to Cloud (Firestore + Server Express JSON)
+    async function saveAllSettingsToCloud() {
+      try {
+        // 1. Sync to Firestore
+        if (typeof settingsCol !== 'undefined' && settingsCol) {
+          await settingsCol.doc('master').set(masterSettings, { merge: true });
+        }
+        // 2. Sync to Backend Express JSON API
+        await saveSettingsToBackend(masterSettings);
+
+        renderSettingsView();
+        updateDropdownsFromSettings();
+        alert("✅ सेटिंग्स सफलतापूर्वक क्लाउड में सुरक्षित हो गईं!");
+      } catch (err) {
+        console.error('Error saving settings:', err);
+        alert("सेटिंग्स सेव करते समय त्रुटि: " + err.message);
+      }
+    }
+
+    // Dynamically populate member status filter & add/edit member modal selects
+    function updateDropdownsFromSettings() {
+      const filterSelect = document.getElementById('member-status-filter');
+      const addSelect = document.getElementById('add-status');
+      const editSelect = document.getElementById('edit-status');
+
+      if (filterSelect && masterSettings.statuses) {
+        const curVal = filterSelect.value || 'ALL';
+        filterSelect.innerHTML = `<option value="ALL">सभी Status</option>` +
+          masterSettings.statuses.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+        filterSelect.value = curVal;
+      }
+
+      if (addSelect && masterSettings.statuses) {
+        const curVal = addSelect.value || 'Active';
+        addSelect.innerHTML = masterSettings.statuses.map(s => `<option value="${s.name}">${s.name} (${s.description || ''})</option>`).join('');
+        addSelect.value = curVal;
+      }
+
+      if (editSelect && masterSettings.statuses) {
+        const curVal = editSelect.value || 'Active';
+        editSelect.innerHTML = masterSettings.statuses.map(s => `<option value="${s.name}">${s.name} (${s.description || ''})</option>`).join('') +
+          `<option value="removed">removed (हटाया गया / Archived)</option>`;
+        editSelect.value = curVal;
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
         showDashboard();

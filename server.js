@@ -14,6 +14,52 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const DATA_FILE = path.join(__dirname, 'public', 'members-data.json');
 const EVENTS_FILE = path.join(__dirname, 'public', 'events-data.json');
+const SETTINGS_FILE = path.join(__dirname, 'public', 'settings-data.json');
+
+const DEFAULT_SETTINGS = {
+  statuses: [
+    { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
+    { id: 'st_2', name: 'Prime Member', badgeColor: 'amber', isSystem: true, description: 'विशिष्ट सदस्य (VIP)' },
+    { id: 'st_3', name: 'Inactive', badgeColor: 'slate', isSystem: true, description: 'निष्क्रिय सदस्य' }
+  ],
+  eventCategories: [
+    { id: 'ec_1', name: 'General Meeting', color: 'blue', isSystem: true, description: 'सामान्य बैठक' },
+    { id: 'ec_2', name: 'Special Event', color: 'purple', isSystem: true, description: 'विशेष उत्सव/समारोह' },
+    { id: 'ec_3', name: 'Emergency meeting', color: 'rose', isSystem: true, description: 'आपातकालीन बैठक' }
+  ],
+  eventTitles: [
+    { id: 'et_1', title: 'मासिक आम सभा एवं कोष समीक्षा', category: 'General Meeting' },
+    { id: 'et_2', title: 'वार्षिक महाधिवेशन एवं सम्मान समारोह', category: 'Special Event' },
+    { id: 'et_3', title: 'आपातकालीन कार्यकारिणी बैठक', category: 'Emergency meeting' },
+    { id: 'et_4', title: 'शिव चर्चा एवं सामाजिक विचार-विमर्श', category: 'General Meeting' }
+  ],
+  eventVenues: [
+    { id: 'ev_1', venue: 'शिव मंदिर परिसर, गुनघसा' },
+    { id: 'ev_2', venue: 'सामुदायिक भवन, गोमो' },
+    { id: 'ev_3', venue: 'केंद्रीय ट्रस्ट कार्यालय, धनबाद' }
+  ],
+  schemes: [
+    { id: 'sc_1', name: 'मासिक सहयोग कोष (Monthly Sewa)', amount: 100, frequency: 'Monthly', description: 'प्रति माह नियमित ट्रस्ट सेवा सहायता', status: 'Active' },
+    { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Active' },
+    { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Active' },
+    { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Active' }
+  ]
+};
+
+function getSettingsData() {
+  try {
+    if (!fs.existsSync(SETTINGS_FILE)) {
+      fs.writeFileSync(SETTINGS_FILE, JSON.stringify(DEFAULT_SETTINGS, null, 2), 'utf8');
+      return DEFAULT_SETTINGS;
+    }
+    const raw = fs.readFileSync(SETTINGS_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    return { ...DEFAULT_SETTINGS, ...parsed };
+  } catch (e) {
+    return DEFAULT_SETTINGS;
+  }
+}
+
 
 // API 1: Get latest members data (Always shared across ALL devices: mobile, PC, tablet)
 app.get('/api/members', (req, res) => {
@@ -100,6 +146,32 @@ app.post('/api/events/delete', (req, res) => {
     return res.json({ success: true, message: 'Event deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete event' });
+  }
+});
+
+// MASTER SETTINGS APIS
+app.get('/api/settings', (req, res) => {
+  try {
+    const settings = getSettingsData();
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.json(settings);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load settings' });
+  }
+});
+
+app.post('/api/settings/save', (req, res) => {
+  try {
+    const updatedSettings = req.body;
+    if (!updatedSettings || typeof updatedSettings !== 'object') {
+      return res.status(400).json({ error: 'Invalid settings payload' });
+    }
+    const current = getSettingsData();
+    const merged = { ...current, ...updatedSettings };
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf8');
+    return res.json({ success: true, settings: merged });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save settings' });
   }
 });
 
