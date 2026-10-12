@@ -6622,6 +6622,192 @@
     // 8. FUND MANAGEMENT LOGIC (Fund Types & Fund Transfers)
     // ==============================================================
 
+    // ==============================================================
+    // BANK DEPOSIT MODAL FUNCTIONS (Record Bank Deposit)
+    // ==============================================================
+    function populateBankDepositAccountDropdown() {
+      const select = document.getElementById('bank-deposit-account-select');
+      if (!select) return;
+      const accounts = (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0)
+        ? masterSettings.bankAccounts
+        : [{ id: 'ba_1', accountNumber: '38294710293', bankName: 'SBI', branchName: 'Gomoh Branch' }];
+
+      select.innerHTML = accounts.map(a => `
+        <option value="${a.accountNumber || a.id}">
+          ${a.bankName || 'SBI'} - A/C ${a.accountNumber} (${a.branchName || 'Main Branch'})
+        </option>
+      `).join('');
+    }
+
+    function openBankDepositModal(depositId = null) {
+      try {
+        closeAllModals();
+        const modal = document.getElementById('bank-deposit-modal');
+        const heading = document.getElementById('bank-deposit-modal-heading');
+        
+        try {
+          populateBankDepositAccountDropdown();
+        } catch (e) {
+          console.warn("Dropdown population error:", e);
+        }
+
+        if (depositId) {
+          const item = (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers))
+            ? allFundTransfers.find(t => t.id === depositId)
+            : null;
+          if (item) {
+            if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक जमा रिकॉर्ड संपादित करें';
+            const idEl = document.getElementById('bank-deposit-id'); if (idEl) idEl.value = item.id;
+            const amtEl = document.getElementById('bank-deposit-amount'); if (amtEl) amtEl.value = item.amount || '';
+            const dtEl = document.getElementById('bank-deposit-date'); if (dtEl) dtEl.value = item.date || '';
+            const srcEl = document.getElementById('bank-deposit-source'); if (srcEl) srcEl.value = item.party || '';
+            const refEl = document.getElementById('bank-deposit-ref'); if (refEl) refEl.value = item.refNo || '';
+            const remEl = document.getElementById('bank-deposit-remarks'); if (remEl) remEl.value = item.remarks || '';
+
+            if (item.bankAccount) {
+              const accSel = document.getElementById('bank-deposit-account-select');
+              if (accSel) accSel.value = item.bankAccount;
+            }
+
+            const radios = document.getElementsByName('bank-deposit-method');
+            for (const r of radios) {
+              r.checked = (r.value === (item.method || 'Cash Deposit'));
+            }
+          }
+        } else {
+          if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)';
+          const idEl = document.getElementById('bank-deposit-id'); if (idEl) idEl.value = '';
+          const amtEl = document.getElementById('bank-deposit-amount'); if (amtEl) amtEl.value = '';
+          const dtEl = document.getElementById('bank-deposit-date'); if (dtEl) dtEl.value = new Date().toISOString().split('T')[0];
+          const srcEl = document.getElementById('bank-deposit-source'); if (srcEl) srcEl.value = '';
+          const refEl = document.getElementById('bank-deposit-ref'); if (refEl) refEl.value = '';
+          const remEl = document.getElementById('bank-deposit-remarks'); if (remEl) remEl.value = '';
+          
+          const radios = document.getElementsByName('bank-deposit-method');
+          if (radios.length > 0) radios[0].checked = true;
+        }
+
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.style.display = 'flex';
+        }
+      } catch (err) {
+        console.error("Error in openBankDepositModal:", err);
+        const modal = document.getElementById('bank-deposit-modal');
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.style.display = 'flex';
+        }
+      }
+    }
+
+    function closeBankDepositModal() {
+      const modal = document.getElementById('bank-deposit-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveBankDeposit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const idInput = document.getElementById('bank-deposit-id') ? document.getElementById('bank-deposit-id').value : '';
+      const bankAccount = document.getElementById('bank-deposit-account-select') ? document.getElementById('bank-deposit-account-select').value : '';
+      const amount = parseFloat(document.getElementById('bank-deposit-amount') ? document.getElementById('bank-deposit-amount').value : 0) || 0;
+      const date = document.getElementById('bank-deposit-date') ? document.getElementById('bank-deposit-date').value : '';
+      const source = document.getElementById('bank-deposit-source') ? document.getElementById('bank-deposit-source').value.trim() : '';
+      const refNo = document.getElementById('bank-deposit-ref') ? document.getElementById('bank-deposit-ref').value.trim() : '';
+      const remarks = document.getElementById('bank-deposit-remarks') ? document.getElementById('bank-deposit-remarks').value.trim() : '';
+
+      let method = 'Cash Deposit';
+      const radios = document.getElementsByName('bank-deposit-method');
+      for (const r of radios) {
+        if (r.checked) {
+          method = r.value;
+          break;
+        }
+      }
+
+      if (amount <= 0 || !date || !source) {
+        alert("कृपया वैध राशि, दिनांक एवं जमाकर्ता/स्रोत दर्ज करें!");
+        return;
+      }
+
+      const id = idInput || 'DEP-' + Date.now().toString().slice(-6);
+      const depositData = {
+        id,
+        type: 'Bank Deposit',
+        amount,
+        date,
+        party: source,
+        bankAccount,
+        method,
+        refNo,
+        remarks: remarks || `बैंक जमा (${method})`,
+        purpose: 'Bank Deposit',
+        createdAt: new Date().toISOString()
+      };
+
+      // 1. Instant local array update
+      const existingIdx = allFundTransfers.findIndex(item => item.id === id);
+      if (existingIdx !== -1) {
+        allFundTransfers[existingIdx] = depositData;
+      } else {
+        allFundTransfers.unshift(depositData);
+      }
+
+      closeBankDepositModal();
+      updateStats();
+      renderFundTransfersList();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+
+      // 2. Persist to Express Backend
+      try {
+        await fetch('/api/fund-transfers/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(depositData)
+        });
+      } catch (err) {
+        console.warn('API fund transfer save warning:', err);
+      }
+
+      // 3. Persist to Firestore Realtime
+      try {
+        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
+          await fundTransfersCol.doc(id).set(depositData, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore fund transfer save warning:', err);
+      }
+    }
+
+    async function deleteBankDepositItem(id) {
+      if (!confirm(`क्या आप इस बैंक जमा रिकॉर्ड (${id}) को हटाना चाहते हैं?`)) return;
+
+      allFundTransfers = allFundTransfers.filter(item => item.id !== id);
+      updateStats();
+      renderFundTransfersList();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+
+      // Express API
+      try {
+        await fetch('/api/fund-transfers/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch (err) {
+        console.warn('API fund transfer delete warning:', err);
+      }
+
+      // Firestore
+      try {
+        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
+          await fundTransfersCol.doc(id).delete();
+        }
+      } catch (err) {
+        console.warn('Firestore fund transfer delete warning:', err);
+      }
+    }
+
     // --- Opening Balance Modal Triggers ---
     function openEditOpeningBalanceModal() {
       closeAllModals();
@@ -8839,190 +9025,6 @@
     function handleBankSearch(term) {
       currentBankSearchTerm = term.trim();
       renderBankTransactionsView();
-    }
-
-    // Modal: Record Direct Bank Deposit
-    function openBankDepositModal(depositId = null) {
-      try {
-        closeAllModals();
-        const modal = document.getElementById('bank-deposit-modal');
-        const heading = document.getElementById('bank-deposit-modal-heading');
-        
-        try {
-          populateBankDepositAccountDropdown();
-        } catch (e) {
-          console.warn("Dropdown population error:", e);
-        }
-
-        if (depositId) {
-          const item = (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers))
-            ? allFundTransfers.find(t => t.id === depositId)
-            : null;
-          if (item) {
-            if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक जमा रिकॉर्ड संपादित करें';
-            const idEl = document.getElementById('bank-deposit-id'); if (idEl) idEl.value = item.id;
-            const amtEl = document.getElementById('bank-deposit-amount'); if (amtEl) amtEl.value = item.amount || '';
-            const dtEl = document.getElementById('bank-deposit-date'); if (dtEl) dtEl.value = item.date || '';
-            const srcEl = document.getElementById('bank-deposit-source'); if (srcEl) srcEl.value = item.party || '';
-            const refEl = document.getElementById('bank-deposit-ref'); if (refEl) refEl.value = item.refNo || '';
-            const remEl = document.getElementById('bank-deposit-remarks'); if (remEl) remEl.value = item.remarks || '';
-
-            if (item.bankAccount) {
-              const accSel = document.getElementById('bank-deposit-account-select');
-              if (accSel) accSel.value = item.bankAccount;
-            }
-
-            const radios = document.getElementsByName('bank-deposit-method');
-            for (const r of radios) {
-              r.checked = (r.value === (item.method || 'Cash Deposit'));
-            }
-          }
-        } else {
-          if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)';
-          const idEl = document.getElementById('bank-deposit-id'); if (idEl) idEl.value = '';
-          const amtEl = document.getElementById('bank-deposit-amount'); if (amtEl) amtEl.value = '';
-          const dtEl = document.getElementById('bank-deposit-date'); if (dtEl) dtEl.value = new Date().toISOString().split('T')[0];
-          const srcEl = document.getElementById('bank-deposit-source'); if (srcEl) srcEl.value = '';
-          const refEl = document.getElementById('bank-deposit-ref'); if (refEl) refEl.value = '';
-          const remEl = document.getElementById('bank-deposit-remarks'); if (remEl) remEl.value = '';
-          
-          const radios = document.getElementsByName('bank-deposit-method');
-          if (radios.length > 0) radios[0].checked = true;
-        }
-
-        if (modal) {
-          modal.classList.remove('hidden');
-          modal.style.display = 'flex';
-        }
-      } catch (err) {
-        console.error("Error in openBankDepositModal:", err);
-        const modal = document.getElementById('bank-deposit-modal');
-        if (modal) {
-          modal.classList.remove('hidden');
-          modal.style.display = 'flex';
-        }
-      }
-    }
-
-    function closeBankDepositModal() {
-      const modal = document.getElementById('bank-deposit-modal');
-      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
-    }
-
-    function populateBankDepositAccountDropdown() {
-      const select = document.getElementById('bank-deposit-account-select');
-      if (!select) return;
-      const accounts = (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0)
-        ? masterSettings.bankAccounts
-        : [{ id: 'ba_1', accountNumber: '38294710293', bankName: 'SBI', branchName: 'Gomoh Branch' }];
-
-      select.innerHTML = accounts.map(a => `
-        <option value="${a.accountNumber || a.id}">
-          ${a.bankName || 'SBI'} - A/C ${a.accountNumber} (${a.branchName || 'Main Branch'})
-        </option>
-      `).join('');
-    }
-
-    async function handleSaveBankDeposit(e) {
-      e.preventDefault();
-      const idInput = document.getElementById('bank-deposit-id').value;
-      const bankAccount = document.getElementById('bank-deposit-account-select').value;
-      const amount = parseFloat(document.getElementById('bank-deposit-amount').value) || 0;
-      const date = document.getElementById('bank-deposit-date').value;
-      const source = document.getElementById('bank-deposit-source').value.trim();
-      const refNo = document.getElementById('bank-deposit-ref').value.trim();
-      const remarks = document.getElementById('bank-deposit-remarks').value.trim();
-
-      let method = 'Cash Deposit';
-      const radios = document.getElementsByName('bank-deposit-method');
-      for (const r of radios) {
-        if (r.checked) {
-          method = r.value;
-          break;
-        }
-      }
-
-      if (amount <= 0 || !date || !source) {
-        alert("कृपया वैध राशि, दिनांक एवं जमाकर्ता/स्रोत दर्ज करें!");
-        return;
-      }
-
-      const id = idInput || 'DEP-' + Date.now().toString().slice(-6);
-      const depositData = {
-        id,
-        type: 'Bank Deposit',
-        amount,
-        date,
-        party: source,
-        bankAccount,
-        method,
-        refNo,
-        remarks: remarks || `बैंक जमा (${method})`,
-        purpose: 'Bank Deposit',
-        createdAt: new Date().toISOString()
-      };
-
-      // 1. Instant local array update (stored in allFundTransfers as Bank Deposit)
-      const existingIdx = allFundTransfers.findIndex(item => item.id === id);
-      if (existingIdx !== -1) {
-        allFundTransfers[existingIdx] = depositData;
-      } else {
-        allFundTransfers.unshift(depositData);
-      }
-
-      closeBankDepositModal();
-      updateStats();
-      renderFundTransfersList();
-      renderBankTransactionsView();
-
-      // 2. Persist to Express Backend
-      try {
-        await fetch('/api/fund-transfers/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(depositData)
-        });
-      } catch (err) {
-        console.warn('API fund transfer save warning:', err);
-      }
-
-      // 3. Persist to Firestore Realtime
-      try {
-        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
-          await fundTransfersCol.doc(id).set(depositData, { merge: true });
-        }
-      } catch (err) {
-        console.warn('Firestore fund transfer save warning:', err);
-      }
-    }
-
-    async function deleteBankDepositItem(id) {
-      if (!confirm(`क्या आप इस बैंक जमा रिकॉर्ड (${id}) को हटाना चाहते हैं?`)) return;
-
-      allFundTransfers = allFundTransfers.filter(item => item.id !== id);
-      updateStats();
-      renderFundTransfersList();
-      renderBankTransactionsView();
-
-      // Express API
-      try {
-        await fetch('/api/fund-transfers/delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id })
-        });
-      } catch (err) {
-        console.warn('API fund transfer delete warning:', err);
-      }
-
-      // Firestore
-      try {
-        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
-          await fundTransfersCol.doc(id).delete();
-        }
-      } catch (err) {
-        console.warn('Firestore fund transfer delete warning:', err);
-      }
     }
 
     // Window Exports
