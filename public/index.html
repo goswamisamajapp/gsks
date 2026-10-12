@@ -2771,7 +2771,25 @@
       { key: '2028-01', label: 'Jan 2028', defaultPaid: false },
       { key: '2028-02', label: 'Feb 2028', defaultPaid: false }
     ];
-    let currentPariwarikMonth = '2026-10'; // Default current view month
+
+    // Dynamic Default Selected Month: Current Month se next month (e.g. Current Oct 2026 -> Nov 2026)
+    function getDefaultPariwarikMonth() {
+      const now = new Date();
+      // Next month
+      const nextMonthDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      const y = nextMonthDate.getFullYear();
+      const m = String(nextMonthDate.getMonth() + 1).padStart(2, '0');
+      const targetKey = `${y}-${m}`;
+
+      // Check if targetKey exists in our 30 months list
+      const exists = PARIWARIK_MONTHS.some(x => x.key === targetKey);
+      if (exists) return targetKey;
+      
+      // If outside range (before Sep 2025 or after Feb 2028), pick reasonable default
+      return '2026-11';
+    }
+
+    let currentPariwarikMonth = getDefaultPariwarikMonth(); // By default next month selected (e.g. Nov 2026)
 
     function isPariwarikMember(m) {
       if (!m) return false;
