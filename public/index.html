@@ -6829,22 +6829,34 @@
       }).join('');
     }
 
+    function getPariwarikInstallmentMonthLabel(selectedMonthKey) {
+      const idx = PARIWARIK_MONTHS.findIndex(m => m.key === selectedMonthKey);
+      if (idx > 0) {
+        return PARIWARIK_MONTHS[idx - 1].label;
+      } else if (idx === 0) {
+        return 'Aug 2025';
+      }
+      return selectedMonthKey;
+    }
+
     function sendPariwarikPushNotification(memberId, memberName, memberPhone) {
-      alert(`🔔 पुश नोटिफिकेशन (Push Notification):\n\nसदस्य: ${memberName || '--'} (${memberId})\nमोबाइल: ${memberPhone || '--'}\nचयनित माह: ${currentPariwarikMonth}\n\nनोट: यूजर डैशबोर्ड तैयार होने पर सदस्य के ऐप पर सीधा पुश अलर्ट डिलीवर होगा!`);
+      const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
+      const selectedMonthLabel = activeMonthCfg.label || currentPariwarikMonth;
+      const installmentMonthLabel = getPariwarikInstallmentMonthLabel(currentPariwarikMonth);
+      alert(`🔔 पुश नोटिफिकेशन (Push Notification):\n\nसदस्य: ${memberName || '--'} (${memberId})\nमोबाइल: ${memberPhone || '--'}\nकिस्त माह: ${installmentMonthLabel} (अग्रिम माह: ${selectedMonthLabel})\n\nनोट: यूजर डैशबोर्ड तैयार होने पर सदस्य के ऐप पर सीधा पुश अलर्ट डिलीवर होगा!`);
     }
 
     function sendPariwarikWhatsAppNotification(memberId, memberName, memberPhone, hasPaid) {
       const cleanPhone = (memberPhone || '').replace(/\D/g, '');
       const validPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
       
-      const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
-      const monthLabel = activeMonthCfg.label || currentPariwarikMonth;
+      const installmentMonthLabel = getPariwarikInstallmentMonthLabel(currentPariwarikMonth);
 
       let msg = '';
       if (!hasPaid) {
-        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${monthLabel}* माह का ₹${PARIWARIK_MONTHLY_FEE} का अंशदान अभी तक प्राप्त नहीं हुआ है।\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की ₹${PARIWARIK_MONTHLY_FEE} की किस्त अभी तक प्राप्त नहीं हुई है।\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
       } else {
-        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${monthLabel}* माह का आपका ₹${PARIWARIK_MONTHLY_FEE} का अंशदान सफलतापूर्वक प्राप्त हो चुका है।\n\nआपके सहयोग के लिए धन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की आपकी ₹${PARIWARIK_MONTHLY_FEE} की किस्त सफलतापूर्वक प्राप्त हो चुकी है।\n\nआपके सहयोग के लिए धन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
       }
 
       if (!validPhone) {
@@ -6870,8 +6882,8 @@
       currentUnpaidBulkList = pariwarikMembers.filter(m => !isPariwarikPaidForMonth(m, currentPariwarikMonth));
       currentUnpaidBulkIndex = 0;
 
-      const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
-      if (subtitleEl) subtitleEl.textContent = `चयनित माह: ${activeMonthCfg.label || currentPariwarikMonth} के बकाया सदस्य`;
+      const installmentMonthLabel = getPariwarikInstallmentMonthLabel(currentPariwarikMonth);
+      if (subtitleEl) subtitleEl.textContent = `${installmentMonthLabel} की किस्त के बकाया सदस्य`;
       if (countEl) countEl.textContent = `${currentUnpaidBulkList.length} सदस्य`;
 
       if (currentUnpaidBulkList.length === 0) {
@@ -6936,15 +6948,16 @@
     function sendPariwarikPushAllNotification() {
       const pariwarikMembers = getPariwarikMemberList();
       const unpaidMembers = pariwarikMembers.filter(m => !isPariwarikPaidForMonth(m, currentPariwarikMonth));
+      const installmentMonthLabel = getPariwarikInstallmentMonthLabel(currentPariwarikMonth);
       const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
-      const monthLabel = activeMonthCfg.label || currentPariwarikMonth;
+      const selectedMonthLabel = activeMonthCfg.label || currentPariwarikMonth;
 
       if (unpaidMembers.length === 0) {
-        alert(`बधाई हो! ${monthLabel} माह के सभी सदस्यों का भुगतान पूर्ण है। कोई बकाया नहीं है!`);
+        alert(`बधाई हो! ${installmentMonthLabel} की किस्त के लिए सभी सदस्यों का भुगतान पूर्ण है। कोई बकाया नहीं है!`);
         return;
       }
 
-      alert(`🔔 पुश नोटिफिकेशन ब्रॉडकास्ट (Push All):\n\nचयनित माह: ${monthLabel}\nकुल बकाया सदस्य: ${unpaidMembers.length}\nप्रति सदस्य बकाया: ₹${PARIWARIK_MONTHLY_FEE}\n\nनोट: यूजर डैशबोर्ड/मोबाइल ऐप एक्टिव होते ही इन सभी ${unpaidMembers.length} सदस्यों के मोबाइल पर एक साथ पुश अलर्ट ब्रॉडकास्ट हो जाएगा!`);
+      alert(`🔔 पुश नोटिफिकेशन ब्रॉडकास्ट (Push All):\n\nकिस्त माह: ${installmentMonthLabel} (अग्रिम माह: ${selectedMonthLabel})\nकुल बकाया सदस्य: ${unpaidMembers.length}\nप्रति सदस्य बकाया: ₹${PARIWARIK_MONTHLY_FEE}\n\nनोट: यूजर डैशबोर्ड/मोबाइल ऐप एक्टिव होते ही इन सभी ${unpaidMembers.length} सदस्यों के मोबाइल पर एक साथ पुश अलर्ट ब्रॉडकास्ट हो जाएगा!`);
     }
 
     window.isPariwarikMember = isPariwarikMember;
