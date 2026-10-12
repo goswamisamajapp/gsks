@@ -1600,7 +1600,7 @@
                 </div>
                 <p class="text-xs text-amber-100 mt-1" id="opening-balance-remarks-text">समिति 2025 से पूर्व संचालित है - प्रारंभिक जमा राशि</p>
               </div>
-              <button onclick="openEditOpeningBalanceModal()" class="px-4 py-2 bg-white text-orange-800 hover:bg-orange-50 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-sm">
+              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-4 py-2 bg-white text-orange-800 hover:bg-orange-50 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
                 <i class="fa-solid fa-pen-to-square"></i>
                 <span>प्रारंभिक कोष संशोधित करें (Edit Opening Balance)</span>
               </button>
@@ -4268,7 +4268,12 @@
         'delete-donation-modal',
         'fundtype-master-modal',
         'bankaccount-modal',
-        'fund-transfer-modal'
+        'fund-transfer-modal',
+        'pariwarik-bulk-whatsapp-modal',
+        'expense-modal',
+        'opening-balance-modal',
+        'vendor-master-modal',
+        'expensescheme-master-modal'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);
@@ -5831,7 +5836,7 @@
     }
 
     // Save All Settings to Cloud (Firestore + Server Express JSON)
-    async function saveAllSettingsToCloud() {
+    async function saveAllSettingsToCloud(showAlert = true) {
       try {
         // 1. Sync to Firestore
         if (typeof settingsCol !== 'undefined' && settingsCol) {
@@ -5842,10 +5847,14 @@
 
         renderSettingsView();
         updateDropdownsFromSettings();
-        alert("✅ सेटिंग्स सफलतापूर्वक क्लाउड में सुरक्षित हो गईं!");
+        if (showAlert) {
+          alert("✅ सेटिंग्स सफलतापूर्वक क्लाउड में सुरक्षित हो गईं!");
+        }
       } catch (err) {
         console.error('Error saving settings:', err);
-        alert("सेटिंग्स सेव करते समय त्रुटि: " + err.message);
+        if (showAlert) {
+          alert("सेटिंग्स सेव करते समय त्रुटि: " + err.message);
+        }
       }
     }
 
@@ -8007,9 +8016,13 @@
       const modal = document.getElementById('opening-balance-modal');
       const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
 
-      document.getElementById('opening-bal-cash-input').value = openBalances.cash !== undefined ? openBalances.cash : 34025;
-      document.getElementById('opening-bal-bank-input').value = openBalances.bank !== undefined ? openBalances.bank : 0;
-      document.getElementById('opening-bal-remarks-input').value = openBalances.remarks || '';
+      const cashInput = document.getElementById('opening-bal-cash-input');
+      const bankInput = document.getElementById('opening-bal-bank-input');
+      const remarksInput = document.getElementById('opening-bal-remarks-input');
+
+      if (cashInput) cashInput.value = openBalances.cash !== undefined ? openBalances.cash : 34025;
+      if (bankInput) bankInput.value = openBalances.bank !== undefined ? openBalances.bank : 0;
+      if (remarksInput) remarksInput.value = openBalances.remarks || '';
 
       if (modal) {
         modal.classList.remove('hidden');
@@ -8023,17 +8036,26 @@
     }
 
     async function handleSaveOpeningBalance(e) {
-      e.preventDefault();
-      const cash = parseFloat(document.getElementById('opening-bal-cash-input').value) || 0;
-      const bank = parseFloat(document.getElementById('opening-bal-bank-input').value) || 0;
-      const remarks = document.getElementById('opening-bal-remarks-input').value.trim() || 'वर्ष 2025 से पूर्व संचित कोष';
+      if (e && e.preventDefault) e.preventDefault();
+      try {
+        const cashVal = document.getElementById('opening-bal-cash-input') ? document.getElementById('opening-bal-cash-input').value : 34025;
+        const bankVal = document.getElementById('opening-bal-bank-input') ? document.getElementById('opening-bal-bank-input').value : 0;
+        const remVal = document.getElementById('opening-bal-remarks-input') ? document.getElementById('opening-bal-remarks-input').value : '';
 
-      masterSettings.openingBalances = { cash, bank, remarks };
-      closeEditOpeningBalanceModal();
-      updateStats();
-      renderExpenseMasterTab();
-      await saveAllSettingsToCloud();
-      alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
+        const cash = parseFloat(cashVal) || 0;
+        const bank = parseFloat(bankVal) || 0;
+        const remarks = remVal.trim() || 'वर्ष 2025 से पूर्व संचित कोष';
+
+        masterSettings.openingBalances = { cash, bank, remarks };
+        closeEditOpeningBalanceModal();
+        updateStats();
+        renderExpenseMasterTab();
+        await saveAllSettingsToCloud(false);
+        alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
+      } catch (err) {
+        console.error("Error saving opening balance:", err);
+        alert("प्रारंभिक कोष अपडेट करते समय त्रुटि: " + err.message);
+      }
     }
 
     // --- Vendor Modal Triggers ---
