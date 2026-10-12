@@ -3984,6 +3984,7 @@
           updateDonationsStats();
           updateStats();
           renderDonationsList();
+          if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
         }, (err) => {
           console.warn("Firestore donations onSnapshot error:", err);
           loadDonationsFallback();
@@ -3998,6 +3999,7 @@
           updateStats();
           updateExpensesStats();
           renderExpensesList();
+          if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
         }, (err) => {
           console.warn("Firestore expenses onSnapshot error:", err);
           loadExpensesFallback();
@@ -4011,6 +4013,7 @@
           allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           renderFundTransfersList();
+          if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
         }, (err) => {
           console.warn("Firestore fund transfers onSnapshot error:", err);
           loadFundTransfersFallback();
@@ -4050,6 +4053,7 @@
         allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
         updateStats();
         renderFundTransfersList();
+        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       } catch (err) {
         console.error('Failed to load fund transfers fallback:', err);
       }
@@ -4063,6 +4067,7 @@
         updateStats();
         updateExpensesStats();
         renderExpensesList();
+        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       } catch (err) {
         console.error('Failed to load expenses fallback:', err);
       }
@@ -4074,7 +4079,9 @@
         allDonations = await res.json();
         allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
         updateDonationsStats();
+        updateStats();
         renderDonationsList();
+        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       } catch (err) {
         console.error('Failed to load donations fallback:', err);
       }
@@ -5436,6 +5443,11 @@
       masterSettings = { ...masterSettings, ...data };
       updateDropdownsFromSettings();
       renderSettingsView();
+      updateStats();
+      renderOpeningBalancesCard();
+      if (typeof renderBankTransactionsView === 'function') {
+        renderBankTransactionsView();
+      }
     }
 
     function renderSettingsView() {
@@ -6650,6 +6662,7 @@
         closeEditOpeningBalanceModal();
         updateStats();
         renderOpeningBalancesCard();
+        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
         await saveAllSettingsToCloud(false);
         alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
       } catch (err) {
@@ -7206,6 +7219,7 @@
       closeFundTransferModal();
       updateStats();
       renderFundTransfersList();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
 
       // 2. Server API sync
       try {
@@ -7237,6 +7251,7 @@
       allFundTransfers = allFundTransfers.filter(t => t.id !== id);
       updateStats();
       renderFundTransfersList();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
 
       // 2. Server API
       try {
