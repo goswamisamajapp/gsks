@@ -3108,15 +3108,10 @@
             </p>
           </div>
 
-          <!-- Bottom Audience strip with View link -->
+          <!-- Bottom Audience strip -->
           <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
             <span class="text-[11px] text-slate-400 font-medium">अधिसूचना लक्षित:</span>
-            <div class="flex items-center gap-2">
-              ${getAudienceBadge(e.audience, e.selectedMembers ? e.selectedMembers.length : 0)}
-              <button onclick="openViewEventModal('${e.id}')" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 ml-1 transition-colors">
-                देखें <i class="fa-solid fa-chevron-right text-[9px]"></i>
-              </button>
-            </div>
+            ${getAudienceBadge(e.audience, e.selectedMembers ? e.selectedMembers.length : 0)}
           </div>
         </div>
       `).join('');
