@@ -280,7 +280,7 @@
             <span class="text-xs text-slate-400 font-medium">Auto-updated</span>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Total Fund Available -->
             <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
               <div>
@@ -332,6 +332,24 @@
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md font-semibold">Cash in Hand</span>
                 <span class="text-slate-400 text-[11px]">Petty Cash</span>
+              </div>
+            </div>
+
+            <!-- 4th Card: Dues Amount -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-slate-500 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider">Dues Amount</span>
+                  <div class="w-8 h-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-sm">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                  </div>
+                </div>
+                <p class="text-2xl sm:text-3xl font-black text-rose-600 mt-1" id="dash-dues-fund">₹ 0</p>
+                <p class="text-xs text-slate-400 mt-1">कुल बकाया राशि</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md font-semibold">Pending Dues</span>
+                <span class="text-slate-400 text-[11px]">Total Dues</span>
               </div>
             </div>
           </div>
@@ -2807,10 +2825,15 @@
       const elTotalFund = document.getElementById('dash-total-fund');
       const elBankFund = document.getElementById('dash-bank-fund');
       const elCashFund = document.getElementById('dash-cash-fund');
+      const elDuesFund = document.getElementById('dash-dues-fund');
+
+      // Calculate total pending dues (from all active/nonRemoved members)
+      const totalDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
 
       if (elTotalFund) elTotalFund.textContent = `₹ ${totalAvailableFund.toLocaleString('en-IN')}`;
       if (elBankFund) elBankFund.textContent = `₹ ${netBankAmount.toLocaleString('en-IN')}`;
       if (elCashFund) elCashFund.textContent = `₹ ${netCashInHand.toLocaleString('en-IN')}`;
+      if (elDuesFund) elDuesFund.textContent = `₹ ${totalDuesAmount.toLocaleString('en-IN')}`;
 
       // Update counters on Fund Management Page as well
       const fundStatTotal = document.getElementById('fund-stat-total');
