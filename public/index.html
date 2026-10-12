@@ -1461,6 +1461,23 @@
           </div>
         </div>
 
+        <!-- Pariwarik Arthik Yojna Member Checkbox -->
+        <div class="bg-cyan-50/70 border border-cyan-200/90 rounded-2xl p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-xs shadow-xs">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 text-xs">पारिवारिक आर्थिक योजना सदस्य (Pariwarik Arthik Yojna Member)</p>
+              <p class="text-[10px] text-cyan-800">हाँ (Yes) होने पर पारिवारिक आर्थिक सहायता लिस्ट में दिखेगा</p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="checkbox" id="edit-pariwarik-member" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+          </label>
+        </div>
+
         <!-- Password Reset Box Requirement -->
         <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5 flex items-center justify-between">
           <div>
@@ -1575,6 +1592,23 @@
               <option value="AB-">AB-</option>
             </select>
           </div>
+        </div>
+
+        <!-- Pariwarik Arthik Yojna Member Checkbox -->
+        <div class="bg-cyan-50/70 border border-cyan-200/90 rounded-2xl p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-xs shadow-xs">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 text-xs">पारिवारिक आर्थिक योजना सदस्य (Pariwarik Arthik Yojna Member)</p>
+              <p class="text-[10px] text-cyan-800">हाँ (Yes) होने पर पारिवारिक आर्थिक सहायता लिस्ट में दिखेगा</p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="checkbox" id="add-pariwarik-member" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+          </label>
         </div>
 
         <div class="p-3 bg-orange-50 rounded-2xl border border-orange-200 flex items-center gap-2 text-[11px] text-orange-900 font-medium">
@@ -3416,6 +3450,12 @@
       document.getElementById('edit-donation').value = member.donation || 0;
       document.getElementById('edit-dues').value = member.dues || 0;
       document.getElementById('edit-blood').value = member.bloodGroup || '';
+      
+      const pariwarikCheckbox = document.getElementById('edit-pariwarik-member');
+      if (pariwarikCheckbox) {
+        pariwarikCheckbox.checked = (member.pariwarikMember === true || member.pariwarikMember === 'true' || member.pariwarikMember === 'yes' || member.pariwarikMember === 'Yes');
+      }
+
       document.getElementById('password-reset-alert').classList.add('hidden');
 
       const modal = document.getElementById('edit-member-modal');
@@ -3455,6 +3495,11 @@
       document.getElementById('add-dues').value = 0;
       document.getElementById('add-blood').value = '';
 
+      const addPariwarikCheckbox = document.getElementById('add-pariwarik-member');
+      if (addPariwarikCheckbox) {
+        addPariwarikCheckbox.checked = false;
+      }
+
       const modal = document.getElementById('add-member-modal');
       if (modal) {
         modal.classList.remove('hidden');
@@ -3486,6 +3531,8 @@
       const nextNum = maxNum + 1;
       const newId = `GSKS-${String(nextNum).padStart(3, '0')}`;
 
+      const addPariwarik = document.getElementById('add-pariwarik-member');
+
       const newMember = {
         id: newId,
         name: document.getElementById('add-name').value.trim().toUpperCase(),
@@ -3496,13 +3543,17 @@
         since: document.getElementById('add-since').value.trim() || '2026',
         donation: Number(document.getElementById('add-donation').value) || 0,
         dues: Number(document.getElementById('add-dues').value) || 0,
-        bloodGroup: document.getElementById('add-blood').value
+        bloodGroup: document.getElementById('add-blood').value,
+        pariwarikMember: addPariwarik ? addPariwarik.checked : false
       };
 
       // Add to array
       allMembers.push(newMember);
       updateStats();
       renderMembers();
+      if (typeof renderPariwarikView === 'function') {
+        renderPariwarikView();
+      }
       closeAddMemberModal();
 
       // Sync to Backend & Firebase
@@ -3515,6 +3566,8 @@
       const index = allMembers.findIndex(m => m.id === id);
       if (index === -1) return;
 
+      const editPariwarik = document.getElementById('edit-pariwarik-member');
+
       const updatedPayload = {
         id: id,
         name: document.getElementById('edit-name').value.trim().toUpperCase(),
@@ -3525,11 +3578,15 @@
         since: document.getElementById('edit-since').value.trim(),
         donation: Number(document.getElementById('edit-donation').value) || 0,
         dues: Number(document.getElementById('edit-dues').value) || 0,
-        bloodGroup: document.getElementById('edit-blood').value
+        bloodGroup: document.getElementById('edit-blood').value,
+        pariwarikMember: editPariwarik ? editPariwarik.checked : false
       };
 
       closeEditModal();
       await syncMemberToBackend(updatedPayload);
+      if (typeof renderPariwarikView === 'function') {
+        renderPariwarikView();
+      }
     }
 
     function handleResetMemberPassword() {
@@ -6157,22 +6214,21 @@
     // ==============================================================
     // 9. PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) LOGIC
     // ==============================================================
+    function isPariwarikMember(m) {
+      if (!m) return false;
+      return (m.pariwarikMember === true || m.pariwarikMember === 'true' || m.pariwarikMember === 'yes' || m.pariwarikMember === 'Yes');
+    }
+
     function renderPariwarikView() {
       const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      // Filter ONLY members where Pariwarik Arthik Yojna Member checkbox is checked (Yes)
+      const pariwarikMembers = nonRemoved.filter(m => isPariwarikMember(m));
       
-      // Calculate Paid (Total donations or recorded donation contributions)
-      let paidSum = 0;
-      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
-        allDonations.forEach(d => {
-          paidSum += (parseFloat(d.amount) || 0);
-        });
-      }
-      if (paidSum === 0) {
-        paidSum = nonRemoved.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
-      }
+      // Calculate Paid for pariwarik members
+      const paidSum = pariwarikMembers.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
 
-      // Calculate Dues (From members pending dues)
-      const duesSum = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
+      // Calculate Dues for pariwarik members
+      const duesSum = pariwarikMembers.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
       
       // Total Amount = Paid + Dues
       const totalSum = paidSum + duesSum;
@@ -6186,25 +6242,26 @@
       if (elTotal) elTotal.textContent = `₹ ${totalSum.toLocaleString('en-IN')}`;
       if (elPaid) elPaid.textContent = `₹ ${paidSum.toLocaleString('en-IN')}`;
       if (elDues) elDues.textContent = `₹ ${duesSum.toLocaleString('en-IN')}`;
-      if (elCount) elCount.textContent = `${nonRemoved.length} सदस्य`;
+      if (elCount) elCount.textContent = `${pariwarikMembers.length} सदस्य`;
 
       // Render Table Breakdown
       const tbody = document.getElementById('pariwarik-table-body');
       if (!tbody) return;
 
-      if (nonRemoved.length === 0) {
+      if (pariwarikMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="6" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-users-slash text-3xl mb-2 text-slate-300"></i>
-              <p class="text-xs font-bold text-slate-600">कोई सदस्य पंजीकृत नहीं है।</p>
+              <p class="text-xs font-bold text-slate-600">कोई पारिवारिक आर्थिक योजना सदस्य पंजीकृत नहीं है।</p>
+              <p class="text-[11px] text-slate-400 mt-1">सदस्य विवरण में "पारिवारिक आर्थिक योजना सदस्य" चेकबॉक्स को टिक करें।</p>
             </td>
           </tr>
         `;
         return;
       }
 
-      tbody.innerHTML = nonRemoved.map(m => {
+      tbody.innerHTML = pariwarikMembers.map(m => {
         const mPaid = Number(m.donation) || 0;
         const mDues = Number(m.dues) || 0;
         const mTotal = mPaid + mDues;
