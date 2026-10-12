@@ -2495,18 +2495,35 @@
       if (document.getElementById('nav-archived-count')) document.getElementById('nav-archived-count').textContent = archivedCount;
       document.getElementById('dash-archived-members').textContent = archivedCount;
 
-      // Dynamic Treasury Calculations from Member donations
-      const totalDonation = nonRemoved.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
-      const bankAmount = Math.round(totalDonation * 0.85); // 85% in Bank
-      const cashAmount = totalDonation - bankAmount;       // 15% in Hand
+      // Dynamic Treasury Calculations from actual Donations and Member records
+      let donationCashTotal = 0;
+      let donationOnlineTotal = 0;
+      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+        allDonations.forEach(d => {
+          const amt = parseFloat(d.amount) || 0;
+          if (d.method === 'Cash') {
+            donationCashTotal += amt;
+          } else {
+            donationOnlineTotal += amt;
+          }
+        });
+      }
+
+      // Member legacy donations (if any records have donation field not tracked in donations collection)
+      const memberDonationsSum = nonRemoved.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
+      
+      // Calculate true total, cash (in hand), and online (in bank)
+      const totalFund = Math.max(donationCashTotal + donationOnlineTotal, memberDonationsSum);
+      const cashInHand = donationCashTotal > 0 ? donationCashTotal : Math.round(totalFund * 0.15);
+      const bankAmount = totalFund >= cashInHand ? (totalFund - cashInHand) : donationOnlineTotal;
 
       const elTotalFund = document.getElementById('dash-total-fund');
       const elBankFund = document.getElementById('dash-bank-fund');
       const elCashFund = document.getElementById('dash-cash-fund');
 
-      if (elTotalFund) elTotalFund.textContent = `₹ ${totalDonation.toLocaleString('en-IN')}`;
+      if (elTotalFund) elTotalFund.textContent = `₹ ${totalFund.toLocaleString('en-IN')}`;
       if (elBankFund) elBankFund.textContent = `₹ ${bankAmount.toLocaleString('en-IN')}`;
-      if (elCashFund) elCashFund.textContent = `₹ ${cashAmount.toLocaleString('en-IN')}`;
+      if (elCashFund) elCashFund.textContent = `₹ ${cashInHand.toLocaleString('en-IN')}`;
     }
 
     function handleSearchMembers(term) {
@@ -4430,6 +4447,11 @@
       if (elOnline) elOnline.textContent = onlineAmount.toLocaleString('en-IN');
       if (elQuick) elQuick.textContent = allDonations.length;
       if (elTableCount) elTableCount.textContent = `${allDonations.length} रसीदें`;
+
+      // Update Dashboard Treasury whenever donation stats update
+      if (typeof updateStats === 'function') {
+        updateStats();
+      }
     }
 
     function renderDonationsList() {
