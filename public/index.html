@@ -6340,14 +6340,17 @@
                 ${m.status || 'Active'}
               </span>
             </td>
-            <!-- Paid Yes/No Checkbox toggle -->
+            <!-- Modern Yes/No Toggle Switch & Badge -->
             <td class="p-3.5 text-center">
-              <label class="inline-flex items-center gap-2 cursor-pointer select-none">
-                <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 transition-colors cursor-pointer">
-                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${hasPaid ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}">
+              <div class="inline-flex items-center gap-2.5">
+                <label class="relative inline-flex items-center cursor-pointer select-none">
+                  <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="sr-only peer">
+                  <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+                </label>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${hasPaid ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}">
                   ${hasPaid ? '✅ Paid' : '⏳ Unpaid'}
                 </span>
-              </label>
+              </div>
             </td>
             <!-- Paid (₹) -->
             <td class="p-3.5 text-right font-mono font-bold ${hasPaid ? 'text-emerald-600 font-black' : 'text-slate-400'}">
