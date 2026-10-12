@@ -1197,7 +1197,7 @@
               </button>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5" id="bank-accounts-cards-grid">
+            <div class="mt-4 flex flex-col space-y-3 w-full" id="bank-accounts-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
@@ -5669,56 +5669,56 @@
         const membersList = Array.isArray(b.members) && b.members.length > 0 ? b.members : (b.member ? [b.member] : []);
 
         const membersBadges = membersList.map(m => `
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50 text-blue-900 border border-blue-200/80 text-[11px] font-semibold">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50 text-blue-900 border border-blue-200/80 text-[11px] font-semibold flex-shrink-0">
             <i class="fa-solid fa-user text-[9px] text-blue-600"></i>
             <span>${m}</span>
           </div>
         `).join('');
 
         return `
-          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3">
-            <div>
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center text-sm shadow-sm flex-shrink-0">
-                    <i class="fa-solid fa-building-columns"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <h4 class="font-bold text-slate-900 text-xs truncate">${b.bankName}</h4>
-                    <p class="text-[10px] text-slate-400 truncate">${b.branchName || 'शाखा विवरण नहीं'}</p>
-                  </div>
+          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 w-full">
+            
+            <!-- Left: Bank Info & Account Number -->
+            <div class="flex items-center gap-3.5 min-w-[260px] flex-shrink-0">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-bold text-slate-900 text-sm truncate">${b.bankName}</h4>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isJoint ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'} flex-shrink-0">
+                    ${isJoint ? '👥 Joint' : '👤 Single'}
+                  </span>
                 </div>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isJoint ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'} flex-shrink-0">
-                  ${isJoint ? '👥 Joint' : '👤 Single'}
-                </span>
-              </div>
-
-              <!-- Account Number -->
-              <div class="mt-3 bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex items-center justify-between">
-                <span class="text-[10px] font-bold text-slate-400 uppercase">A/C No.</span>
-                <span class="font-mono font-black text-slate-900 text-xs tracking-wider">${b.accountNumber}</span>
-              </div>
-
-              <!-- Account Members -->
-              <div class="mt-3">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">खाताधारक सदस्य (Account Members):</p>
-                <div class="flex flex-wrap gap-1.5">
-                  ${membersBadges || '<span class="text-xs text-slate-400">सदस्य नाम उपलब्ध नहीं</span>'}
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase">A/C:</span>
+                  <span class="font-mono font-black text-slate-900 text-xs tracking-wider bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200/60">${b.accountNumber}</span>
+                  ${b.branchName ? `<span class="text-[11px] text-slate-400 truncate max-w-[140px]">• ${b.branchName}</span>` : ''}
                 </div>
               </div>
-
-              ${b.remarks ? `<p class="text-[11px] text-slate-500 mt-2.5 italic border-t border-slate-100 pt-2"><i class="fa-solid fa-circle-info text-[9px] text-slate-400 mr-1"></i>${b.remarks}</p>` : ''}
             </div>
 
-            <!-- Action buttons -->
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-1">
-              <button onclick="editBankAccountItem('${b.id}')" class="text-blue-700 hover:text-blue-900 text-xs p-1.5 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-1 font-semibold" title="संपादित करें (Edit)">
-                <i class="fa-solid fa-pen-to-square"></i> <span>Edit</span>
+            <!-- Middle: Account Members (Horizontal wrapped flow) -->
+            <div class="flex-1 min-w-0 md:px-4 md:border-x md:border-slate-100">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">खाताधारक सदस्य (Account Members):</p>
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${membersBadges || '<span class="text-xs text-slate-400">सदस्य नाम उपलब्ध नहीं</span>'}
+              </div>
+              ${b.remarks ? `<p class="text-[11px] text-slate-500 mt-1.5 italic"><i class="fa-solid fa-circle-info text-[9px] text-slate-400 mr-1"></i>${b.remarks}</p>` : ''}
+            </div>
+
+            <!-- Right: Action Buttons -->
+            <div class="flex items-center justify-end gap-1.5 flex-shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
+              <button onclick="editBankAccountItem('${b.id}')" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition-colors flex items-center gap-1.5" title="संपादित करें (Edit)">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Edit</span>
               </button>
-              <button onclick="deleteBankAccountItem('${b.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors flex items-center gap-1 font-semibold" title="हटाएं (Delete)">
-                <i class="fa-solid fa-trash-can"></i> <span>Delete</span>
+              <button onclick="deleteBankAccountItem('${b.id}')" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition-colors flex items-center gap-1.5" title="हटाएं (Delete)">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Delete</span>
               </button>
             </div>
+
           </div>
         `;
       }).join('');
