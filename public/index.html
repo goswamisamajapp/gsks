@@ -1014,6 +1014,7 @@
                   <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
                   <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
                   <th class="p-3.5 font-mono text-right">कुल / Total (₹)</th>
+                  <th class="p-3.5 text-center pr-5">नोटिफिकेशन / Alert</th>
                 </tr>
               </thead>
               <tbody id="pariwarik-table-body" class="divide-y divide-slate-100">
@@ -6649,7 +6650,7 @@
       if (pariwarikMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" class="p-10 text-center text-slate-400">
+            <td colspan="7" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-cyan-600"></i>
               <p class="text-xs font-bold text-slate-600">सदस्य सूची लोड हो रही है...</p>
               <p class="text-[11px] text-slate-400 mt-1">कृपया एक क्षण प्रतीक्षा करें।</p>
@@ -6684,7 +6685,7 @@
       if (filteredMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" class="p-10 text-center text-slate-400">
+            <td colspan="7" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-300"></i>
               <p class="text-xs font-bold text-slate-600">"${currentPariwarikSearchTerm}" के लिए कोई सदस्य नहीं मिला।</p>
               <p class="text-[11px] text-slate-400 mt-1">कृपया सही नाम, मोबाइल नंबर या सदस्य ID दर्ज करें।</p>
@@ -6730,9 +6731,23 @@
             <td class="p-3.5 text-right font-mono font-black text-slate-900">
               ₹${cumulativeTotalForMonth.toLocaleString('en-IN')}
             </td>
+            <!-- Push Notification Button Column -->
+            <td class="p-3.5 text-center pr-5">
+              <button type="button" 
+                      onclick="sendPariwarikPushNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}')" 
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
+                      title="पुश नोटिफिकेशन भेजें (Push Notification)">
+                <i class="fa-solid fa-bell text-[11px]"></i>
+                <span class="hidden sm:inline">पुश भेजें</span>
+              </button>
+            </td>
           </tr>
         `;
       }).join('');
+    }
+
+    function sendPariwarikPushNotification(memberId, memberName, memberPhone) {
+      alert(`🔔 पुश नोटिफिकेशन (Push Notification):\n\nसदस्य: ${memberName || '--'} (${memberId})\nमोबाइल: ${memberPhone || '--'}\nचयनित माह: ${currentPariwarikMonth}\n\nनोट: यूजर डैशबोर्ड तैयार होने पर सदस्य के ऐप पर सीधा पुश अलर्ट डिलीवर होगा!`);
     }
 
     window.isPariwarikMember = isPariwarikMember;
@@ -6742,6 +6757,7 @@
     window.renderPariwarikView = renderPariwarikView;
     window.handlePariwarikSearch = handlePariwarikSearch;
     window.clearPariwarikSearch = clearPariwarikSearch;
+    window.sendPariwarikPushNotification = sendPariwarikPushNotification;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
