@@ -894,7 +894,6 @@
                 <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
                   <th class="p-3.5 pl-5">सदस्य ID / नाम</th>
                   <th class="p-3.5">मोबाइल / पता</th>
-                  <th class="p-3.5">स्थिति (Status)</th>
                   <th class="p-3.5 text-center">भुगतान स्थिति (Paid Yes/No)</th>
                   <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
                   <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
@@ -6316,7 +6315,7 @@
       if (pariwarikMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="7" class="p-10 text-center text-slate-400">
+            <td colspan="6" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-users-slash text-3xl mb-2 text-slate-300"></i>
               <p class="text-xs font-bold text-slate-600">कोई पारिवारिक आर्थिक योजना सदस्य पंजीकृत नहीं है।</p>
               <p class="text-[11px] text-slate-400 mt-1">सदस्य विवरण में "पारिवारिक आर्थिक योजना सदस्य" चेकबॉक्स को टिक करें।</p>
@@ -6332,10 +6331,6 @@
         const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
         const mTotal = PARIWARIK_MONTHLY_FEE;
 
-        const statusClass = m.status === 'Prime Member'
-          ? 'bg-amber-100 text-amber-800'
-          : (m.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600');
-
         return `
           <tr class="hover:bg-slate-50/80 transition-colors">
             <td class="p-3.5 pl-5">
@@ -6345,11 +6340,6 @@
             <td class="p-3.5 text-slate-600">
               <div>${m.phone || '--'}</div>
               <div class="text-[10px] text-slate-400">${m.address || '--'}</div>
-            </td>
-            <td class="p-3.5">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${statusClass}">
-                ${m.status || 'Active'}
-              </span>
             </td>
             <!-- Modern Yes/No Toggle Switch & Badge -->
             <td class="p-3.5 text-center">
