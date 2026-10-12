@@ -1244,7 +1244,7 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-            <button onclick="openBankDepositModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+            <button type="button" id="btn-record-bank-deposit" onclick="openBankDepositModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
               <i class="fa-solid fa-plus text-xs"></i>
               <span>+ बैंक में जमा दर्ज करें (Record Bank Deposit)</span>
             </button>
@@ -3395,13 +3395,13 @@
   <!-- ============================================================== -->
   <!-- MODAL: RECORD BANK DEPOSIT (बैंक में सीधी जमा दर्ज करें)       -->
   <!-- ============================================================== -->
-  <div id="bank-deposit-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div id="bank-deposit-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
         <h3 id="bank-deposit-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
           <i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)
         </h3>
-        <button onclick="closeBankDepositModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+        <button type="button" onclick="closeBankDepositModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -7402,6 +7402,12 @@
     window.deleteFundTransferItem = deleteFundTransferItem;
     window.filterFundTransfers = filterFundTransfers;
     window.renderFundTransfersList = renderFundTransfersList;
+
+    window.openBankDepositModal = openBankDepositModal;
+    window.closeBankDepositModal = closeBankDepositModal;
+    window.handleSaveBankDeposit = handleSaveBankDeposit;
+    window.deleteBankDepositItem = deleteBankDepositItem;
+    window.renderBankTransactionsView = renderBankTransactionsView;
 
     window.openAddStatusModal = openAddStatusModal;
     window.editStatusMasterItem = editStatusMasterItem;
