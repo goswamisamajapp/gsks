@@ -2515,9 +2515,18 @@
           </div>
         </div>
 
-        <!-- Party Name / Receiver -->
+        <!-- Party Name / Receiver / Bank Selector -->
         <div>
           <label class="block font-bold text-slate-700 mb-1" id="fundtransfer-party-label">पार्टी / प्राप्तकर्ता का नाम (Party Name / Receiver)</label>
+          
+          <!-- Dynamic Bank Account Dropdown (Visible when transfer involves a Bank) -->
+          <div id="fundtransfer-bank-select-wrapper" class="hidden mb-2">
+            <select id="fundtransfer-bank-select" onchange="handleFundTransferBankSelect(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+              <!-- Dynamically populated from masterSettings.bankAccounts -->
+            </select>
+          </div>
+
+          <!-- Free text input for party name or custom bank name -->
           <input type="text" id="fundtransfer-party" placeholder="जैसे: वेंडर / टेंट वाले / कोषाध्यक्ष / स्वैच्छिक" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
         </div>
 
@@ -5754,6 +5763,54 @@
       }
     }
 
+    // Populate Bank Account Dropdown in Fund Transfer Modal
+    function populateFundTransferBankDropdown(selectedVal = '') {
+      const select = document.getElementById('fundtransfer-bank-select');
+      if (!select) return;
+      const accounts = (masterSettings && Array.isArray(masterSettings.bankAccounts)) ? masterSettings.bankAccounts : [];
+
+      if (accounts.length === 0) {
+        select.innerHTML = `<option value="">-- कोई बैंक खाता दर्ज नहीं है (अन्य चुनें) --</option><option value="__custom__">➕ अन्य / मैनुअल दर्ज करें...</option>`;
+      } else {
+        select.innerHTML = `<option value="">-- पंजीकृत बैंक खाता चुनें (Select Bank Account) --</option>` +
+          accounts.map(acc => {
+            const accNumMasked = acc.accountNumber ? ` (खाता: ${acc.accountNumber})` : '';
+            const branchText = acc.branchName ? ` - ${acc.branchName}` : '';
+            const title = `${acc.bankName}${accNumMasked}${branchText}`;
+            return `<option value="${escapeHtml(title)}">${escapeHtml(title)}</option>`;
+          }).join('') +
+          `<option value="__custom__">➕ अन्य बैंक / अन्य नाम दर्ज करें...</option>`;
+      }
+
+      if (selectedVal) {
+        // Check if selectedVal exists in options
+        let matched = false;
+        for (let opt of select.options) {
+          if (opt.value === selectedVal) {
+            select.value = selectedVal;
+            matched = true;
+            break;
+          }
+        }
+        if (!matched && selectedVal) {
+          select.value = '__custom__';
+        }
+      } else {
+        select.selectedIndex = 0;
+      }
+    }
+
+    function handleFundTransferBankSelect(val) {
+      const partyInput = document.getElementById('fundtransfer-party');
+      if (!partyInput) return;
+      if (val === '__custom__') {
+        partyInput.value = '';
+        partyInput.focus();
+      } else if (val) {
+        partyInput.value = val;
+      }
+    }
+
     // --- Fund Transfers Functions ---
     function openFundTransferModal(transferId = null) {
       closeAllModals();
@@ -5771,6 +5828,8 @@
         document.getElementById('fundtransfer-date').value = item.date;
         document.getElementById('fundtransfer-party').value = item.party || '';
         
+        populateFundTransferBankDropdown(item.party || '');
+
         // Match remarks dropdown or fallback to text
         const select = document.getElementById('fundtransfer-remarks-select');
         if (select && item.purpose) {
@@ -5785,6 +5844,8 @@
         document.getElementById('fundtransfer-date').value = new Date().toISOString().split('T')[0];
         document.getElementById('fundtransfer-party').value = '';
         document.getElementById('fundtransfer-remarks').value = '';
+
+        populateFundTransferBankDropdown('');
       }
 
       handleTransferTypeChange(document.getElementById('fundtransfer-type').value);
@@ -5799,17 +5860,27 @@
     function handleTransferTypeChange(type) {
       const partyLabel = document.getElementById('fundtransfer-party-label');
       const partyInput = document.getElementById('fundtransfer-party');
+      const bankSelectWrapper = document.getElementById('fundtransfer-bank-select-wrapper');
+      const bankSelect = document.getElementById('fundtransfer-bank-select');
       if (!partyLabel || !partyInput) return;
 
+      const involvesBank = (type === 'Hand to Bank' || type === 'Bank to Hand' || type === 'Bank to Party');
+
+      if (involvesBank && bankSelectWrapper) {
+        bankSelectWrapper.classList.remove('hidden');
+      } else if (bankSelectWrapper) {
+        bankSelectWrapper.classList.add('hidden');
+      }
+
       if (type === 'Bank to Hand') {
-        partyLabel.textContent = 'निकासीकर्ता / विवरण (Withdrawn By / Receiver)';
-        partyInput.placeholder = 'जैसे: कोषाध्यक्ष / स्वयं / शाखा निकासी';
+        partyLabel.textContent = 'स्रोत बैंक खाता / निकासीकर्ता (Source Bank A/C / Withdrawn By)';
+        partyInput.placeholder = 'जैसे: Bandhan Bank Gomoh / कोषाध्यक्ष निकासी';
       } else if (type === 'Hand to Bank') {
         partyLabel.textContent = 'जमाकर्ता / बैंक खाता (Deposited By / Bank Account)';
-        partyInput.placeholder = 'जैसे: SBI Trust Account (खाता सं. 1234)';
+        partyInput.placeholder = 'जैसे: Bandhan Bank Gomoh / SBI Trust A/C';
       } else if (type === 'Bank to Party') {
-        partyLabel.textContent = 'पार्टी / वेंडर का नाम (Party / Vendor Name) *';
-        partyInput.placeholder = 'जैसे: टेंट हाउस, कैटरर, सामग्री वेंडर';
+        partyLabel.textContent = 'भुगतान बैंक खाता एवं पार्टी / वेंडर (Bank A/C & Party/Vendor) *';
+        partyInput.placeholder = 'जैसे: Bandhan Bank - टेंट हाउस वेंडर';
       } else if (type === 'Cash to Party') {
         partyLabel.textContent = 'पार्टी / प्राप्तकर्ता का नाम (Receiver / Party Name) *';
         partyInput.placeholder = 'जैसे: लाउडस्पीकर किराया, चाय-नाश्ता, विविध';
