@@ -6731,15 +6731,24 @@
             <td class="p-3.5 text-right font-mono font-black text-slate-900">
               ₹${cumulativeTotalForMonth.toLocaleString('en-IN')}
             </td>
-            <!-- Push Notification Button Column -->
+            <!-- Notification & WhatsApp Action Column -->
             <td class="p-3.5 text-center pr-5">
-              <button type="button" 
-                      onclick="sendPariwarikPushNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}')" 
-                      class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
-                      title="पुश नोटिफिकेशन भेजें (Push Notification)">
-                <i class="fa-solid fa-bell text-[11px]"></i>
-                <span class="hidden sm:inline">पुश भेजें</span>
-              </button>
+              <div class="inline-flex items-center gap-1.5 justify-center">
+                <button type="button" 
+                        onclick="sendPariwarikPushNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}')" 
+                        class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
+                        title="पुश नोटिफिकेशन भेजें (Push Notification)">
+                  <i class="fa-solid fa-bell text-[11px]"></i>
+                  <span class="hidden sm:inline">पुश</span>
+                </button>
+                <button type="button" 
+                        onclick="sendPariwarikWhatsAppNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}', ${hasPaid})" 
+                        class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
+                        title="व्हाट्सएप पर भुगतान रिमाइंडर भेजें (WhatsApp Notification)">
+                  <i class="fa-brands fa-whatsapp text-xs"></i>
+                  <span class="hidden sm:inline">WhatsApp</span>
+                </button>
+              </div>
             </td>
           </tr>
         `;
@@ -6750,6 +6759,29 @@
       alert(`🔔 पुश नोटिफिकेशन (Push Notification):\n\nसदस्य: ${memberName || '--'} (${memberId})\nमोबाइल: ${memberPhone || '--'}\nचयनित माह: ${currentPariwarikMonth}\n\nनोट: यूजर डैशबोर्ड तैयार होने पर सदस्य के ऐप पर सीधा पुश अलर्ट डिलीवर होगा!`);
     }
 
+    function sendPariwarikWhatsAppNotification(memberId, memberName, memberPhone, hasPaid) {
+      const cleanPhone = (memberPhone || '').replace(/\D/g, '');
+      const validPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+      
+      const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
+      const monthLabel = activeMonthCfg.label || currentPariwarikMonth;
+
+      let msg = '';
+      if (!hasPaid) {
+        msg = `जय शिव शम्भू 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\nअखिल भारतीय शैव समाज सेवा ट्रस्ट (GSKS) के पारिवारिक आर्थिक योजना अंतर्गत *${monthLabel}* माह का ₹${PARIWARIK_MONTHLY_FEE} का अंशदान अभी तक प्राप्त नहीं हुआ है।\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- अखिल भारतीय शैव समाज सेवा ट्रस्ट`;
+      } else {
+        msg = `जय शिव शम्भू 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\nअखिल भारतीय शैव समाज सेवा ट्रस्ट (GSKS) के पारिवारिक आर्थिक योजना अंतर्गत *${monthLabel}* माह का आपका ₹${PARIWARIK_MONTHLY_FEE} का अंशदान सफलतापूर्वक प्राप्त हो चुका है।\n\nआपके सहयोग के लिए धन्यवाद!\n- अखिल भारतीय शैव समाज सेवा ट्रस्ट`;
+      }
+
+      if (!validPhone) {
+        alert(`सदस्य ${memberName} का मोबाइल नंबर उपलब्ध नहीं है!`);
+        return;
+      }
+
+      const waUrl = `https://wa.me/${validPhone}?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    }
+
     window.isPariwarikMember = isPariwarikMember;
     window.isPariwarikPaidForMonth = isPariwarikPaidForMonth;
     window.selectPariwarikMonth = selectPariwarikMonth;
@@ -6758,6 +6790,7 @@
     window.handlePariwarikSearch = handlePariwarikSearch;
     window.clearPariwarikSearch = clearPariwarikSearch;
     window.sendPariwarikPushNotification = sendPariwarikPushNotification;
+    window.sendPariwarikWhatsAppNotification = sendPariwarikWhatsAppNotification;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
