@@ -15,6 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const DATA_FILE = path.join(__dirname, 'public', 'members-data.json');
 const EVENTS_FILE = path.join(__dirname, 'public', 'events-data.json');
 const SETTINGS_FILE = path.join(__dirname, 'public', 'settings-data.json');
+const DONATIONS_FILE = path.join(__dirname, 'public', 'donations-data.json');
 
 const DEFAULT_SETTINGS = {
   statuses: [
@@ -146,6 +147,53 @@ app.post('/api/events/delete', (req, res) => {
     return res.json({ success: true, message: 'Event deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete event' });
+  }
+});
+
+// DONATIONS APIS
+app.get('/api/donations', (req, res) => {
+  try {
+    if (!fs.existsSync(DONATIONS_FILE)) fs.writeFileSync(DONATIONS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(DONATIONS_FILE, 'utf8');
+    const donations = JSON.parse(raw);
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.json(donations);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read donations' });
+  }
+});
+
+app.post('/api/donations/save', (req, res) => {
+  try {
+    const donationItem = req.body;
+    if (!fs.existsSync(DONATIONS_FILE)) fs.writeFileSync(DONATIONS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(DONATIONS_FILE, 'utf8');
+    let donations = JSON.parse(raw);
+
+    const index = donations.findIndex(d => d.id === donationItem.id);
+    if (index !== -1) {
+      donations[index] = { ...donations[index], ...donationItem };
+    } else {
+      donations.unshift(donationItem);
+    }
+    fs.writeFileSync(DONATIONS_FILE, JSON.stringify(donations, null, 2), 'utf8');
+    return res.json({ success: true, donation: donationItem });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save donation' });
+  }
+});
+
+app.post('/api/donations/delete', (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!fs.existsSync(DONATIONS_FILE)) fs.writeFileSync(DONATIONS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(DONATIONS_FILE, 'utf8');
+    let donations = JSON.parse(raw);
+    donations = donations.filter(d => d.id !== id);
+    fs.writeFileSync(DONATIONS_FILE, JSON.stringify(donations, null, 2), 'utf8');
+    return res.json({ success: true, message: 'Donation deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete donation' });
   }
 });
 

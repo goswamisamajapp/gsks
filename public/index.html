@@ -229,7 +229,7 @@
             <span class="text-xs text-slate-400 font-medium">1-Click Controls</span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <!-- Action 1: Events & Meetings -->
             <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
@@ -252,6 +252,20 @@
               <div class="min-w-0">
                 <h4 class="text-xs font-bold text-slate-900 group-hover:text-orange-950 truncate">नया सदस्य जोड़ें</h4>
                 <p class="text-[11px] text-slate-500 truncate">+ नया पंजीकरण करें →</p>
+              </div>
+            </button>
+
+            <!-- Action 3: Donations (दान एवं सहयोग) -->
+            <button onclick="switchAdminView('donations')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/40 hover:from-emerald-100 hover:to-teal-100 text-left border border-emerald-200/80 hover:border-emerald-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-emerald-950 truncate">दान एवं सहयोग (Donations)</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-emerald-200/80 text-emerald-900" id="quick-donations-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">दान रसीद व विवरण देखें →</p>
               </div>
             </button>
           </div>
@@ -606,6 +620,140 @@
         <!-- Events Cards Grid -->
         <div id="events-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- Populated via JavaScript -->
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB 4B: DONATIONS & SEWA MANAGEMENT SECTION    -->
+      <!-- ============================================== -->
+      <div id="view-donations-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  दान एवं सहयोग प्रबंधन (Donations & Funds)
+                </h2>
+                <p class="text-xs text-slate-500">दान रसीद, नकद/ऑनलाइन सहयोग, योजना-वार दान सूची एवं पारदर्शी लेखा-जोखा</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openDonationModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>+ नया दान / सहयोग जोड़ें (Add Donation)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Donations Summary 4-Cards Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <!-- Total Donation -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-emerald-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल प्राप्त दान</p>
+              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-total">0</span></h3>
+              <p class="text-[10px] text-emerald-600 font-semibold"><span id="don-stat-count">0</span> रसीदें</p>
+            </div>
+          </div>
+
+          <!-- Today's Donation -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-blue-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-calendar-day"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">आज का दान</p>
+              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-today">0</span></h3>
+              <p class="text-[10px] text-blue-600 font-semibold">Today's Total</p>
+            </div>
+          </div>
+
+          <!-- Cash Donation -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">नकद दान (Cash)</p>
+              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-cash">0</span></h3>
+              <p class="text-[10px] text-amber-600 font-semibold">Cash in Hand</p>
+            </div>
+          </div>
+
+          <!-- Online Donation -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-purple-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ऑनलाइन दान (UPI/Bank)</p>
+              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-online">0</span></h3>
+              <p class="text-[10px] text-purple-600 font-semibold">Bank / QR</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Controls & Search/Filter Strip -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <!-- Left: Search Box -->
+          <div class="relative flex-1 min-w-[200px]">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+            <input type="text" id="donation-search-input" oninput="renderDonationsList()" placeholder="दानदाता का नाम, सदस्य ID या योजना खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium">
+          </div>
+
+          <!-- Right: Method & Scheme Filters -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Method Filter -->
+            <select id="donation-method-filter" onchange="renderDonationsList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+              <option value="ALL">सभी माध्यम (Cash + Online)</option>
+              <option value="Cash">💵 केवल नकद (Cash)</option>
+              <option value="Online">📱 केवल ऑनलाइन (Online)</option>
+            </select>
+
+            <!-- Scheme Filter -->
+            <select id="donation-scheme-filter" onchange="renderDonationsList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
+              <option value="ALL">सभी योजनाएं</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Donations List Table / Cards (Recent to Old) -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-emerald-600"></i> दानदाता सूची (हाल ही के दान - Recent to Old)
+            </h3>
+            <span class="text-xs text-slate-400 font-medium font-mono" id="donations-table-count">0 रसीदें</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                  <th class="p-3.5 pl-5">रसीद क्र. / दिनांक</th>
+                  <th class="p-3.5">दानदाता (Donor)</th>
+                  <th class="p-3.5">सहयोग योजना (Scheme)</th>
+                  <th class="p-3.5">माध्यम (Method)</th>
+                  <th class="p-3.5 font-mono text-right">राशि (Amount)</th>
+                  <th class="p-3.5 pr-5 text-center">कार्रवाई (Actions)</th>
+                </tr>
+              </thead>
+              <tbody id="donations-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderDonationsList() -->
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>
@@ -1455,6 +1603,216 @@
           </button>
         </div>
       </div>
+  <!-- ============================================================== -->
+  <!-- MODAL 5C: ADD / EDIT DONATION MODAL                            -->
+  <!-- ============================================================== -->
+  <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeDonationModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-4">
+        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+        <div>
+          <h3 id="donation-modal-title" class="text-base font-black text-slate-900">नया दान / सहयोग रसीद जोड़ें</h3>
+          <p class="text-[11px] text-slate-500">GSKS दान एवं कोष प्रबंधन</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveDonation(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="donation-id">
+
+        <!-- Member Selector / Donor Name -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold text-slate-700">दानदाता सदस्य (Select Member) *</label>
+            <span class="text-[10px] text-slate-400">ट्रस्ट पंजीकृत सदस्य</span>
+          </div>
+          <select id="donation-member-id" onchange="handleDonationMemberSelect(this.value)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            <option value="">-- सदस्य चुनें (Select Member) --</option>
+            <!-- Dynamically populated from allMembers -->
+          </select>
+        </div>
+
+        <!-- Custom/Non-member Donor Name override -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">दानदाता का नाम (Donor Name) *</label>
+            <input type="text" id="donation-donor-name" required placeholder="जैसे: अमित कुमार गोस्वामी" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">मोबाइल नंबर (Phone Number)</label>
+            <input type="tel" id="donation-donor-phone" placeholder="10 अंकों का मोबाइल नंबर" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+          </div>
+        </div>
+
+        <!-- Scheme Selection -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">सहयोग योजना (Donation Scheme) *</label>
+          <select id="donation-scheme-name" onchange="handleDonationSchemeSelect(this.value)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            <!-- Dynamically populated from masterSettings.schemes -->
+          </select>
+        </div>
+
+        <!-- Amount & Date -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">दान राशि (Amount in ₹) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2 font-bold text-slate-400">₹</span>
+              <input type="number" id="donation-amount" required min="1" placeholder="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            </div>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">दान दिनांक (Date) *</label>
+            <input type="date" id="donation-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+          </div>
+        </div>
+
+        <!-- Payment Method (Cash / Online) -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">भुगतान माध्यम (Donation Method) *</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/70 transition-all">
+              <input type="radio" name="donation-method" value="Cash" checked class="text-amber-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 text-xs">💵 नकद (Cash)</p>
+                <p class="text-[10px] text-slate-400">कोषाध्यक्ष के पास नगद जमा</p>
+              </div>
+            </label>
+
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50/70 transition-all">
+              <input type="radio" name="donation-method" value="Online" class="text-purple-600 focus:ring-0">
+              <div>
+                <p class="font-bold text-slate-800 text-xs">📱 ऑनलाइन (Online/UPI)</p>
+                <p class="text-[10px] text-slate-400">बैंक / QR कोड भुगतान</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Remarks / Note -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विशेष टिप्पणी / रसीद विवरण (Remarks)</label>
+          <input type="text" id="donation-remarks" placeholder="जैसे: मासिक अंशदान / रसीद क्र. / UPI Ref" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeDonationModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md shadow-emerald-500/20 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span id="donation-save-btn-text">रसीद सुरक्षित करें (Save Donation)</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5D: VIEW DONATION RECEIPT MODAL                           -->
+  <!-- ============================================================== -->
+  <div id="view-donation-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeViewDonationModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all print:hidden">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Printable Receipt Card -->
+      <div id="printable-donation-receipt" class="space-y-4">
+        <!-- Receipt Header -->
+        <div class="text-center pb-3 border-b-2 border-dashed border-slate-200">
+          <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl mx-auto mb-2">
+            <i class="fa-solid fa-om"></i>
+          </div>
+          <h3 class="text-sm font-black text-orange-950 font-devanagari">गोस्वामी समाज कल्याण समिति</h3>
+          <p class="text-[10px] text-slate-500">गुनघसा, गोमो, धनबाद - 828401 | दान पावती (Donation Receipt)</p>
+          <div class="mt-2 inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+            रसीद संख्या: <span id="view-don-id">--</span>
+          </div>
+        </div>
+
+        <!-- Receipt Main Details -->
+        <div class="space-y-2.5 text-xs">
+          <div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">दानदाता का नाम:</span>
+            <span class="font-bold text-slate-900" id="view-don-name">--</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">सदस्य पहचान क्र. (ID):</span>
+            <span class="font-mono font-bold text-indigo-700" id="view-don-member-id">--</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">सहयोग योजना:</span>
+            <span class="font-bold text-emerald-800" id="view-don-scheme">--</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">दिनांक (Date):</span>
+            <span class="font-mono font-semibold text-slate-700" id="view-don-date">--</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">भुगतान माध्यम:</span>
+            <span id="view-don-method">--</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">विशेष विवरण / Ref:</span>
+            <span class="font-medium text-slate-600" id="view-don-remarks">--</span>
+          </div>
+
+          <!-- Total Amount Highlight -->
+          <div class="bg-emerald-50 rounded-2xl p-3 border border-emerald-200 flex items-center justify-between mt-3">
+            <span class="font-bold text-emerald-900 text-xs">कुल प्राप्त राशि (Amount Received):</span>
+            <span class="text-xl font-black text-emerald-800 font-mono" id="view-don-amount">₹0</span>
+          </div>
+        </div>
+
+        <div class="text-center pt-2">
+          <p class="text-[10px] text-slate-400">समाज सेवा एवं परोपकार में आपके सहयोग के लिए हार्दिक धन्यवाद। 🙏</p>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2 print:hidden">
+        <button id="view-don-print-btn" onclick="printDonationReceipt()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition-colors shadow-sm flex items-center gap-1.5">
+          <i class="fa-solid fa-print"></i> रसीद प्रिंट करें (Print)
+        </button>
+        <button id="view-don-edit-btn" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-pen"></i> एडिट
+        </button>
+        <button id="view-don-delete-btn" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-trash-can"></i> डिलीट
+        </button>
+        <button type="button" onclick="closeViewDonationModal()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
+          बंद करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5E: DELETE DONATION CONFIRMATION                          -->
+  <!-- ============================================================== -->
+  <div id="delete-donation-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center animate-in fade-in zoom-in-95 duration-200">
+      <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3">
+        <i class="fa-solid fa-receipt"></i>
+      </div>
+      <h3 class="text-base font-black text-slate-900">दान रसीद हटाना चाहते हैं?</h3>
+      <p class="text-xs text-slate-500 mt-1 mb-4">
+        रसीद संख्या <span id="delete-donation-id-span" class="font-bold text-slate-800">--</span> को हमेशा के लिए हटा दिया जाएगा।
+      </p>
+      <div class="flex items-center gap-2">
+        <button onclick="confirmDeleteDonation()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm">
+          हाँ, हटाएं
+        </button>
+        <button onclick="closeDeleteDonationModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+          रद्द करें
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1719,9 +2077,11 @@
   <script>
     let allMembers = [];
     let allEvents = [];
+    let allDonations = [];
     let currentEventFilter = 'ALL';
     let currentEventStatusFilter = 'ALL';
     let pendingDeleteEventId = null;
+    let pendingDeleteDonationId = null;
     let currentFilterAddress = 'ALL';
     let currentFilterStatus = 'ALL';
     let currentSearchTerm = '';
@@ -1833,12 +2193,13 @@
       if (elDate) elDate.textContent = new Date().toLocaleDateString('hi-IN', options);
     }
 
-    // Switch between Admin views: dashboard, members, prime, active, inactive, events, archived
+    // Switch between Admin views: dashboard, members, prime, active, inactive, events, donations, archived
     function switchAdminView(view, statusFilter = null) {
       const dashSection = document.getElementById('view-dashboard-section');
       const membersSection = document.getElementById('view-members-section');
       const archivedSection = document.getElementById('view-archived-section');
       const eventsSection = document.getElementById('view-events-section');
+      const donationsSection = document.getElementById('view-donations-section');
       const settingsSection = document.getElementById('view-settings-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
@@ -1870,6 +2231,7 @@
       membersSection.classList.add('hidden');
       archivedSection.classList.add('hidden');
       if (eventsSection) eventsSection.classList.add('hidden');
+      if (donationsSection) donationsSection.classList.add('hidden');
       if (settingsSection) settingsSection.classList.add('hidden');
 
       if (view === 'settings') {
@@ -1877,6 +2239,9 @@
         if (navSettings) navSettings.className = 'px-3.5 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/20';
         if (mobSettings) mobSettings.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
         renderSettingsView();
+      } else if (view === 'donations') {
+        if (donationsSection) donationsSection.classList.remove('hidden');
+        renderDonationsView();
       } else if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
         if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
@@ -1927,6 +2292,7 @@
     const db = firebase.firestore();
     const membersCol = db.collection('members');
     const eventsCol = db.collection('events');
+    const donationsCol = db.collection('donations');
     const settingsCol = db.collection('settings');
 
     let realtimeListenerInitialized = false;
@@ -1971,6 +2337,20 @@
           loadEventsFallback();
         });
 
+        // Listen for live Firestore donations
+        donationsCol.onSnapshot((liveDonationsSnap) => {
+          const dList = [];
+          liveDonationsSnap.forEach(doc => dList.push(doc.data()));
+          allDonations = dList;
+          // Sort donations by date / timestamp descending (recent first)
+          allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          updateDonationsStats();
+          renderDonationsList();
+        }, (err) => {
+          console.warn("Firestore donations onSnapshot error:", err);
+          loadDonationsFallback();
+        });
+
         // Listen for live Firestore settings
         settingsCol.doc('master').onSnapshot((docSnap) => {
           if (docSnap.exists) {
@@ -1988,12 +2368,25 @@
         console.error('Firestore init error, falling back:', err);
         loadMembersDataFallback();
         loadEventsFallback();
+        loadDonationsFallback();
         loadSettingsFallback();
       }
     }
 
     // Auto-init immediately when page loads
     initFirebaseRealtime();
+
+    async function loadDonationsFallback() {
+      try {
+        const res = await fetch('/api/donations');
+        allDonations = await res.json();
+        allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+        updateDonationsStats();
+        renderDonationsList();
+      } catch (err) {
+        console.error('Failed to load donations fallback:', err);
+      }
+    }
 
     async function loadEventsFallback() {
       try {
@@ -3887,6 +4280,454 @@
         editSelect.value = curVal;
       }
     }
+
+    // ==============================================
+    // 7. DONATIONS MANAGEMENT LOGIC
+    // ==============================================
+    function renderDonationsView() {
+      populateDonationSchemeDropdowns();
+      populateDonationMemberSelect();
+      updateDonationsStats();
+      renderDonationsList();
+    }
+
+    function populateDonationSchemeDropdowns() {
+      const modalSelect = document.getElementById('donation-scheme-name');
+      const filterSelect = document.getElementById('donation-scheme-filter');
+
+      const schemes = (masterSettings && masterSettings.schemes) ? masterSettings.schemes : [];
+      if (modalSelect) {
+        modalSelect.innerHTML = `<option value="">-- योजना चुनें (Select Scheme) --</option>` +
+          schemes.map(s => {
+            const amtStr = s.amountType === 'fixed' ? ` (₹${s.amount})` : ' (इच्छानुसार)';
+            return `<option value="${s.name}" data-amount="${s.amount || ''}" data-type="${s.amountType || 'fixed'}">${s.name}${amtStr}</option>`;
+          }).join('') +
+          `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
+      }
+
+      if (filterSelect) {
+        const cur = filterSelect.value || 'ALL';
+        filterSelect.innerHTML = `<option value="ALL">सभी योजनाएं</option>` +
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('') +
+          `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
+        filterSelect.value = cur;
+      }
+    }
+
+    function populateDonationMemberSelect() {
+      const select = document.getElementById('donation-member-id');
+      if (!select) return;
+      const nonRemoved = allMembers.filter(m => m.status !== 'removed');
+      select.innerHTML = `<option value="">-- सदस्य चुनें (Select Registered Member) --</option>` +
+        `<option value="NON_MEMBER">➕ अन्य / गैर-सदस्य दानदाता (Guest / Non-Member)</option>` +
+        nonRemoved.map(m => `<option value="${m.id}" data-name="${m.name}" data-phone="${m.phone || ''}">${m.name} (${m.id}) • ${m.address}</option>`).join('');
+    }
+
+    function handleDonationMemberSelect(memberId) {
+      const nameInput = document.getElementById('donation-donor-name');
+      const phoneInput = document.getElementById('donation-donor-phone');
+      if (!memberId) return;
+
+      if (memberId === 'NON_MEMBER') {
+        if (nameInput) { nameInput.value = ''; nameInput.focus(); }
+        if (phoneInput) phoneInput.value = '';
+        return;
+      }
+
+      const member = allMembers.find(m => m.id === memberId);
+      if (member) {
+        if (nameInput) nameInput.value = member.name || '';
+        if (phoneInput) phoneInput.value = member.phone || '';
+      }
+    }
+
+    function handleDonationSchemeSelect(schemeName) {
+      const select = document.getElementById('donation-scheme-name');
+      const amountInput = document.getElementById('donation-amount');
+      if (!select || !amountInput) return;
+
+      const selectedOpt = select.options[select.selectedIndex];
+      if (selectedOpt) {
+        const fixedAmt = selectedOpt.getAttribute('data-amount');
+        const amtType = selectedOpt.getAttribute('data-type');
+        if (amtType === 'fixed' && fixedAmt) {
+          amountInput.value = fixedAmt;
+        }
+      }
+    }
+
+    function updateDonationsStats() {
+      let totalAmount = 0;
+      let todayAmount = 0;
+      let cashAmount = 0;
+      let onlineAmount = 0;
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+
+      allDonations.forEach(d => {
+        const amt = parseFloat(d.amount) || 0;
+        totalAmount += amt;
+
+        const dDate = (d.date || d.createdAt || '').slice(0, 10);
+        if (dDate === todayStr) {
+          todayAmount += amt;
+        }
+
+        if (d.method === 'Cash') {
+          cashAmount += amt;
+        } else if (d.method === 'Online') {
+          onlineAmount += amt;
+        }
+      });
+
+      const elTotal = document.getElementById('don-stat-total');
+      const elCount = document.getElementById('don-stat-count');
+      const elToday = document.getElementById('don-stat-today');
+      const elCash = document.getElementById('don-stat-cash');
+      const elOnline = document.getElementById('don-stat-online');
+      const elQuick = document.getElementById('quick-donations-count');
+      const elTableCount = document.getElementById('donations-table-count');
+
+      if (elTotal) elTotal.textContent = totalAmount.toLocaleString('en-IN');
+      if (elCount) elCount.textContent = allDonations.length;
+      if (elToday) elToday.textContent = todayAmount.toLocaleString('en-IN');
+      if (elCash) elCash.textContent = cashAmount.toLocaleString('en-IN');
+      if (elOnline) elOnline.textContent = onlineAmount.toLocaleString('en-IN');
+      if (elQuick) elQuick.textContent = allDonations.length;
+      if (elTableCount) elTableCount.textContent = `${allDonations.length} रसीदें`;
+    }
+
+    function renderDonationsList() {
+      const tbody = document.getElementById('donations-table-body');
+      if (!tbody) return;
+
+      const searchTerm = (document.getElementById('donation-search-input')?.value || '').toLowerCase().trim();
+      const methodFilter = document.getElementById('donation-method-filter')?.value || 'ALL';
+      const schemeFilter = document.getElementById('donation-scheme-filter')?.value || 'ALL';
+
+      // Always sort recent to old
+      const sorted = [...allDonations].sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+
+      const filtered = sorted.filter(d => {
+        const matchesMethod = (methodFilter === 'ALL' || d.method === methodFilter);
+        const matchesScheme = (schemeFilter === 'ALL' || d.scheme === schemeFilter);
+        
+        const donorName = (d.donorName || '').toLowerCase();
+        const memberId = (d.memberId || '').toLowerCase();
+        const scheme = (d.scheme || '').toLowerCase();
+        const receiptId = (d.id || '').toLowerCase();
+
+        const matchesSearch = !searchTerm || donorName.includes(searchTerm) || memberId.includes(searchTerm) || scheme.includes(searchTerm) || receiptId.includes(searchTerm);
+
+        return matchesMethod && matchesScheme && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-12 text-center text-slate-400">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-2">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+              </div>
+              <p class="font-bold text-slate-700 text-xs">कोई भी दान रसीद उपलब्ध नहीं है</p>
+              <p class="text-[11px] text-slate-400 mt-1">नई रसीद दर्ज करने के लिए <b>"+ नया दान / सहयोग जोड़ें"</b> पर क्लिक करें।</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(d => {
+        const methodBadge = d.method === 'Cash'
+          ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 नकद (Cash)</span>`
+          : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">📱 Online / UPI</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-3.5 pl-5">
+              <span class="font-mono font-bold text-slate-800 text-xs block">${d.id}</span>
+              <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(d.date)}</span>
+            </td>
+            <td class="p-3.5">
+              <div class="font-bold text-slate-900">${d.donorName || '--'}</div>
+              <div class="text-[10px] text-slate-500 font-mono">
+                ${d.memberId && d.memberId !== 'NON_MEMBER' ? `<span class="text-indigo-600 font-semibold">ID: ${d.memberId}</span>` : '<span class="text-slate-400">गैर-सदस्य दान</span>'}
+                ${d.phone ? ` • ${d.phone}` : ''}
+              </div>
+            </td>
+            <td class="p-3.5">
+              <span class="font-semibold text-slate-800">${d.scheme || 'सामान्य सहयोग'}</span>
+              ${d.remarks ? `<p class="text-[10px] text-slate-400 truncate max-w-xs">${d.remarks}</p>` : ''}
+            </td>
+            <td class="p-3.5">
+              ${methodBadge}
+            </td>
+            <td class="p-3.5 text-right font-mono font-black text-slate-900 text-sm">
+              ₹${(parseFloat(d.amount) || 0).toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 pr-5 text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <button onclick="openViewDonationModal('${d.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण व रसीद देखें (View Receipt)">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button onclick="openDonationModal('${d.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संशोधित करें (Edit Donation)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="printDirectReceipt('${d.id}')" class="w-7 h-7 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="रसीद प्रिंट करें (Print)">
+                  <i class="fa-solid fa-print"></i>
+                </button>
+                <button onclick="openDeleteDonationModal('${d.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function formatDonationDate(dtStr) {
+      if (!dtStr) return '--';
+      try {
+        const d = new Date(dtStr);
+        return d.toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      } catch (e) {
+        return dtStr;
+      }
+    }
+
+    function openDonationModal(donationId = null) {
+      try {
+        closeAllModals();
+        populateDonationSchemeDropdowns();
+        populateDonationMemberSelect();
+
+        const modal = document.getElementById('donation-form-modal');
+        if (!modal) return;
+        const titleEl = document.getElementById('donation-modal-title');
+        const btnTextEl = document.getElementById('donation-save-btn-text');
+
+        if (donationId) {
+          const d = allDonations.find(item => item.id === donationId);
+          if (!d) return;
+
+          if (document.getElementById('donation-id')) document.getElementById('donation-id').value = d.id;
+          if (titleEl) titleEl.textContent = 'दान रसीद संपादित करें (Edit Donation)';
+          if (btnTextEl) btnTextEl.textContent = 'अपडेट करें (Update Donation)';
+
+          if (document.getElementById('donation-member-id')) document.getElementById('donation-member-id').value = d.memberId || 'NON_MEMBER';
+          if (document.getElementById('donation-donor-name')) document.getElementById('donation-donor-name').value = d.donorName || '';
+          if (document.getElementById('donation-donor-phone')) document.getElementById('donation-donor-phone').value = d.phone || '';
+          if (document.getElementById('donation-scheme-name')) document.getElementById('donation-scheme-name').value = d.scheme || '';
+          if (document.getElementById('donation-amount')) document.getElementById('donation-amount').value = d.amount || '';
+          if (document.getElementById('donation-date')) document.getElementById('donation-date').value = d.date || '';
+          if (document.getElementById('donation-remarks')) document.getElementById('donation-remarks').value = d.remarks || '';
+
+          const methodRadios = document.getElementsByName('donation-method');
+          for (const r of methodRadios) {
+            r.checked = (r.value === (d.method || 'Cash'));
+          }
+        } else {
+          if (document.getElementById('donation-id')) document.getElementById('donation-id').value = '';
+          if (titleEl) titleEl.textContent = 'नया दान / सहयोग रसीद जोड़ें (Add Donation)';
+          if (btnTextEl) btnTextEl.textContent = 'रसीद सुरक्षित करें (Save Donation)';
+
+          if (document.getElementById('donation-member-id')) document.getElementById('donation-member-id').value = '';
+          if (document.getElementById('donation-donor-name')) document.getElementById('donation-donor-name').value = '';
+          if (document.getElementById('donation-donor-phone')) document.getElementById('donation-donor-phone').value = '';
+          if (document.getElementById('donation-amount')) document.getElementById('donation-amount').value = '';
+          if (document.getElementById('donation-remarks')) document.getElementById('donation-remarks').value = '';
+
+          const todayStr = new Date().toISOString().slice(0, 10);
+          if (document.getElementById('donation-date')) document.getElementById('donation-date').value = todayStr;
+
+          const methodRadios = document.getElementsByName('donation-method');
+          if (methodRadios.length > 0) methodRadios[0].checked = true;
+        }
+
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      } catch (err) {
+        console.error('Error opening donation modal:', err);
+      }
+    }
+
+    function closeDonationModal() {
+      const modal = document.getElementById('donation-form-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    window.openDonationModal = openDonationModal;
+    window.closeDonationModal = closeDonationModal;
+
+    async function handleSaveDonation(e) {
+      e.preventDefault();
+      const existingId = document.getElementById('donation-id').value;
+      const id = existingId || `DON-${Date.now().toString().slice(-6)}`;
+
+      let selectedMethod = 'Cash';
+      const methodRadios = document.getElementsByName('donation-method');
+      for (const r of methodRadios) {
+        if (r.checked) { selectedMethod = r.value; break; }
+      }
+
+      const donationPayload = {
+        id: id,
+        memberId: document.getElementById('donation-member-id').value || 'NON_MEMBER',
+        donorName: document.getElementById('donation-donor-name').value.trim(),
+        phone: document.getElementById('donation-donor-phone').value.trim(),
+        scheme: document.getElementById('donation-scheme-name').value || 'सामान्य न्यास कोष',
+        amount: parseFloat(document.getElementById('donation-amount').value) || 0,
+        date: document.getElementById('donation-date').value,
+        method: selectedMethod,
+        remarks: document.getElementById('donation-remarks').value.trim(),
+        createdAt: new Date().toISOString()
+      };
+
+      // 1. Instant local update
+      const exIdx = allDonations.findIndex(item => item.id === id);
+      if (exIdx !== -1) {
+        allDonations[exIdx] = { ...allDonations[exIdx], ...donationPayload };
+      } else {
+        allDonations.unshift(donationPayload);
+      }
+      updateDonationsStats();
+      renderDonationsList();
+      closeDonationModal();
+
+      // 2. Persist to Express Central Server API
+      try {
+        await fetch('/api/donations/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(donationPayload)
+        });
+      } catch (err) {
+        console.warn('API donation save warning:', err);
+      }
+
+      // 3. Persist to Cloud Firestore Realtime
+      try {
+        if (typeof donationsCol !== 'undefined' && donationsCol) {
+          await donationsCol.doc(donationPayload.id).set(donationPayload, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore donation save warning:', err);
+      }
+    }
+
+    function openViewDonationModal(id) {
+      const d = allDonations.find(item => item.id === id);
+      if (!d) return;
+
+      document.getElementById('view-don-id').textContent = d.id;
+      document.getElementById('view-don-name').textContent = d.donorName || '--';
+      document.getElementById('view-don-member-id').textContent = (d.memberId && d.memberId !== 'NON_MEMBER') ? d.memberId : 'गैर-सदस्य';
+      document.getElementById('view-don-scheme').textContent = d.scheme || 'सामान्य न्यास कोष';
+      document.getElementById('view-don-date').textContent = formatDonationDate(d.date);
+      document.getElementById('view-don-method').innerHTML = d.method === 'Cash'
+        ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 नकद (Cash)</span>`
+        : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">📱 ऑनलाइन (Online/UPI)</span>`;
+      document.getElementById('view-don-remarks').textContent = d.remarks || 'कोई विशेष विवरण नहीं';
+      document.getElementById('view-don-amount').textContent = `₹${(parseFloat(d.amount) || 0).toLocaleString('en-IN')}`;
+
+      // Wire Edit and Delete buttons
+      const editBtn = document.getElementById('view-don-edit-btn');
+      if (editBtn) {
+        editBtn.onclick = () => {
+          closeViewDonationModal();
+          openDonationModal(d.id);
+        };
+      }
+
+      const delBtn = document.getElementById('view-don-delete-btn');
+      if (delBtn) {
+        delBtn.onclick = () => {
+          closeViewDonationModal();
+          openDeleteDonationModal(d.id);
+        };
+      }
+
+      const modal = document.getElementById('view-donation-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeViewDonationModal() {
+      const modal = document.getElementById('view-donation-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    function printDonationReceipt() {
+      window.print();
+    }
+
+    function printDirectReceipt(id) {
+      openViewDonationModal(id);
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
+
+    function openDeleteDonationModal(id) {
+      pendingDeleteDonationId = id;
+      document.getElementById('delete-donation-id-span').textContent = id;
+      document.getElementById('delete-donation-modal').classList.remove('hidden');
+    }
+
+    function closeDeleteDonationModal() {
+      document.getElementById('delete-donation-modal').classList.add('hidden');
+      pendingDeleteDonationId = null;
+    }
+
+    async function confirmDeleteDonation() {
+      if (!pendingDeleteDonationId) return;
+      const id = pendingDeleteDonationId;
+      closeDeleteDonationModal();
+
+      // 1. Local array update
+      allDonations = allDonations.filter(d => d.id !== id);
+      updateDonationsStats();
+      renderDonationsList();
+
+      // 2. Server express API
+      try {
+        await fetch('/api/donations/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch (err) {
+        console.warn('API donation delete warning:', err);
+      }
+
+      // 3. Firestore delete
+      try {
+        if (typeof donationsCol !== 'undefined' && donationsCol) {
+          await donationsCol.doc(id).delete();
+        }
+      } catch (err) {
+        console.warn('Firestore donation delete warning:', err);
+      }
+    }
+
+    window.openViewDonationModal = openViewDonationModal;
+    window.closeViewDonationModal = closeViewDonationModal;
+    window.printDonationReceipt = printDonationReceipt;
+    window.printDirectReceipt = printDirectReceipt;
+    window.openDeleteDonationModal = openDeleteDonationModal;
+    window.closeDeleteDonationModal = closeDeleteDonationModal;
+    window.confirmDeleteDonation = confirmDeleteDonation;
+    window.renderDonationsView = renderDonationsView;
+    window.renderDonationsList = renderDonationsList;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
