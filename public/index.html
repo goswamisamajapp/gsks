@@ -3426,6 +3426,13 @@
       }
     }
 
+    function handleEventParticipants(id) {
+      const ev = allEvents.find(e => e.id === id);
+      const title = ev ? ev.title : 'इवेंट';
+      alert(`👥 प्रतिभागी एवं उपस्थिति (Participants) - "${title}"\n(यह फीचर जल्द ही एक्टिव होगा)`);
+    }
+
+    window.handleEventParticipants = handleEventParticipants;
     window.openViewEventModal = openViewEventModal;
     window.closeViewEventModal = closeViewEventModal;
 
@@ -3456,25 +3463,14 @@
       container.innerHTML = filtered.map(e => `
         <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
-            <!-- Top Strip: Category Badge, Status Badge & Actions (View, Edit, Delete) -->
+            <!-- Top Strip: Category Badge, Status Badge & Audience Tag (Previously at bottom) -->
             <div class="flex items-start justify-between gap-2 mb-3">
               <div class="flex items-center gap-1.5 flex-wrap">
                 ${getEventBadge(e.category)}
                 ${getEventStatusBadge(e.status)}
               </div>
-              <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
-                <!-- 1. View Button -->
-                <button onclick="openViewEventModal('${e.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण देखें (View Event)">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-                <!-- 2. Edit Button -->
-                <button onclick="openEventModal('${e.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संशोधित करें (Edit Event)">
-                  <i class="fa-solid fa-pen"></i>
-                </button>
-                <!-- 3. Delete Button -->
-                <button onclick="openDeleteEventModal('${e.id}', '${e.title}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete Event)">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
+              <div class="flex-shrink-0">
+                ${getAudienceBadge(e.audience, e.selectedMembers ? e.selectedMembers.length : 0)}
               </div>
             </div>
 
@@ -3501,10 +3497,27 @@
             </p>
           </div>
 
-          <!-- Bottom Audience strip -->
+          <!-- Bottom Strip: Actions (Participants, View, Edit, Delete) (Previously at top) -->
           <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span class="text-[11px] text-slate-400 font-medium">अधिसूचना लक्षित:</span>
-            ${getAudienceBadge(e.audience, e.selectedMembers ? e.selectedMembers.length : 0)}
+            <span class="text-[11px] text-slate-400 font-medium">कार्रवाई (Actions):</span>
+            <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+              <!-- 0. Participants Button (New) -->
+              <button onclick="handleEventParticipants('${e.id}')" class="w-7 h-7 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="उपस्थिति / प्रतिभागी (Participants)">
+                <i class="fa-solid fa-user-check"></i>
+              </button>
+              <!-- 1. View Button -->
+              <button onclick="openViewEventModal('${e.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण देखें (View Event)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <!-- 2. Edit Button -->
+              <button onclick="openEventModal('${e.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संशोधित करें (Edit Event)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <!-- 3. Delete Button -->
+              <button onclick="openDeleteEventModal('${e.id}', '${e.title}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete Event)">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
           </div>
         </div>
       `).join('');
