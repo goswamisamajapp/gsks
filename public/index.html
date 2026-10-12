@@ -889,6 +889,7 @@
                   <th class="p-3.5 pl-5">सदस्य ID / नाम</th>
                   <th class="p-3.5">मोबाइल / पता</th>
                   <th class="p-3.5">स्थिति (Status)</th>
+                  <th class="p-3.5 text-center">भुगतान स्थिति (Paid Yes/No)</th>
                   <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
                   <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
                   <th class="p-3.5 font-mono text-right">कुल / Total (₹)</th>
@@ -6229,9 +6230,34 @@
     // ==============================================================
     // 9. PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) LOGIC
     // ==============================================================
+    const PARIWARIK_MONTHLY_FEE = 150;
+
     function isPariwarikMember(m) {
       if (!m) return false;
       return (m.pariwarikMember === true || m.pariwarikMember === 'true' || m.pariwarikMember === 'yes' || m.pariwarikMember === 'Yes');
+    }
+
+    function isPariwarikPaid(m) {
+      if (!m) return false;
+      return (m.pariwarikPaid === true || m.pariwarikPaid === 'true' || m.pariwarikPaid === 'yes' || m.pariwarikPaid === 'Yes');
+    }
+
+    async function togglePariwarikPaidStatus(memberId, isChecked) {
+      const idx = allMembers.findIndex(m => m.id === memberId);
+      if (idx === -1) return;
+      
+      allMembers[idx].pariwarikPaid = !!isChecked;
+      renderPariwarikView();
+
+      // Persist to Central Server
+      try {
+        await syncMemberToBackend({
+          id: memberId,
+          pariwarikPaid: !!isChecked
+        });
+      } catch (err) {
+        console.warn('Error saving pariwarik paid status:', err);
+      }
     }
 
     function renderPariwarikView() {
@@ -6239,14 +6265,16 @@
       // Filter ONLY members where Pariwarik Arthik Yojna Member checkbox is checked (Yes)
       const pariwarikMembers = nonRemoved.filter(m => isPariwarikMember(m));
       
-      // Calculate Paid for pariwarik members
-      const paidSum = pariwarikMembers.reduce((sum, m) => sum + (Number(m.donation) || 0), 0);
+      const memberCount = pariwarikMembers.length;
+      // 1. Total Amount = Members * 150
+      const totalSum = memberCount * PARIWARIK_MONTHLY_FEE;
 
-      // Calculate Dues for pariwarik members
-      const duesSum = pariwarikMembers.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
-      
-      // Total Amount = Paid + Dues
-      const totalSum = paidSum + duesSum;
+      // 2. Paid members count and Paid Amount
+      const paidMembersCount = pariwarikMembers.filter(m => isPariwarikPaid(m)).length;
+      const paidSum = paidMembersCount * PARIWARIK_MONTHLY_FEE;
+
+      // 3. Dues Amount = Total Amount - Paid Amount (Unpaid members * 150)
+      const duesSum = totalSum - paidSum;
 
       // Update Top Summary Cards
       const elMembers = document.getElementById('pariwarik-stat-members');
@@ -6255,11 +6283,11 @@
       const elDues = document.getElementById('pariwarik-stat-dues');
       const elCount = document.getElementById('pariwarik-members-count');
 
-      if (elMembers) elMembers.textContent = pariwarikMembers.length;
+      if (elMembers) elMembers.textContent = memberCount;
       if (elTotal) elTotal.textContent = `₹ ${totalSum.toLocaleString('en-IN')}`;
       if (elPaid) elPaid.textContent = `₹ ${paidSum.toLocaleString('en-IN')}`;
       if (elDues) elDues.textContent = `₹ ${duesSum.toLocaleString('en-IN')}`;
-      if (elCount) elCount.textContent = `${pariwarikMembers.length} सदस्य`;
+      if (elCount) elCount.textContent = `${memberCount} सदस्य`;
 
       // Render Table Breakdown
       const tbody = document.getElementById('pariwarik-table-body');
@@ -6268,7 +6296,7 @@
       if (pariwarikMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" class="p-10 text-center text-slate-400">
+            <td colspan="7" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-users-slash text-3xl mb-2 text-slate-300"></i>
               <p class="text-xs font-bold text-slate-600">कोई पारिवारिक आर्थिक योजना सदस्य पंजीकृत नहीं है।</p>
               <p class="text-[11px] text-slate-400 mt-1">सदस्य विवरण में "पारिवारिक आर्थिक योजना सदस्य" चेकबॉक्स को टिक करें।</p>
@@ -6279,9 +6307,11 @@
       }
 
       tbody.innerHTML = pariwarikMembers.map(m => {
-        const mPaid = Number(m.donation) || 0;
-        const mDues = Number(m.dues) || 0;
-        const mTotal = mPaid + mDues;
+        const hasPaid = isPariwarikPaid(m);
+        const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
+        const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+        const mTotal = PARIWARIK_MONTHLY_FEE;
+
         const statusClass = m.status === 'Prime Member'
           ? 'bg-amber-100 text-amber-800'
           : (m.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600');
@@ -6301,12 +6331,24 @@
                 ${m.status || 'Active'}
               </span>
             </td>
-            <td class="p-3.5 text-right font-mono font-bold text-emerald-600">
+            <!-- Paid Yes/No Checkbox toggle -->
+            <td class="p-3.5 text-center">
+              <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 transition-colors cursor-pointer">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${hasPaid ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}">
+                  ${hasPaid ? '✅ Paid' : '⏳ Unpaid'}
+                </span>
+              </label>
+            </td>
+            <!-- Paid (₹) -->
+            <td class="p-3.5 text-right font-mono font-bold ${hasPaid ? 'text-emerald-600 font-black' : 'text-slate-400'}">
               ₹${mPaid.toLocaleString('en-IN')}
             </td>
-            <td class="p-3.5 text-right font-mono font-bold text-rose-600">
+            <!-- Dues (₹) -->
+            <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
               ₹${mDues.toLocaleString('en-IN')}
             </td>
+            <!-- Total (₹) -->
             <td class="p-3.5 text-right font-mono font-black text-slate-900">
               ₹${mTotal.toLocaleString('en-IN')}
             </td>
@@ -6315,6 +6357,9 @@
       }).join('');
     }
 
+    window.isPariwarikMember = isPariwarikMember;
+    window.isPariwarikPaid = isPariwarikPaid;
+    window.togglePariwarikPaidStatus = togglePariwarikPaidStatus;
     window.renderPariwarikView = renderPariwarikView;
 
     window.addEventListener('DOMContentLoaded', () => {
