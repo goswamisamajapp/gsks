@@ -811,6 +811,25 @@
               </button>
             </div>
 
+            <!-- Schemes Status Filter Bar (ALL, Open, Upcoming, Closed) -->
+            <div class="mt-4 flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+              <button onclick="filterSchemes('ALL')" id="filter-scheme-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-amber-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0">
+                <span>सभी योजनाएं</span> (<span id="scheme-count-all">0</span>)
+              </button>
+              <button onclick="filterSchemes('Open')" id="filter-scheme-open" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Open (चालू)</span> (<span id="scheme-count-open">0</span>)
+              </button>
+              <button onclick="filterSchemes('Upcoming')" id="filter-scheme-upcoming" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span>Upcoming (आगामी)</span> (<span id="scheme-count-upcoming">0</span>)
+              </button>
+              <button onclick="filterSchemes('Closed')" id="filter-scheme-closed" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                <span>Closed (समाप्त)</span> (<span id="scheme-count-closed">0</span>)
+              </button>
+            </div>
+
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4" id="schemes-cards-grid">
               <!-- Populated via JS -->
             </div>
@@ -1546,7 +1565,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <!-- Fixed Amount Box -->
           <div id="scheme-fixed-amount-box">
             <label class="block font-bold text-slate-700 mb-1">निर्धारित राशि (₹ Amount) *</label>
@@ -1556,8 +1575,8 @@
           <!-- Custom Donation Placeholder Info (shown when custom is selected) -->
           <div id="scheme-custom-amount-box" class="hidden">
             <label class="block font-bold text-slate-700 mb-1">राशि का नियम</label>
-            <div class="w-full bg-amber-50/60 border border-amber-200/80 rounded-xl px-3 py-2 text-amber-900 font-bold text-[11px] flex items-center gap-1.5">
-              <i class="fa-solid fa-heart text-amber-500"></i>
+            <div class="w-full bg-purple-50 border border-purple-200/80 rounded-xl px-3 py-2 text-purple-900 font-bold text-[11px] flex items-center gap-1.5 h-[38px]">
+              <i class="fa-solid fa-hand-holding-dollar text-purple-600"></i>
               <span>स्वैच्छिक (Open Donation)</span>
             </div>
           </div>
@@ -1572,6 +1591,16 @@
             </select>
           </div>
         </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">योजना स्थिति (Scheme Status) *</label>
+          <select id="scheme-item-status" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            <option value="Open">🟢 Open (चालू / एक्टिव)</option>
+            <option value="Upcoming">🔵 Upcoming (आगामी - जल्द शुरू होगी)</option>
+            <option value="Closed">🔴 Closed (समाप्त / बंद)</option>
+          </select>
+        </div>
+
         <div>
           <label class="block font-bold text-slate-700 mb-1">योजना विवरण (Description)</label>
           <textarea id="scheme-item-desc" rows="2" placeholder="योजना का उद्देश्य एवं विवरण..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-none"></textarea>
@@ -1603,6 +1632,7 @@
 
     // Master Settings State
     let currentSettingsTab = 'status';
+    let currentSchemeFilter = 'ALL';
     let masterSettings = {
       statuses: [
         { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
@@ -1626,10 +1656,10 @@
         { id: 'ev_3', venue: 'केंद्रीय ट्रस्ट कार्यालय, धनबाद' }
       ],
       schemes: [
-        { id: 'sc_1', name: 'मासिक सहयोग कोष (Monthly Sewa)', amount: 100, frequency: 'Monthly', description: 'प्रति माह नियमित ट्रस्ट सेवा सहायता', status: 'Active' },
-        { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Active' },
-        { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Active' },
-        { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Active' }
+        { id: 'sc_1', name: 'मासिक सहयोग कोष (Monthly Sewa)', amountType: 'fixed', amount: 100, frequency: 'Monthly', description: 'प्रति माह नियमित ट्रस्ट सेवा सहायता', status: 'Open' },
+        { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amountType: 'fixed', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Open' },
+        { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amountType: 'fixed', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Open' },
+        { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amountType: 'custom', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Open' }
       ]
     };
 
@@ -3045,53 +3075,115 @@
         `).join('');
       }
 
-      // 6. Render Schemes
+      // 6. Render Schemes with Status Filter (ALL, Open, Upcoming, Closed)
       const schemesGrid = document.getElementById('schemes-cards-grid');
+      const allSchemesList = masterSettings.schemes || [];
+      
+      // Update filter counts
+      const countAll = allSchemesList.length;
+      const countOpen = allSchemesList.filter(s => (s.status || 'Open') === 'Open').length;
+      const countUpcoming = allSchemesList.filter(s => s.status === 'Upcoming').length;
+      const countClosed = allSchemesList.filter(s => s.status === 'Closed').length;
+
+      const elCAll = document.getElementById('scheme-count-all');
+      const elCOpen = document.getElementById('scheme-count-open');
+      const elCUpcoming = document.getElementById('scheme-count-upcoming');
+      const elCClosed = document.getElementById('scheme-count-closed');
+      if (elCAll) elCAll.textContent = countAll;
+      if (elCOpen) elCOpen.textContent = countOpen;
+      if (elCUpcoming) elCUpcoming.textContent = countUpcoming;
+      if (elCClosed) elCClosed.textContent = countClosed;
+
+      // Update active filter button styling
+      const btnAll = document.getElementById('filter-scheme-all');
+      const btnOpen = document.getElementById('filter-scheme-open');
+      const btnUpcoming = document.getElementById('filter-scheme-upcoming');
+      const btnClosed = document.getElementById('filter-scheme-closed');
+      
+      [btnAll, btnOpen, btnUpcoming, btnClosed].forEach(b => {
+        if (b) b.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0';
+      });
+
+      if (currentSchemeFilter === 'Open' && btnOpen) {
+        btnOpen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
+      } else if (currentSchemeFilter === 'Upcoming' && btnUpcoming) {
+        btnUpcoming.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
+      } else if (currentSchemeFilter === 'Closed' && btnClosed) {
+        btnClosed.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-700 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
+      } else if (btnAll) {
+        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-amber-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
+      }
+
+      // Filtered list
+      const filteredSchemes = allSchemesList.filter(sc => {
+        if (currentSchemeFilter === 'ALL') return true;
+        return (sc.status || 'Open') === currentSchemeFilter;
+      });
+
       if (schemesGrid) {
-        schemesGrid.innerHTML = (masterSettings.schemes || []).map(sc => {
-          const isCustom = sc.amountType === 'custom' || (!sc.amount && sc.amount !== 0) || sc.amount === 0;
-          return `
-          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between space-y-2 hover:shadow-md transition-shadow">
-            <div class="flex items-start justify-between">
-              <div>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
-                    ${sc.frequency || 'One-Time'}
-                  </span>
-                  ${isCustom ? `
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 flex items-center gap-1">
-                      <i class="fa-solid fa-hand-holding-dollar text-[9px]"></i> Custom (स्वैच्छिक दान)
-                    </span>
-                  ` : `
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                      <i class="fa-solid fa-lock text-[9px]"></i> Fixed (निश्चित)
-                    </span>
-                  `}
-                </div>
-                <h4 class="font-bold text-slate-900 text-sm mt-1.5">${sc.name}</h4>
-              </div>
-              <div class="text-right">
-                ${isCustom ? `
-                  <p class="text-xs font-black text-purple-700 font-sans bg-purple-50 px-2 py-1 rounded-lg border border-purple-200">
-                    स्वैच्छिक दान
-                  </p>
-                ` : `
-                  <p class="text-base font-black text-amber-600 font-mono">₹${sc.amount}</p>
-                `}
-                <div class="flex items-center justify-end gap-1 mt-1.5">
-                  <button onclick="editSchemeItem('${sc.id}')" class="text-amber-700 hover:text-amber-900 text-xs p-1 rounded hover:bg-amber-50" title="संपादित करें (Edit)">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                  </button>
-                  <button onclick="deleteSchemeItem('${sc.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1 rounded hover:bg-rose-50" title="हटाएं (Delete)">
-                    <i class="fa-solid fa-trash-can"></i>
-                  </button>
-                </div>
-              </div>
+        if (filteredSchemes.length === 0) {
+          schemesGrid.innerHTML = `
+            <div class="col-span-full py-12 text-center text-slate-400">
+              <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300"></i>
+              <p class="text-xs font-semibold">इस फ़िल्टर में कोई योजना उपलब्ध नहीं है।</p>
             </div>
-            <p class="text-xs text-slate-500">${sc.description || ''}</p>
-          </div>
-        `;
-        }).join('');
+          `;
+        } else {
+          schemesGrid.innerHTML = filteredSchemes.map(sc => {
+            const isCustom = sc.amountType === 'custom' || (!sc.amount && sc.amount !== 0) || sc.amount === 0;
+            const statusVal = sc.status || 'Open';
+            
+            let statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Open (चालू)</span>`;
+            if (statusVal === 'Upcoming') {
+              statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Upcoming (आगामी)</span>`;
+            } else if (statusVal === 'Closed') {
+              statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 border border-slate-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Closed (समाप्त)</span>`;
+            }
+
+            return `
+            <div class="p-4 rounded-2xl border ${statusVal === 'Closed' ? 'border-slate-200 bg-slate-50/60 opacity-80' : 'border-slate-200 bg-white'} shadow-sm flex flex-col justify-between space-y-2.5 hover:shadow-md transition-all">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    ${statusBadge}
+                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200">
+                      ${sc.frequency || 'One-Time'}
+                    </span>
+                    ${isCustom ? `
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 flex items-center gap-1">
+                        <i class="fa-solid fa-hand-holding-dollar text-[9px]"></i> Custom
+                      </span>
+                    ` : `
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                        <i class="fa-solid fa-lock text-[9px]"></i> Fixed
+                      </span>
+                    `}
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-sm mt-2">${sc.name}</h4>
+                </div>
+                <div class="text-right">
+                  ${isCustom ? `
+                    <p class="text-xs font-black text-purple-700 font-sans bg-purple-50 px-2 py-1 rounded-lg border border-purple-200 whitespace-nowrap">
+                      स्वैच्छिक दान
+                    </p>
+                  ` : `
+                    <p class="text-base font-black text-amber-600 font-mono">₹${sc.amount}</p>
+                  `}
+                  <div class="flex items-center justify-end gap-1 mt-2">
+                    <button onclick="editSchemeItem('${sc.id}')" class="text-amber-700 hover:text-amber-900 text-xs p-1.5 rounded-lg hover:bg-amber-50 transition-colors" title="संपादित करें (Edit)">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button onclick="deleteSchemeItem('${sc.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="हटाएं (Delete)">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-500">${sc.description || ''}</p>
+            </div>
+          `;
+          }).join('');
+        }
       }
     }
 
@@ -3278,6 +3370,11 @@
       }
     }
 
+    function filterSchemes(status) {
+      currentSchemeFilter = status || 'ALL';
+      renderSettingsView();
+    }
+
     function openAddSchemeModal() {
       closeAllModals();
       const modal = document.getElementById('scheme-master-modal');
@@ -3288,6 +3385,7 @@
       document.getElementById('scheme-item-amount').value = '100';
       document.getElementById('scheme-item-desc').value = '';
       document.getElementById('scheme-item-freq').value = 'One-Time';
+      document.getElementById('scheme-item-status').value = 'Open';
       toggleSchemeAmountType('fixed');
       if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
     }
@@ -3302,6 +3400,7 @@
       document.getElementById('scheme-item-id').value = item.id;
       document.getElementById('scheme-item-name').value = item.name;
       document.getElementById('scheme-item-freq').value = item.frequency || 'One-Time';
+      document.getElementById('scheme-item-status').value = item.status || 'Open';
       document.getElementById('scheme-item-desc').value = item.description || '';
 
       const isCustom = item.amountType === 'custom' || item.amount === 0;
@@ -3451,6 +3550,7 @@
       const amount = isCustom ? 0 : (parseFloat(document.getElementById('scheme-item-amount').value) || 0);
 
       const freq = document.getElementById('scheme-item-freq').value;
+      const status = document.getElementById('scheme-item-status').value || 'Open';
       const desc = document.getElementById('scheme-item-desc').value.trim();
 
       if (!name) return;
@@ -3465,6 +3565,7 @@
             amountType,
             amount,
             frequency: freq,
+            status,
             description: desc
           };
         }
@@ -3475,8 +3576,8 @@
           amountType,
           amount,
           frequency: freq,
-          description: desc,
-          status: 'Active'
+          status,
+          description: desc
         });
       }
       closeSchemeModal();
