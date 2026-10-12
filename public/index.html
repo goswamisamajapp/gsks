@@ -229,7 +229,7 @@
             <span class="text-xs text-slate-400 font-medium">1-Click Controls</span>
           </div>
 
-          <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          <div class="grid grid-cols-2 lg:grid-cols-6 gap-3">
             <!-- Action 1: Events & Meetings -->
             <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
@@ -283,7 +283,21 @@
               </div>
             </button>
 
-            <!-- Action 5: Pariwarik Arthik Yojna (पारिवारिक आर्थिक योजना) -->
+            <!-- Action 5: Bank Transactions (बैंक खाता लेनदेन) -->
+            <button onclick="switchAdminView('bank')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50/40 hover:from-blue-100 hover:to-indigo-100 text-left border border-blue-200/80 hover:border-blue-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-sm shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-blue-950 truncate">बैंक लेनदेन</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-200/80 text-blue-900" id="quick-bank-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">बैंक जमा व रिकॉर्ड →</p>
+              </div>
+            </button>
+
+            <!-- Action 6: Pariwarik Arthik Yojna (पारिवारिक आर्थिक योजना) -->
             <button onclick="switchAdminView('pariwarik')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-50/40 hover:from-cyan-100 hover:to-sky-100 text-left border border-cyan-200/80 hover:border-cyan-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-sm shadow-md shadow-cyan-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
                 <i class="fa-solid fa-users-rectangle"></i>
@@ -327,20 +341,20 @@
             </div>
 
             <!-- In Bank -->
-            <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div onclick="switchAdminView('bank')" class="cursor-pointer bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition-all group">
               <div>
                 <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider">In Bank</span>
-                  <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                  <span class="text-xs font-bold uppercase tracking-wider text-blue-800">In Bank</span>
+                  <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-building-columns"></i>
                   </div>
                 </div>
                 <p class="text-2xl sm:text-3xl font-black text-blue-900 mt-1" id="dash-bank-fund">₹ 0</p>
-                <p class="text-xs text-slate-400 mt-1">बैंक खाते में शेष राशि</p>
+                <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">बैंक खाते में शेष राशि <i class="fa-solid fa-arrow-right text-[10px] text-blue-500"></i></p>
               </div>
               <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span class="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md font-semibold">SBI Trust A/C</span>
-                <span class="text-slate-400 text-[11px]">Gomoh Branch</span>
+                <span class="text-slate-400 text-[11px]">बैंक विवरण देखें →</span>
               </div>
             </div>
 
@@ -1201,6 +1215,158 @@
               </thead>
               <tbody id="expenses-table-body" class="divide-y divide-slate-100">
                 <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB 4D: BANK TRANSACTIONS & DEPOSITS SECTION    -->
+      <!-- ============================================== -->
+      <div id="view-bank-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  बैंक खाता लेनदेन एवं जमा रिकॉर्ड (Bank Transactions & Deposits)
+                </h2>
+                <p class="text-xs text-slate-500">ट्रस्ट बैंक खाता (SBI), बैंक में सीधी जमा (Deposits), ऑनलाइन दान, फंड ट्रांसफर एवं बैंक व्यय का विस्तृत ब्यौरा</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openBankDepositModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>+ बैंक में जमा दर्ज करें (Record Bank Deposit)</span>
+            </button>
+            <button onclick="openFundTransferModal()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3.5 py-2.5 rounded-xl text-xs border border-slate-200 flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+              <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i>
+              <span>फंड ट्रांसफर</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bank Treasury 4-Cards Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <!-- Total Bank Balance -->
+          <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-4 sm:p-5 text-white shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-white/20 text-white flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-vault"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-blue-100 uppercase tracking-wider">बैंक शुद्ध शेष (In Bank)</p>
+              <h3 class="text-base sm:text-xl font-black font-mono mt-0.5" id="bank-stat-balance">₹ 0</h3>
+              <p class="text-[10px] text-blue-100 font-medium">वर्तमान उपलब्ध बैंक कोष</p>
+            </div>
+          </div>
+
+          <!-- Total Bank Inflow / Deposits -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-emerald-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-arrow-down-long"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल बैंक आवक (Total Inflow)</p>
+              <h3 class="text-base sm:text-xl font-black text-emerald-700 font-mono mt-0.5" id="bank-stat-inflow">₹ 0</h3>
+              <p class="text-[10px] text-emerald-600 font-semibold">ओपनिंग + दान + जमा</p>
+            </div>
+          </div>
+
+          <!-- Total Bank Outflow / Debits -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-rose-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-arrow-up-long"></i>
+            </div>
+            <div>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल बैंक निकासी/खर्च (Outflow)</p>
+              <h3 class="text-base sm:text-xl font-black text-rose-700 font-mono mt-0.5" id="bank-stat-outflow">₹ 0</h3>
+              <p class="text-[10px] text-rose-600 font-semibold">निकासी + पार्टी/ऑनलाइन खर्च</p>
+            </div>
+          </div>
+
+          <!-- Active SBI Account Info -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-blue-100 shadow-sm flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">खाता संख्या (A/C No.)</p>
+              <h3 class="text-xs sm:text-sm font-black text-slate-800 font-mono truncate mt-0.5" id="bank-stat-acc-no">38294710293</h3>
+              <p class="text-[10px] text-blue-600 font-semibold truncate" id="bank-stat-acc-title">SBI Gomoh Branch</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank Records & History Table Container -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <!-- Filters & Search Toolbar -->
+          <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+            <!-- Filter Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+              <button onclick="filterBankTransactions('ALL')" id="filter-bank-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0">
+                <span>सभी बैंक लेनदेन</span>
+                <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20" id="bank-count-all">0</span>
+              </button>
+              <button onclick="filterBankTransactions('DEPOSIT')" id="filter-bank-deposit" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>बैंक में जमा (Deposits)</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-deposit">(0)</span>
+              </button>
+              <button onclick="filterBankTransactions('ONLINE_DONATION')" id="filter-bank-donations" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span>ऑनलाइन दान (Donations)</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-donations">(0)</span>
+              </button>
+              <button onclick="filterBankTransactions('TRANSFER')" id="filter-bank-transfers" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                <span>फंड ट्रांसफर (Transfers)</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-transfers">(0)</span>
+              </button>
+              <button onclick="filterBankTransactions('EXPENSE')" id="filter-bank-expenses" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span>बैंक ऑनलाइन खर्च (Expenses)</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-expenses">(0)</span>
+              </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full lg:w-72">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="bank-search-input" 
+                oninput="handleBankSearch(this.value)" 
+                placeholder="UTR / पार्टी / बैंक / विवरण खोजें..." 
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+              >
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 pl-4">दिनांक व ID</th>
+                  <th class="p-3.5">प्रकार (Type)</th>
+                  <th class="p-3.5">विवरण / स्रोत / पार्टी (Description & Source)</th>
+                  <th class="p-3.5">खाता / UTR / संदर्भ (Ref / A/C)</th>
+                  <th class="p-3.5 text-right text-emerald-700">क्रेडिट (+) आवक</th>
+                  <th class="p-3.5 text-right text-rose-700">डेबिट (-) खर्च/निकासी</th>
+                  <th class="p-3.5 text-center pr-4">कार्रवाई</th>
+                </tr>
+              </thead>
+              <tbody id="bank-transactions-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderBankTransactionsView() -->
               </tbody>
             </table>
           </div>
@@ -3226,6 +3392,95 @@
     </div>
   </div>
 
+  <!-- ============================================================== -->
+  <!-- MODAL: RECORD BANK DEPOSIT (बैंक में सीधी जमा दर्ज करें)       -->
+  <!-- ============================================================== -->
+  <div id="bank-deposit-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="bank-deposit-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)
+        </h3>
+        <button onclick="closeBankDepositModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveBankDeposit(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="bank-deposit-id">
+
+        <!-- Bank Account Selector -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">जमा खाता (Bank Account) *</label>
+          <select id="bank-deposit-account-select" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+            <!-- Dynamically populated from masterSettings.bankAccounts -->
+          </select>
+        </div>
+
+        <!-- Amount & Date -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">जमा राशि (Amount in ₹) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
+              <input type="number" id="bank-deposit-amount" required min="1" step="any" placeholder="0.00" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+            </div>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">जमा दिनांक (Deposit Date) *</label>
+            <input type="date" id="bank-deposit-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          </div>
+        </div>
+
+        <!-- Deposited By / Source -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">जमाकर्ता / स्रोत (Deposited By / Source) *</label>
+          <input type="text" id="bank-deposit-source" required placeholder="जैसे: रोहित गोस्वामी (कोषाध्यक्ष) / सीधे बैंक चालान जमा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+        </div>
+
+        <!-- Deposit Mode -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">जमा विधि (Deposit Method) *</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
+              <input type="radio" name="bank-deposit-method" value="Cash Deposit" checked class="text-blue-600 focus:ring-0">
+              <span class="font-bold text-slate-800 text-[11px]">💵 नगद चालान (CDM)</span>
+            </label>
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
+              <input type="radio" name="bank-deposit-method" value="Online Transfer / NEFT" class="text-blue-600 focus:ring-0">
+              <span class="font-bold text-slate-800 text-[11px]">📱 NEFT / RTGS</span>
+            </label>
+            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
+              <input type="radio" name="bank-deposit-method" value="Cheque" class="text-blue-600 focus:ring-0">
+              <span class="font-bold text-slate-800 text-[11px]">📝 चेक (Cheque)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- UTR / Slip / Ref No -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">जमा पर्ची / UTR / चेक नंबर (Ref / UTR / Slip No.)</label>
+          <input type="text" id="bank-deposit-ref" placeholder="जैसे: UTR# 4920192849 / Slip #502" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+        </div>
+
+        <!-- Remarks / Purpose -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / टिप्पणी (Remarks)</label>
+          <input type="text" id="bank-deposit-remarks" placeholder="जैसे: बैठक में एकत्रित नकद बैंक खाते में जमा किया गया" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeBankDepositModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 transition-all">
+            बैंक जमा सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
 
   <!-- ============================================================== -->
@@ -3561,6 +3816,7 @@
       const eventsSection = document.getElementById('view-events-section');
       const donationsSection = document.getElementById('view-donations-section');
       const expensesSection = document.getElementById('view-expenses-section');
+      const bankSection = document.getElementById('view-bank-section');
       const pariwarikSection = document.getElementById('view-pariwarik-section');
       const settingsSection = document.getElementById('view-settings-section');
       
@@ -3596,6 +3852,7 @@
       if (eventsSection) eventsSection.classList.add('hidden');
       if (donationsSection) donationsSection.classList.add('hidden');
       if (expensesSection) expensesSection.classList.add('hidden');
+      if (bankSection) bankSection.classList.add('hidden');
       if (pariwarikSection) pariwarikSection.classList.add('hidden');
       if (settingsSection) settingsSection.classList.add('hidden');
 
@@ -3614,6 +3871,9 @@
         if (expensesSection) expensesSection.classList.remove('hidden');
         if (mobExpenses) mobExpenses.className = 'flex flex-col items-center gap-1 text-rose-600 font-bold';
         renderExpensesView();
+      } else if (view === 'bank') {
+        if (bankSection) bankSection.classList.remove('hidden');
+        renderBankTransactionsView();
       } else if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
         if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
@@ -3969,16 +4229,19 @@
       // Hand to Bank: Cash decreases, Bank increases
       // Bank to Party: Bank decreases
       // Cash to Party: Cash decreases
+      // Bank Deposit: Direct deposit into Bank (increases Bank)
       let bankToHand = 0;
       let handToBank = 0;
       let bankToParty = 0;
       let cashToParty = 0;
+      let bankDirectDeposits = 0;
 
       if (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers)) {
         allFundTransfers.forEach(ft => {
           const amt = parseFloat(ft.amount) || 0;
           if (ft.type === 'Bank to Hand') bankToHand += amt;
           else if (ft.type === 'Hand to Bank') handToBank += amt;
+          else if (ft.type === 'Bank Deposit') bankDirectDeposits += amt;
           else if (ft.type === 'Bank to Party') bankToParty += amt;
           else if (ft.type === 'Cash to Party') cashToParty += amt;
         });
@@ -3986,7 +4249,7 @@
 
       // Net In Hand Cash & Bank Fund (Including Opening Balances minus Expenses)
       const netCashInHand = Math.max(0, openCash + donationCashTotal + bankToHand - handToBank - cashToParty - expenseCashTotal);
-      const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank - bankToHand - bankToParty - expenseOnlineTotal);
+      const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank + bankDirectDeposits - bankToHand - bankToParty - expenseOnlineTotal);
       const totalAvailableFund = netCashInHand + netBankAmount;
 
       const elTotalFund = document.getElementById('dash-total-fund');
@@ -4270,7 +4533,8 @@
         'expense-modal',
         'opening-balance-modal',
         'vendor-master-modal',
-        'expensescheme-master-modal'
+        'expensescheme-master-modal',
+        'bank-deposit-modal'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);
@@ -8213,7 +8477,520 @@
       await saveAllSettingsToCloud();
     }
 
+    // ==============================================================
+    // BANK TRANSACTIONS & DEPOSITS LOGIC & RENDERING
+    // ==============================================================
+    let currentBankFilter = 'ALL';
+    let currentBankSearchTerm = '';
+
+    function getBankTransactionsList() {
+      const list = [];
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0 };
+      const openBank = parseFloat(openBalances.bank) || 0;
+
+      // 1. Bank Opening Balance Entry
+      if (openBank > 0) {
+        list.push({
+          id: 'OB-BANK',
+          date: '2025-01-01',
+          type: 'OPENING',
+          typeLabel: '🏦 प्रारंभिक कोष',
+          badgeClass: 'bg-blue-50 text-blue-800 border-blue-200',
+          title: 'प्रारंभिक बैंक कोष (Opening Balance)',
+          description: openBalances.remarks || 'वर्ष 2025 से पूर्व संचित बैंक कोष',
+          refNo: 'A/C 38294710293',
+          credit: openBank,
+          debit: 0,
+          rawItem: null,
+          canEdit: false
+        });
+      }
+
+      // 2. Fund Transfers involving Bank (Hand to Bank, Bank to Hand, Bank to Party, Direct Deposits)
+      if (typeof allFundTransfers !== 'undefined' && Array.isArray(allFundTransfers)) {
+        allFundTransfers.forEach(ft => {
+          const amt = parseFloat(ft.amount) || 0;
+          if (ft.type === 'Hand to Bank' || ft.type === 'Bank Deposit') {
+            const isManualDeposit = (ft.type === 'Bank Deposit');
+            list.push({
+              id: ft.id,
+              date: ft.date || ft.createdAt || '',
+              type: 'DEPOSIT',
+              typeLabel: isManualDeposit ? '📥 बैंक में जमा' : '💵➡️🏦 Hand to Bank',
+              badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+              title: ft.party || 'बैंक जमा',
+              description: ft.remarks || (isManualDeposit ? 'सीधे बैंक खाते में जमा' : 'हाथ से बैंक में जमा'),
+              refNo: ft.refNo || ft.purpose || 'SBI Gomoh',
+              credit: amt,
+              debit: 0,
+              rawItem: ft,
+              canEdit: true
+            });
+          } else if (ft.type === 'Bank to Hand') {
+            list.push({
+              id: ft.id,
+              date: ft.date || ft.createdAt || '',
+              type: 'TRANSFER',
+              typeLabel: '🏦➡️💵 Bank to Hand',
+              badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+              title: ft.party || 'बैंक से नगद निकासी',
+              description: ft.remarks || 'बैंक से निकासी (कोषाध्यक्ष)',
+              refNo: ft.refNo || ft.purpose || 'SBI Gomoh',
+              credit: 0,
+              debit: amt,
+              rawItem: ft,
+              canEdit: true
+            });
+          } else if (ft.type === 'Bank to Party') {
+            list.push({
+              id: ft.id,
+              date: ft.date || ft.createdAt || '',
+              type: 'TRANSFER',
+              typeLabel: '🏦➡️👤 Bank to Party',
+              badgeClass: 'bg-purple-50 text-purple-800 border-purple-200',
+              title: ft.party || 'बैंक द्वारा पार्टी भुगतान',
+              description: ft.remarks || 'पार्टी/वेंडर भुगतान',
+              refNo: ft.refNo || ft.purpose || 'Bank Transfer',
+              credit: 0,
+              debit: amt,
+              rawItem: ft,
+              canEdit: true
+            });
+          }
+        });
+      }
+
+      // 3. Online Donations (Received in Bank)
+      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+        allDonations.forEach(d => {
+          const method = d.method || 'Cash';
+          if (method !== 'Cash') {
+            const amt = parseFloat(d.amount) || 0;
+            list.push({
+              id: d.id,
+              date: d.date || d.createdAt || '',
+              type: 'ONLINE_DONATION',
+              typeLabel: `📱 ${method} दान`,
+              badgeClass: 'bg-teal-50 text-teal-800 border-teal-200',
+              title: `${d.name || 'अज्ञात दानदाता'} (सदस्य: ${d.memberId || '--'})`,
+              description: `${d.scheme || 'सामान्य दान'}${d.remarks ? ` - ${d.remarks}` : ''}`,
+              refNo: d.transactionId || d.utr || 'Online/UPI',
+              credit: amt,
+              debit: 0,
+              rawItem: d,
+              canEdit: false,
+              isDonation: true
+            });
+          }
+        });
+      }
+
+      // 4. Online Expenses paid via Bank
+      if (typeof allExpenses !== 'undefined' && Array.isArray(allExpenses)) {
+        allExpenses.forEach(exp => {
+          const method = exp.method || 'Cash';
+          if (method !== 'Cash') {
+            const amt = parseFloat(exp.amount) || 0;
+            list.push({
+              id: exp.id,
+              date: exp.date || exp.createdAt || '',
+              type: 'EXPENSE',
+              typeLabel: '💳 बैंक ऑनलाइन व्यय',
+              badgeClass: 'bg-rose-50 text-rose-800 border-rose-200',
+              title: exp.vendorName || 'वेंडर भुगतान',
+              description: `${exp.scheme || 'खर्च'}${exp.remarks ? ` - ${exp.remarks}` : ''}`,
+              refNo: exp.billNumber || 'Online NetBanking/UPI',
+              credit: 0,
+              debit: amt,
+              rawItem: exp,
+              canEdit: false,
+              isExpense: true
+            });
+          }
+        });
+      }
+
+      // Sort chronological descending (latest first)
+      list.sort((a, b) => new Date(b.date || '1970-01-01') - new Date(a.date || '1970-01-01'));
+      return list;
+    }
+
+    function renderBankTransactionsView() {
+      const allTx = getBankTransactionsList();
+
+      // Calculate totals
+      let totalCredit = 0;
+      let totalDebit = 0;
+      let depositCount = 0;
+      let donationCount = 0;
+      let transferCount = 0;
+      let expenseCount = 0;
+
+      allTx.forEach(t => {
+        totalCredit += (t.credit || 0);
+        totalDebit += (t.debit || 0);
+        if (t.type === 'DEPOSIT' || t.type === 'OPENING') depositCount++;
+        else if (t.type === 'ONLINE_DONATION') donationCount++;
+        else if (t.type === 'TRANSFER') transferCount++;
+        else if (t.type === 'EXPENSE') expenseCount++;
+      });
+
+      const netBalance = Math.max(0, totalCredit - totalDebit);
+
+      // Update Top Summary Cards
+      const statBalance = document.getElementById('bank-stat-balance');
+      const statInflow = document.getElementById('bank-stat-inflow');
+      const statOutflow = document.getElementById('bank-stat-outflow');
+      const statAccNo = document.getElementById('bank-stat-acc-no');
+      const statAccTitle = document.getElementById('bank-stat-acc-title');
+
+      if (statBalance) statBalance.textContent = `₹ ${netBalance.toLocaleString('en-IN')}`;
+      if (statInflow) statInflow.textContent = `₹ ${totalCredit.toLocaleString('en-IN')}`;
+      if (statOutflow) statOutflow.textContent = `₹ ${totalDebit.toLocaleString('en-IN')}`;
+
+      // Primary bank account details
+      const primaryBank = (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0)
+        ? masterSettings.bankAccounts[0]
+        : { accountNumber: '38294710293', bankName: 'State Bank of India', branchName: 'Gomoh Branch' };
+
+      if (statAccNo) statAccNo.textContent = primaryBank.accountNumber || '38294710293';
+      if (statAccTitle) statAccTitle.textContent = `${primaryBank.bankName || 'SBI'} - ${primaryBank.branchName || 'Gomoh'}`;
+
+      // Update Filter Pill Counts
+      const elCountAll = document.getElementById('bank-count-all');
+      const elCountDeposit = document.getElementById('bank-count-deposit');
+      const elCountDonations = document.getElementById('bank-count-donations');
+      const elCountTransfers = document.getElementById('bank-count-transfers');
+      const elCountExpenses = document.getElementById('bank-count-expenses');
+
+      if (elCountAll) elCountAll.textContent = allTx.length;
+      if (elCountDeposit) elCountDeposit.textContent = `(${depositCount})`;
+      if (elCountDonations) elCountDonations.textContent = `(${donationCount})`;
+      if (elCountTransfers) elCountTransfers.textContent = `(${transferCount})`;
+      if (elCountExpenses) elCountExpenses.textContent = `(${expenseCount})`;
+
+      // Update quick badge in dashboard
+      const elQuickBankCount = document.getElementById('quick-bank-count');
+      if (elQuickBankCount) elQuickBankCount.textContent = allTx.length;
+
+      // Update Filter Button Styles
+      const btnAll = document.getElementById('filter-bank-all');
+      const btnDeposit = document.getElementById('filter-bank-deposit');
+      const btnDonations = document.getElementById('filter-bank-donations');
+      const btnTransfers = document.getElementById('filter-bank-transfers');
+      const btnExpenses = document.getElementById('filter-bank-expenses');
+
+      [btnAll, btnDeposit, btnDonations, btnTransfers, btnExpenses].forEach(btn => {
+        if (btn) btn.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0';
+      });
+
+      if (currentBankFilter === 'DEPOSIT' && btnDeposit) {
+        btnDeposit.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+      } else if (currentBankFilter === 'ONLINE_DONATION' && btnDonations) {
+        btnDonations.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+      } else if (currentBankFilter === 'TRANSFER' && btnTransfers) {
+        btnTransfers.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+      } else if (currentBankFilter === 'EXPENSE' && btnExpenses) {
+        btnExpenses.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+      } else if (btnAll) {
+        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+      }
+
+      // Filter and Search logic
+      const filtered = allTx.filter(tx => {
+        if (currentBankFilter === 'DEPOSIT' && !(tx.type === 'DEPOSIT' || tx.type === 'OPENING')) return false;
+        if (currentBankFilter === 'ONLINE_DONATION' && tx.type !== 'ONLINE_DONATION') return false;
+        if (currentBankFilter === 'TRANSFER' && tx.type !== 'TRANSFER') return false;
+        if (currentBankFilter === 'EXPENSE' && tx.type !== 'EXPENSE') return false;
+
+        if (currentBankSearchTerm) {
+          const q = currentBankSearchTerm.toLowerCase();
+          const matchId = (tx.id || '').toLowerCase().includes(q);
+          const matchTitle = (tx.title || '').toLowerCase().includes(q);
+          const matchDesc = (tx.description || '').toLowerCase().includes(q);
+          const matchRef = (tx.refNo || '').toLowerCase().includes(q);
+          return matchId || matchTitle || matchDesc || matchRef;
+        }
+        return true;
+      });
+
+      const tbody = document.getElementById('bank-transactions-table-body');
+      if (!tbody) return;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="p-12 text-center text-slate-400">
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl mx-auto mb-2">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <p class="font-bold text-slate-700 text-xs">कोई बैंक लेनदेन रिकॉर्ड नहीं मिला</p>
+              <p class="text-[11px] text-slate-400 mt-1">बैंक में जमा दर्ज करने हेतु ऊपर "+ बैंक में जमा दर्ज करें" बटन दबाएं।</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(t => {
+        const creditDisplay = t.credit > 0 ? `+ ₹${t.credit.toLocaleString('en-IN')}` : '--';
+        const debitDisplay = t.debit > 0 ? `- ₹${t.debit.toLocaleString('en-IN')}` : '--';
+
+        let actionBtns = '';
+        if (t.canEdit && t.rawItem) {
+          if (t.rawItem.type === 'Bank Deposit') {
+            actionBtns = `
+              <div class="flex items-center justify-center gap-1.5">
+                <button onclick="openBankDepositModal('${t.rawItem.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संपादित करें (Edit)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button onclick="deleteBankDepositItem('${t.rawItem.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            `;
+          } else {
+            actionBtns = `
+              <div class="flex items-center justify-center gap-1.5">
+                <button onclick="openFundTransferModal('${t.rawItem.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="फंड ट्रांसफर संपादित करें">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+              </div>
+            `;
+          }
+        } else if (t.isDonation) {
+          actionBtns = `
+            <div class="flex items-center justify-center">
+              <button onclick="switchAdminView('donations')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded-lg text-[10px] transition-colors" title="दान रसीद देखें">
+                रसीद देखें →
+              </button>
+            </div>
+          `;
+        } else if (t.isExpense) {
+          actionBtns = `
+            <div class="flex items-center justify-center">
+              <button onclick="switchAdminView('expenses')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold rounded-lg text-[10px] transition-colors" title="खर्च बिल देखें">
+                खर्च देखें →
+              </button>
+            </div>
+          `;
+        } else {
+          actionBtns = `<span class="text-[10px] text-slate-400 font-medium">प्रारंभिक</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-3.5 pl-4">
+              <span class="font-mono font-bold text-slate-900 text-xs block">${t.id}</span>
+              <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(t.date)}</span>
+            </td>
+            <td class="p-3.5">
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold border ${t.badgeClass}">
+                ${t.typeLabel}
+              </span>
+            </td>
+            <td class="p-3.5 max-w-xs">
+              <div class="font-bold text-slate-900 leading-tight">${t.title}</div>
+              <div class="text-[10px] text-slate-500 mt-0.5 truncate">${t.description}</div>
+            </td>
+            <td class="p-3.5">
+              <span class="font-mono text-xs text-slate-700 font-semibold">${t.refNo || '--'}</span>
+            </td>
+            <td class="p-3.5 text-right font-mono font-black ${t.credit > 0 ? 'text-emerald-700 text-sm' : 'text-slate-300'}">
+              ${creditDisplay}
+            </td>
+            <td class="p-3.5 text-right font-mono font-black ${t.debit > 0 ? 'text-rose-700 text-sm' : 'text-slate-300'}">
+              ${debitDisplay}
+            </td>
+            <td class="p-3.5 pr-4 text-center">
+              ${actionBtns}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterBankTransactions(category) {
+      currentBankFilter = category;
+      renderBankTransactionsView();
+    }
+
+    function handleBankSearch(term) {
+      currentBankSearchTerm = term.trim();
+      renderBankTransactionsView();
+    }
+
+    // Modal: Record Direct Bank Deposit
+    function openBankDepositModal(depositId = null) {
+      closeAllModals();
+      const modal = document.getElementById('bank-deposit-modal');
+      const heading = document.getElementById('bank-deposit-modal-heading');
+      populateBankDepositAccountDropdown();
+
+      if (depositId) {
+        const item = allFundTransfers.find(t => t.id === depositId);
+        if (!item) return;
+        if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक जमा रिकॉर्ड संपादित करें';
+        document.getElementById('bank-deposit-id').value = item.id;
+        document.getElementById('bank-deposit-amount').value = item.amount || '';
+        document.getElementById('bank-deposit-date').value = item.date || '';
+        document.getElementById('bank-deposit-source').value = item.party || '';
+        document.getElementById('bank-deposit-ref').value = item.refNo || '';
+        document.getElementById('bank-deposit-remarks').value = item.remarks || '';
+
+        if (item.bankAccount) {
+          document.getElementById('bank-deposit-account-select').value = item.bankAccount;
+        }
+
+        const radios = document.getElementsByName('bank-deposit-method');
+        for (const r of radios) {
+          r.checked = (r.value === (item.method || 'Cash Deposit'));
+        }
+      } else {
+        if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> बैंक में जमा दर्ज करें (Record Bank Deposit)';
+        document.getElementById('bank-deposit-id').value = '';
+        document.getElementById('bank-deposit-amount').value = '';
+        document.getElementById('bank-deposit-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('bank-deposit-source').value = '';
+        document.getElementById('bank-deposit-ref').value = '';
+        document.getElementById('bank-deposit-remarks').value = '';
+        
+        const radios = document.getElementsByName('bank-deposit-method');
+        if (radios.length > 0) radios[0].checked = true;
+      }
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function closeBankDepositModal() {
+      const modal = document.getElementById('bank-deposit-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    function populateBankDepositAccountDropdown() {
+      const select = document.getElementById('bank-deposit-account-select');
+      if (!select) return;
+      const accounts = (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0)
+        ? masterSettings.bankAccounts
+        : [{ id: 'ba_1', accountNumber: '38294710293', bankName: 'SBI', branchName: 'Gomoh Branch' }];
+
+      select.innerHTML = accounts.map(a => `
+        <option value="${a.accountNumber || a.id}">
+          ${a.bankName || 'SBI'} - A/C ${a.accountNumber} (${a.branchName || 'Main Branch'})
+        </option>
+      `).join('');
+    }
+
+    async function handleSaveBankDeposit(e) {
+      e.preventDefault();
+      const idInput = document.getElementById('bank-deposit-id').value;
+      const bankAccount = document.getElementById('bank-deposit-account-select').value;
+      const amount = parseFloat(document.getElementById('bank-deposit-amount').value) || 0;
+      const date = document.getElementById('bank-deposit-date').value;
+      const source = document.getElementById('bank-deposit-source').value.trim();
+      const refNo = document.getElementById('bank-deposit-ref').value.trim();
+      const remarks = document.getElementById('bank-deposit-remarks').value.trim();
+
+      let method = 'Cash Deposit';
+      const radios = document.getElementsByName('bank-deposit-method');
+      for (const r of radios) {
+        if (r.checked) {
+          method = r.value;
+          break;
+        }
+      }
+
+      if (amount <= 0 || !date || !source) {
+        alert("कृपया वैध राशि, दिनांक एवं जमाकर्ता/स्रोत दर्ज करें!");
+        return;
+      }
+
+      const id = idInput || 'DEP-' + Date.now().toString().slice(-6);
+      const depositData = {
+        id,
+        type: 'Bank Deposit',
+        amount,
+        date,
+        party: source,
+        bankAccount,
+        method,
+        refNo,
+        remarks: remarks || `बैंक जमा (${method})`,
+        purpose: 'Bank Deposit',
+        createdAt: new Date().toISOString()
+      };
+
+      // 1. Instant local array update (stored in allFundTransfers as Bank Deposit)
+      const existingIdx = allFundTransfers.findIndex(item => item.id === id);
+      if (existingIdx !== -1) {
+        allFundTransfers[existingIdx] = depositData;
+      } else {
+        allFundTransfers.unshift(depositData);
+      }
+
+      closeBankDepositModal();
+      updateStats();
+      renderFundTransfersList();
+      renderBankTransactionsView();
+
+      // 2. Persist to Express Backend
+      try {
+        await fetch('/api/fund-transfers/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(depositData)
+        });
+      } catch (err) {
+        console.warn('API fund transfer save warning:', err);
+      }
+
+      // 3. Persist to Firestore Realtime
+      try {
+        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
+          await fundTransfersCol.doc(id).set(depositData, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore fund transfer save warning:', err);
+      }
+    }
+
+    async function deleteBankDepositItem(id) {
+      if (!confirm(`क्या आप इस बैंक जमा रिकॉर्ड (${id}) को हटाना चाहते हैं?`)) return;
+
+      allFundTransfers = allFundTransfers.filter(item => item.id !== id);
+      updateStats();
+      renderFundTransfersList();
+      renderBankTransactionsView();
+
+      // Express API
+      try {
+        await fetch('/api/fund-transfers/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch (err) {
+        console.warn('API fund transfer delete warning:', err);
+      }
+
+      // Firestore
+      try {
+        if (typeof fundTransfersCol !== 'undefined' && fundTransfersCol) {
+          await fundTransfersCol.doc(id).delete();
+        }
+      } catch (err) {
+        console.warn('Firestore fund transfer delete warning:', err);
+      }
+    }
+
     // Window Exports
+    window.renderBankTransactionsView = renderBankTransactionsView;
+    window.filterBankTransactions = filterBankTransactions;
+    window.handleBankSearch = handleBankSearch;
+    window.openBankDepositModal = openBankDepositModal;
+    window.closeBankDepositModal = closeBankDepositModal;
+    window.handleSaveBankDeposit = handleSaveBankDeposit;
+    window.deleteBankDepositItem = deleteBankDepositItem;
     window.renderExpensesView = renderExpensesView;
     window.openExpenseModal = openExpenseModal;
     window.closeExpenseModal = closeExpenseModal;
