@@ -2854,6 +2854,59 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL: EDIT OPENING BALANCES (प्रारंभिक कोष संशोधन)            -->
+  <!-- ============================================================== -->
+  <div id="opening-balance-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-vault text-amber-600"></i> प्रारंभिक कोष संशोधित करें (Opening Balance)
+        </h3>
+        <button type="button" onclick="closeEditOpeningBalanceModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveOpeningBalance(event)" class="space-y-3.5 text-xs">
+        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-amber-900">
+          <p class="font-bold">💡 समिति स्थापना 2025 संचित कोष:</p>
+          <p class="text-[11px] mt-0.5 text-amber-800">यहाँ दर्ज राशि आपके डैशबोर्ड के कुल कोष एवं In Hand / Bank में स्वतः जोड़ दी जाती है।</p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">नगद प्रारंभिक राशि (Cash Opening Balance) *</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
+            <input type="number" id="opening-bal-cash-input" required min="0" step="any" placeholder="34025" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">बैंक प्रारंभिक राशि (Bank Opening Balance) *</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
+            <input type="number" id="opening-bal-bank-input" required min="0" step="any" placeholder="0" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / नोट (Remarks)</label>
+          <input type="text" id="opening-bal-remarks-input" placeholder="जैसे: वर्ष 2025 से पूर्व संचित कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeEditOpeningBalanceModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all">
+            सुरक्षित करें (Save Balance)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL 8B: ADD/EDIT BANK ACCOUNT MODAL                           -->
   <!-- ============================================================== -->
   <div id="bankaccount-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -3178,58 +3231,7 @@
     </div>
   </div>
 
-  <!-- ============================================================== -->
-  <!-- MODAL: EDIT OPENING BALANCES (प्रारंभिक कोष संशोधन)            -->
-  <!-- ============================================================== -->
-  <div id="opening-balance-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
-        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-vault text-amber-600"></i> प्रारंभिक कोष संशोधित करें (Opening Balance)
-        </h3>
-        <button onclick="closeEditOpeningBalanceModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
 
-      <form onsubmit="handleSaveOpeningBalance(event)" class="space-y-3.5 text-xs">
-        <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-amber-900">
-          <p class="font-bold">💡 समिति स्थापना 2025 संचित कोष:</p>
-          <p class="text-[11px] mt-0.5 text-amber-800">यहाँ दर्ज राशि आपके डैशबोर्ड के कुल कोष एवं In Hand / Bank में स्वतः जोड़ दी जाती है।</p>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">नगद प्रारंभिक राशि (Cash Opening Balance) *</label>
-          <div class="relative">
-            <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
-            <input type="number" id="opening-bal-cash-input" required min="0" step="any" placeholder="34025" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">बैंक प्रारंभिक राशि (Bank Opening Balance) *</label>
-          <div class="relative">
-            <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
-            <input type="number" id="opening-bal-bank-input" required min="0" step="any" placeholder="0" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">विवरण / नोट (Remarks)</label>
-          <input type="text" id="opening-bal-remarks-input" placeholder="जैसे: वर्ष 2025 से पूर्व संचित कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
-        </div>
-
-        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeEditOpeningBalanceModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
-            रद्द करें
-          </button>
-          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all">
-            सुरक्षित करें (Save Balance)
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- ============================================================== -->
   <!-- MODAL: ADD / EDIT VENDOR (वेंडर जोड़ें/संपादित करें)          -->
@@ -6349,6 +6351,54 @@
     // 8. FUND MANAGEMENT LOGIC (Fund Types & Fund Transfers)
     // ==============================================================
 
+    // --- Opening Balance Modal Triggers ---
+    function openEditOpeningBalanceModal() {
+      closeAllModals();
+      const modal = document.getElementById('opening-balance-modal');
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+
+      const cashInput = document.getElementById('opening-bal-cash-input');
+      const bankInput = document.getElementById('opening-bal-bank-input');
+      const remarksInput = document.getElementById('opening-bal-remarks-input');
+
+      if (cashInput) cashInput.value = openBalances.cash !== undefined ? openBalances.cash : 34025;
+      if (bankInput) bankInput.value = openBalances.bank !== undefined ? openBalances.bank : 0;
+      if (remarksInput) remarksInput.value = openBalances.remarks || '';
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeEditOpeningBalanceModal() {
+      const modal = document.getElementById('opening-balance-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveOpeningBalance(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      try {
+        const cashVal = document.getElementById('opening-bal-cash-input') ? document.getElementById('opening-bal-cash-input').value : 34025;
+        const bankVal = document.getElementById('opening-bal-bank-input') ? document.getElementById('opening-bal-bank-input').value : 0;
+        const remVal = document.getElementById('opening-bal-remarks-input') ? document.getElementById('opening-bal-remarks-input').value : '';
+
+        const cash = parseFloat(cashVal) || 0;
+        const bank = parseFloat(bankVal) || 0;
+        const remarks = remVal.trim() || 'वर्ष 2025 से पूर्व संचित कोष';
+
+        masterSettings.openingBalances = { cash, bank, remarks };
+        closeEditOpeningBalanceModal();
+        updateStats();
+        renderOpeningBalancesCard();
+        await saveAllSettingsToCloud(false);
+        alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
+      } catch (err) {
+        console.error("Error saving opening balance:", err);
+        alert("प्रारंभिक कोष अपडेट करते समय त्रुटि: " + err.message);
+      }
+    }
+
     // --- Fund Types Functions ---
     function openAddFundTypeModal() {
       closeAllModals();
@@ -7066,6 +7116,11 @@
     window.handleSaveFundType = handleSaveFundType;
     window.deleteFundTypeItem = deleteFundTypeItem;
     window.renderFundTypesGrid = renderFundTypesGrid;
+
+    window.openEditOpeningBalanceModal = openEditOpeningBalanceModal;
+    window.closeEditOpeningBalanceModal = closeEditOpeningBalanceModal;
+    window.handleSaveOpeningBalance = handleSaveOpeningBalance;
+    window.renderOpeningBalancesCard = renderOpeningBalancesCard;
 
     window.openAddBankAccountModal = openAddBankAccountModal;
     window.editBankAccountItem = editBankAccountItem;
@@ -8012,54 +8067,6 @@
             </tr>
           `).join('');
         }
-      }
-    }
-
-    // --- Opening Balance Modal Triggers ---
-    function openEditOpeningBalanceModal() {
-      closeAllModals();
-      const modal = document.getElementById('opening-balance-modal');
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
-
-      const cashInput = document.getElementById('opening-bal-cash-input');
-      const bankInput = document.getElementById('opening-bal-bank-input');
-      const remarksInput = document.getElementById('opening-bal-remarks-input');
-
-      if (cashInput) cashInput.value = openBalances.cash !== undefined ? openBalances.cash : 34025;
-      if (bankInput) bankInput.value = openBalances.bank !== undefined ? openBalances.bank : 0;
-      if (remarksInput) remarksInput.value = openBalances.remarks || '';
-
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-      }
-    }
-
-    function closeEditOpeningBalanceModal() {
-      const modal = document.getElementById('opening-balance-modal');
-      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
-    }
-
-    async function handleSaveOpeningBalance(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      try {
-        const cashVal = document.getElementById('opening-bal-cash-input') ? document.getElementById('opening-bal-cash-input').value : 34025;
-        const bankVal = document.getElementById('opening-bal-bank-input') ? document.getElementById('opening-bal-bank-input').value : 0;
-        const remVal = document.getElementById('opening-bal-remarks-input') ? document.getElementById('opening-bal-remarks-input').value : '';
-
-        const cash = parseFloat(cashVal) || 0;
-        const bank = parseFloat(bankVal) || 0;
-        const remarks = remVal.trim() || 'वर्ष 2025 से पूर्व संचित कोष';
-
-        masterSettings.openingBalances = { cash, bank, remarks };
-        closeEditOpeningBalanceModal();
-        updateStats();
-        renderOpeningBalancesCard();
-        await saveAllSettingsToCloud(false);
-        alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
-      } catch (err) {
-        console.error("Error saving opening balance:", err);
-        alert("प्रारंभिक कोष अपडेट करते समय त्रुटि: " + err.message);
       }
     }
 
