@@ -1603,10 +1603,13 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
   <!-- ============================================================== -->
   <!-- MODAL 5C: ADD / EDIT DONATION MODAL                            -->
   <!-- ============================================================== -->
-  <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+  <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       <button onclick="closeDonationModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
         <i class="fa-solid fa-xmark"></i>
@@ -2746,7 +2749,11 @@
         'eventcat-master-modal',
         'eventtitle-master-modal',
         'eventvenue-master-modal',
-        'scheme-master-modal'
+        'scheme-master-modal',
+        'view-event-modal',
+        'donation-form-modal',
+        'view-donation-modal',
+        'delete-donation-modal'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);
@@ -4620,9 +4627,20 @@
       } else {
         allDonations.unshift(donationPayload);
       }
+
+      // Also reflect in member's record if member selected
+      if (donationPayload.memberId && donationPayload.memberId !== 'NON_MEMBER') {
+        const mem = allMembers.find(m => m.id === donationPayload.memberId);
+        if (mem) {
+          mem.donation = (parseFloat(mem.donation) || 0) + donationPayload.amount;
+          updateStats();
+        }
+      }
+
       updateDonationsStats();
       renderDonationsList();
       closeDonationModal();
+      alert(`✅ दान रसीद (${id}) सफलतापूर्वक सुरक्षित कर ली गई है!`);
 
       // 2. Persist to Express Central Server API
       try {
@@ -4745,6 +4763,9 @@
       }
     }
 
+    window.handleDonationMemberSelect = handleDonationMemberSelect;
+    window.handleDonationSchemeSelect = handleDonationSchemeSelect;
+    window.handleSaveDonation = handleSaveDonation;
     window.openViewDonationModal = openViewDonationModal;
     window.closeViewDonationModal = closeViewDonationModal;
     window.printDonationReceipt = printDonationReceipt;
