@@ -1001,6 +1001,14 @@
                 <i class="fa-solid fa-users text-slate-400 text-[11px]"></i>
                 <span class="text-xs text-slate-700 font-bold font-mono" id="pariwarik-members-count">0 सदस्य</span>
               </div>
+              <button type="button" 
+                      onclick="openPariwarikBulkWhatsAppModal()" 
+                      class="shrink-0 flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer" 
+                      title="सभी बकाया सदस्यों को WhatsApp भेजें (Bulk WhatsApp Reminder)">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span class="hidden sm:inline">सभी बकाया को WhatsApp</span>
+                <span class="sm:hidden">बकाया WhatsApp</span>
+              </button>
             </div>
           </div>
 
@@ -2721,6 +2729,66 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: BULK WHATSAPP REMINDER FOR UNPAID MEMBERS               -->
+  <!-- ============================================================== -->
+  <div id="pariwarik-bulk-whatsapp-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button onclick="closePariwarikBulkWhatsAppModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl shadow-sm">
+          <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            बकाया सदस्यों को WhatsApp रिमाइंडर
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5" id="pariwarik-bulk-modal-subtitle">चयनित माह के सभी बकाया सदस्यों की सूची</p>
+        </div>
+      </div>
+
+      <!-- Quick Summary Card -->
+      <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-4 flex items-center justify-between text-xs">
+        <div>
+          <span class="text-slate-500 font-medium">कुल बकाया सदस्य:</span>
+          <span class="text-rose-600 font-black font-mono text-sm ml-1.5" id="pariwarik-bulk-unpaid-count">0</span>
+        </div>
+        <div>
+          <span class="text-slate-500 font-medium">माह अंशदान:</span>
+          <span class="text-slate-800 font-black font-mono ml-1">₹150 प्रति सदस्य</span>
+        </div>
+        <div>
+          <button type="button" 
+                  onclick="openNextPendingPariwarikWhatsApp()" 
+                  class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-play text-[10px]"></i>
+            <span>पहला चैट खोलें</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable List of Unpaid Members -->
+      <div class="max-h-80 overflow-y-auto space-y-2 pr-1 divide-y divide-slate-100" id="pariwarik-bulk-members-list">
+        <!-- Dynamically populated via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 text-xs">
+        <span class="text-[11px] text-slate-400">💡 सदस्य के सामने "भेजें" बटन पर क्लिक करने पर उसका WhatsApp चैट खुल जाएगा।</span>
+        <button type="button" onclick="closePariwarikBulkWhatsAppModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors">
+          बंद करें
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -6782,6 +6850,83 @@
       window.open(waUrl, '_blank');
     }
 
+    let currentUnpaidBulkList = [];
+    let currentUnpaidBulkIndex = 0;
+
+    function openPariwarikBulkWhatsAppModal() {
+      const modal = document.getElementById('pariwarik-bulk-whatsapp-modal');
+      const listContainer = document.getElementById('pariwarik-bulk-members-list');
+      const countEl = document.getElementById('pariwarik-bulk-unpaid-count');
+      const subtitleEl = document.getElementById('pariwarik-bulk-modal-subtitle');
+      if (!modal || !listContainer) return;
+
+      const pariwarikMembers = getPariwarikMemberList();
+      currentUnpaidBulkList = pariwarikMembers.filter(m => !isPariwarikPaidForMonth(m, currentPariwarikMonth));
+      currentUnpaidBulkIndex = 0;
+
+      const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
+      if (subtitleEl) subtitleEl.textContent = `चयनित माह: ${activeMonthCfg.label || currentPariwarikMonth} के बकाया सदस्य`;
+      if (countEl) countEl.textContent = `${currentUnpaidBulkList.length} सदस्य`;
+
+      if (currentUnpaidBulkList.length === 0) {
+        listContainer.innerHTML = `
+          <div class="p-8 text-center text-slate-400">
+            <i class="fa-solid fa-circle-check text-4xl text-emerald-500 mb-2"></i>
+            <p class="text-sm font-bold text-slate-700">बधाई हो! इस माह का कोई बकाया नहीं है।</p>
+            <p class="text-xs text-slate-400 mt-1">सभी सदस्यों का ₹150 अंशदान प्राप्त हो चुका है।</p>
+          </div>
+        `;
+      } else {
+        listContainer.innerHTML = currentUnpaidBulkList.map((m, idx) => {
+          const cleanPhone = (m.phone || '').replace(/\D/g, '');
+          const hasValidPhone = cleanPhone.length >= 10;
+          return `
+            <div class="p-3 bg-white hover:bg-slate-50/80 rounded-2xl flex items-center justify-between gap-3 border border-slate-100 transition-colors" id="bulk-unpaid-row-${m.id}">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                  ${idx + 1}
+                </span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-800 leading-tight">${m.name || '--'}</h4>
+                  <p class="text-[10px] text-slate-400 font-mono mt-0.5">${m.id || '--'} • 📞 ${m.phone || 'नंबर नहीं है'}</p>
+                </div>
+              </div>
+              <div class="shrink-0 flex items-center gap-2">
+                <span class="text-rose-600 font-mono font-bold text-xs">₹150</span>
+                <button type="button" 
+                        onclick="sendPariwarikWhatsAppNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}', false)" 
+                        ${!hasValidPhone ? 'disabled' : ''}
+                        class="px-3 py-1.5 ${hasValidPhone ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-slate-300 cursor-not-allowed'} text-white font-bold text-[11px] rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-brands fa-whatsapp"></i>
+                  <span>भेजें</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closePariwarikBulkWhatsAppModal() {
+      const modal = document.getElementById('pariwarik-bulk-whatsapp-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function openNextPendingPariwarikWhatsApp() {
+      if (!currentUnpaidBulkList || currentUnpaidBulkList.length === 0) {
+        alert("इस माह में कोई बकाया सदस्य नहीं है!");
+        return;
+      }
+      if (currentUnpaidBulkIndex >= currentUnpaidBulkList.length) {
+        currentUnpaidBulkIndex = 0; // restart cycle
+      }
+      const member = currentUnpaidBulkList[currentUnpaidBulkIndex];
+      sendPariwarikWhatsAppNotification(member.id, member.name, member.phone, false);
+      currentUnpaidBulkIndex++;
+    }
+
     window.isPariwarikMember = isPariwarikMember;
     window.isPariwarikPaidForMonth = isPariwarikPaidForMonth;
     window.selectPariwarikMonth = selectPariwarikMonth;
@@ -6791,6 +6936,9 @@
     window.clearPariwarikSearch = clearPariwarikSearch;
     window.sendPariwarikPushNotification = sendPariwarikPushNotification;
     window.sendPariwarikWhatsAppNotification = sendPariwarikWhatsAppNotification;
+    window.openPariwarikBulkWhatsAppModal = openPariwarikBulkWhatsAppModal;
+    window.closePariwarikBulkWhatsAppModal = closePariwarikBulkWhatsAppModal;
+    window.openNextPendingPariwarikWhatsApp = openNextPendingPariwarikWhatsApp;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
