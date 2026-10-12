@@ -848,7 +848,10 @@
             <div>
               <p class="text-xs font-bold text-emerald-100 uppercase tracking-wider">भुगतान राशि (Paid Amount)</p>
               <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-paid">₹ 0</h3>
-              <p class="text-[11px] text-emerald-100 mt-1">अब तक प्राप्त / जमा सहयोग</p>
+              <p class="text-[11px] text-emerald-100 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-paid-count">0 सदस्य Paid</span>
+                <span>• जमा सहयोग</span>
+              </p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
               <i class="fa-solid fa-circle-check"></i>
@@ -860,7 +863,10 @@
             <div>
               <p class="text-xs font-bold text-rose-100 uppercase tracking-wider">बकाया राशि (Dues Amount)</p>
               <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-dues">₹ 0</h3>
-              <p class="text-[11px] text-rose-100 mt-1">शेष लंबित सहयोग राशि</p>
+              <p class="text-[11px] text-rose-100 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-unpaid-count">0 सदस्य Unpaid</span>
+                <span>• शेष लंबित राशि</span>
+              </p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
               <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -6283,6 +6289,7 @@
       const paidSum = paidMembersCount * PARIWARIK_MONTHLY_FEE;
 
       // 3. Dues Amount = Total Amount - Paid Amount (Unpaid members * 150)
+      const unpaidMembersCount = memberCount - paidMembersCount;
       const duesSum = totalSum - paidSum;
 
       // Update Top Summary Cards
@@ -6291,12 +6298,16 @@
       const elPaid = document.getElementById('pariwarik-stat-paid');
       const elDues = document.getElementById('pariwarik-stat-dues');
       const elCount = document.getElementById('pariwarik-members-count');
+      const elPaidCount = document.getElementById('pariwarik-paid-count');
+      const elUnpaidCount = document.getElementById('pariwarik-unpaid-count');
 
       if (elMembers) elMembers.textContent = memberCount;
       if (elTotal) elTotal.textContent = `₹ ${totalSum.toLocaleString('en-IN')}`;
       if (elPaid) elPaid.textContent = `₹ ${paidSum.toLocaleString('en-IN')}`;
       if (elDues) elDues.textContent = `₹ ${duesSum.toLocaleString('en-IN')}`;
       if (elCount) elCount.textContent = `${memberCount} सदस्य`;
+      if (elPaidCount) elPaidCount.textContent = `${paidMembersCount} सदस्य Paid`;
+      if (elUnpaidCount) elUnpaidCount.textContent = `${unpaidMembersCount} सदस्य Unpaid`;
 
       // Render Table Breakdown
       const tbody = document.getElementById('pariwarik-table-body');
