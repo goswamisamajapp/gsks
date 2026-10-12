@@ -2620,6 +2620,21 @@
     let activeViewingMemberId = null;
     let pendingDeleteMemberId = null;
 
+    // Pariwarik Arthik Constants & Helpers
+    const PARIWARIK_MONTHLY_FEE = 150;
+    function isPariwarikMember(m) {
+      if (!m) return false;
+      if (m.status === 'removed') return false;
+      if (m.pariwarikMember === false || m.pariwarikMember === 'false' || m.pariwarikMember === 'no' || m.pariwarikMember === 'No') {
+        return false;
+      }
+      return true;
+    }
+    function isPariwarikPaid(m) {
+      if (!m) return false;
+      return (m.pariwarikPaid === true || m.pariwarikPaid === 'true' || m.pariwarikPaid === 'yes' || m.pariwarikPaid === 'Yes');
+    }
+
     // Master Settings State
     let currentSettingsTab = 'status';
     let currentSchemeFilter = 'ALL';
@@ -2873,6 +2888,9 @@
           if (typeof renderArchivedList === 'function') {
             renderArchivedList();
           }
+          if (typeof renderPariwarikView === 'function') {
+            renderPariwarikView();
+          }
         }, (error) => {
           console.error("Firestore onSnapshot error:", error);
           loadMembersDataFallback();
@@ -2987,6 +3005,9 @@
         allMembers = await res.json();
         updateStats();
         renderMembers();
+        if (typeof renderPariwarikView === 'function') {
+          renderPariwarikView();
+        }
       } catch (err) {
         console.error(err);
       }
@@ -6230,22 +6251,6 @@
     // ==============================================================
     // 9. PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) LOGIC
     // ==============================================================
-    const PARIWARIK_MONTHLY_FEE = 150;
-
-    function isPariwarikMember(m) {
-      if (!m) return false;
-      // If explicitly marked false or 'no', exclude. Otherwise include by default for all non-removed members.
-      if (m.pariwarikMember === false || m.pariwarikMember === 'false' || m.pariwarikMember === 'no' || m.pariwarikMember === 'No') {
-        return false;
-      }
-      return true;
-    }
-
-    function isPariwarikPaid(m) {
-      if (!m) return false;
-      return (m.pariwarikPaid === true || m.pariwarikPaid === 'true' || m.pariwarikPaid === 'yes' || m.pariwarikPaid === 'Yes');
-    }
-
     async function togglePariwarikPaidStatus(memberId, isChecked) {
       const idx = allMembers.findIndex(m => m.id === memberId);
       if (idx === -1) return;
