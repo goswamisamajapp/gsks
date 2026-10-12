@@ -3466,7 +3466,7 @@
       
       const pariwarikCheckbox = document.getElementById('edit-pariwarik-member');
       if (pariwarikCheckbox) {
-        pariwarikCheckbox.checked = (member.pariwarikMember === true || member.pariwarikMember === 'true' || member.pariwarikMember === 'yes' || member.pariwarikMember === 'Yes');
+        pariwarikCheckbox.checked = isPariwarikMember(member);
       }
 
       document.getElementById('password-reset-alert').classList.add('hidden');
@@ -3510,7 +3510,7 @@
 
       const addPariwarikCheckbox = document.getElementById('add-pariwarik-member');
       if (addPariwarikCheckbox) {
-        addPariwarikCheckbox.checked = false;
+        addPariwarikCheckbox.checked = true;
       }
 
       const modal = document.getElementById('add-member-modal');
@@ -6234,7 +6234,11 @@
 
     function isPariwarikMember(m) {
       if (!m) return false;
-      return (m.pariwarikMember === true || m.pariwarikMember === 'true' || m.pariwarikMember === 'yes' || m.pariwarikMember === 'Yes');
+      // If explicitly marked false or 'no', exclude. Otherwise include by default for all non-removed members.
+      if (m.pariwarikMember === false || m.pariwarikMember === 'false' || m.pariwarikMember === 'no' || m.pariwarikMember === 'No') {
+        return false;
+      }
+      return true;
     }
 
     function isPariwarikPaid(m) {
