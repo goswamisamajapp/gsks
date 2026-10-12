@@ -1452,6 +1452,43 @@
         <!-- ========================================== -->
         <div id="settings-page-fund" class="hidden space-y-6">
           
+          <!-- Opening Balances Card (2025 Opening Fund - 2025 से पूर्व संचित कोष) -->
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-md">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-white/20">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                  <h3 class="text-base sm:text-lg font-black tracking-wide">प्रारंभिक कोष (Opening Balance - 2025 से पूर्व संचित कोष)</h3>
+                </div>
+                <p class="text-xs text-amber-100 mt-1" id="opening-balance-remarks-text">समिति 2025 से पूर्व संचालित है - प्रारंभिक जमा राशि</p>
+              </div>
+              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-4 py-2 bg-white text-orange-800 hover:bg-orange-50 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>प्रारंभिक कोष संशोधित करें (Edit Opening Balance)</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-4">
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">नगद प्रारंभिक कोष (Cash Opening Balance)</p>
+                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-cash">₹ 34,025</h4>
+                <p class="text-[10px] text-amber-100 mt-0.5">स्वयं जमा / Self Fund Cash</p>
+              </div>
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">बैंक प्रारंभिक कोष (Bank Opening Balance)</p>
+                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-bank">₹ 0</h4>
+                <p class="text-[10px] text-amber-100 mt-0.5">SBI / बैंक खाता प्रारंभिक शेष</p>
+              </div>
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between">
+                <div>
+                  <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">कुल प्रारंभिक संचित कोष</p>
+                  <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-total">₹ 34,025</h4>
+                </div>
+                <p class="text-[10px] text-emerald-200 font-bold mt-1">✓ मुख्य कोष में स्वतः सम्मिलित</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Treasury Summary Live Counters -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
@@ -1590,43 +1627,6 @@
         <!-- ========================================== -->
         <div id="settings-page-expense" class="hidden space-y-6">
           
-          <!-- Opening Balances Card (2025 Opening Fund) -->
-          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-md">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-white/20">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
-                  <h3 class="text-base sm:text-lg font-black tracking-wide">प्रारंभिक कोष (Opening Balance - 2025 से पूर्व संचित कोष)</h3>
-                </div>
-                <p class="text-xs text-amber-100 mt-1" id="opening-balance-remarks-text">समिति 2025 से पूर्व संचालित है - प्रारंभिक जमा राशि</p>
-              </div>
-              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-4 py-2 bg-white text-orange-800 hover:bg-orange-50 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
-                <i class="fa-solid fa-pen-to-square"></i>
-                <span>प्रारंभिक कोष संशोधित करें (Edit Opening Balance)</span>
-              </button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-4">
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">नगद प्रारंभिक कोष (Cash Opening Balance)</p>
-                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-cash">₹ 34,025</h4>
-                <p class="text-[10px] text-amber-100 mt-0.5">स्वयं जमा / Self Fund Cash</p>
-              </div>
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">बैंक प्रारंभिक कोष (Bank Opening Balance)</p>
-                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-bank">₹ 0</h4>
-                <p class="text-[10px] text-amber-100 mt-0.5">SBI / बैंक खाता प्रारंभिक शेष</p>
-              </div>
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between">
-                <div>
-                  <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">कुल प्रारंभिक संचित कोष</p>
-                  <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-total">₹ 34,025</h4>
-                </div>
-                <p class="text-[10px] text-emerald-200 font-bold mt-1">✓ मुख्य कोष में स्वतः सम्मिलित</p>
-              </div>
-            </div>
-          </div>
-
           <!-- Section 1: Expense Schemes / Heads Master -->
           <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
@@ -5156,6 +5156,7 @@
       } else if (tab === 'fund') {
         if (tabBtnFund) tabBtnFund.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-teal-600 text-white shadow-sm flex-shrink-0';
         if (pageFund) pageFund.classList.remove('hidden');
+        renderOpeningBalancesCard();
         renderFundTypesGrid();
         renderBankAccountsGrid();
         renderFundTransfersList();
@@ -7931,9 +7932,8 @@
       }
     }
 
-    // --- EXPENSE MASTER TAB RENDERING & LOGIC ---
-    function renderExpenseMasterTab() {
-      // 1. Opening Balances Display
+    // --- OPENING BALANCES CARD RENDERING ---
+    function renderOpeningBalancesCard() {
       const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
       const openCash = parseFloat(openBalances.cash) || 0;
       const openBank = parseFloat(openBalances.bank) || 0;
@@ -7948,8 +7948,13 @@
       if (dispBank) dispBank.textContent = `₹ ${openBank.toLocaleString('en-IN')}`;
       if (dispTotal) dispTotal.textContent = `₹ ${openTotal.toLocaleString('en-IN')}`;
       if (dispRemarks && openBalances.remarks) dispRemarks.textContent = openBalances.remarks;
+    }
 
-      // 2. Expense Schemes / Heads Grid
+    // --- EXPENSE MASTER TAB RENDERING & LOGIC ---
+    function renderExpenseMasterTab() {
+      renderOpeningBalancesCard();
+
+      // 1. Expense Schemes / Heads Grid
       const schemesGrid = document.getElementById('expense-schemes-cards-grid');
       if (schemesGrid) {
         const list = masterSettings.expenseSchemes || [];
@@ -8049,7 +8054,7 @@
         masterSettings.openingBalances = { cash, bank, remarks };
         closeEditOpeningBalanceModal();
         updateStats();
-        renderExpenseMasterTab();
+        renderOpeningBalancesCard();
         await saveAllSettingsToCloud(false);
         alert("✅ प्रारंभिक कोष (Opening Balance) सफलतापूर्वक अपडेट कर दिया गया!");
       } catch (err) {
@@ -8216,6 +8221,7 @@
     window.renderExpensesList = renderExpensesList;
 
     window.renderExpenseMasterTab = renderExpenseMasterTab;
+    window.renderOpeningBalancesCard = renderOpeningBalancesCard;
     window.openEditOpeningBalanceModal = openEditOpeningBalanceModal;
     window.closeEditOpeningBalanceModal = closeEditOpeningBalanceModal;
     window.handleSaveOpeningBalance = handleSaveOpeningBalance;
