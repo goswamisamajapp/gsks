@@ -3324,24 +3324,24 @@
 
     function getEventBadge(cat) {
       if (cat === 'Emergency meeting') {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span> Emergency</span>`;
+        return `<span title="Emergency meeting" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span> <i class="fa-solid fa-triangle-exclamation"></i> Emergency</span>`;
       } else if (cat === 'Special Event') {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-300 flex items-center gap-1"><i class="fa-solid fa-star text-[9px] text-purple-600"></i> Special Event</span>`;
+        return `<span title="Special Event" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800 border border-purple-300 flex items-center gap-1"><i class="fa-solid fa-champagne-glasses text-[9px] text-purple-600"></i> Special Event</span>`;
       }
-      return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1"><i class="fa-solid fa-users text-[9px] text-blue-600"></i> General Meeting</span>`;
+      return `<span title="General Meeting" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1"><i class="fa-solid fa-users text-[9px] text-blue-600"></i> General Meeting</span>`;
     }
 
     function getAudienceBadge(aud, selectedCount) {
       if (aud === 'Selected User') {
-        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1"><i class="fa-solid fa-crosshairs"></i> ${selectedCount || 0} चयनित सदस्य</span>`;
+        return `<span title="${selectedCount || 0} चयनित सदस्य (Selected Members)" class="px-2 py-1 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-user-tag text-indigo-600"></i><span class="text-[10px] font-extrabold font-mono">${selectedCount || 0}</span></span>`;
       } else if (aud === 'Prime User') {
-        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1"><i class="fa-solid fa-crown text-amber-600"></i> Prime Members Only</span>`;
+        return `<span title="प्राइम सदस्य (Prime Members Only)" class="w-7 h-7 rounded-xl text-xs bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center shadow-sm"><i class="fa-solid fa-crown text-amber-500"></i></span>`;
       } else if (aud === 'Active User') {
-        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i class="fa-solid fa-user-check text-emerald-600"></i> Active Members Only</span>`;
+        return `<span title="सक्रिय सदस्य (Active Members Only)" class="w-7 h-7 rounded-xl text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-check text-emerald-600"></i></span>`;
       } else if (aud === 'Inactive User') {
-        return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1"><i class="fa-solid fa-user-slash text-slate-500"></i> Inactive Members</span>`;
+        return `<span title="निष्क्रिय सदस्य (Inactive Members)" class="w-7 h-7 rounded-xl text-xs bg-slate-100 text-slate-600 border border-slate-300 flex items-center justify-center shadow-sm"><i class="fa-solid fa-user-slash text-slate-500"></i></span>`;
       }
-      return `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1"><i class="fa-solid fa-bullhorn text-blue-600"></i> समस्त सदस्य (All Members)</span>`;
+      return `<span title="समस्त सदस्य (All Members)" class="w-7 h-7 rounded-xl text-xs bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center shadow-sm"><i class="fa-solid fa-users text-blue-600"></i></span>`;
     }
 
     function formatEventDate(dtStr) {
@@ -3377,7 +3377,20 @@
       
       const audContainer = document.getElementById('view-event-audience-container');
       if (audContainer) {
-        audContainer.innerHTML = getAudienceBadge(ev.audience, ev.selectedMembers ? ev.selectedMembers.length : 0);
+        const audNames = {
+          'All User': 'समस्त सदस्य (All Members)',
+          'Prime User': 'प्राइम सदस्य (Prime Members Only)',
+          'Active User': 'सक्रिय सदस्य (Active Members Only)',
+          'Inactive User': 'निष्क्रिय सदस्य (Inactive Members)',
+          'Selected User': `चयनित सदस्य (${(ev.selectedMembers || []).length} Selected Members)`
+        };
+        const audLabel = audNames[ev.audience] || 'समस्त सदस्य (All Members)';
+        audContainer.innerHTML = `
+          <div class="flex items-center gap-2">
+            ${getAudienceBadge(ev.audience, ev.selectedMembers ? ev.selectedMembers.length : 0)}
+            <span class="text-xs font-bold text-slate-700">${audLabel}</span>
+          </div>
+        `;
         if (ev.audience === 'Selected User' && ev.selectedMembers && ev.selectedMembers.length > 0) {
           const names = ev.selectedMembers.map(mId => {
             const member = allMembers.find(m => m.id === mId);
