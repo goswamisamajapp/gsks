@@ -874,8 +874,8 @@
           </div>
         </div>
 
-        <!-- 2. Row 2: 30 Months Overall Scheme Grand Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 2. Row 2: 30 Months Overall Scheme Grand Summary Cards (4 Cards) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Overall Card 1: Grand Total -->
           <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-slate-700/50">
             <div>
@@ -927,6 +927,24 @@
             </div>
             <div class="w-12 h-12 rounded-2xl bg-rose-500/25 text-rose-300 border border-rose-400/20 flex items-center justify-center text-xl shadow-inner">
               <i class="fa-solid fa-receipt"></i>
+            </div>
+          </div>
+
+          <!-- Overall Card 4: In Fund Deposit (All Paid Months x 500) -->
+          <div class="bg-gradient-to-br from-amber-950 via-amber-900 to-orange-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-amber-700/50">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-amber-500/30 text-amber-200 text-[10px] font-bold uppercase tracking-wider">Fund Deposit</span>
+                <p class="text-xs font-bold text-amber-200">कोष में जमा (In Fund Deposit)</p>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-amber-300" id="pariwarik-fund-deposit">₹ 0</h3>
+              <p class="text-[11px] text-amber-100 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/15 px-2 py-0.5 rounded-full text-amber-200 font-bold text-[10px]" id="pariwarik-fund-deposit-calc">0 माह × ₹500</span>
+                <span>• Completed Months × ₹500</span>
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/25 text-amber-300 border border-amber-400/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-vault"></i>
             </div>
           </div>
         </div>
@@ -6555,12 +6573,20 @@
       const elOverallDues = document.getElementById('pariwarik-overall-dues');
       const elRemainingMonths = document.getElementById('pariwarik-remaining-months-count');
 
+      // Fund Deposit: completedMonthsCount * 500 (e.g., 14 x 500 = 7,000)
+      const fundDepositPerMonth = 500;
+      const totalFundDeposit = completedMonthsCount * fundDepositPerMonth;
+      const elFundDeposit = document.getElementById('pariwarik-fund-deposit');
+      const elFundDepositCalc = document.getElementById('pariwarik-fund-deposit-calc');
+
       if (elGrandTotal) elGrandTotal.textContent = `₹ ${overallGrandTotal.toLocaleString('en-IN')}`;
       if (elGrandMonthsCount) elGrandMonthsCount.textContent = `${totalMonthsInScheme} Months Total`;
       if (elOverallPaid) elOverallPaid.textContent = `₹ ${overallTotalPaid.toLocaleString('en-IN')}`;
       if (elCompletedMonths) elCompletedMonths.textContent = `${completedMonthsCount} Completed Months`;
       if (elOverallDues) elOverallDues.textContent = `₹ ${overallTotalDues.toLocaleString('en-IN')}`;
       if (elRemainingMonths) elRemainingMonths.textContent = `${remainingMonthsCount} Rest Months`;
+      if (elFundDeposit) elFundDeposit.textContent = `₹ ${totalFundDeposit.toLocaleString('en-IN')}`;
+      if (elFundDepositCalc) elFundDepositCalc.textContent = `${completedMonthsCount} माह × ₹500`;
 
       // ==========================================
       // TABLE BREAKDOWN
