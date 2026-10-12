@@ -1213,7 +1213,7 @@
               </div>
               <button onclick="openFundTransferModal()" class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-indigo-500/20">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया Fund Transfer / खर्च दर्ज करें</span>
+                <span>नया Fund Transfer / खर्च दर्ज करें</span>
               </button>
             </div>
 
@@ -5833,8 +5833,9 @@
           accounts.map(acc => {
             const accNumMasked = acc.accountNumber ? ` (खाता: ${acc.accountNumber})` : '';
             const branchText = acc.branchName ? ` - ${acc.branchName}` : '';
-            const title = `${acc.bankName}${accNumMasked}${branchText}`;
-            return `<option value="${escapeHtml(title)}">${escapeHtml(title)}</option>`;
+            const rawTitle = `${acc.bankName || 'बैंक'}${accNumMasked}${branchText}`;
+            const cleanTitle = rawTitle.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return `<option value="${cleanTitle}">${cleanTitle}</option>`;
           }).join('') +
           `<option value="__custom__">➕ अन्य बैंक / अन्य नाम दर्ज करें...</option>`;
       }
@@ -6169,6 +6170,8 @@
     window.handleTransferTypeChange = handleTransferTypeChange;
     window.handleFundTransferRemarksSelect = handleFundTransferRemarksSelect;
     window.populateFundTransferPurposeDropdown = populateFundTransferPurposeDropdown;
+    window.populateFundTransferBankDropdown = populateFundTransferBankDropdown;
+    window.handleFundTransferBankSelect = handleFundTransferBankSelect;
     window.handleSaveFundTransfer = handleSaveFundTransfer;
     window.deleteFundTransferItem = deleteFundTransferItem;
     window.filterFundTransfers = filterFundTransfers;
