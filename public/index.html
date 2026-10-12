@@ -817,7 +817,7 @@
           </div>
         </div>
 
-        <!-- 1. Top Summary Cards (Total Members, Total Amount, Paid Amount, Dues Amount) -->
+        <!-- 1. Top Monthly Dynamic Summary Cards (For Selected Month) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Card 1: Total Members -->
           <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
@@ -831,22 +831,22 @@
             </div>
           </div>
 
-          <!-- Card 2: Total Amount -->
+          <!-- Card 2: Selected Month Total Amount -->
           <div class="bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-bold text-cyan-100 uppercase tracking-wider">कुल राशि (Total Amount)</p>
+              <p class="text-xs font-bold text-cyan-100 uppercase tracking-wider">माह कुल राशि (<span id="pariwarik-selected-month-lbl">महीना</span>)</p>
               <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-total">₹ 0</h3>
-              <p class="text-[11px] text-cyan-100 mt-1">योजना अंतर्गत कुल निर्धारित राशि</p>
+              <p class="text-[11px] text-cyan-100 mt-1">मासिक निर्धारित राशि (30 x 150)</p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
               <i class="fa-solid fa-hand-holding-dollar"></i>
             </div>
           </div>
 
-          <!-- Card 3: Paid Amount -->
+          <!-- Card 3: Selected Month Paid Amount -->
           <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-bold text-emerald-100 uppercase tracking-wider">भुगतान राशि (Paid Amount)</p>
+              <p class="text-xs font-bold text-emerald-100 uppercase tracking-wider">माह भुगतान राशि (Paid)</p>
               <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-paid">₹ 0</h3>
               <p class="text-[11px] text-emerald-100 mt-1 flex items-center gap-1.5 font-medium">
                 <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-paid-count">0 सदस्य Paid</span>
@@ -858,10 +858,10 @@
             </div>
           </div>
 
-          <!-- Card 4: Dues Amount -->
+          <!-- Card 4: Selected Month Dues Amount -->
           <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
             <div>
-              <p class="text-xs font-bold text-rose-100 uppercase tracking-wider">बकाया राशि (Dues Amount)</p>
+              <p class="text-xs font-bold text-rose-100 uppercase tracking-wider">माह बकाया राशि (Dues)</p>
               <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-dues">₹ 0</h3>
               <p class="text-[11px] text-rose-100 mt-1 flex items-center gap-1.5 font-medium">
                 <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-unpaid-count">0 सदस्य Unpaid</span>
@@ -871,6 +871,78 @@
             <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
               <i class="fa-solid fa-file-invoice-dollar"></i>
             </div>
+          </div>
+        </div>
+
+        <!-- 2. Row 2: 30 Months Overall Scheme Grand Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Overall Card 1: Grand Total -->
+          <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-slate-700/50">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-indigo-500/30 text-indigo-200 text-[10px] font-bold uppercase tracking-wider">30 Months Total</span>
+                <p class="text-xs font-bold text-slate-300">योजना महायोग (Grand Total)</p>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-white" id="pariwarik-grand-total">₹ 1,35,000</h3>
+              <p class="text-[11px] text-slate-300 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/10 px-2 py-0.5 rounded-full text-indigo-300 font-bold text-[10px]" id="pariwarik-grand-months-count">30 Months Count</span>
+                <span>• 30 सदस्य × 30 माह × ₹150</span>
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+          </div>
+
+          <!-- Overall Card 2: Overall Total Paid -->
+          <div class="bg-gradient-to-br from-teal-900 via-emerald-900 to-emerald-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-emerald-700/50">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-emerald-500/30 text-emerald-200 text-[10px] font-bold uppercase tracking-wider">Completed Collection</span>
+                <p class="text-xs font-bold text-emerald-200">कुल जमा (Total Paid)</p>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-emerald-300" id="pariwarik-overall-paid">₹ 0</h3>
+              <p class="text-[11px] text-emerald-100 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/15 px-2 py-0.5 rounded-full text-emerald-200 font-bold text-[10px]" id="pariwarik-completed-months-count">0 Completed Months</span>
+                <span>• अब तक कुल प्राप्त</span>
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/25 text-emerald-300 border border-emerald-400/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+
+          <!-- Overall Card 3: Overall Total Dues -->
+          <div class="bg-gradient-to-br from-rose-950 via-red-900 to-rose-900 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-rose-700/50">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-rose-500/30 text-rose-200 text-[10px] font-bold uppercase tracking-wider">Remaining Dues</span>
+                <p class="text-xs font-bold text-rose-200">कुल बकाया (Total Dues)</p>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-rose-200" id="pariwarik-overall-dues">₹ 0</h3>
+              <p class="text-[11px] text-rose-100 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/15 px-2 py-0.5 rounded-full text-rose-200 font-bold text-[10px]" id="pariwarik-remaining-months-count">0 Rest Months</span>
+                <span>• Grand Total - Total Paid</span>
+              </p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-rose-500/25 text-rose-300 border border-rose-400/20 flex items-center justify-center text-xl shadow-inner">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Monthly Tabs Bar (Sep 2025 to Feb 2028 - Total 30 Months) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-2.5 shadow-xs">
+          <div class="flex items-center justify-between px-2 pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-calendar-days text-indigo-600 text-xs"></i>
+              <span class="text-xs font-bold text-slate-800">मासिक विवरण चुनें (Select Month):</span>
+              <span class="text-[10px] text-slate-400 font-semibold">(Sep 2025 से Feb 2028 तक कुल 30 माह)</span>
+            </div>
+            <span class="text-[11px] font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-100" id="pariwarik-active-month-badge">महीना: --</span>
+          </div>
+          <div class="flex items-center gap-2 overflow-x-auto pt-2 pb-1 scrollbar-thin" id="pariwarik-months-tabs-bar">
+            <!-- Dynamically populated via JS -->
           </div>
         </div>
 
@@ -2625,8 +2697,42 @@
     let activeViewingMemberId = null;
     let pendingDeleteMemberId = null;
 
-    // Pariwarik Arthik Constants & Helpers
+    // Pariwarik Arthik Constants & Helpers (Sep 2025 to Feb 2028 - 30 Months)
     const PARIWARIK_MONTHLY_FEE = 150;
+    const PARIWARIK_MONTHS = [
+      { key: '2025-09', label: 'Sep 2025', defaultPaid: true },
+      { key: '2025-10', label: 'Oct 2025', defaultPaid: true },
+      { key: '2025-11', label: 'Nov 2025', defaultPaid: true },
+      { key: '2025-12', label: 'Dec 2025', defaultPaid: true },
+      { key: '2026-01', label: 'Jan 2026', defaultPaid: true },
+      { key: '2026-02', label: 'Feb 2026', defaultPaid: true },
+      { key: '2026-03', label: 'Mar 2026', defaultPaid: true },
+      { key: '2026-04', label: 'Apr 2026', defaultPaid: true },
+      { key: '2026-05', label: 'May 2026', defaultPaid: true },
+      { key: '2026-06', label: 'Jun 2026', defaultPaid: true },
+      { key: '2026-07', label: 'Jul 2026', defaultPaid: true },
+      { key: '2026-08', label: 'Aug 2026', defaultPaid: true },
+      { key: '2026-09', label: 'Sep 2026', defaultPaid: true },
+      { key: '2026-10', label: 'Oct 2026', defaultPaid: false },
+      { key: '2026-11', label: 'Nov 2026', defaultPaid: false },
+      { key: '2026-12', label: 'Dec 2026', defaultPaid: false },
+      { key: '2027-01', label: 'Jan 2027', defaultPaid: false },
+      { key: '2027-02', label: 'Feb 2027', defaultPaid: false },
+      { key: '2027-03', label: 'Mar 2027', defaultPaid: false },
+      { key: '2027-04', label: 'Apr 2027', defaultPaid: false },
+      { key: '2027-05', label: 'May 2027', defaultPaid: false },
+      { key: '2027-06', label: 'Jun 2027', defaultPaid: false },
+      { key: '2027-07', label: 'Jul 2027', defaultPaid: false },
+      { key: '2027-08', label: 'Aug 2027', defaultPaid: false },
+      { key: '2027-09', label: 'Sep 2027', defaultPaid: false },
+      { key: '2027-10', label: 'Oct 2027', defaultPaid: false },
+      { key: '2027-11', label: 'Nov 2027', defaultPaid: false },
+      { key: '2027-12', label: 'Dec 2027', defaultPaid: false },
+      { key: '2028-01', label: 'Jan 2028', defaultPaid: false },
+      { key: '2028-02', label: 'Feb 2028', defaultPaid: false }
+    ];
+    let currentPariwarikMonth = '2026-10'; // Default current view month
+
     function isPariwarikMember(m) {
       if (!m) return false;
       if (m.status === 'removed') return false;
@@ -2635,9 +2741,17 @@
       }
       return true;
     }
-    function isPariwarikPaid(m) {
+
+    function isPariwarikPaidForMonth(m, monthKey) {
       if (!m) return false;
-      return (m.pariwarikPaid === true || m.pariwarikPaid === 'true' || m.pariwarikPaid === 'yes' || m.pariwarikPaid === 'Yes');
+      // 1. If explicit override in member's monthly map
+      if (m.pariwarikMonthlyPaid && m.pariwarikMonthlyPaid[monthKey] !== undefined) {
+        const val = m.pariwarikMonthlyPaid[monthKey];
+        return (val === true || val === 'true' || val === 'yes' || val === 'Yes');
+      }
+      // 2. Fallback to month default rule (Sep 2025 to Sep 2026 default paid true)
+      const mCfg = PARIWARIK_MONTHS.find(x => x.key === monthKey);
+      return mCfg ? mCfg.defaultPaid : false;
     }
 
     // Master Settings State
@@ -6256,18 +6370,50 @@
     // ==============================================================
     // 9. PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) LOGIC
     // ==============================================================
+    function selectPariwarikMonth(monthKey) {
+      currentPariwarikMonth = monthKey;
+      renderPariwarikView();
+    }
+
+    function renderPariwarikMonthsTabs() {
+      const container = document.getElementById('pariwarik-months-tabs-bar');
+      if (!container) return;
+
+      container.innerHTML = PARIWARIK_MONTHS.map((m, idx) => {
+        const isSelected = m.key === currentPariwarikMonth;
+        const activeClass = isSelected
+          ? 'bg-indigo-600 text-white font-black shadow-md shadow-indigo-600/30 ring-2 ring-indigo-400'
+          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold';
+        
+        return `
+          <button type="button" onclick="selectPariwarikMonth('${m.key}')" class="px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 ${activeClass}">
+            <span>${m.label}</span>
+            <span class="text-[9px] opacity-75">(${idx + 1})</span>
+          </button>
+        `;
+      }).join('');
+    }
+
     async function togglePariwarikPaidStatus(memberId, isChecked) {
       const idx = allMembers.findIndex(m => m.id === memberId);
       if (idx === -1) return;
       
+      if (!allMembers[idx].pariwarikMonthlyPaid || typeof allMembers[idx].pariwarikMonthlyPaid !== 'object') {
+        allMembers[idx].pariwarikMonthlyPaid = {};
+      }
+      allMembers[idx].pariwarikMonthlyPaid[currentPariwarikMonth] = !!isChecked;
+      
+      // Also update general flag if current month is active
       allMembers[idx].pariwarikPaid = !!isChecked;
+
       renderPariwarikView();
 
       // Persist to Central Server
       try {
         await syncMemberToBackend({
           id: memberId,
-          pariwarikPaid: !!isChecked
+          pariwarikMonthlyPaid: allMembers[idx].pariwarikMonthlyPaid,
+          pariwarikPaid: allMembers[idx].pariwarikPaid
         });
       } catch (err) {
         console.warn('Error saving pariwarik paid status:', err);
@@ -6275,23 +6421,34 @@
     }
 
     function renderPariwarikView() {
+      // 0. Render Monthly Tabs
+      renderPariwarikMonthsTabs();
+
       const nonRemoved = allMembers.filter(m => m.status !== 'removed');
       // Filter ONLY members where Pariwarik Arthik Yojna Member checkbox is checked (Yes)
       const pariwarikMembers = nonRemoved.filter(m => isPariwarikMember(m));
-      
       const memberCount = pariwarikMembers.length;
-      // 1. Total Amount = Members * 150
-      const totalSum = memberCount * PARIWARIK_MONTHLY_FEE;
 
-      // 2. Paid members count and Paid Amount
-      const paidMembersCount = pariwarikMembers.filter(m => isPariwarikPaid(m)).length;
-      const paidSum = paidMembersCount * PARIWARIK_MONTHLY_FEE;
+      // Month Details
+      const monthIdx = PARIWARIK_MONTHS.findIndex(m => m.key === currentPariwarikMonth);
+      const activeMonthCfg = PARIWARIK_MONTHS[monthIdx] || PARIWARIK_MONTHS[0];
+      const monthNumber = (monthIdx >= 0 ? monthIdx : 0) + 1; // 1 to 30
 
-      // 3. Dues Amount = Total Amount - Paid Amount (Unpaid members * 150)
-      const unpaidMembersCount = memberCount - paidMembersCount;
-      const duesSum = totalSum - paidSum;
+      // Update Month Badge & Selected Month Label
+      const elMonthBadge = document.getElementById('pariwarik-active-month-badge');
+      const elSelectedMonthLbl = document.getElementById('pariwarik-selected-month-lbl');
+      if (elMonthBadge) elMonthBadge.textContent = `चयनित माह: ${activeMonthCfg.label} (माह ${monthNumber}/30)`;
+      if (elSelectedMonthLbl) elSelectedMonthLbl.textContent = activeMonthCfg.label;
 
-      // Update Top Summary Cards
+      // ==========================================
+      // ROW 1: SELECTED MONTH DYNAMIC STATS (4 Cards)
+      // ==========================================
+      const selectedMonthTotal = memberCount * PARIWARIK_MONTHLY_FEE;
+      const selectedMonthPaidCount = pariwarikMembers.filter(m => isPariwarikPaidForMonth(m, currentPariwarikMonth)).length;
+      const selectedMonthUnpaidCount = memberCount - selectedMonthPaidCount;
+      const selectedMonthPaidSum = selectedMonthPaidCount * PARIWARIK_MONTHLY_FEE;
+      const selectedMonthDuesSum = selectedMonthTotal - selectedMonthPaidSum;
+
       const elMembers = document.getElementById('pariwarik-stat-members');
       const elTotal = document.getElementById('pariwarik-stat-total');
       const elPaid = document.getElementById('pariwarik-stat-paid');
@@ -6301,14 +6458,58 @@
       const elUnpaidCount = document.getElementById('pariwarik-unpaid-count');
 
       if (elMembers) elMembers.textContent = memberCount;
-      if (elTotal) elTotal.textContent = `₹ ${totalSum.toLocaleString('en-IN')}`;
-      if (elPaid) elPaid.textContent = `₹ ${paidSum.toLocaleString('en-IN')}`;
-      if (elDues) elDues.textContent = `₹ ${duesSum.toLocaleString('en-IN')}`;
+      if (elTotal) elTotal.textContent = `₹ ${selectedMonthTotal.toLocaleString('en-IN')}`;
+      if (elPaid) elPaid.textContent = `₹ ${selectedMonthPaidSum.toLocaleString('en-IN')}`;
+      if (elDues) elDues.textContent = `₹ ${selectedMonthDuesSum.toLocaleString('en-IN')}`;
       if (elCount) elCount.textContent = `${memberCount} सदस्य`;
-      if (elPaidCount) elPaidCount.textContent = `${paidMembersCount} सदस्य Paid`;
-      if (elUnpaidCount) elUnpaidCount.textContent = `${unpaidMembersCount} सदस्य Unpaid`;
+      if (elPaidCount) elPaidCount.textContent = `${selectedMonthPaidCount} सदस्य Paid`;
+      if (elUnpaidCount) elUnpaidCount.textContent = `${selectedMonthUnpaidCount} सदस्य Unpaid`;
 
-      // Render Table Breakdown
+      // ==========================================
+      // ROW 2: OVERALL SCHEME SUMMARY (3 Cards)
+      // Grand Total = 30 members * 30 months * 150 = 1,35,000
+      // ==========================================
+      const totalMonthsInScheme = PARIWARIK_MONTHS.length; // 30
+      const overallGrandTotal = memberCount * totalMonthsInScheme * PARIWARIK_MONTHLY_FEE;
+
+      let overallTotalPaid = 0;
+      let completedMonthsCount = 0;
+
+      PARIWARIK_MONTHS.forEach(mCfg => {
+        let mPaidMembers = 0;
+        pariwarikMembers.forEach(m => {
+          if (isPariwarikPaidForMonth(m, mCfg.key)) {
+            overallTotalPaid += PARIWARIK_MONTHLY_FEE;
+            mPaidMembers++;
+          }
+        });
+        // Month is counted as completed if all members have paid
+        if (memberCount > 0 && mPaidMembers === memberCount) {
+          completedMonthsCount++;
+        }
+      });
+
+      const overallTotalDues = Math.max(0, overallGrandTotal - overallTotalPaid);
+      const remainingMonthsCount = Math.max(0, totalMonthsInScheme - completedMonthsCount);
+
+      const elGrandTotal = document.getElementById('pariwarik-grand-total');
+      const elGrandMonthsCount = document.getElementById('pariwarik-grand-months-count');
+      const elOverallPaid = document.getElementById('pariwarik-overall-paid');
+      const elCompletedMonths = document.getElementById('pariwarik-completed-months-count');
+      const elOverallDues = document.getElementById('pariwarik-overall-dues');
+      const elRemainingMonths = document.getElementById('pariwarik-remaining-months-count');
+
+      if (elGrandTotal) elGrandTotal.textContent = `₹ ${overallGrandTotal.toLocaleString('en-IN')}`;
+      if (elGrandMonthsCount) elGrandMonthsCount.textContent = `${totalMonthsInScheme} Months Total`;
+      if (elOverallPaid) elOverallPaid.textContent = `₹ ${overallTotalPaid.toLocaleString('en-IN')}`;
+      if (elCompletedMonths) elCompletedMonths.textContent = `${completedMonthsCount} Completed Months`;
+      if (elOverallDues) elOverallDues.textContent = `₹ ${overallTotalDues.toLocaleString('en-IN')}`;
+      if (elRemainingMonths) elRemainingMonths.textContent = `${remainingMonthsCount} Rest Months`;
+
+      // ==========================================
+      // TABLE BREAKDOWN
+      // Cumulative Total for Month N = N * 150 (e.g. Sep 2025 = 150, Oct 2025 = 300, ... Feb 2028 = 4500)
+      // ==========================================
       const tbody = document.getElementById('pariwarik-table-body');
       if (!tbody) return;
 
@@ -6325,11 +6526,12 @@
         return;
       }
 
+      const cumulativeTotalForMonth = monthNumber * PARIWARIK_MONTHLY_FEE;
+
       tbody.innerHTML = pariwarikMembers.map(m => {
-        const hasPaid = isPariwarikPaid(m);
+        const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
         const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
         const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
-        const mTotal = PARIWARIK_MONTHLY_FEE;
 
         return `
           <tr class="hover:bg-slate-50/80 transition-colors">
@@ -6356,9 +6558,9 @@
             <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
               ₹${mDues.toLocaleString('en-IN')}
             </td>
-            <!-- Total (₹) -->
+            <!-- Cumulative Total (₹) up to this month -->
             <td class="p-3.5 text-right font-mono font-black text-slate-900">
-              ₹${mTotal.toLocaleString('en-IN')}
+              ₹${cumulativeTotalForMonth.toLocaleString('en-IN')}
             </td>
           </tr>
         `;
@@ -6366,7 +6568,8 @@
     }
 
     window.isPariwarikMember = isPariwarikMember;
-    window.isPariwarikPaid = isPariwarikPaid;
+    window.isPariwarikPaidForMonth = isPariwarikPaidForMonth;
+    window.selectPariwarikMonth = selectPariwarikMonth;
     window.togglePariwarikPaidStatus = togglePariwarikPaidStatus;
     window.renderPariwarikView = renderPariwarikView;
 
