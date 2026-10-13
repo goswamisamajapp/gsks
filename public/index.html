@@ -4647,6 +4647,24 @@
           if (e.category === 'Emergency meeting') badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
           else if (e.category === 'Special Event') badgeColor = 'bg-purple-100 text-purple-800 border-purple-200';
 
+          const evtStatus = e.status || (isUpcomingOrOpen ? 'Upcoming' : 'Closed');
+          const isCancelled = (evtStatus.toLowerCase() === 'cancelled');
+          const isClosed = (evtStatus.toLowerCase() === 'closed') || (!isUpcomingOrOpen && !isCancelled);
+
+          let statusBadgeClass = 'bg-slate-100 text-slate-700 border-slate-300';
+          let statusLabel = 'संपन्न (CLOSED)';
+
+          if (isCancelled) {
+            statusBadgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
+            statusLabel = 'रद्द (CANCELLED)';
+          } else if (isClosed) {
+            statusBadgeClass = 'bg-slate-100 text-slate-700 border-slate-300';
+            statusLabel = 'संपन्न (CLOSED)';
+          } else {
+            statusBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+            statusLabel = 'सक्रिय (OPEN)';
+          }
+
           rawNotices.push({
             id: e.id || 'EV-' + Math.random().toString().slice(2, 6),
             title: e.title || 'समिति बैठक सूचना',
@@ -4654,7 +4672,10 @@
             date: e.date || (dt ? dt.toISOString().split('T')[0] : '2026-10-13'),
             dateFormatted: dtFormatted,
             timeFormatted,
-            isOpen: isUpcomingOrOpen && e.status !== 'Closed' && e.status !== 'Cancelled',
+            status: evtStatus,
+            statusLabel,
+            statusBadgeClass,
+            isOpen: isUpcomingOrOpen && evtStatus !== 'Closed' && evtStatus !== 'Cancelled',
             badgeColor,
             badgeText: isUpcomingOrOpen ? '🟢 सक्रिय / आगामी' : '⚪ संपन्न / पूर्व',
             summary: e.description || 'समिति की सामान्य सभा एवं विचार-विमर्श',
@@ -4788,16 +4809,20 @@
                   <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs flex-shrink-0">
                     <i class="fa-solid fa-file-lines"></i>
                   </span>
-                  <div>
-                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 mr-1.5">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
                       ${n.category}
                     </span>
                     <h4 class="text-sm font-extrabold text-slate-800 font-devanagari inline">
                       ${n.title}
                     </h4>
+                    <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${n.statusBadgeClass || 'bg-slate-100 text-slate-700 border-slate-300'} flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full ${n.status === 'Cancelled' ? 'bg-rose-500' : 'bg-slate-400'}"></span>
+                      <span>${n.statusLabel || n.status || 'CLOSED'}</span>
+                    </span>
                   </div>
                 </div>
-                <span class="text-[11px] font-mono text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-lg border border-slate-200">
+                <span class="text-[11px] font-mono text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-lg border border-slate-200 flex-shrink-0 self-start sm:self-center">
                   ${n.dateFormatted || n.date}
                 </span>
               </div>
@@ -4970,9 +4995,14 @@
           <div class="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/70 border border-slate-200 transition-all flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${badgeColor}">
-                  ${e.category || 'बैठक'}
-                </span>
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${badgeColor}">
+                    ${e.category || 'बैठक'}
+                  </span>
+                  ${e.status === 'Closed' ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-200 text-slate-700">संपन्न (Closed)</span>' : ''}
+                  ${e.status === 'Cancelled' ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-700 border border-rose-200">रद्द (Cancelled)</span>' : ''}
+                  ${(!e.status || e.status === 'Upcoming' || e.status === 'Open') ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">आगामी (Upcoming)</span>' : ''}
+                </div>
                 <span class="text-[11px] font-mono font-bold text-indigo-700 flex items-center gap-1">
                   <i class="fa-regular fa-clock text-[10px]"></i> ${timeStr}
                 </span>
