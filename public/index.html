@@ -26,14 +26,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script>
-    // Instant session check before DOM renders to prevent login screen showing on refresh
     if (localStorage.getItem('gsks_admin_auth') === 'true') {
       document.documentElement.classList.add('admin-logged-in');
+    } else if (localStorage.getItem('gsks_member_auth')) {
+      document.documentElement.classList.add('member-logged-in');
     }
   </script>
   <style>
     .admin-logged-in #login-screen { display: none !important; }
     .admin-logged-in #admin-dashboard { display: flex !important; }
+    .member-logged-in #login-screen { display: none !important; }
+    .member-logged-in #member-dashboard { display: flex !important; }
   </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 antialiased flex flex-col">
@@ -124,15 +127,44 @@
       </div>
 
       <!-- User Portal Box -->
-      <div id="user-login-box" class="hidden text-center py-4">
-        <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-3 text-lg">
-          <i class="fa-solid fa-address-card"></i>
+      <div id="user-login-box" class="hidden">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 text-sm">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">Member Portal (सदस्य लॉगिन)</h2>
+            <p class="text-[11px] text-slate-500">सदस्य कोड (ID) या पंजीकृत मोबाइल नंबर से प्रवेश करें</p>
+          </div>
         </div>
-        <h3 class="text-sm font-bold text-slate-900">Member Portal</h3>
-        <p class="text-xs text-slate-500 mt-1 mb-4">सदस्य लॉगिन और पंजीकरण मॉड्यूल शीघ्र उपलब्ध होगा</p>
-        <span class="inline-block px-3 py-1 bg-amber-50 text-amber-700 text-[11px] font-semibold rounded-lg border border-amber-200">
-          🚩 Under Development
-        </span>
+
+        <form onsubmit="handleMemberLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">सदस्य ID या मोबाइल नंबर *</label>
+            <div class="relative">
+              <i class="fa-solid fa-id-card absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="member-login-input" 
+                placeholder="उदा. GSKS-001 या 7781931880" 
+                required
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
+              >
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">💡 अपना GSKS सदस्यता कोड (ID) या मोबाइल नंबर दर्ज करें</p>
+          </div>
+
+          <div id="member-login-error" class="hidden text-[11px] text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200 font-medium"></div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold text-xs tracking-wide shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-right-to-bracket text-xs"></i>
+            <span>सदस्य डैशबोर्ड में प्रवेश करें</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </form>
       </div>
 
       <div class="text-center pt-6 mt-6 border-t border-slate-100 text-[11px] text-slate-400">
@@ -1884,6 +1916,296 @@
         <span class="text-[10px] font-medium">Settings</span>
       </button>
     </div>
+
+  </div>
+
+
+  <!-- ============================================== -->
+  <!-- VIEW 3: MEMBER APP / PORTAL (User Dashboard)   -->
+  <!-- ============================================== -->
+  <div id="member-dashboard" class="hidden flex-1 flex flex-col w-full">
+    
+    <!-- Member Header -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Left: Branding -->
+        <div class="flex items-center gap-3">
+          <img src="/logo-opt.png" alt="GSKS" class="w-10 h-10 rounded-full object-cover border-2 border-orange-200 shadow-sm">
+          <div>
+            <h1 class="text-sm sm:text-base font-extrabold text-orange-800 font-devanagari leading-tight">
+              गोस्वामी समाज कल्याण समिति
+            </h1>
+            <p class="text-[11px] text-slate-500 hidden sm:block">
+              गुनघसा, गोमो, धनबाद - 828401 | सदस्य पोर्टल (Member Portal)
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Member Status Badge & Logout -->
+        <div class="flex items-center gap-2.5">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1 bg-amber-50 rounded-xl border border-amber-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-xs font-bold text-amber-900" id="user-header-name">सदस्य</span>
+          </div>
+
+          <button 
+            type="button"
+            onclick="logoutMember()" 
+            class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 font-bold text-xs transition-colors border border-slate-200 flex items-center gap-1.5 cursor-pointer"
+          >
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>लॉगआउट</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+      
+      <!-- 1. SABSE UPAR: LATEST NOTIFICATION PANEL -->
+      <section id="user-notification-panel" class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden">
+        <div class="absolute -right-4 -bottom-6 text-white/10 text-8xl pointer-events-none">
+          <i class="fa-solid fa-bullhorn"></i>
+        </div>
+        <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg shadow-inner flex-shrink-0">
+              <i class="fa-solid fa-bell animate-bounce"></i>
+            </div>
+            <div>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block">
+                नवीनतम सूचना / Notification
+              </span>
+              <h2 class="text-sm sm:text-base font-extrabold mt-0.5 font-devanagari" id="user-notice-title">
+                समिति की आगामी बैठक एवं सूचना
+              </h2>
+            </div>
+          </div>
+          <span class="text-[11px] bg-black/20 px-3 py-1 rounded-full font-mono font-medium self-end sm:self-center" id="user-notice-date">
+            आज की सूचना
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-white/20 text-xs text-amber-50 leading-relaxed font-medium" id="user-notice-body">
+          समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि मासिक बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।
+        </div>
+      </section>
+
+      <!-- Welcome Profile Banner & 4 Quick Stats -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <!-- Welcome Card (Spans 2 cols on md) -->
+        <div class="md:col-span-2 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div class="relative flex-shrink-0">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-100 to-amber-100 border-2 border-orange-300 flex items-center justify-center text-orange-600 text-2xl font-black font-devanagari" id="user-avatar-initial">
+              ग
+            </div>
+            <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-white shadow-xs font-mono" id="user-card-id">
+              GSKS-000
+            </span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-base sm:text-lg font-black text-slate-900 truncate" id="user-card-name">
+                सदस्य का नाम
+              </h3>
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="user-card-status">
+                सक्रिय सदस्य
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1 truncate">
+              पिता/संरक्षक: <span class="font-semibold text-slate-700" id="user-card-father">--</span>
+            </p>
+            <p class="text-[11px] text-slate-400 mt-0.5">
+              ग्राम/पता: <span class="text-slate-600 font-medium" id="user-card-address">--</span> • सदस्यता वर्ष: <span class="font-mono text-slate-600 font-medium" id="user-card-since">2025</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Stat 1: My Dues (बकाया अंशदान) -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">मेरा बकाया (My Dues)</p>
+            <h3 class="text-xl sm:text-2xl font-black text-rose-600 font-mono mt-0.5" id="user-stat-dues">₹ 0</h3>
+            <p class="text-[10px] text-slate-400" id="user-stat-dues-status">कोई बकाया नहीं</p>
+          </div>
+        </div>
+
+        <!-- Quick Stat 2: My Total Donations (कुल दिया गया सहयोग/दान) -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल दान (My Donations)</p>
+            <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5" id="user-stat-donations">₹ 0</h3>
+            <p class="text-[10px] text-emerald-600 font-semibold" id="user-stat-donations-count">0 रसीदें</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 2. UPCOMING MEETINGS & EVENTS (आगामी बैठकें एवं कार्यक्रम) -->
+      <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                आगामी बैठकें एवं कार्यक्रम (Upcoming Meetings & Events)
+              </h3>
+              <p class="text-xs text-slate-400">समिति द्वारा आयोजित आगामी महत्वपूर्ण कार्यक्रम</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200" id="user-events-count">
+            0 कार्यक्रम
+          </span>
+        </div>
+
+        <!-- Events Container -->
+        <div id="user-events-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- 3. MY DONATIONS & 4. MY DUES DETAILS GRID -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- 3. MY DONATIONS (मेरे दान एवं सहयोग की रसीदें) -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                  मेरे दान व रसीदें (My Donations)
+                </h3>
+                <p class="text-xs text-slate-400">समिति कोष में आपके द्वारा दिया गया दान</p>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" id="user-donations-total-badge">
+              ₹ 0
+            </span>
+          </div>
+
+          <!-- Donations Table Container -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3 pl-4">रसीद सं. / दिनांक</th>
+                  <th class="p-3">योजना / मद</th>
+                  <th class="p-3">माध्यम</th>
+                  <th class="p-3 font-mono text-right pr-4">राशि (Amount)</th>
+                </tr>
+              </thead>
+              <tbody id="user-donations-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                <!-- Populated dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. MY DUES BREAKDOWN (बकाया विवरण एवं सदस्यता अंशदान) -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-base">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                  बकाया विवरण (My Dues)
+                </h3>
+                <p class="text-xs text-slate-400">मासिक सहयोग व वार्षिक सदस्यता शुल्क की स्थिति</p>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200" id="user-dues-badge">
+              ₹ 0
+            </span>
+          </div>
+
+          <div class="space-y-3" id="user-dues-content">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 6. COMPLETE PROFILE DETAILS (प्रोफ़ाइल विवरण) -->
+      <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
+              <i class="fa-solid fa-id-badge"></i>
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                मेरी प्रोफ़ाइल (My Profile Details)
+              </h3>
+              <p class="text-xs text-slate-400">समिति के आधिकारिक रजिस्टर में दर्ज विवरण</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 font-mono" id="user-profile-id-pill">
+            GSKS-000
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">पूरा नाम (Full Name)</span>
+            <span class="font-extrabold text-slate-800 text-sm mt-0.5 block" id="user-prof-name">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">पिता / अभिभावक का नाम (Father's Name)</span>
+            <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-father">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">पंजीकृत मोबाइल नंबर (Mobile No.)</span>
+            <span class="font-mono font-bold text-slate-800 text-sm mt-0.5 block" id="user-prof-phone">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">स्थायी पता / ग्राम (Address)</span>
+            <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-address">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">सदस्यता श्रेणी (Membership Status)</span>
+            <span class="font-bold text-amber-700 mt-0.5 block" id="user-prof-status">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">रक्त समूह (Blood Group)</span>
+            <span class="font-mono font-bold text-rose-600 mt-0.5 block" id="user-prof-blood">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">सदस्यता प्रारंभ तिथि (Member Since)</span>
+            <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-since">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">परिवार पहचान संख्या (Family ID)</span>
+            <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-family-id">--</span>
+          </div>
+          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <span class="text-[11px] text-slate-400 font-medium block">ट्रस्ट शाखा (Trust Branch)</span>
+            <span class="font-bold text-slate-800 mt-0.5 block">गुनघसा, गोमो, धनबाद (828401)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust Footer for Member -->
+      <footer class="text-center py-6 border-t border-slate-200 text-xs text-slate-400">
+        <p class="font-bold text-slate-600 font-devanagari">गोस्वामी समाज कल्याण समिति, गुनघसा (गोमो, धनबाद)</p>
+        <p class="text-[11px] mt-1">अखिल भारतीय शैव समाज सेवा ट्रस्ट • सेवा, एकता एवं कल्याण</p>
+      </footer>
+
+    </main>
 
   </div>
 
@@ -3828,6 +4150,373 @@
       document.getElementById('admin-dashboard').classList.add('hidden');
       document.getElementById('login-screen').classList.remove('hidden');
       document.getElementById('admin-password').value = '';
+    }
+
+    // ==============================================
+    // MEMBER (USER) PORTAL LOGIC & DASHBOARD
+    // ==============================================
+    let currentLoggedInMember = null;
+
+    async function handleMemberLogin(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const inputEl = document.getElementById('member-login-input');
+      const errBox = document.getElementById('member-login-error');
+      if (!inputEl) return;
+      const rawVal = inputEl.value.trim().toLowerCase();
+
+      if (!rawVal) {
+        if (errBox) {
+          errBox.textContent = 'कृपया सदस्य ID या मोबाइल नंबर दर्ज करें!';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // Ensure members data is available
+      if (!allMembers || allMembers.length === 0) {
+        await loadMembersDataFallback();
+      }
+
+      const cleanNum = rawVal.replace(/\D/g, '');
+
+      // Find member by ID or Phone
+      const member = allMembers.find(m => {
+        if (!m || m.status === 'removed') return false;
+        const mId = (m.id || '').toLowerCase();
+        const mPhone = (m.phone || '').replace(/\D/g, '');
+        if (mId === rawVal) return true;
+        if (cleanNum && cleanNum.length >= 8 && mPhone.endsWith(cleanNum)) return true;
+        return false;
+      });
+
+      if (member) {
+        if (errBox) errBox.classList.add('hidden');
+        currentLoggedInMember = member;
+        localStorage.setItem('gsks_member_auth', JSON.stringify({ id: member.id, phone: member.phone }));
+        showMemberDashboard(member);
+      } else {
+        if (errBox) {
+          errBox.textContent = '❌ कोई सदस्य नहीं मिला! कृपया अपनी सही GSKS ID या 10-अंकीय मोबाइल नंबर जांचें।';
+          errBox.classList.remove('hidden');
+        }
+      }
+    }
+
+    function showMemberDashboard(member) {
+      currentLoggedInMember = member;
+      document.documentElement.classList.remove('admin-logged-in');
+      document.documentElement.classList.add('member-logged-in');
+      
+      const loginScr = document.getElementById('login-screen');
+      const adminDash = document.getElementById('admin-dashboard');
+      const memberDash = document.getElementById('member-dashboard');
+
+      if (loginScr) loginScr.classList.add('hidden');
+      if (adminDash) adminDash.classList.add('hidden');
+      if (memberDash) memberDash.classList.remove('hidden');
+
+      initFirebaseRealtime();
+      renderMemberDashboard(member);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function logoutMember() {
+      localStorage.removeItem('gsks_member_auth');
+      currentLoggedInMember = null;
+      document.documentElement.classList.remove('member-logged-in');
+      const memberDash = document.getElementById('member-dashboard');
+      const loginScr = document.getElementById('login-screen');
+      if (memberDash) memberDash.classList.add('hidden');
+      if (loginScr) loginScr.classList.remove('hidden');
+      const inputEl = document.getElementById('member-login-input');
+      if (inputEl) inputEl.value = '';
+      const errBox = document.getElementById('member-login-error');
+      if (errBox) errBox.classList.add('hidden');
+      switchPortalTab('user');
+    }
+
+    function renderMemberDashboard(member) {
+      if (!member) {
+        const stored = localStorage.getItem('gsks_member_auth');
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            member = (allMembers || []).find(m => m.id === parsed.id || (parsed.phone && m.phone === parsed.phone));
+          } catch(e) {}
+        }
+      }
+      if (!member) return;
+      currentLoggedInMember = member;
+
+      // 1. Header & Welcome Card
+      const elHeaderName = document.getElementById('user-header-name');
+      const elCardName = document.getElementById('user-card-name');
+      const elCardId = document.getElementById('user-card-id');
+      const elCardFather = document.getElementById('user-card-father');
+      const elCardAddress = document.getElementById('user-card-address');
+      const elCardSince = document.getElementById('user-card-since');
+      const elCardStatus = document.getElementById('user-card-status');
+      const elAvatar = document.getElementById('user-avatar-initial');
+
+      if (elHeaderName) elHeaderName.textContent = member.name || 'सदस्य';
+      if (elCardName) elCardName.textContent = member.name || 'सदस्य';
+      if (elCardId) elCardId.textContent = member.id || 'GSKS-000';
+      if (elCardFather) elCardFather.textContent = member.father || '--';
+      if (elCardAddress) elCardAddress.textContent = member.address || '--';
+      if (elCardSince) elCardSince.textContent = member.since || '2025';
+      if (elCardStatus) {
+        elCardStatus.textContent = member.status === 'Prime Member' ? '⭐ विशिष्ट सदस्य (Prime)' : (member.status || 'सक्रिय सदस्य');
+        elCardStatus.className = member.status === 'Prime Member' 
+          ? 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300'
+          : 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+      }
+      if (elAvatar) elAvatar.textContent = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
+
+      // 2. LATEST NOTIFICATION PANEL (Sabse Upar)
+      renderMemberNotification(member);
+
+      // 3. UPCOMING MEETINGS & EVENTS
+      renderMemberUpcomingEvents();
+
+      // 4. MY DONATIONS
+      renderMemberDonations(member);
+
+      // 5. MY DUES
+      renderMemberDues(member);
+
+      // 6. COMPLETE PROFILE
+      renderMemberProfile(member);
+    }
+
+    function renderMemberNotification(member) {
+      const noticeTitle = document.getElementById('user-notice-title');
+      const noticeDate = document.getElementById('user-notice-date');
+      const noticeBody = document.getElementById('user-notice-body');
+
+      // Check upcoming events for latest meeting notice
+      const upcomingMeeting = (allEvents || []).find(e => {
+        const d = new Date(e.datetime || e.date);
+        return !isNaN(d) && d >= new Date(new Date().setHours(0,0,0,0));
+      });
+
+      if (upcomingMeeting) {
+        if (noticeTitle) noticeTitle.textContent = `📢 ${upcomingMeeting.title || 'समिति की आगामी बैठक'}`;
+        if (noticeDate) noticeDate.textContent = `📅 ${new Date(upcomingMeeting.datetime).toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', weekday: 'short' })}`;
+        if (noticeBody) {
+          noticeBody.innerHTML = `
+            स्थान: <span class="font-bold text-white">${upcomingMeeting.venue || 'शिव मंदिर, गुनघसा'}</span> | 
+            समय: <span class="font-bold text-white">${new Date(upcomingMeeting.datetime).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+            <p class="mt-1">${upcomingMeeting.description || 'सभी सदस्यों की उपस्थिति प्रार्थनीय है।'}</p>
+          `;
+        }
+      } else {
+        if (noticeTitle) noticeTitle.textContent = `समिति मासिक सहयोग एवं कल्याण सूचना`;
+        if (noticeDate) noticeDate.textContent = new Date().toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+        if (noticeBody) {
+          const dues = Number(member.dues) || 0;
+          if (dues > 0) {
+            noticeBody.innerHTML = `सादर प्रणाम <b>${member.name}</b> जी! आपके खाते में वर्तमान बकाया सहयोग राशि <b>₹${dues.toLocaleString('en-IN')}</b> है। कृपया समय पर अंशदान जमा कर समिति के सामाजिक कार्यों को सुदृढ़ बनाएं।`;
+          } else {
+            noticeBody.innerHTML = `सादर प्रणाम <b>${member.name}</b> जी! समिति में आपकी नियमित सहभागिता और निष्ठा सराहनीय है। आपका समस्त अंशदान अद्यतन है।`;
+          }
+        }
+      }
+    }
+
+    function renderMemberUpcomingEvents() {
+      const listEl = document.getElementById('user-events-list');
+      const countEl = document.getElementById('user-events-count');
+      if (!listEl) return;
+
+      const events = (allEvents || []).filter(e => (e.status || 'Upcoming') !== 'Cancelled');
+      if (countEl) countEl.textContent = `${events.length} कार्यक्रम`;
+
+      if (events.length === 0) {
+        listEl.innerHTML = `
+          <div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
+            <i class="fa-solid fa-calendar-xmark text-3xl mb-2 text-slate-300"></i>
+            <p class="text-xs font-bold text-slate-600">फिलहाल कोई आगामी बैठक या कार्यक्रम निर्धारित नहीं है</p>
+            <p class="text-[11px] text-slate-400 mt-1">नई बैठक तय होने पर यहाँ तुरंत दिखाई देगी</p>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = events.slice(0, 4).map(e => {
+        const dt = e.datetime ? new Date(e.datetime) : null;
+        const dateStr = dt && !isNaN(dt) 
+          ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+          : (e.date || '--');
+        const timeStr = dt && !isNaN(dt)
+          ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })
+          : '';
+
+        const badgeColor = e.category === 'Emergency meeting' 
+          ? 'bg-rose-100 text-rose-700 border-rose-200' 
+          : (e.category === 'Special Event' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200');
+
+        return `
+          <div class="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100/70 border border-slate-200 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${badgeColor}">
+                  ${e.category || 'बैठक'}
+                </span>
+                <span class="text-[11px] font-mono font-bold text-indigo-700 flex items-center gap-1">
+                  <i class="fa-regular fa-clock text-[10px]"></i> ${timeStr}
+                </span>
+              </div>
+              <h4 class="text-sm font-extrabold text-slate-900 leading-snug">${e.title || 'समिति बैठक'}</h4>
+              <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">${e.description || 'समिति की सामान्य सभा'}</p>
+            </div>
+            
+            <div class="mt-3 pt-3 border-t border-slate-200/70 flex items-center justify-between text-xs">
+              <span class="text-slate-600 font-semibold flex items-center gap-1.5 truncate">
+                <i class="fa-solid fa-location-dot text-rose-500 text-[11px]"></i>
+                <span class="truncate">${e.venue || 'शिव मंदिर, गुनघसा'}</span>
+              </span>
+              <span class="font-mono text-[11px] text-slate-500 flex-shrink-0">${dateStr}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMemberDonations(member) {
+      const tbody = document.getElementById('user-donations-tbody');
+      const badgeEl = document.getElementById('user-donations-total-badge');
+      const statTotalEl = document.getElementById('user-stat-donations');
+      const statCountEl = document.getElementById('user-stat-donations-count');
+      if (!tbody) return;
+
+      const mId = (member.id || '').toLowerCase();
+      const mName = (member.name || '').toLowerCase();
+
+      // Filter donations by memberId or matching member name
+      const myDonations = (allDonations || []).filter(d => {
+        if (!d) return false;
+        const dMemId = (d.memberId || '').toLowerCase();
+        const dName = (d.name || '').toLowerCase();
+        return (dMemId && dMemId === mId) || (dName && dName === mName);
+      });
+
+      const totalAmt = myDonations.reduce((sum, d) => sum + (parseFloat(d.amount) || 0), 0);
+      const displayTotal = totalAmt > 0 ? totalAmt : (Number(member.donation) || 0);
+
+      if (badgeEl) badgeEl.textContent = `₹ ${displayTotal.toLocaleString('en-IN')}`;
+      if (statTotalEl) statTotalEl.textContent = `₹ ${displayTotal.toLocaleString('en-IN')}`;
+      if (statCountEl) statCountEl.textContent = `${myDonations.length} रसीदें`;
+
+      if (myDonations.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="p-6 text-center text-slate-400">
+              <i class="fa-solid fa-receipt text-2xl text-slate-300 mb-1.5 block"></i>
+              <p class="text-xs font-semibold text-slate-600">अभी तक कोई दान रसीद दर्ज नहीं है</p>
+              ${member.donation > 0 ? `<p class="text-[11px] text-emerald-600 mt-1">आरंभिक सहयोग: ₹${Number(member.donation).toLocaleString('en-IN')}</p>` : ''}
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = myDonations.map(d => {
+        const amt = parseFloat(d.amount) || 0;
+        const dt = d.date || (d.createdAt ? d.createdAt.split('T')[0] : '--');
+        const methodBadge = d.method === 'Cash' 
+          ? '<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">💵 नकद</span>'
+          : `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200">📱 ${d.method || 'Online'}</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-3 pl-4">
+              <span class="font-mono font-bold text-slate-900 block">${d.id || '--'}</span>
+              <span class="text-[10px] text-slate-400 font-mono">${dt}</span>
+            </td>
+            <td class="p-3">
+              <span class="font-bold text-slate-800 block">${d.scheme || 'सामान्य सहयोग'}</span>
+              ${d.remarks ? `<span class="text-[10px] text-slate-400 truncate block max-w-xs">${d.remarks}</span>` : ''}
+            </td>
+            <td class="p-3">${methodBadge}</td>
+            <td class="p-3 font-mono font-bold text-emerald-600 text-right pr-4">
+              + ₹${amt.toLocaleString('en-IN')}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderMemberDues(member) {
+      const badgeEl = document.getElementById('user-dues-badge');
+      const statDuesEl = document.getElementById('user-stat-dues');
+      const statStatusEl = document.getElementById('user-stat-dues-status');
+      const contentEl = document.getElementById('user-dues-content');
+      if (!contentEl) return;
+
+      const duesAmt = Number(member.dues) || 0;
+      if (badgeEl) badgeEl.textContent = `₹ ${duesAmt.toLocaleString('en-IN')}`;
+      if (statDuesEl) statDuesEl.textContent = `₹ ${duesAmt.toLocaleString('en-IN')}`;
+      if (statStatusEl) {
+        statStatusEl.textContent = duesAmt > 0 ? '⚠️ बकाया देय' : '✅ पूर्णतः अद्यतन';
+        statStatusEl.className = duesAmt > 0 ? 'text-[10px] text-rose-600 font-bold' : 'text-[10px] text-emerald-600 font-semibold';
+      }
+
+      contentEl.innerHTML = `
+        <div class="p-4 rounded-2xl ${duesAmt > 0 ? 'bg-rose-50 border border-rose-200' : 'bg-emerald-50 border border-emerald-200'}">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold ${duesAmt > 0 ? 'text-rose-900' : 'text-emerald-900'} block">
+                ${duesAmt > 0 ? 'वर्तमान बकाया सहयोग राशि (Pending Dues)' : 'कोई बकाया देय नहीं (No Dues)'}
+              </span>
+              <p class="text-[11px] ${duesAmt > 0 ? 'text-rose-600' : 'text-emerald-700'} mt-0.5">
+                ${duesAmt > 0 ? 'कृपया आगामी बैठक में या कोषाध्यक्ष के पास अंशदान जमा करें।' : 'आपकी सदस्यता का समस्त शुल्क पूर्ण रूप से चुकता है।'}
+              </p>
+            </div>
+            <span class="text-xl font-mono font-black ${duesAmt > 0 ? 'text-rose-600' : 'text-emerald-600'}">
+              ₹ ${duesAmt.toLocaleString('en-IN')}
+            </span>
+          </div>
+        </div>
+
+        <!-- Trust Schemes Contribution Guide -->
+        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-2.5 text-xs">
+          <h4 class="font-bold text-slate-800 text-[11px] uppercase tracking-wider">नियमित सदस्यता अंशदान नियम:</h4>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60 text-slate-600">
+            <span>• मासिक पारिवारिक सहयोग (Monthly Sewa):</span>
+            <span class="font-mono font-bold text-slate-800">₹150 / माह</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60 text-slate-600">
+            <span>• वार्षिक सदस्यता नवीनीकरण (Annual Dues):</span>
+            <span class="font-mono font-bold text-slate-800">₹1,200 / वर्ष</span>
+          </div>
+          <div class="flex items-center justify-between py-1 text-slate-600">
+            <span>• भुगतान माध्यम:</span>
+            <span class="font-semibold text-indigo-700">नकद (कोषाध्यक्ष) अथवा ट्रस्ट SBI बैंक खाता</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMemberProfile(member) {
+      const pName = document.getElementById('user-prof-name');
+      const pFather = document.getElementById('user-prof-father');
+      const pPhone = document.getElementById('user-prof-phone');
+      const pAddress = document.getElementById('user-prof-address');
+      const pStatus = document.getElementById('user-prof-status');
+      const pBlood = document.getElementById('user-prof-blood');
+      const pSince = document.getElementById('user-prof-since');
+      const pFamilyId = document.getElementById('user-prof-family-id');
+      const pPill = document.getElementById('user-profile-id-pill');
+
+      if (pName) pName.textContent = member.name || '--';
+      if (pFather) pFather.textContent = member.father || '--';
+      if (pPhone) pPhone.textContent = member.phone || '--';
+      if (pAddress) pAddress.textContent = member.address || '--';
+      if (pStatus) pStatus.textContent = member.status === 'Prime Member' ? 'विशिष्ट सदस्य (Prime Member)' : (member.status || 'सक्रिय सदस्य');
+      if (pBlood) pBlood.textContent = member.bloodGroup || 'दर्ज नहीं';
+      if (pSince) pSince.textContent = member.since || '2025';
+      if (pFamilyId) pFamilyId.textContent = member.familyId || `FAM-${member.id ? member.id.replace(/\D/g,'') : '001'}`;
+      if (pPill) pPill.textContent = member.id || 'GSKS-000';
     }
 
     function updateDate() {
@@ -9276,7 +9965,13 @@ ID: ${item.id}
     window.handleSaveExpenseScheme = handleSaveExpenseScheme;
     window.deleteExpenseSchemeItem = deleteExpenseSchemeItem;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Member exports
+    window.handleMemberLogin = handleMemberLogin;
+    window.showMemberDashboard = showMemberDashboard;
+    window.logoutMember = logoutMember;
+    window.renderMemberDashboard = renderMemberDashboard;
+
+    window.addEventListener('DOMContentLoaded', async () => {
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
       if (btnDeposit) {
         btnDeposit.addEventListener('click', (e) => {
@@ -9287,6 +9982,21 @@ ID: ${item.id}
 
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
         showDashboard();
+      } else if (localStorage.getItem('gsks_member_auth')) {
+        try {
+          const authData = JSON.parse(localStorage.getItem('gsks_member_auth'));
+          if (authData && authData.id) {
+            await loadMembersDataFallback();
+            await loadEventsFallback();
+            await loadDonationsFallback();
+            const mem = (allMembers || []).find(m => m.id === authData.id);
+            if (mem) {
+              showMemberDashboard(mem);
+            }
+          }
+        } catch (e) {
+          console.warn('Member auth restore error:', e);
+        }
       }
     });
   </script>
