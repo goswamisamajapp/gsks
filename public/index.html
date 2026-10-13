@@ -3069,8 +3069,10 @@
   <!-- ============================================================== -->
   <!-- MODAL: EVENT PARTICIPANTS LIST POPUP (प्रतिभागी सदस्य सूची)      -->
   <!-- ============================================================== -->
-  <div id="member-event-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+  <!-- MODAL: EVENT PARTICIPANTS LIST POPUP (प्रतिभागी सदस्य सूची व प्रबंधन) -->
+  <!-- ============================================================== -->
+  <div id="member-event-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-2xl border border-slate-200 relative my-6 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col">
       
       <!-- Close Button -->
       <button onclick="closeMemberEventParticipantsModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
@@ -3078,16 +3080,16 @@
       </button>
 
       <!-- Header -->
-      <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
-        <div class="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg flex-shrink-0 shadow-xs">
-          <i class="fa-solid fa-users"></i>
+      <div class="flex items-center gap-3 pb-3.5 border-b border-slate-100 flex-shrink-0">
+        <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg flex-shrink-0 shadow-xs">
+          <i class="fa-solid fa-user-check"></i>
         </div>
-        <div class="min-w-0 pr-6">
+        <div class="min-w-0 pr-8">
           <div class="flex items-center gap-2">
             <h3 class="text-base font-black text-slate-900 font-devanagari truncate">
               उपस्थित प्रतिभागी सूची (Participants)
             </h3>
-            <span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 flex-shrink-0" id="m-modal-parts-count">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex-shrink-0" id="m-modal-parts-count">
               0
             </span>
           </div>
@@ -3095,30 +3097,119 @@
         </div>
       </div>
 
-      <!-- Quick Stats / Meeting Info -->
-      <div class="my-3.5 bg-slate-50 p-3 rounded-2xl border border-slate-200/70 flex items-center justify-between text-xs text-slate-600">
+      <!-- Quick Stats / Meeting Info & Add Button -->
+      <div class="my-3 bg-slate-50 p-3 rounded-2xl border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600 flex-shrink-0">
         <div class="flex items-center gap-1.5 truncate">
           <i class="fa-solid fa-location-dot text-rose-500 text-[11px]"></i>
-          <span class="truncate" id="m-modal-parts-venue">--</span>
+          <span class="truncate font-medium text-slate-700" id="m-modal-parts-venue">--</span>
         </div>
-        <span class="font-mono text-[11px] text-slate-500 flex-shrink-0 font-medium" id="m-modal-parts-date">--</span>
+        <div class="flex items-center gap-2 justify-between sm:justify-end">
+          <span class="font-mono text-[11px] text-slate-500 font-bold" id="m-modal-parts-date">--</span>
+          
+          <!-- Admin Manual Add Toggle Button -->
+          <button 
+            type="button" 
+            id="btn-toggle-manual-add-participant"
+            onclick="toggleManualAddParticipantForm()" 
+            class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+          >
+            <i class="fa-solid fa-user-plus text-[10px]"></i>
+            <span>+ सदस्य जोड़ें (Add)</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Participants List Table / Container -->
-      <div class="space-y-2 mb-4">
-        <div class="max-h-72 overflow-y-auto rounded-2xl border border-slate-200 divide-y divide-slate-100" id="m-modal-parts-list-body">
+      <!-- Hidden ID of Current Active Event for Participants Modal -->
+      <input type="hidden" id="parts-modal-active-event-id">
+
+      <!-- Collapsible Manual Add Participants Form (Admin Feature) -->
+      <div id="manual-add-participant-section" class="hidden mb-3 p-3.5 bg-gradient-to-br from-emerald-50/70 via-teal-50/40 to-slate-50 rounded-2xl border-2 border-emerald-300 shadow-xs flex-shrink-0 animate-in fade-in duration-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-900 font-devanagari">
+            <i class="fa-solid fa-user-plus text-emerald-600"></i>
+            <span>मैन्युअल रूप से प्रतिभागी उपस्थिति दर्ज करें</span>
+          </div>
+          <button type="button" onclick="toggleManualAddParticipantForm(false)" class="text-slate-400 hover:text-slate-600 text-xs cursor-pointer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="space-y-2.5 text-xs">
+          <!-- Member Selection Dropdown / Multi-Select Checklist -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="font-bold text-slate-700 text-[11px]">सदस्य चुनें (Select Members - Multiple):</label>
+              <div class="flex items-center gap-1.5 text-[10px]">
+                <button type="button" onclick="selectAllManualParticipants(true)" class="text-emerald-700 hover:underline font-bold">सभी चुनें</button>
+                <span class="text-slate-300">|</span>
+                <button type="button" onclick="selectAllManualParticipants(false)" class="text-slate-500 hover:underline">हटाएं</button>
+              </div>
+            </div>
+
+            <!-- Search box for members inside participant selector -->
+            <div class="relative mb-1.5">
+              <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-[10px]"></i>
+              <input 
+                type="text" 
+                id="manual-part-search" 
+                oninput="filterManualParticipantsList(this.value)" 
+                placeholder="सदस्य का नाम, ID या फोन से खोजें..." 
+                class="w-full bg-white border border-slate-200 rounded-xl pl-7 pr-3 py-1.5 text-[11px] text-slate-800 focus:outline-none focus:border-emerald-500"
+              >
+            </div>
+
+            <!-- Scrollable Checklist of Members -->
+            <div id="manual-parts-checklist-container" class="max-h-36 overflow-y-auto bg-white border border-slate-200 rounded-xl p-2 space-y-1 divide-y divide-slate-50">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Time Input & Add Button Row -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-1 border-t border-emerald-200/60">
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 text-[11px] whitespace-nowrap">उपस्थिति का समय (Time):</label>
+              <input 
+                type="time" 
+                id="manual-part-time-input" 
+                class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-[11px] font-mono text-slate-800 font-bold focus:outline-none focus:border-emerald-500"
+              >
+            </div>
+
+            <button 
+              type="button" 
+              onclick="saveManualParticipantsToEvent()" 
+              id="btn-confirm-add-participants"
+              class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-600/30 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+            >
+              <i class="fa-solid fa-check"></i>
+              <span>प्रतिभागी जोड़ें (Add Participants)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participants List Table / Container (Flexible Scrollable Area) -->
+      <div class="flex-1 overflow-hidden flex flex-col mb-3">
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center justify-between px-1">
+          <span>उपस्थित सदस्य विवरण:</span>
+          <span class="text-[10px] text-slate-400 font-normal">नाम • मोबाइल • समय</span>
+        </div>
+        <div class="flex-1 overflow-y-auto rounded-2xl border border-slate-200 divide-y divide-slate-100 bg-slate-50/50" id="m-modal-parts-list-body">
           <!-- Populated dynamically via JS -->
         </div>
       </div>
 
-      <!-- Close Button -->
-      <button 
-        type="button" 
-        onclick="closeMemberEventParticipantsModal()" 
-        class="w-full py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-sm"
-      >
-        <span>ठीक है (Close)</span>
-      </button>
+      <!-- Bottom Action Row -->
+      <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-shrink-0">
+        <span class="text-[11px] text-slate-400 font-medium">कुल उपस्थिति: <strong id="m-modal-parts-bottom-count" class="text-slate-700">0</strong> सदस्य</span>
+        <button 
+          type="button" 
+          onclick="closeMemberEventParticipantsModal()" 
+          class="px-6 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-sm"
+        >
+          <span>बंद करें (Close)</span>
+        </button>
+      </div>
 
     </div>
   </div>
@@ -6363,6 +6454,9 @@
       );
     }
 
+    let activeParticipantsEventId = null;
+    let manualPartSearchTerm = '';
+
     function openMemberEventParticipantsModal(eventId) {
       if (!eventId) return;
       const ev = (allEvents || []).find(e => e.id === eventId);
@@ -6371,12 +6465,17 @@
         return;
       }
 
+      activeParticipantsEventId = eventId;
       const modal = document.getElementById('member-event-participants-modal');
+      const activeIdInput = document.getElementById('parts-modal-active-event-id');
+      if (activeIdInput) activeIdInput.value = eventId;
+
       const titleEl = document.getElementById('m-modal-parts-event-title');
       const countEl = document.getElementById('m-modal-parts-count');
+      const bCountEl = document.getElementById('m-modal-parts-bottom-count');
       const venueEl = document.getElementById('m-modal-parts-venue');
       const dateEl = document.getElementById('m-modal-parts-date');
-      const bodyEl = document.getElementById('m-modal-parts-list-body');
+      const toggleAddBtn = document.getElementById('btn-toggle-manual-add-participant');
 
       const dt = ev.datetime ? new Date(ev.datetime) : null;
       const dateStr = dt && !isNaN(dt)
@@ -6387,63 +6486,311 @@
       if (venueEl) venueEl.textContent = ev.venue || 'शिव मंदिर, गुनघसा';
       if (dateEl) dateEl.textContent = dateStr;
 
-      const participants = ev.participants || [];
-      if (countEl) countEl.textContent = `${participants.length} उपस्थित`;
-
-      if (bodyEl) {
-        if (participants.length === 0) {
-          bodyEl.innerHTML = `
-            <div class="p-8 text-center bg-slate-50 text-slate-400">
-              <i class="fa-solid fa-user-slash text-2xl text-slate-300 mb-1.5 block"></i>
-              <p class="text-xs font-bold text-slate-600">इस बैठक में अभी तक कोई प्रतिभागी उपस्थिति दर्ज नहीं है</p>
-              <p class="text-[11px] text-slate-400 mt-0.5">बैठक के समय 20 मीटर दायरे में उपस्थित सदस्यों द्वारा उपस्थिति दर्ज की जाती है।</p>
-            </div>
-          `;
+      // Check if user is logged in as Admin or Member
+      const isAdminLoggedIn = (localStorage.getItem('gsks_admin_auth') === 'true');
+      if (toggleAddBtn) {
+        // Show manual add button to admin, hide if regular member view
+        if (isAdminLoggedIn) {
+          toggleAddBtn.classList.remove('hidden');
         } else {
-          bodyEl.innerHTML = participants.map((p, idx) => {
-            const timeStr = p.joinedAt ? new Date(p.joinedAt).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : '--';
-            const initial = (p.name ? p.name.trim().charAt(0) : 'स').toUpperCase();
-            const memberObj = (allMembers || []).find(m => m.id === p.memberId);
-            const fatherName = memberObj ? memberObj.father : '';
-
-            return `
-              <div class="p-3 sm:p-3.5 bg-white hover:bg-slate-50 transition-colors flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 min-w-0">
-                  <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-black text-xs font-devanagari flex-shrink-0 shadow-2xs">
-                    ${initial}
-                  </div>
-                  <div class="min-w-0">
-                    <div class="flex items-center gap-2">
-                      <span class="font-extrabold text-slate-900 text-xs truncate font-devanagari">
-                        ${p.name || 'सदस्य'}
-                      </span>
-                      <span class="px-2 py-0.2 rounded-md text-[9px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                        ${p.memberId || '--'}
-                      </span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 truncate mt-0.5">
-                      ${fatherName ? `पिता: ${fatherName} • ` : ''}दूरी: ${p.distanceMeters != null ? `${p.distanceMeters}m` : 'सत्यापित'}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="text-right flex-shrink-0">
-                  <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
-                    <i class="fa-solid fa-check text-[9px]"></i>
-                    <span>उपस्थित</span>
-                  </span>
-                  <span class="text-[9px] font-mono text-slate-400 block mt-0.5">
-                    ${timeStr}
-                  </span>
-                </div>
-              </div>
-            `;
-          }).join('');
+          toggleAddBtn.classList.add('hidden');
         }
       }
 
+      // Hide the add form by default
+      toggleManualAddParticipantForm(false);
+
+      // Render the current participants list
+      renderEventParticipantsList();
+
       if (modal) modal.classList.remove('hidden');
     }
+
+    function renderEventParticipantsList() {
+      if (!activeParticipantsEventId) return;
+      const ev = (allEvents || []).find(e => e.id === activeParticipantsEventId);
+      if (!ev) return;
+
+      const countEl = document.getElementById('m-modal-parts-count');
+      const bCountEl = document.getElementById('m-modal-parts-bottom-count');
+      const bodyEl = document.getElementById('m-modal-parts-list-body');
+      const isAdminLoggedIn = (localStorage.getItem('gsks_admin_auth') === 'true');
+
+      const participants = ev.participants || [];
+      if (countEl) countEl.textContent = `${participants.length} उपस्थित`;
+      if (bCountEl) bCountEl.textContent = participants.length;
+
+      if (!bodyEl) return;
+
+      if (participants.length === 0) {
+        bodyEl.innerHTML = `
+          <div class="p-8 text-center bg-white text-slate-400">
+            <div class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-300 flex items-center justify-center text-xl mx-auto mb-2">
+              <i class="fa-solid fa-user-slash"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-700">इस बैठक में अभी तक कोई प्रतिभागी उपस्थिति दर्ज नहीं है</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">बैठक के समय 20 मीटर दायरे में उपस्थित सदस्य अथवा व्यवस्थापक द्वारा उपस्थिति जोड़ी जाती है।</p>
+          </div>
+        `;
+        return;
+      }
+
+      bodyEl.innerHTML = participants.map((p, idx) => {
+        const timeStr = p.joinedAt 
+          ? new Date(p.joinedAt).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) 
+          : (p.time || '--');
+        const initial = (p.name ? p.name.trim().charAt(0) : 'स').toUpperCase();
+        const memberObj = (allMembers || []).find(m => m.id === p.memberId);
+        const fatherName = memberObj ? memberObj.father : '';
+        const phone = p.phone || (memberObj ? memberObj.phone : '--');
+        const isManual = p.isManual === true || p.distanceMeters == null;
+
+        return `
+          <div class="p-3 sm:p-3.5 bg-white hover:bg-slate-50/80 transition-colors flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-50 to-teal-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-black text-xs font-devanagari flex-shrink-0 shadow-2xs">
+                ${initial}
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-extrabold text-slate-900 text-xs truncate font-devanagari">
+                    ${p.name || 'सदस्य'}
+                  </span>
+                  <span class="px-2 py-0.2 rounded-md text-[9px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                    ${p.memberId || '--'}
+                  </span>
+                  ${isManual ? `
+                    <span class="px-1.5 py-0.2 rounded text-[8px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                      एडमिन प्रविष्टि
+                    </span>
+                  ` : `
+                    <span class="px-1.5 py-0.2 rounded text-[8px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                      GPS 20m
+                    </span>
+                  `}
+                </div>
+                <div class="text-[10px] text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap">
+                  ${fatherName ? `<span>पिता: <strong class="text-slate-700">${fatherName}</strong></span> • ` : ''}
+                  <span class="font-mono flex items-center gap-1">
+                    <i class="fa-solid fa-phone text-[9px] text-slate-400"></i> ${phone}
+                  </span>
+                  ${p.distanceMeters != null ? `• <span>दूरी: ${p.distanceMeters}m</span>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 flex-shrink-0 text-right">
+              <div>
+                <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                  <i class="fa-solid fa-check text-[9px]"></i>
+                  <span>उपस्थित</span>
+                </span>
+                <span class="text-[10px] font-mono font-bold text-slate-500 block mt-0.5">
+                  <i class="fa-regular fa-clock text-[9px] text-slate-400"></i> ${timeStr}
+                </span>
+              </div>
+
+              ${isAdminLoggedIn ? `
+                <button 
+                  type="button" 
+                  onclick="deleteEventParticipant('${ev.id}', '${p.memberId || p.id}')" 
+                  class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center text-xs transition-colors cursor-pointer shadow-2xs"
+                  title="उपस्थिति हटाएं (Remove)"
+                >
+                  <i class="fa-solid fa-trash-can text-[11px]"></i>
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleManualAddParticipantForm(forceState = null) {
+      const section = document.getElementById('manual-add-participant-section');
+      if (!section) return;
+
+      const shouldShow = (forceState !== null) ? forceState : section.classList.contains('hidden');
+      if (shouldShow) {
+        section.classList.remove('hidden');
+
+        // Set default time to current time
+        const timeInput = document.getElementById('manual-part-time-input');
+        if (timeInput) {
+          const now = new Date();
+          const hh = String(now.getHours()).padStart(2, '0');
+          const mm = String(now.getMinutes()).padStart(2, '0');
+          timeInput.value = `${hh}:${mm}`;
+        }
+
+        renderManualParticipantsChecklist();
+      } else {
+        section.classList.add('hidden');
+      }
+    }
+    window.toggleManualAddParticipantForm = toggleManualAddParticipantForm;
+
+    function renderManualParticipantsChecklist() {
+      const container = document.getElementById('manual-parts-checklist-container');
+      if (!container) return;
+
+      const ev = (allEvents || []).find(e => e.id === activeParticipantsEventId);
+      const existingPartIds = new Set((ev && ev.participants ? ev.participants : []).map(p => p.memberId));
+
+      const term = (manualPartSearchTerm || '').trim().toLowerCase();
+      const filteredMembers = (allMembers || []).filter(m => {
+        if (!term) return true;
+        const name = (m.name || '').toLowerCase();
+        const id = (m.id || '').toLowerCase();
+        const phone = (m.phone || '').toLowerCase();
+        const father = (m.father || '').toLowerCase();
+        return name.includes(term) || id.includes(term) || phone.includes(term) || father.includes(term);
+      });
+
+      if (filteredMembers.length === 0) {
+        container.innerHTML = `<p class="p-3 text-center text-[11px] text-slate-400">कोई सदस्य नहीं मिला</p>`;
+        return;
+      }
+
+      container.innerHTML = filteredMembers.map(m => {
+        const isAlreadyJoined = existingPartIds.has(m.id);
+
+        return `
+          <label class="flex items-center justify-between p-1.5 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors ${isAlreadyJoined ? 'opacity-50 pointer-events-none bg-emerald-50/40' : ''}">
+            <div class="flex items-center gap-2 min-w-0">
+              <input 
+                type="checkbox" 
+                name="manual-select-member-cb" 
+                value="${m.id}" 
+                ${isAlreadyJoined ? 'disabled checked' : ''}
+                class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5 cursor-pointer"
+              >
+              <div class="min-w-0">
+                <span class="font-bold text-slate-800 text-[11px] truncate block font-devanagari">
+                  ${m.name}
+                </span>
+                <span class="text-[9px] text-slate-400 block truncate">
+                  ${m.father ? `पिता: ${m.father} • ` : ''}${m.phone || ''}
+                </span>
+              </div>
+            </div>
+            <span class="px-1.5 py-0.2 rounded font-mono text-[9px] font-bold ${isAlreadyJoined ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}">
+              ${isAlreadyJoined ? 'पहले से उपस्थित' : m.id}
+            </span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function filterManualParticipantsList(term) {
+      manualPartSearchTerm = term;
+      renderManualParticipantsChecklist();
+    }
+    window.filterManualParticipantsList = filterManualParticipantsList;
+
+    function selectAllManualParticipants(check = true) {
+      const checkboxes = document.querySelectorAll('input[name="manual-select-member-cb"]:not(:disabled)');
+      checkboxes.forEach(cb => { cb.checked = check; });
+    }
+    window.selectAllManualParticipants = selectAllManualParticipants;
+
+    async function saveManualParticipantsToEvent() {
+      if (!activeParticipantsEventId) return;
+      const ev = (allEvents || []).find(e => e.id === activeParticipantsEventId);
+      if (!ev) return;
+
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="manual-select-member-cb"]:checked:not(:disabled)'));
+      if (checkedBoxes.length === 0) {
+        alert('कृपया कम से कम एक सदस्य चुनें जिसे उपस्थिति सूची में जोड़ना है।');
+        return;
+      }
+
+      const timeVal = document.getElementById('manual-part-time-input').value || '17:00';
+      const [hours, minutes] = timeVal.split(':');
+      const now = new Date();
+      now.setHours(parseInt(hours) || 17, parseInt(minutes) || 0, 0, 0);
+
+      const btn = document.getElementById('btn-confirm-add-participants');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>जोड़ा जा रहा है...</span>`;
+      }
+
+      if (!ev.participants) ev.participants = [];
+
+      checkedBoxes.forEach(cb => {
+        const memId = cb.value;
+        const memberObj = (allMembers || []).find(m => m.id === memId);
+        if (memberObj) {
+          ev.participants.push({
+            memberId: memberObj.id,
+            name: memberObj.name,
+            phone: memberObj.phone || '',
+            joinedAt: now.toISOString(),
+            time: timeVal,
+            isManual: true,
+            distanceMeters: null // Manually marked by admin
+          });
+        }
+      });
+
+      // Update in allEvents state
+      const evIndex = allEvents.findIndex(e => e.id === ev.id);
+      if (evIndex !== -1) allEvents[evIndex] = ev;
+
+      // Persist to Backend API
+      try {
+        await fetch('/api/events/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ev)
+        });
+      } catch (err) {
+        console.warn('Backend save participants warning:', err);
+      }
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> <span>प्रतिभागी जोड़ें (Add Participants)</span>`;
+      }
+
+      // Refresh views
+      toggleManualAddParticipantForm(false);
+      renderEventParticipantsList();
+      renderEventsList();
+      if (typeof renderMemberUpcomingEvents === 'function') renderMemberUpcomingEvents();
+      if (typeof renderMemberAllNotifications === 'function') renderMemberAllNotifications(currentLoggedInMember);
+
+      alert(`✅ ${checkedBoxes.length} सदस्यों की उपस्थिति सफलतापूर्वक दर्ज कर दी गई!`);
+    }
+    window.saveManualParticipantsToEvent = saveManualParticipantsToEvent;
+
+    async function deleteEventParticipant(eventId, memberId) {
+      if (!confirm('क्या आप सचमुच इस सदस्य की उपस्थिति हटाना चाहते हैं?')) return;
+
+      const ev = (allEvents || []).find(e => e.id === eventId);
+      if (!ev || !ev.participants) return;
+
+      ev.participants = ev.participants.filter(p => (p.memberId || p.id) !== memberId);
+
+      const evIndex = allEvents.findIndex(e => e.id === ev.id);
+      if (evIndex !== -1) allEvents[evIndex] = ev;
+
+      try {
+        await fetch('/api/events/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ev)
+        });
+      } catch (err) {
+        console.warn('Backend delete participant warning:', err);
+      }
+
+      renderEventParticipantsList();
+      renderEventsList();
+      if (typeof renderMemberUpcomingEvents === 'function') renderMemberUpcomingEvents();
+    }
+    window.deleteEventParticipant = deleteEventParticipant;
 
     function closeMemberEventParticipantsModal() {
       const modal = document.getElementById('member-event-participants-modal');
@@ -8414,9 +8761,9 @@
     }
 
     function handleEventParticipants(id) {
-      const ev = allEvents.find(e => e.id === id);
-      const title = ev ? ev.title : 'इवेंट';
-      alert(`👥 प्रतिभागी एवं उपस्थिति (Participants) - "${title}"\n(यह फीचर जल्द ही एक्टिव होगा)`);
+      if (typeof openMemberEventParticipantsModal === 'function') {
+        openMemberEventParticipantsModal(id);
+      }
     }
 
     window.handleEventParticipants = handleEventParticipants;
@@ -8557,9 +8904,14 @@
           <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
             <span class="text-[11px] text-slate-400 font-medium">कार्रवाई (Actions):</span>
             <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
-              <!-- 0. Participants Button (New) -->
-              <button onclick="handleEventParticipants('${e.id}')" class="w-7 h-7 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="उपस्थिति / प्रतिभागी (Participants)">
-                <i class="fa-solid fa-user-check"></i>
+              <!-- 0. Participants Button with Count Badge -->
+              <button onclick="handleEventParticipants('${e.id}')" class="h-7 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs gap-1" title="उपस्थिति / प्रतिभागी (Participants)">
+                <i class="fa-solid fa-user-check text-[11px]"></i>
+                ${(e.participants && e.participants.length > 0) ? `
+                  <span class="font-mono text-[10px] font-bold bg-emerald-600 text-white px-1.5 py-0.2 rounded-full">
+                    ${e.participants.length}
+                  </span>
+                ` : ''}
               </button>
               <!-- 1. View Button -->
               <button onclick="openViewEventModal('${e.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण देखें (View Event)">
