@@ -1125,7 +1125,7 @@
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
-                  <th class="p-3.5 pl-5">सदस्य ID / नाम</th>
+                  <th class="p-3.5 pl-5">सदस्य / पिता का नाम</th>
                   <th class="p-3.5">मोबाइल / पता</th>
                   <th class="p-3.5 text-center">भुगतान स्थिति (Paid Yes/No)</th>
                   <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
@@ -12190,7 +12190,7 @@ ID: ${item.id}
           <tr class="hover:bg-slate-50/80 transition-colors">
             <td class="p-3.5 pl-5">
               <div class="font-bold text-slate-900">${m.name || '--'}</div>
-              <div class="text-[10px] text-slate-400 font-mono">${m.id || '--'}</div>
+              <div class="text-[10px] text-slate-500 font-medium">${m.father ? `पिता: ${m.father}` : '--'}</div>
             </td>
             <td class="p-3.5 text-slate-600">
               <div>${m.phone || '--'}</div>
