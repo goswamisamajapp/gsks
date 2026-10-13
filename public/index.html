@@ -6545,29 +6545,23 @@
           };
 
           if (!ev.participants) ev.participants = [];
-          ev.participants.push(participantRecord);
-
-          // Save to local storage / state
-          const evIndex = allEvents.findIndex(e => e.id === ev.id);
-          if (evIndex !== -1) allEvents[evIndex] = ev;
-
-          // Save to backend API
-          try {
-            await fetch('/api/events/save', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(ev)
-            });
-          } catch (err) {
-            console.warn('Event participation save warning:', err);
+          // Avoid duplicate entry if already present
+          const existingIdx = ev.participants.findIndex(p => (p.memberId || p.id) === member.id);
+          if (existingIdx !== -1) {
+            ev.participants[existingIdx] = participantRecord;
+          } else {
+            ev.participants.push(participantRecord);
           }
 
           setFeedback('सफलता! आपकी उपस्थिति बैठक स्थल पर सफलतापूर्वक दर्ज कर ली गई है।', false);
 
+          // Atomic Sync to local state, Express API and Firestore
+          await syncEventToBackendAndCloud(ev);
+
           setTimeout(() => {
             renderEventParticipationUI(ev.id);
             renderMemberUpcomingEvents();
-          }, 1200);
+          }, 600);
         },
         (error) => {
           if (btn) {
@@ -6872,20 +6866,8 @@
         }
       });
 
-      // Update in allEvents state
-      const evIndex = allEvents.findIndex(e => e.id === ev.id);
-      if (evIndex !== -1) allEvents[evIndex] = ev;
-
-      // Persist to Backend API
-      try {
-        await fetch('/api/events/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(ev)
-        });
-      } catch (err) {
-        console.warn('Backend save participants warning:', err);
-      }
+      // Atomic Sync to local state, Express API & Firestore
+      await syncEventToBackendAndCloud(ev);
 
       if (btn) {
         btn.disabled = false;
@@ -6911,18 +6893,8 @@
 
       ev.participants = ev.participants.filter(p => (p.memberId || p.id) !== memberId);
 
-      const evIndex = allEvents.findIndex(e => e.id === ev.id);
-      if (evIndex !== -1) allEvents[evIndex] = ev;
-
-      try {
-        await fetch('/api/events/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(ev)
-        });
-      } catch (err) {
-        console.warn('Backend delete participant warning:', err);
-      }
+      // Atomic Sync to local state, Express API & Firestore
+      await syncEventToBackendAndCloud(ev);
 
       renderEventParticipantsList();
       renderEventsList();
@@ -7555,12 +7527,30 @@
         // Listen for live Firestore events
         eventsCol.onSnapshot((liveEventsSnap) => {
           const eList = [];
-          liveEventsSnap.forEach(doc => eList.push(doc.data()));
+          liveEventsSnap.forEach(doc => {
+            const remoteEv = doc.data();
+            // Merge with local state to ensure no in-memory participants are lost
+            const localEv = (allEvents || []).find(e => e.id === remoteEv.id);
+            if (localEv && Array.isArray(localEv.participants) && localEv.participants.length > 0) {
+              const remoteParts = Array.isArray(remoteEv.participants) ? remoteEv.participants : [];
+              const combinedParts = [...remoteParts];
+              localEv.participants.forEach(lp => {
+                if (!combinedParts.some(rp => (rp.memberId || rp.id) === (lp.memberId || lp.id))) {
+                  combinedParts.push(lp);
+                }
+              });
+              remoteEv.participants = combinedParts;
+            }
+            eList.push(remoteEv);
+          });
           allEvents = eList;
           // Sort events by date descending
-          allEvents.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+          allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
           updateEventsStats();
           renderEventsList();
+          if (typeof renderEventParticipantsList === 'function' && activeParticipantsEventId) {
+            renderEventParticipantsList();
+          }
           if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
             renderMemberNotification(currentLoggedInMember);
             renderMemberUpcomingEvents();
@@ -7695,10 +7685,29 @@
     async function loadEventsFallback() {
       try {
         const res = await fetch('/api/events');
-        allEvents = await res.json();
-        allEvents.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+        const fetchedEvents = await res.json();
+        if (Array.isArray(fetchedEvents)) {
+          fetchedEvents.forEach(fe => {
+            const local = (allEvents || []).find(le => le.id === fe.id);
+            if (local && Array.isArray(local.participants) && local.participants.length > 0) {
+              const feParts = Array.isArray(fe.participants) ? fe.participants : [];
+              const merged = [...feParts];
+              local.participants.forEach(lp => {
+                if (!merged.some(rp => (rp.memberId || rp.id) === (lp.memberId || lp.id))) {
+                  merged.push(lp);
+                }
+              });
+              fe.participants = merged;
+            }
+          });
+          allEvents = fetchedEvents;
+        }
+        allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
         updateEventsStats();
         renderEventsList();
+        if (typeof renderEventParticipantsList === 'function' && activeParticipantsEventId) {
+          renderEventParticipantsList();
+        }
         if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
           renderMemberNotification(currentLoggedInMember);
           renderMemberUpcomingEvents();
@@ -7746,6 +7755,48 @@
         console.warn('Failed saving settings to server API:', err);
       }
     }
+
+    // Unified helper to save/sync Event to local state, Express API & Firestore
+    async function syncEventToBackendAndCloud(eventObj) {
+      if (!eventObj || !eventObj.id) return;
+
+      // 1. Instant local array update
+      const exIdx = allEvents.findIndex(e => e.id === eventObj.id);
+      if (exIdx !== -1) {
+        allEvents[exIdx] = { ...allEvents[exIdx], ...eventObj };
+      } else {
+        allEvents.unshift(eventObj);
+      }
+
+      // Refresh stats & lists
+      updateEventsStats();
+      renderEventsList();
+      if (typeof renderMemberUpcomingEvents === 'function') renderMemberUpcomingEvents();
+      if (typeof renderEventParticipantsList === 'function') renderEventParticipantsList();
+      if (typeof renderEventParticipationUI === 'function') renderEventParticipationUI(eventObj.id);
+
+      // 2. Persist to Express Central Server API (/api/events/save)
+      try {
+        await fetch('/api/events/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(eventObj)
+        });
+      } catch (err) {
+        console.warn('API event sync error:', err);
+      }
+
+      // 3. Persist directly to Firebase Firestore ('events' collection)
+      try {
+        if (typeof eventsCol !== 'undefined' && eventsCol) {
+          await eventsCol.doc(eventObj.id).set(eventObj, { merge: true });
+          console.log('✅ Event successfully synced to Firestore:', eventObj.id, 'Participants:', (eventObj.participants || []).length);
+        }
+      } catch (err) {
+        console.error('Firestore event sync error:', err);
+      }
+    }
+    window.syncEventToBackendAndCloud = syncEventToBackendAndCloud;
 
 
     async function syncMemberToBackend(memberData) {
