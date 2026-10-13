@@ -4665,22 +4665,6 @@
         });
       }
 
-      // 3. Trust General Welcome / Advisory Notice
-      rawNotices.push({
-        id: 'NOTICE-WELCOME',
-        title: '🚩 समिति सदस्यता एवं पारदर्शी डिजिटल कोष सूचना',
-        category: 'आम सूचना',
-        date: '2026-05-19',
-        isOpen: false,
-        badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
-        badgeText: 'स्थाई सूचना (General Notice)',
-        summary: 'समिति के समस्त आय-व्यय, बैंक जमा एवं दान का विवरण अब पारदर्शी डिजिटल प्रणाली से प्रबंधित है।',
-        details: 'गोस्वामी समाज कल्याण समिति गुनघसा के सभी सम्मानित सदस्यों के सहयोग से ट्रस्ट लगातार समाजहित में समर्पित है। सभी सदस्य अपने प्रोफाइल और दान रसीदों की स्थिति की निगरानी कर सकते हैं।',
-        venue: 'गुनघसा, गोमो (धनबाद)',
-        time: 'सामान्य',
-        isSystem: true
-      });
-
       // Filter and Search
       let filteredNotices = rawNotices.filter(n => {
         if (currentMemberNoticeFilter === 'OPEN' && !n.isOpen) return false;
