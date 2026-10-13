@@ -4867,15 +4867,21 @@
       const statCountEl = document.getElementById('user-stat-donations-count');
       if (!tbody) return;
 
-      const mId = (member.id || '').toLowerCase();
-      const mName = (member.name || '').toLowerCase();
+      const mId = (member.id || '').trim().toLowerCase();
+      const mName = (member.name || '').trim().toLowerCase();
+      const mPhone = (member.phone || '').replace(/\D/g, '');
 
-      // Filter donations by memberId or matching member name
+      // Filter donations by memberId, donorName / name, or phone number
       const myDonations = (allDonations || []).filter(d => {
         if (!d) return false;
-        const dMemId = (d.memberId || '').toLowerCase();
-        const dName = (d.name || '').toLowerCase();
-        return (dMemId && dMemId === mId) || (dName && dName === mName);
+        const dMemId = (d.memberId || '').trim().toLowerCase();
+        const dName = (d.donorName || d.name || '').trim().toLowerCase();
+        const dPhone = (d.phone || '').replace(/\D/g, '');
+
+        if (mId && dMemId && dMemId === mId) return true;
+        if (mPhone && dPhone && dPhone.length >= 8 && (mPhone.endsWith(dPhone) || dPhone.endsWith(mPhone))) return true;
+        if (mName && dName && (dName === mName || dName.includes(mName) || mName.includes(dName))) return true;
+        return false;
       });
 
       const totalAmt = myDonations.reduce((sum, d) => sum + (parseFloat(d.amount) || 0), 0);
@@ -5187,6 +5193,9 @@
           updateStats();
           renderDonationsList();
           if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+          if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+            if (currentLoggedInMember) renderMemberDonations(currentLoggedInMember);
+          }
         }, (err) => {
           console.warn("Firestore donations onSnapshot error:", err);
           loadDonationsFallback();
@@ -5284,6 +5293,9 @@
         updateStats();
         renderDonationsList();
         if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+        if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+          if (currentLoggedInMember) renderMemberDonations(currentLoggedInMember);
+        }
       } catch (err) {
         console.error('Failed to load donations fallback:', err);
       }
