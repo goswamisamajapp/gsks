@@ -1942,9 +1942,32 @@
           </div>
         </div>
 
-        <!-- Right: Member Status Badge & Logout -->
-        <div class="flex items-center gap-2.5">
-          <div class="hidden sm:flex items-center gap-2 px-3 py-1 bg-amber-50 rounded-xl border border-amber-200">
+        <!-- Right: Navigation, Member Status Badge & Logout -->
+        <div class="flex items-center gap-2 sm:gap-2.5">
+          <!-- Member Navigation Tabs -->
+          <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200/80 text-xs font-semibold">
+            <button 
+              type="button" 
+              id="user-nav-btn-dash" 
+              onclick="switchMemberView('dashboard')" 
+              class="px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer"
+            >
+              <i class="fa-solid fa-house text-[11px]"></i>
+              <span class="hidden sm:inline">डैशबोर्ड</span>
+            </button>
+            <button 
+              type="button" 
+              id="user-nav-btn-notices" 
+              onclick="switchMemberView('notifications')" 
+              class="px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer"
+            >
+              <i class="fa-solid fa-bell text-[11px]"></i>
+              <span>सभी सूचनाएं</span>
+              <span id="user-header-notice-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-white">1</span>
+            </button>
+          </div>
+
+          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-amber-50 rounded-xl border border-amber-200">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span class="text-xs font-bold text-amber-900" id="user-header-name">सदस्य</span>
           </div>
@@ -1955,7 +1978,7 @@
             class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 font-bold text-xs transition-colors border border-slate-200 flex items-center gap-1.5 cursor-pointer"
           >
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <span>लॉगआउट</span>
+            <span class="hidden sm:inline">लॉगआउट</span>
           </button>
         </div>
       </div>
@@ -1964,33 +1987,46 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
       
-      <!-- 1. SABSE UPAR: LATEST NOTIFICATION PANEL -->
-      <section id="user-notification-panel" class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden">
-        <div class="absolute -right-4 -bottom-6 text-white/10 text-8xl pointer-events-none">
-          <i class="fa-solid fa-bullhorn"></i>
-        </div>
-        <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg shadow-inner flex-shrink-0">
-              <i class="fa-solid fa-bell animate-bounce"></i>
+      <!-- SUB-VIEW 1: MEMBER MAIN DASHBOARD -->
+      <div id="member-view-dashboard" class="space-y-6 animate-in fade-in duration-200">
+        
+        <!-- 1. SABSE UPAR: LATEST NOTIFICATION PANEL -->
+        <section id="user-notification-panel" class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-6 text-white/10 text-8xl pointer-events-none">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg shadow-inner flex-shrink-0">
+                <i class="fa-solid fa-bell animate-bounce"></i>
+              </div>
+              <div>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block">
+                  नवीनतम सूचना / Notification
+                </span>
+                <h2 class="text-sm sm:text-base font-extrabold mt-0.5 font-devanagari" id="user-notice-title">
+                  समिति की आगामी बैठक एवं सूचना
+                </h2>
+              </div>
             </div>
-            <div>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block">
-                नवीनतम सूचना / Notification
+            <div class="flex items-center gap-2 self-end sm:self-center">
+              <span class="text-[11px] bg-black/20 px-3 py-1 rounded-full font-mono font-medium" id="user-notice-date">
+                आज की सूचना
               </span>
-              <h2 class="text-sm sm:text-base font-extrabold mt-0.5 font-devanagari" id="user-notice-title">
-                समिति की आगामी बैठक एवं सूचना
-              </h2>
+              <button 
+                type="button" 
+                onclick="switchMemberView('notifications')" 
+                class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white text-orange-700 hover:bg-orange-50 transition-all flex items-center gap-1 shadow-sm cursor-pointer"
+              >
+                <span>सभी देखें</span>
+                <i class="fa-solid fa-arrow-right text-[9px]"></i>
+              </button>
             </div>
           </div>
-          <span class="text-[11px] bg-black/20 px-3 py-1 rounded-full font-mono font-medium self-end sm:self-center" id="user-notice-date">
-            आज की सूचना
-          </span>
-        </div>
-        <div class="mt-3 pt-3 border-t border-white/20 text-xs text-amber-50 leading-relaxed font-medium" id="user-notice-body">
-          समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि मासिक बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।
-        </div>
-      </section>
+          <div class="mt-3 pt-3 border-t border-white/20 text-xs text-amber-50 leading-relaxed font-medium" id="user-notice-body">
+            समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि मासिक बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।
+          </div>
+        </section>
 
       <!-- Welcome Profile Banner & 4 Quick Stats -->
       <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -2198,6 +2234,127 @@
           </div>
         </div>
       </section>
+
+      </div><!-- End member-view-dashboard -->
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW 2: ALL NOTIFICATIONS SEPARATE PAGE    -->
+      <!-- ============================================== -->
+      <div id="member-view-notifications" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Notifications Page Header Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shadow-xs">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  समिति सूचना पटल (All Notifications)
+                </h2>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 font-mono" id="notices-total-count-badge">
+                  0
+                </span>
+              </div>
+              <p class="text-xs text-slate-500">समिति की सभी नवीनतम व पूर्व सूचनाएं, घोषणाएं एवं बैठक विवरण</p>
+            </div>
+          </div>
+
+          <!-- Back to Dashboard Button -->
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button 
+              type="button" 
+              onclick="switchMemberView('dashboard')" 
+              class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors border border-slate-200 flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>डैशबोर्ड पर वापस जाएं</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Bar for Notifications -->
+        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            <button 
+              type="button" 
+              id="filter-notice-all" 
+              onclick="filterMemberNotices('ALL')" 
+              class="px-3.5 py-1.5 rounded-xl font-bold bg-amber-500 text-white shadow-xs flex-shrink-0 cursor-pointer"
+            >
+              सभी सूचनाएं (<span id="notice-filter-count-all">0</span>)
+            </button>
+            <button 
+              type="button" 
+              id="filter-notice-open" 
+              onclick="filterMemberNotices('OPEN')" 
+              class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
+            >
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>सक्रिय / आगामी (Open)</span>
+            </button>
+            <button 
+              type="button" 
+              id="filter-notice-closed" 
+              onclick="filterMemberNotices('CLOSED')" 
+              class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
+            >
+              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span>पूर्व सूचनाएं (Past)</span>
+            </button>
+          </div>
+
+          <!-- Search Input -->
+          <div class="relative w-full sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+            <input 
+              type="text" 
+              id="member-notice-search" 
+              oninput="handleMemberNoticeSearch(this.value)" 
+              placeholder="सूचना या विषय खोजें..." 
+              class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+            >
+          </div>
+        </div>
+
+        <!-- 1. OPEN / ACTIVE NOTIFICATIONS (Top Highlighted Section) -->
+        <div id="open-notices-section" class="space-y-4">
+          <div class="flex items-center gap-2 px-1">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></div>
+            <h3 class="text-xs font-black uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+              <span>सक्रिय एवं आगामी सूचनाएं (Open & Active Notices)</span>
+              <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200" id="open-notices-badge">
+                0 सक्रिय
+              </span>
+            </h3>
+          </div>
+
+          <!-- Open Notices Cards Container -->
+          <div id="open-notices-list" class="space-y-4">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- 2. PAST / ARCHIVED NOTIFICATIONS (Previous Notices Section) -->
+        <div id="past-notices-section" class="space-y-4 pt-4 border-t border-slate-200">
+          <div class="flex items-center gap-2 px-1">
+            <i class="fa-solid fa-clock-rotate-left text-slate-400 text-xs"></i>
+            <h3 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+              <span>पूर्व सूचनाएं एवं संपन्न बैठकें (Past Notices Archive)</span>
+              <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" id="past-notices-badge">
+                0 पूर्व
+              </span>
+            </h3>
+          </div>
+
+          <!-- Past Notices Cards Container -->
+          <div id="past-notices-list" class="space-y-3">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </div><!-- End member-view-notifications -->
 
       <!-- Trust Footer for Member -->
       <footer class="text-center py-6 border-t border-slate-200 text-xs text-slate-400">
@@ -4286,6 +4443,298 @@
 
       // 6. COMPLETE PROFILE
       renderMemberProfile(member);
+
+      // 7. ALL NOTIFICATIONS PAGE
+      renderMemberAllNotifications(member);
+    }
+
+    // ==============================================
+    // MEMBER VIEW SWITCHING (Dashboard vs Notifications)
+    // ==============================================
+    let currentMemberSubView = 'dashboard';
+    let currentMemberNoticeFilter = 'ALL';
+    let currentMemberNoticeSearch = '';
+
+    function switchMemberView(view) {
+      currentMemberSubView = view;
+      const viewDash = document.getElementById('member-view-dashboard');
+      const viewNotices = document.getElementById('member-view-notifications');
+      const btnDash = document.getElementById('user-nav-btn-dash');
+      const btnNotices = document.getElementById('user-nav-btn-notices');
+
+      if (view === 'notifications') {
+        if (viewDash) viewDash.classList.add('hidden');
+        if (viewNotices) viewNotices.classList.remove('hidden');
+        if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
+        if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
+        renderMemberAllNotifications(currentLoggedInMember);
+      } else {
+        if (viewNotices) viewNotices.classList.add('hidden');
+        if (viewDash) viewDash.classList.remove('hidden');
+        if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
+        if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterMemberNotices(filter) {
+      currentMemberNoticeFilter = filter;
+      const btnAll = document.getElementById('filter-notice-all');
+      const btnOpen = document.getElementById('filter-notice-open');
+      const btnClosed = document.getElementById('filter-notice-closed');
+
+      [btnAll, btnOpen, btnClosed].forEach(b => {
+        if (b) b.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+      });
+
+      if (filter === 'OPEN' && btnOpen) {
+        btnOpen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+      } else if (filter === 'CLOSED' && btnClosed) {
+        btnClosed.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-700 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+      } else if (btnAll) {
+        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-amber-500 text-white shadow-xs flex-shrink-0 cursor-pointer';
+      }
+
+      renderMemberAllNotifications(currentLoggedInMember);
+    }
+
+    function handleMemberNoticeSearch(query) {
+      currentMemberNoticeSearch = (query || '').trim().toLowerCase();
+      renderMemberAllNotifications(currentLoggedInMember);
+    }
+
+    function renderMemberAllNotifications(member) {
+      const openContainer = document.getElementById('open-notices-list');
+      const pastContainer = document.getElementById('past-notices-list');
+      const openSection = document.getElementById('open-notices-section');
+      const pastSection = document.getElementById('past-notices-section');
+
+      const totalBadge = document.getElementById('notices-total-count-badge');
+      const headerBadge = document.getElementById('user-header-notice-badge');
+      const filterAllCount = document.getElementById('notice-filter-count-all');
+      const openBadge = document.getElementById('open-notices-badge');
+      const pastBadge = document.getElementById('past-notices-badge');
+
+      // Generate comprehensive notifications list from Events and Trust Announcements
+      const rawNotices = [];
+
+      // 1. Dues Notice if member has dues
+      if (member && Number(member.dues) > 0) {
+        rawNotices.push({
+          id: 'NOTICE-DUES',
+          title: '⚠️ सदस्यता अंशदान एवं सहयोग बकाया सूचना',
+          category: 'सहयोग कोष सूचना',
+          date: new Date().toISOString().split('T')[0],
+          isOpen: true,
+          badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
+          badgeText: 'महत्वपूर्ण बकाया (Dues Notice)',
+          summary: `सादर प्रणाम ${member.name} जी! आपके खाते में कुल ₹${Number(member.dues).toLocaleString('en-IN')} का सहयोग अंशदान बकाया है।`,
+          details: `समिति के सामाजिक, धार्मिक एवं कल्याणकारी कार्यों को सुचारु रूप से चलाने हेतु आपसे विनम्र निवेदन है कि अपनी बकाया राशि आगामी बैठक में अथवा ट्रस्ट के अधिकृत SBI बैंक खाते/कोषाध्यक्ष के पास जमा कराएं।`,
+          venue: 'कोषाध्यक्ष कार्यालय, गुनघसा',
+          time: 'तत्काल देय',
+          isSystem: true
+        });
+      }
+
+      // 2. Events & Meetings as Notifications
+      if (typeof allEvents !== 'undefined' && Array.isArray(allEvents)) {
+        allEvents.forEach(e => {
+          const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
+          const now = new Date();
+          const isUpcomingOrOpen = (e.status === 'Open' || e.status === 'Upcoming' || (!e.status && dt && dt >= new Date(now.setHours(0,0,0,0))));
+          
+          const dtFormatted = dt && !isNaN(dt) 
+            ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+            : (e.date || '--');
+          const timeFormatted = dt && !isNaN(dt)
+            ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })
+            : '05:00 PM';
+
+          let badgeColor = 'bg-blue-100 text-blue-800 border-blue-200';
+          if (e.category === 'Emergency meeting') badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
+          else if (e.category === 'Special Event') badgeColor = 'bg-purple-100 text-purple-800 border-purple-200';
+
+          rawNotices.push({
+            id: e.id || 'EV-' + Math.random().toString().slice(2, 6),
+            title: e.title || 'समिति बैठक सूचना',
+            category: e.category || 'सामान्य बैठक',
+            date: e.date || (dt ? dt.toISOString().split('T')[0] : '2026-10-13'),
+            dateFormatted: dtFormatted,
+            timeFormatted,
+            isOpen: isUpcomingOrOpen && e.status !== 'Closed' && e.status !== 'Cancelled',
+            badgeColor,
+            badgeText: isUpcomingOrOpen ? '🟢 सक्रिय / आगामी' : '⚪ संपन्न / पूर्व',
+            summary: e.description || 'समिति की सामान्य सभा एवं विचार-विमर्श',
+            details: e.description || 'सभी सदस्यों की समय पर गरिमामयी उपस्थिति सादर प्रार्थनीय है।',
+            venue: e.venue || 'शिव मंदिर, गुनघसा',
+            rawItem: e
+          });
+        });
+      }
+
+      // 3. Trust General Welcome / Advisory Notice
+      rawNotices.push({
+        id: 'NOTICE-WELCOME',
+        title: '🚩 समिति सदस्यता एवं पारदर्शी डिजिटल कोष सूचना',
+        category: 'आम सूचना',
+        date: '2026-05-19',
+        isOpen: false,
+        badgeColor: 'bg-amber-100 text-amber-800 border-amber-300',
+        badgeText: 'स्थाई सूचना (General Notice)',
+        summary: 'समिति के समस्त आय-व्यय, बैंक जमा एवं दान का विवरण अब पारदर्शी डिजिटल प्रणाली से प्रबंधित है।',
+        details: 'गोस्वामी समाज कल्याण समिति गुनघसा के सभी सम्मानित सदस्यों के सहयोग से ट्रस्ट लगातार समाजहित में समर्पित है। सभी सदस्य अपने प्रोफाइल और दान रसीदों की स्थिति की निगरानी कर सकते हैं।',
+        venue: 'गुनघसा, गोमो (धनबाद)',
+        time: 'सामान्य',
+        isSystem: true
+      });
+
+      // Filter and Search
+      let filteredNotices = rawNotices.filter(n => {
+        if (currentMemberNoticeFilter === 'OPEN' && !n.isOpen) return false;
+        if (currentMemberNoticeFilter === 'CLOSED' && n.isOpen) return false;
+
+        if (currentMemberNoticeSearch) {
+          const q = currentMemberNoticeSearch;
+          const matchTitle = (n.title || '').toLowerCase().includes(q);
+          const matchSumm = (n.summary || '').toLowerCase().includes(q);
+          const matchDet = (n.details || '').toLowerCase().includes(q);
+          const matchVen = (n.venue || '').toLowerCase().includes(q);
+          return matchTitle || matchSumm || matchDet || matchVen;
+        }
+        return true;
+      });
+
+      // Separate into Open (Top Highlighted) and Past
+      const openNotices = filteredNotices.filter(n => n.isOpen);
+      const pastNotices = filteredNotices.filter(n => !n.isOpen);
+
+      if (totalBadge) totalBadge.textContent = rawNotices.length;
+      if (filterAllCount) filterAllCount.textContent = rawNotices.length;
+      if (headerBadge) headerBadge.textContent = openNotices.length;
+      if (openBadge) openBadge.textContent = `${openNotices.length} सक्रिय`;
+      if (pastBadge) pastBadge.textContent = `${pastNotices.length} पूर्व`;
+
+      // Render Open Notices (Top Highlighted Cards)
+      if (openContainer) {
+        if (openNotices.length === 0) {
+          if (currentMemberNoticeFilter === 'CLOSED') {
+            if (openSection) openSection.classList.add('hidden');
+          } else {
+            if (openSection) openSection.classList.remove('hidden');
+            openContainer.innerHTML = `
+              <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
+                <i class="fa-solid fa-circle-check text-2xl text-emerald-500 mb-1.5"></i>
+                <p class="font-bold text-slate-700">वर्तमान में कोई नई खुली सूचना या आपातकालीन नोटिस नहीं है</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">सभी आगामी कार्यक्रम समय पर यहाँ प्रदर्शित किए जाएंगे।</p>
+              </div>
+            `;
+          }
+        } else {
+          if (openSection) openSection.classList.remove('hidden');
+          openContainer.innerHTML = openNotices.map((n, idx) => `
+            <div class="bg-gradient-to-br from-amber-50/80 via-white to-orange-50/40 rounded-3xl p-5 sm:p-6 border-2 border-amber-300 shadow-md shadow-amber-500/10 transition-all relative overflow-hidden group">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-amber-200/60">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+                    <i class="fa-solid fa-bullhorn"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-emerald-600 text-white shadow-2xs flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                        <span>सक्रिय सूचना (OPEN)</span>
+                      </span>
+                      <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${n.badgeColor}">
+                        ${n.category}
+                      </span>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-black text-slate-900 mt-1 font-devanagari leading-snug">
+                      ${n.title}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="text-right self-start sm:self-center flex-shrink-0">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                    📅 ${n.dateFormatted || n.date}
+                  </span>
+                  <div class="text-[11px] font-mono font-bold text-amber-800 mt-1">
+                    ⏰ ${n.timeFormatted || n.time || 'समय: 05:00 PM'}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notification Body Details -->
+              <div class="py-3.5 text-xs text-slate-700 leading-relaxed space-y-2">
+                <p class="font-medium text-slate-800 text-[13px] bg-white/70 p-3 rounded-2xl border border-amber-200/50">
+                  ${n.summary}
+                </p>
+                ${n.details && n.details !== n.summary ? `<p class="text-slate-600 pl-1">${n.details}</p>` : ''}
+              </div>
+
+              <!-- Notification Footer with Venue -->
+              <div class="pt-3 border-t border-amber-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2 text-slate-700 font-semibold">
+                  <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs flex-shrink-0">
+                    <i class="fa-solid fa-location-dot"></i>
+                  </span>
+                  <span>स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
+                </div>
+                <span class="text-[10px] text-slate-400 font-mono">
+                  सूचना ID: ${n.id}
+                </span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Render Past Notices (Archive Cards)
+      if (pastContainer) {
+        if (pastNotices.length === 0) {
+          if (currentMemberNoticeFilter === 'OPEN') {
+            if (pastSection) pastSection.classList.add('hidden');
+          } else {
+            if (pastSection) pastSection.classList.remove('hidden');
+            pastContainer.innerHTML = `
+              <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
+                <p class="font-semibold text-slate-600">कोई पूर्व सूचना उपलब्ध नहीं है</p>
+              </div>
+            `;
+          }
+        } else {
+          if (pastSection) pastSection.classList.remove('hidden');
+          pastContainer.innerHTML = pastNotices.map(n => `
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs flex-shrink-0">
+                    <i class="fa-solid fa-file-lines"></i>
+                  </span>
+                  <div>
+                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 mr-1.5">
+                      ${n.category}
+                    </span>
+                    <h4 class="text-sm font-extrabold text-slate-800 font-devanagari inline">
+                      ${n.title}
+                    </h4>
+                  </div>
+                </div>
+                <span class="text-[11px] font-mono text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-lg border border-slate-200">
+                  ${n.dateFormatted || n.date}
+                </span>
+              </div>
+              <div class="pt-2.5 text-xs text-slate-600">
+                <p class="line-clamp-2">${n.summary}</p>
+                <div class="mt-2 flex items-center gap-4 text-[11px] text-slate-400 font-medium">
+                  <span><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i> ${n.venue}</span>
+                  <span><i class="fa-solid fa-clock text-slate-400 mr-1"></i> ${n.timeFormatted || n.time || '--'}</span>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
     }
 
     function renderMemberNotification(member) {
@@ -9970,6 +10419,10 @@ ID: ${item.id}
     window.showMemberDashboard = showMemberDashboard;
     window.logoutMember = logoutMember;
     window.renderMemberDashboard = renderMemberDashboard;
+    window.switchMemberView = switchMemberView;
+    window.filterMemberNotices = filterMemberNotices;
+    window.handleMemberNoticeSearch = handleMemberNoticeSearch;
+    window.renderMemberAllNotifications = renderMemberAllNotifications;
 
     window.addEventListener('DOMContentLoaded', async () => {
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
