@@ -2379,6 +2379,13 @@
                 सक्रिय सदस्य
               </span>
             </div>
+            <!-- Member Designation (Second Line) -->
+            <div class="mt-1 flex items-center gap-1.5 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs font-devanagari" id="user-card-designation">
+                <i class="fa-solid fa-user-tie text-[10px] text-indigo-600"></i>
+                <span id="user-card-designation-text">सदस्य (Member)</span>
+              </span>
+            </div>
             <p class="text-xs text-slate-500 mt-1 truncate">
               पिता/संरक्षक: <span class="font-semibold text-slate-700" id="user-card-father">--</span>
             </p>
@@ -5658,6 +5665,12 @@
           ? 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300'
           : 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
       }
+      
+      const elCardDesText = document.getElementById('user-card-designation-text');
+      if (elCardDesText) {
+        elCardDesText.textContent = member.designation || 'सदस्य (Member)';
+      }
+
       if (elAvatar) elAvatar.textContent = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
 
       // 2. LATEST NOTIFICATION PANEL (Sabse Upar)
