@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Leaflet Map for Geo-fencing & Venue GPS Location Pinning -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     tailwind.config = {
       theme: {
@@ -4094,9 +4097,9 @@
   <!-- ============================================================== -->
   <!-- MODAL 9: ADD/EDIT EVENT VENUE MODAL                            -->
   <!-- ============================================================== -->
-  <div id="eventvenue-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+  <div id="eventvenue-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
         <h3 id="eventvenue-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
           <i class="fa-solid fa-location-dot text-rose-500"></i> मानक वेन्यू जोड़ें
         </h3>
@@ -4104,17 +4107,63 @@
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <form onsubmit="handleSaveEventVenue(event)" class="space-y-3 text-xs">
+
+      <form onsubmit="handleSaveEventVenue(event)" class="space-y-3.5 text-xs">
         <input type="hidden" id="eventvenue-item-id">
+
+        <!-- 1. Venue Name -->
         <div>
           <label class="block font-bold text-slate-700 mb-1">स्थान का नाम (Venue Name) *</label>
-          <input type="text" id="eventvenue-item-name" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+          <input type="text" id="eventvenue-item-name" required placeholder="जैसे: काली मंदिर प्रांगण, नीचे टोला, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
         </div>
-        <div class="flex items-center gap-2 pt-2">
-          <button type="button" onclick="closeEventVenueModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+
+        <!-- 2. Google / Live GPS Location Section -->
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/90 space-y-2.5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <span class="font-extrabold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-map-location-dot text-indigo-600"></i>
+              <span>गूगल मैप लोकेशन (20m Geofencing)</span>
+            </span>
+            <button 
+              type="button" 
+              onclick="detectAdminCurrentVenueLocation()" 
+              id="btn-detect-venue-gps" 
+              class="px-2.5 py-1 rounded-lg font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-[11px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs"
+              title="जहाँ आप अभी खड़े हैं वहाँ का GPS स्थान स्वतः लें"
+            >
+              <i class="fa-solid fa-location-crosshairs text-indigo-600"></i>
+              <span>मेरी लाइव लोकेशन लें</span>
+            </button>
+          </div>
+
+          <!-- Interactive Leaflet Map Container -->
+          <div class="relative w-full h-44 rounded-xl overflow-hidden border border-slate-300 shadow-inner bg-slate-200">
+            <div id="venue-picker-map" class="w-full h-full z-0"></div>
+            <div class="absolute bottom-1.5 left-1.5 z-[400] bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md text-[10px] font-bold text-slate-700 border border-slate-200 shadow-2xs pointer-events-none">
+              🟢 हरा दायरा = 20 मीटर उपस्थिति सीमा
+            </div>
+          </div>
+
+          <!-- Coordinates Display & Manual Inputs -->
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div>
+              <label class="block font-bold text-slate-500 mb-0.5">Latitude (अक्षांश)</label>
+              <input type="number" step="any" id="eventvenue-item-lat" onchange="onVenueCoordInputChange()" placeholder="23.86885" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 font-mono text-slate-800 font-semibold focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-500 mb-0.5">Longitude (देशांतर)</label>
+              <input type="number" step="any" id="eventvenue-item-lng" onchange="onVenueCoordInputChange()" placeholder="86.15540" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1 font-mono text-slate-800 font-semibold focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-400">💡 मैप पर कहीं भी क्लिक करके या पिन को खींचकर सटीक बैठक स्थल तय करें।</p>
+        </div>
+
+        <!-- Submit & Cancel Buttons -->
+        <div class="flex items-center gap-2 pt-1">
+          <button type="button" onclick="closeEventVenueModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs transition-colors">
             रद्द करें
           </button>
-          <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-rose-500/20">
+          <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-rose-500/20 transition-all">
             सुरक्षित करें
           </button>
         </div>
@@ -6024,6 +6073,18 @@
       if (ev.latitude && ev.longitude) {
         return { lat: parseFloat(ev.latitude), lng: parseFloat(ev.longitude) };
       }
+
+      // Check if venue matches any venue in masterSettings.eventVenues with configured latitude & longitude
+      if (masterSettings && Array.isArray(masterSettings.eventVenues)) {
+        const found = masterSettings.eventVenues.find(v => {
+          if (!v.venue) return false;
+          return v.venue.trim().toLowerCase() === (ev.venue || '').trim().toLowerCase();
+        });
+        if (found && found.latitude && found.longitude) {
+          return { lat: parseFloat(found.latitude), lng: parseFloat(found.longitude), name: found.venue };
+        }
+      }
+
       const v = (ev.venue || '').toLowerCase();
       if (v.includes('काली मंदिर') || v.includes('नीचे टोला')) return VENUE_COORDINATES['gunghasa_kali_mandir'];
       if (v.includes('शिव मंदिर')) return VENUE_COORDINATES['gunghasa_shiv_mandir'];
@@ -8973,6 +9034,120 @@
       if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
     }
 
+    let venuePickerMap = null;
+    let venuePickerMarker = null;
+    let venuePickerCircle = null;
+
+    function initVenuePickerMap(lat, lng) {
+      const defaultLat = lat ? parseFloat(lat) : 23.86885;
+      const defaultLng = lng ? parseFloat(lng) : 86.15540;
+
+      const mapContainer = document.getElementById('venue-picker-map');
+      if (!mapContainer) return;
+
+      setTimeout(() => {
+        if (!venuePickerMap) {
+          venuePickerMap = L.map('venue-picker-map', {
+            zoomControl: true,
+            attributionControl: false
+          }).setView([defaultLat, defaultLng], 16);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+          }).addTo(venuePickerMap);
+
+          // Add draggable marker
+          venuePickerMarker = L.marker([defaultLat, defaultLng], {
+            draggable: true
+          }).addTo(venuePickerMap);
+
+          // Add 20-meter geofence radius circle
+          venuePickerCircle = L.circle([defaultLat, defaultLng], {
+            color: '#10b981',
+            fillColor: '#10b981',
+            fillOpacity: 0.25,
+            radius: 20 // 20 Meters Radius
+          }).addTo(venuePickerMap);
+
+          venuePickerMarker.on('dragend', function (e) {
+            const pos = e.target.getLatLng();
+            updateVenuePickerPosition(pos.lat, pos.lng);
+          });
+
+          venuePickerMap.on('click', function (e) {
+            updateVenuePickerPosition(e.latlng.lat, e.latlng.lng);
+          });
+        } else {
+          venuePickerMap.invalidateSize();
+          updateVenuePickerPosition(defaultLat, defaultLng);
+          venuePickerMap.setView([defaultLat, defaultLng], 16);
+        }
+      }, 250);
+    }
+
+    function updateVenuePickerPosition(lat, lng) {
+      const fixedLat = parseFloat(lat).toFixed(6);
+      const fixedLng = parseFloat(lng).toFixed(6);
+
+      const latInput = document.getElementById('eventvenue-item-lat');
+      const lngInput = document.getElementById('eventvenue-item-lng');
+      if (latInput) latInput.value = fixedLat;
+      if (lngInput) lngInput.value = fixedLng;
+
+      if (venuePickerMarker) {
+        venuePickerMarker.setLatLng([fixedLat, fixedLng]);
+      }
+      if (venuePickerCircle) {
+        venuePickerCircle.setLatLng([fixedLat, fixedLng]);
+      }
+      if (venuePickerMap) {
+        venuePickerMap.panTo([fixedLat, fixedLng]);
+      }
+    }
+    window.updateVenuePickerPosition = updateVenuePickerPosition;
+
+    function onVenueCoordInputChange() {
+      const latVal = parseFloat(document.getElementById('eventvenue-item-lat').value);
+      const lngVal = parseFloat(document.getElementById('eventvenue-item-lng').value);
+      if (!isNaN(latVal) && !isNaN(lngVal)) {
+        updateVenuePickerPosition(latVal, lngVal);
+      }
+    }
+    window.onVenueCoordInputChange = onVenueCoordInputChange;
+
+    function detectAdminCurrentVenueLocation() {
+      const btn = document.getElementById('btn-detect-venue-gps');
+      if (!navigator.geolocation) {
+        alert('आपके ब्राउज़र में GPS / Geolocation उपलब्ध नहीं है');
+        return;
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-indigo-600"></i> <span>GPS जाँचा जा रहा है...</span>`;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> <span>लोकेशन सेट हो गई!</span>`;
+            setTimeout(() => {
+              btn.innerHTML = `<i class="fa-solid fa-location-crosshairs text-indigo-600"></i> <span>मेरी लाइव लोकेशन लें</span>`;
+            }, 3000);
+          }
+          updateVenuePickerPosition(pos.coords.latitude, pos.coords.longitude);
+        },
+        (err) => {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-location-crosshairs text-indigo-600"></i> <span>मेरी लाइव लोकेशन लें</span>`;
+          }
+          alert('GPS लोकेशन प्राप्त नहीं हो सकी: ' + (err.message || 'अनुमति अस्वीकृत'));
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    }
+    window.detectAdminCurrentVenueLocation = detectAdminCurrentVenueLocation;
+
     function openAddVenueModal() {
       closeAllModals();
       const modal = document.getElementById('eventvenue-master-modal');
@@ -8980,7 +9155,10 @@
       if (heading) heading.innerHTML = '<i class="fa-solid fa-location-dot text-rose-500"></i> मानक वेन्यू जोड़ें';
       document.getElementById('eventvenue-item-id').value = '';
       document.getElementById('eventvenue-item-name').value = '';
+      document.getElementById('eventvenue-item-lat').value = '23.86885';
+      document.getElementById('eventvenue-item-lng').value = '86.15540';
       if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+      initVenuePickerMap(23.86885, 86.15540);
     }
 
     function editEventVenueItem(id) {
@@ -8992,7 +9170,12 @@
       if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-rose-500"></i> स्थान/वेन्यू संपादित करें';
       document.getElementById('eventvenue-item-id').value = item.id;
       document.getElementById('eventvenue-item-name').value = item.venue;
+      const targetLat = item.latitude || 23.86885;
+      const targetLng = item.longitude || 86.15540;
+      document.getElementById('eventvenue-item-lat').value = targetLat;
+      document.getElementById('eventvenue-item-lng').value = targetLng;
       if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+      initVenuePickerMap(targetLat, targetLng);
     }
 
     function closeEventVenueModal() {
@@ -9178,6 +9361,11 @@
       e.preventDefault();
       const id = document.getElementById('eventvenue-item-id').value;
       const venue = document.getElementById('eventvenue-item-name').value.trim();
+      const latVal = parseFloat(document.getElementById('eventvenue-item-lat').value);
+      const lngVal = parseFloat(document.getElementById('eventvenue-item-lng').value);
+      const latitude = !isNaN(latVal) ? latVal : 23.86885;
+      const longitude = !isNaN(lngVal) ? lngVal : 86.15540;
+
       if (!venue) return;
       if (!masterSettings.eventVenues) masterSettings.eventVenues = [];
 
@@ -9186,13 +9374,17 @@
         if (idx !== -1) {
           masterSettings.eventVenues[idx] = {
             ...masterSettings.eventVenues[idx],
-            venue
+            venue,
+            latitude,
+            longitude
           };
         }
       } else {
         masterSettings.eventVenues.push({
           id: 'ev_' + Date.now(),
-          venue
+          venue,
+          latitude,
+          longitude
         });
       }
       closeEventVenueModal();
