@@ -5351,17 +5351,38 @@
                 ${n.details && n.details !== n.summary ? `<p class="text-slate-600 pl-1">${n.details}</p>` : ''}
               </div>
 
-              <!-- Notification Footer with Venue -->
-              <div class="pt-3 border-t border-amber-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
-                <div class="flex items-center gap-2 text-slate-700 font-semibold">
+              <!-- Notification Footer with Venue & Participate Action Button -->
+              <div class="pt-3 border-t border-amber-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2 text-slate-700 font-semibold min-w-0">
                   <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs flex-shrink-0">
                     <i class="fa-solid fa-location-dot"></i>
                   </span>
-                  <span>स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
+                  <span class="truncate">स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
                 </div>
-                <span class="text-[10px] text-slate-400 font-mono">
-                  सूचना ID: ${n.id}
-                </span>
+
+                <div class="flex items-center gap-2 self-end sm:self-center flex-shrink-0">
+                  ${(n.rawItem && n.rawItem.id) ? `
+                    ${(isMemberAlreadyParticipated(n.rawItem, member ? member.id : null)) ? `
+                      <span class="px-3 py-1.5 rounded-xl text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-2xs">
+                        <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                        <span>उपस्थिति दर्ज (Joined)</span>
+                      </span>
+                    ` : `
+                      <button 
+                        type="button" 
+                        onclick="handleEventParticipation('${n.rawItem.id}')" 
+                        class="px-4 py-1.5 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-sm shadow-emerald-600/30 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                        title="लाइव 20 मीटर जीपीएस लोकेशन से बैठक में उपस्थिति दर्ज करें"
+                      >
+                        <i class="fa-solid fa-hand-holding-hand text-[11px]"></i>
+                        <span>उपस्थिति दर्ज करें (Participate)</span>
+                      </button>
+                    `}
+                  ` : ''}
+                  <span class="text-[10px] text-slate-400 font-mono hidden md:inline">
+                    ID: ${n.id}
+                  </span>
+                </div>
               </div>
             </div>
           `).join('');
