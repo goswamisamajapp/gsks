@@ -2399,29 +2399,53 @@
         </div>
       </section>
 
-      <!-- 4 Quick Stats Grid: Dues & Donations Side-by-Side -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Quick Stat 1: My Dues (बकाया अंशदान - Light Red) -->
-        <div class="bg-rose-50/70 rounded-3xl p-5 border border-rose-200/90 shadow-sm flex items-center gap-3.5">
+      <!-- 4 Quick Stats Grid: Dues, PASY Payment, Total Donation, Total Utilized -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+        <!-- Card 1: My Dues (मेरा कुल बकाया - Light Red) -->
+        <div class="bg-rose-50/75 rounded-3xl p-4 sm:p-5 border border-rose-200/90 shadow-sm flex items-center gap-3.5 hover:shadow-md transition-all">
           <div class="w-12 h-12 rounded-2xl bg-white text-rose-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs border border-rose-100">
             <i class="fa-solid fa-clock-rotate-left"></i>
           </div>
-          <div>
-            <p class="text-[11px] font-bold text-rose-500 uppercase tracking-wider">मेरा बकाया (My Dues)</p>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold text-rose-500 uppercase tracking-wider truncate">मेरा बकाया (My Dues)</p>
             <h3 class="text-xl sm:text-2xl font-black text-rose-600 font-mono mt-0.5" id="user-stat-dues">₹ 0</h3>
-            <p class="text-[10px] text-rose-600/80 font-semibold" id="user-stat-dues-status">कोई बकाया नहीं</p>
+            <p class="text-[10px] text-rose-600/80 font-semibold truncate" id="user-stat-dues-status">कोई बकाया नहीं</p>
           </div>
         </div>
 
-        <!-- Quick Stat 2: My Total Donations (कुल दिया गया सहयोग/दान - Light Green) -->
-        <div class="bg-emerald-50/70 rounded-3xl p-5 border border-emerald-200/90 shadow-sm flex items-center gap-3.5">
+        <!-- Card 2: PASY Payment (पारिवारिक योजना भुगतान - Light Green) -->
+        <div class="bg-emerald-50/75 rounded-3xl p-4 sm:p-5 border border-emerald-200/90 shadow-sm flex items-center gap-3.5 hover:shadow-md transition-all">
           <div class="w-12 h-12 rounded-2xl bg-white text-emerald-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs border border-emerald-100">
+            <i class="fa-solid fa-hands-holding-child"></i>
+          </div>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider truncate">PASY Payment</p>
+            <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5" id="user-stat-pasy-payment">₹ 0</h3>
+            <p class="text-[10px] text-emerald-700 font-semibold truncate" id="user-stat-pasy-payment-count">0 माह जमा (₹150/माह)</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Total Donation (कुल सामान्य दान - Light Amber / Golden) -->
+        <div class="bg-amber-50/75 rounded-3xl p-4 sm:p-5 border border-amber-200/90 shadow-sm flex items-center gap-3.5 hover:shadow-md transition-all">
+          <div class="w-12 h-12 rounded-2xl bg-white text-amber-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs border border-amber-100">
             <i class="fa-solid fa-hand-holding-heart"></i>
           </div>
-          <div>
-            <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">कुल दान (My Donations)</p>
-            <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5" id="user-stat-donations">₹ 0</h3>
-            <p class="text-[10px] text-emerald-700 font-semibold" id="user-stat-donations-count">0 रसीदें</p>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold text-amber-600 uppercase tracking-wider truncate">Total Donation</p>
+            <h3 class="text-xl sm:text-2xl font-black text-amber-700 font-mono mt-0.5" id="user-stat-total-donation">₹ 0</h3>
+            <p class="text-[10px] text-amber-700 font-semibold truncate" id="user-stat-total-donation-count">0 दान रसीदें</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Total Utilized (समिति से प्राप्त लाभ/सहायता - Light Purple / Indigo) -->
+        <div class="bg-purple-50/75 rounded-3xl p-4 sm:p-5 border border-purple-200/90 shadow-sm flex items-center gap-3.5 hover:shadow-md transition-all">
+          <div class="w-12 h-12 rounded-2xl bg-white text-purple-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs border border-purple-100">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold text-purple-600 uppercase tracking-wider truncate">Total Utilized</p>
+            <h3 class="text-xl sm:text-2xl font-black text-purple-700 font-mono mt-0.5" id="user-stat-total-utilized">₹ 0</h3>
+            <p class="text-[10px] text-purple-700 font-semibold truncate" id="user-stat-total-utilized-count">समिति से प्राप्त सहायता</p>
           </div>
         </div>
       </section>
@@ -7637,20 +7661,156 @@
       }
     }
 
-    function renderMemberDues(member) {
-      const badgeEl = document.getElementById('user-dues-badge');
-      const statDuesEl = document.getElementById('user-stat-dues');
-      const statStatusEl = document.getElementById('user-stat-dues-status');
-      const contentEl = document.getElementById('user-dues-content');
+    // 4 Quick Stats on Member Dashboard: Dues, PASY Payment, Total Donation, Total Utilized
+    function renderMemberQuickStats(member) {
+      if (!member) return;
 
-      const duesAmt = Number(member ? member.dues : 0) || 0;
-      if (badgeEl) badgeEl.textContent = `₹ ${duesAmt.toLocaleString('en-IN')}`;
-      if (statDuesEl) statDuesEl.textContent = `₹ ${duesAmt.toLocaleString('en-IN')}`;
-      if (statStatusEl) {
-        statStatusEl.textContent = duesAmt > 0 ? '⚠️ बकाया देय' : '✅ पूर्णतः अद्यतन';
-        statStatusEl.className = duesAmt > 0 ? 'text-[10px] text-rose-600 font-bold' : 'text-[10px] text-emerald-600 font-semibold';
+      const mId = (member.id || '').trim().toLowerCase();
+      const mName = (member.name || '').trim().toLowerCase();
+      const mPhone = (member.phone || '').replace(/\D/g, '');
+
+      // 1. PASY Months calculation
+      const isEnrolled = typeof isPariwarikMember === 'function' ? isPariwarikMember(member) : false;
+      let pasyPaidMonths = 0;
+      let pasyDuesMonths = 0;
+      if (typeof PARIWARIK_MONTHS !== 'undefined' && Array.isArray(PARIWARIK_MONTHS)) {
+        PARIWARIK_MONTHS.forEach(mCfg => {
+          if (typeof isPariwarikPaidForMonth === 'function' && isPariwarikPaidForMonth(member, mCfg.key)) {
+            pasyPaidMonths++;
+          } else {
+            pasyDuesMonths++;
+          }
+        });
+      }
+      const pasyFee = typeof PARIWARIK_MONTHLY_FEE !== 'undefined' ? PARIWARIK_MONTHLY_FEE : 150;
+      const pasyPaidAmount = isEnrolled ? (pasyPaidMonths * pasyFee) : 0;
+      const pasyDuesAmount = isEnrolled ? (pasyDuesMonths * pasyFee) : 0;
+
+      // 2. Card 1: My Dues (मेरा बकाया = Pariwarik Yojna Dues + Other/General Member Dues)
+      const generalDues = Number(member.dues) || 0;
+      const totalDues = pasyDuesAmount + generalDues;
+      const elStatDues = document.getElementById('user-stat-dues');
+      const elStatDuesStatus = document.getElementById('user-stat-dues-status');
+      if (elStatDues) elStatDues.textContent = `₹ ${totalDues.toLocaleString('en-IN')}`;
+      if (elStatDuesStatus) {
+        if (totalDues > 0) {
+          const detailParts = [];
+          if (pasyDuesAmount > 0) detailParts.push(`PASY ${pasyDuesMonths} माह शेष`);
+          if (generalDues > 0) detailParts.push(`सदस्यता ₹${generalDues.toLocaleString('en-IN')}`);
+          elStatDuesStatus.textContent = `⚠️ बकाया: ${detailParts.join(' + ') || 'देय'}`;
+          elStatDuesStatus.className = 'text-[10px] text-rose-600 font-bold truncate';
+        } else {
+          elStatDuesStatus.textContent = '✅ कोई बकाया नहीं (All Clear)';
+          elStatDuesStatus.className = 'text-[10px] text-emerald-600 font-semibold truncate';
+        }
       }
 
+      // Also update user-dues-badge if present
+      const badgeDuesEl = document.getElementById('user-dues-badge');
+      if (badgeDuesEl) badgeDuesEl.textContent = `₹ ${totalDues.toLocaleString('en-IN')}`;
+
+      // 3. Card 2: PASY Payment (पारिवारिक योजना में किए गए कुल भुगतान)
+      const elStatPasyPayment = document.getElementById('user-stat-pasy-payment');
+      const elStatPasyPaymentCount = document.getElementById('user-stat-pasy-payment-count');
+      if (elStatPasyPayment) elStatPasyPayment.textContent = `₹ ${pasyPaidAmount.toLocaleString('en-IN')}`;
+      if (elStatPasyPaymentCount) {
+        elStatPasyPaymentCount.textContent = isEnrolled 
+          ? `${pasyPaidMonths} माह जमा (₹${pasyFee}/माह)`
+          : 'योजना में गैर-नामांकित';
+      }
+
+      // 4. Card 3: Total Donation (केवल सामान्य दान - ₹150 पारिवारिक योजना को छोड़कर)
+      const userDonations = (typeof allDonations !== 'undefined' && Array.isArray(allDonations))
+        ? allDonations.filter(d => {
+            if (!d) return false;
+            const dMemId = (d.memberId || '').trim().toLowerCase();
+            const dName = (d.donorName || d.name || '').trim().toLowerCase();
+            const dPhone = (d.phone || '').replace(/\D/g, '');
+
+            const isMatch = (mId && dMemId && dMemId === mId) ||
+              (mPhone && dPhone && dPhone.length >= 8 && (mPhone.endsWith(dPhone) || dPhone.endsWith(mPhone))) ||
+              (mName && dName && (dName === mName || dName.includes(mName) || mName.includes(dName)));
+
+            if (!isMatch) return false;
+
+            // Exclude ₹150 Pariwarik Yojna receipts
+            const scheme = (d.scheme || '').trim();
+            const remarks = (d.remarks || '').trim();
+            const isPasyReceipt = scheme.includes('पारिवारिक आर्थिक सहायता') ||
+              scheme.includes('पारिवारिक योजना') ||
+              scheme.toUpperCase().includes('PASY') ||
+              Boolean(d.pariwarikMonthKey) ||
+              remarks.includes('पारिवारिक योजना') ||
+              remarks.includes('PASY');
+
+            return !isPasyReceipt;
+          })
+        : [];
+
+      const generalDonationsSum = userDonations.reduce((sum, d) => sum + (parseFloat(d.amount) || 0), 0);
+      const totalGeneralDonation = generalDonationsSum > 0 ? generalDonationsSum : (Number(member.donation) || 0);
+
+      const elStatTotalDonation = document.getElementById('user-stat-total-donation');
+      const elStatTotalDonationCount = document.getElementById('user-stat-total-donation-count');
+      if (elStatTotalDonation) elStatTotalDonation.textContent = `₹ ${totalGeneralDonation.toLocaleString('en-IN')}`;
+      if (elStatTotalDonationCount) {
+        elStatTotalDonationCount.textContent = `${userDonations.length > 0 ? userDonations.length : (totalGeneralDonation > 0 ? 1 : 0)} दान रसीदें`;
+      }
+
+      // 5. Card 4: Total Utilized (समिति से प्राप्त लाभ / आर्थिक सहायता / माह विजेता राशि ₹4000)
+      let winCount = 0;
+      if (typeof masterSettings !== 'undefined' && masterSettings && masterSettings.pariwarikWinners && typeof masterSettings.pariwarikWinners === 'object') {
+        Object.entries(masterSettings.pariwarikWinners).forEach(([mKey, winnerId]) => {
+          if (winnerId && (winnerId === member.id || (mId && String(winnerId).toLowerCase() === mId))) {
+            winCount++;
+          }
+        });
+      }
+      const pariwarikWinnerPrizePerMonth = 4000;
+      const winnerAmount = winCount * pariwarikWinnerPrizePerMonth;
+
+      // Also check expenses where vendor/beneficiary is this member for welfare/assistance
+      let memberAssistanceAmount = 0;
+      let assistanceCount = 0;
+      if (typeof allExpenses !== 'undefined' && Array.isArray(allExpenses)) {
+        allExpenses.forEach(exp => {
+          if (!exp) return;
+          const vName = (exp.vendorName || '').trim().toLowerCase();
+          const rmk = (exp.remarks || '').trim().toLowerCase();
+          const sch = (exp.scheme || '').trim().toLowerCase();
+          const isMemberRecipient = (mId && (vName.includes(mId) || rmk.includes(mId))) ||
+            (mName && (vName === mName || vName.includes(mName)));
+
+          if (isMemberRecipient && (sch.includes('पारिवारिक') || sch.includes('सहायता') || sch.includes('हित') || sch.includes('कल्याण') || sch.includes('welfare') || sch.includes('pasy'))) {
+            memberAssistanceAmount += (parseFloat(exp.amount) || 0);
+            assistanceCount++;
+          }
+        });
+      }
+
+      // Member's direct benefit record if saved on member object
+      const directBenefit = Number(member.totalUtilized || member.utilizedAmount || 0);
+
+      const totalUtilized = Math.max(winnerAmount + memberAssistanceAmount, directBenefit);
+
+      const elStatTotalUtilized = document.getElementById('user-stat-total-utilized');
+      const elStatTotalUtilizedCount = document.getElementById('user-stat-total-utilized-count');
+      if (elStatTotalUtilized) elStatTotalUtilized.textContent = `₹ ${totalUtilized.toLocaleString('en-IN')}`;
+      if (elStatTotalUtilizedCount) {
+        if (winCount > 0) {
+          elStatTotalUtilizedCount.textContent = `🏆 ${winCount} बार योजना लाभ (₹4,000/माह)`;
+        } else if (totalUtilized > 0) {
+          elStatTotalUtilizedCount.textContent = 'समिति से प्राप्त सहायता राशि';
+        } else {
+          elStatTotalUtilizedCount.textContent = 'कोई सहायता/लाभ नहीं लिया';
+        }
+      }
+    }
+    window.renderMemberQuickStats = renderMemberQuickStats;
+
+    function renderMemberDues(member) {
+      renderMemberQuickStats(member);
+      const contentEl = document.getElementById('user-dues-content');
       if (contentEl) {
         contentEl.innerHTML = '';
       }
