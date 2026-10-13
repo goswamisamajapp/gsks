@@ -12400,6 +12400,7 @@ ID: ${item.id}
 
       tbody.innerHTML = filteredMembers.map(m => {
         const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
+        const isWinner = (currentWinnerMemberId === m.id);
         // Check if member already won in any other month
         let otherWonMonthKey = null;
         for (const [mKey, winId] of Object.entries(winnersMap)) {
