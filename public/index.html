@@ -2610,8 +2610,17 @@
               onclick="filterMemberNotices('OPEN')" 
               class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
             >
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span>सक्रिय / आगामी (Open)</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>चालू (Open)</span>
+            </button>
+            <button 
+              type="button" 
+              id="filter-notice-upcoming" 
+              onclick="filterMemberNotices('UPCOMING')" 
+              class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
+            >
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span>आगामी (Upcoming)</span>
             </button>
             <button 
               type="button" 
@@ -2619,8 +2628,8 @@
               onclick="filterMemberNotices('CLOSED')" 
               class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
             >
-              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-              <span>पूर्व सूचनाएं (Past)</span>
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              <span>संपन्न / पूर्व (Closed)</span>
             </button>
           </div>
 
@@ -5778,19 +5787,22 @@
     }
 
     function filterMemberNotices(filter) {
-      currentMemberNoticeFilter = filter;
+      currentMemberNoticeFilter = filter || 'ALL';
       const btnAll = document.getElementById('filter-notice-all');
       const btnOpen = document.getElementById('filter-notice-open');
+      const btnUpcoming = document.getElementById('filter-notice-upcoming');
       const btnClosed = document.getElementById('filter-notice-closed');
 
-      [btnAll, btnOpen, btnClosed].forEach(b => {
+      [btnAll, btnOpen, btnUpcoming, btnClosed].forEach(b => {
         if (b) b.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       });
 
       if (filter === 'OPEN' && btnOpen) {
         btnOpen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+      } else if (filter === 'UPCOMING' && btnUpcoming) {
+        btnUpcoming.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       } else if (filter === 'CLOSED' && btnClosed) {
-        btnClosed.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-700 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+        btnClosed.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-rose-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       } else if (btnAll) {
         btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-amber-500 text-white shadow-xs flex-shrink-0 cursor-pointer';
       }
@@ -5826,6 +5838,7 @@
           category: 'सहयोग कोष सूचना',
           date: new Date().toISOString().split('T')[0],
           isOpen: true,
+          status: 'Open',
           badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
           badgeText: 'महत्वपूर्ण बकाया (Dues Notice)',
           summary: `सादर प्रणाम ${member.name} जी! आपके खाते में कुल ₹${Number(member.dues).toLocaleString('en-IN')} का सहयोग अंशदान बकाया है।`,
@@ -5840,9 +5853,6 @@
       if (typeof allEvents !== 'undefined' && Array.isArray(allEvents)) {
         allEvents.forEach(e => {
           const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
-          const now = new Date();
-          const isUpcomingOrOpen = (e.status === 'Open' || e.status === 'Upcoming' || (!e.status && dt && dt >= new Date(now.setHours(0,0,0,0))));
-          
           const dtFormatted = dt && !isNaN(dt) 
             ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
             : (e.date || '--');
@@ -5854,22 +5864,29 @@
           if (e.category === 'Emergency meeting') badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
           else if (e.category === 'Special Event') badgeColor = 'bg-purple-100 text-purple-800 border-purple-200';
 
-          const evtStatus = e.status || (isUpcomingOrOpen ? 'Upcoming' : 'Closed');
-          const isCancelled = (evtStatus.toLowerCase() === 'cancelled');
-          const isClosed = (evtStatus.toLowerCase() === 'closed') || (!isUpcomingOrOpen && !isCancelled);
+          const effStatus = typeof getEffectiveEventStatus === 'function' ? getEffectiveEventStatus(e) : (e.status || 'Upcoming');
+          const isOpen = effStatus === 'Open';
+          const isUpcoming = effStatus === 'Upcoming';
+          const isClosed = effStatus === 'Closed' || effStatus === 'Cancelled';
 
-          let statusBadgeClass = 'bg-slate-100 text-slate-700 border-slate-300';
-          let statusLabel = 'संपन्न (CLOSED)';
+          // Color coded status badges matching app-wide rule:
+          // Open = Emerald/Green, Upcoming = Blue, Closed/Cancelled = Rose/Red
+          let statusBadgeClass = 'bg-blue-100 text-blue-800 border-blue-300';
+          let statusDotColor = 'bg-blue-500';
+          let statusLabel = 'आगामी (UPCOMING)';
 
-          if (isCancelled) {
-            statusBadgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
-            statusLabel = 'रद्द (CANCELLED)';
-          } else if (isClosed) {
-            statusBadgeClass = 'bg-slate-100 text-slate-700 border-slate-300';
-            statusLabel = 'संपन्न (CLOSED)';
-          } else {
+          if (isOpen) {
             statusBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
-            statusLabel = 'सक्रिय (OPEN)';
+            statusDotColor = 'bg-emerald-600 animate-pulse';
+            statusLabel = 'चालू / सक्रिय (OPEN)';
+          } else if (effStatus === 'Cancelled') {
+            statusBadgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
+            statusDotColor = 'bg-rose-600';
+            statusLabel = 'रद्द (CANCELLED)';
+          } else if (effStatus === 'Closed') {
+            statusBadgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
+            statusDotColor = 'bg-rose-600';
+            statusLabel = 'संपन्न (CLOSED)';
           }
 
           rawNotices.push({
@@ -5879,12 +5896,15 @@
             date: e.date || (dt ? dt.toISOString().split('T')[0] : '2026-10-13'),
             dateFormatted: dtFormatted,
             timeFormatted,
-            status: evtStatus,
+            status: effStatus,
             statusLabel,
             statusBadgeClass,
-            isOpen: isUpcomingOrOpen && evtStatus !== 'Closed' && evtStatus !== 'Cancelled',
+            statusDotColor,
+            isOpen: isOpen,
+            isUpcoming: isUpcoming,
+            isClosed: isClosed,
             badgeColor,
-            badgeText: isUpcomingOrOpen ? '🟢 सक्रिय / आगामी' : '⚪ संपन्न / पूर्व',
+            badgeText: isOpen ? '🟢 चालू' : (isUpcoming ? '🔵 आगामी' : '🔴 संपन्न'),
             summary: e.description || 'समिति की सामान्य सभा एवं विचार-विमर्श',
             details: e.description || 'सभी सदस्यों की समय पर गरिमामयी उपस्थिति सादर प्रार्थनीय है।',
             venue: e.venue || 'शिव मंदिर, गुनघसा',
@@ -5893,10 +5913,15 @@
         });
       }
 
-      // Filter and Search
+      // Filter and Search according to filter rule:
+      // ALL = show all
+      // OPEN = show open/in-progress
+      // UPCOMING = show upcoming meetings
+      // CLOSED = show closed / past meetings
       let filteredNotices = rawNotices.filter(n => {
         if (currentMemberNoticeFilter === 'OPEN' && !n.isOpen) return false;
-        if (currentMemberNoticeFilter === 'CLOSED' && n.isOpen) return false;
+        if (currentMemberNoticeFilter === 'UPCOMING' && !n.isUpcoming) return false;
+        if (currentMemberNoticeFilter === 'CLOSED' && !n.isClosed) return false;
 
         if (currentMemberNoticeSearch) {
           const q = currentMemberNoticeSearch;
@@ -5909,17 +5934,40 @@
         return true;
       });
 
-      // Separate into Open (Top Highlighted) and Past
-      const openNotices = filteredNotices.filter(n => n.isOpen);
-      const pastNotices = filteredNotices.filter(n => !n.isOpen);
+      // Sort notices according to priority & date:
+      // Priority 1: OPEN (चालू - सबसे ऊपर)
+      // Priority 2: UPCOMING (आगामी - जो तारीख पहले आने वाली है, soonest first)
+      // Priority 3: CLOSED (संपन्न - हाल ही में संपन्न पहले, new to old)
+      filteredNotices.sort((a, b) => {
+        const getPriority = (item) => {
+          if (item.isOpen) return 1;
+          if (item.isUpcoming) return 2;
+          return 3;
+        };
+
+        const pa = getPriority(a);
+        const pb = getPriority(b);
+        if (pa !== pb) return pa - pb;
+
+        const da = new Date(a.date || 0);
+        const db = new Date(b.date || 0);
+        if (pa === 3) {
+          return db - da; // Closed: latest closed first
+        }
+        return da - db; // Open/Upcoming: soonest first
+      });
+
+      // Separate into Active/Upcoming (Top Highlights) and Closed/Past
+      const openNotices = filteredNotices.filter(n => n.isOpen || n.isUpcoming);
+      const pastNotices = filteredNotices.filter(n => n.isClosed);
 
       if (totalBadge) totalBadge.textContent = rawNotices.length;
       if (filterAllCount) filterAllCount.textContent = rawNotices.length;
-      if (headerBadge) headerBadge.textContent = openNotices.length;
-      if (openBadge) openBadge.textContent = `${openNotices.length} सक्रिय`;
-      if (pastBadge) pastBadge.textContent = `${pastNotices.length} पूर्व`;
+      if (headerBadge) headerBadge.textContent = rawNotices.filter(n => n.isOpen || n.isUpcoming).length;
+      if (openBadge) openBadge.textContent = `${openNotices.length} सक्रिय/आगामी`;
+      if (pastBadge) pastBadge.textContent = `${pastNotices.length} संपन्न/पूर्व`;
 
-      // Render Open Notices (Top Highlighted Cards)
+      // Render Open/Upcoming Notices (Top Highlighted Cards)
       if (openContainer) {
         if (openNotices.length === 0) {
           if (currentMemberNoticeFilter === 'CLOSED') {
@@ -5929,25 +5977,35 @@
             openContainer.innerHTML = `
               <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
                 <i class="fa-solid fa-circle-check text-2xl text-emerald-500 mb-1.5"></i>
-                <p class="font-bold text-slate-700">वर्तमान में कोई नई खुली सूचना या आपातकालीन नोटिस नहीं है</p>
+                <p class="font-bold text-slate-700">वर्तमान में कोई खुली या आगामी सूचना नहीं है</p>
                 <p class="text-[11px] text-slate-400 mt-0.5">सभी आगामी कार्यक्रम समय पर यहाँ प्रदर्शित किए जाएंगे।</p>
               </div>
             `;
           }
         } else {
           if (openSection) openSection.classList.remove('hidden');
-          openContainer.innerHTML = openNotices.map((n, idx) => `
-            <div class="bg-gradient-to-br from-amber-50/80 via-white to-orange-50/40 rounded-3xl p-5 sm:p-6 border-2 border-amber-300 shadow-md shadow-amber-500/10 transition-all relative overflow-hidden group">
-              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-amber-200/60">
+          openContainer.innerHTML = openNotices.map((n, idx) => {
+            const isActuallyOpen = n.isOpen;
+            const cardBg = isActuallyOpen 
+              ? 'bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/40 border-2 border-emerald-400 shadow-md shadow-emerald-500/10'
+              : 'bg-gradient-to-br from-blue-50/70 via-white to-indigo-50/30 border-2 border-blue-300 shadow-md shadow-blue-500/10';
+
+            const iconBg = isActuallyOpen ? 'bg-emerald-600 text-white' : 'bg-blue-600 text-white';
+            const dateBadgeBg = isActuallyOpen ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-blue-100 text-blue-900 border-blue-300';
+            const timeColor = isActuallyOpen ? 'text-emerald-800' : 'text-blue-800';
+
+            return `
+            <div class="${cardBg} rounded-3xl p-5 sm:p-6 transition-all relative overflow-hidden group">
+              <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b ${isActuallyOpen ? 'border-emerald-200/70' : 'border-blue-200/70'}">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+                  <div class="w-10 h-10 rounded-2xl ${iconBg} flex items-center justify-center text-lg shadow-sm flex-shrink-0">
                     <i class="fa-solid fa-bullhorn"></i>
                   </div>
                   <div>
                     <div class="flex items-center gap-2 flex-wrap">
-                      <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-emerald-600 text-white shadow-2xs flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                        <span>सक्रिय सूचना (OPEN)</span>
+                      <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${n.statusBadgeClass} shadow-2xs flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full ${n.statusDotColor || 'bg-emerald-600'}"></span>
+                        <span>${n.statusLabel}</span>
                       </span>
                       <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${n.badgeColor}">
                         ${n.category}
@@ -5960,10 +6018,10 @@
                 </div>
 
                 <div class="text-right self-start sm:self-center flex-shrink-0">
-                  <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold border ${dateBadgeBg}">
                     📅 ${n.dateFormatted || n.date}
                   </span>
-                  <div class="text-[11px] font-mono font-bold text-amber-800 mt-1">
+                  <div class="text-[11px] font-mono font-bold ${timeColor} mt-1">
                     ⏰ ${n.timeFormatted || n.time || 'समय: 05:00 PM'}
                   </div>
                 </div>
@@ -5971,14 +6029,14 @@
 
               <!-- Notification Body Details -->
               <div class="py-3.5 text-xs text-slate-700 leading-relaxed space-y-2">
-                <p class="font-medium text-slate-800 text-[13px] bg-white/70 p-3 rounded-2xl border border-amber-200/50">
+                <p class="font-medium text-slate-800 text-[13px] bg-white/80 p-3 rounded-2xl border ${isActuallyOpen ? 'border-emerald-200/60' : 'border-blue-200/60'}">
                   ${n.summary}
                 </p>
                 ${n.details && n.details !== n.summary ? `<p class="text-slate-600 pl-1">${n.details}</p>` : ''}
               </div>
 
               <!-- Notification Footer with Venue & Participate Action Button -->
-              <div class="pt-3 border-t border-amber-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div class="pt-3 border-t ${isActuallyOpen ? 'border-emerald-200/70' : 'border-blue-200/70'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-2 text-slate-700 font-semibold min-w-0">
                   <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs flex-shrink-0">
                     <i class="fa-solid fa-location-dot"></i>
@@ -6011,20 +6069,21 @@
                 </div>
               </div>
             </div>
-          `).join('');
+            `;
+          }).join('');
         }
       }
 
       // Render Past Notices (Archive Cards)
       if (pastContainer) {
         if (pastNotices.length === 0) {
-          if (currentMemberNoticeFilter === 'OPEN') {
+          if (currentMemberNoticeFilter === 'OPEN' || currentMemberNoticeFilter === 'UPCOMING') {
             if (pastSection) pastSection.classList.add('hidden');
           } else {
             if (pastSection) pastSection.classList.remove('hidden');
             pastContainer.innerHTML = `
               <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
-                <p class="font-semibold text-slate-600">कोई पूर्व सूचना उपलब्ध नहीं है</p>
+                <p class="font-semibold text-slate-600">कोई पूर्व/संपन्न सूचना उपलब्ध नहीं है</p>
               </div>
             `;
           }
@@ -6044,9 +6103,9 @@
                     <h4 class="text-sm font-extrabold text-slate-800 font-devanagari inline">
                       ${n.title}
                     </h4>
-                    <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${n.statusBadgeClass || 'bg-slate-100 text-slate-700 border-slate-300'} flex items-center gap-1">
-                      <span class="w-1.5 h-1.5 rounded-full ${n.status === 'Cancelled' ? 'bg-rose-500' : 'bg-slate-400'}"></span>
-                      <span>${n.statusLabel || n.status || 'CLOSED'}</span>
+                    <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full ${n.statusDotColor || 'bg-rose-500'}"></span>
+                      <span>${n.statusLabel}</span>
                     </span>
                   </div>
                 </div>
