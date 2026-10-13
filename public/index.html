@@ -2807,14 +2807,21 @@
         </div>
       </div>
 
-      <!-- Action Button -->
-      <button 
-        type="button" 
-        onclick="closeMemberEventDetailModal()" 
-        class="w-full py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white transition-all text-center cursor-pointer shadow-md shadow-indigo-500/20"
-      >
-        <span>ठीक है (Close)</span>
-      </button>
+      <!-- Participation Status Card & Button Area -->
+      <div id="m-modal-event-participation-box" class="mb-4">
+        <!-- Rendered dynamically by renderEventParticipationUI(eventId) -->
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5">
+        <button 
+          type="button" 
+          onclick="closeMemberEventDetailModal()" 
+          class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-center cursor-pointer"
+        >
+          <span>बंद करें (Close)</span>
+        </button>
+      </div>
 
     </div>
   </div>
@@ -5473,12 +5480,307 @@
       if (venueEl) venueEl.textContent = ev.venue || 'शिव मंदिर प्रांगण, गुनघसा';
       if (descEl) descEl.textContent = ev.description || 'बैठक का कोई विशेष विवरण दर्ज नहीं है।';
 
+      // Render Participation Status & Action Button
+      renderEventParticipationUI(ev.id);
+
       if (modal) modal.classList.remove('hidden');
     }
 
     function closeMemberEventDetailModal() {
       const modal = document.getElementById('member-event-detail-modal');
       if (modal) modal.classList.add('hidden');
+    }
+
+    // ==============================================
+    // EVENT PARTICIPATION & GEOLOCATION (20 METERS)
+    // ==============================================
+    const VENUE_COORDINATES = {
+      'gunghasa_kali_mandir': { lat: 23.86885, lng: 86.15540, name: 'काली मंदिर प्रांगण, नीचे टोला, गुनघसा' },
+      'gunghasa_shiv_mandir': { lat: 23.86920, lng: 86.15610, name: 'शिव मंदिर परिसर, गुनघसा' },
+      'gomoh_samudayik': { lat: 23.87410, lng: 86.15280, name: 'सामुदायिक भवन, गोमो' },
+      'dhanbad_office': { lat: 23.79570, lng: 86.43040, name: 'केंद्रीय ट्रस्ट कार्यालय, धनबाद' },
+      'default': { lat: 23.86885, lng: 86.15540, name: 'गुनघसा, गोमो' }
+    };
+
+    function getVenueCoordsForEvent(ev) {
+      if (ev.latitude && ev.longitude) {
+        return { lat: parseFloat(ev.latitude), lng: parseFloat(ev.longitude) };
+      }
+      const v = (ev.venue || '').toLowerCase();
+      if (v.includes('काली मंदिर') || v.includes('नीचे टोला')) return VENUE_COORDINATES['gunghasa_kali_mandir'];
+      if (v.includes('शिव मंदिर')) return VENUE_COORDINATES['gunghasa_shiv_mandir'];
+      if (v.includes('सामुदायिक') || v.includes('गोमो')) return VENUE_COORDINATES['gomoh_samudayik'];
+      if (v.includes('धनबाद') || v.includes('ट्रस्ट कार्यालय')) return VENUE_COORDINATES['dhanbad_office'];
+      return VENUE_COORDINATES['default'];
+    }
+
+    // Haversine distance in meters
+    function calculateDistanceInMeters(lat1, lon1, lat2, lon2) {
+      const R = 6371e3; // Earth radius in meters
+      const phi1 = (lat1 * Math.PI) / 180;
+      const phi2 = (lat2 * Math.PI) / 180;
+      const deltaPhi = ((lat2 - lat1) * Math.PI) / 180;
+      const deltaLambda = ((lon2 - lon1) * Math.PI) / 180;
+
+      const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function checkIsMeetingActiveNow(ev) {
+      if (!ev) return { active: false, reason: 'कार्यक्रम नहीं मिला' };
+      if (ev.status === 'Closed') {
+        return { active: false, reason: 'बैठक संपन्न (Closed) हो चुकी है।' };
+      }
+      if (ev.status === 'Cancelled') {
+        return { active: false, reason: 'बैठक रद्द (Cancelled) कर दी गई है।' };
+      }
+
+      if (!ev.datetime && !ev.date) {
+        return { active: false, reason: 'बैठक का समय निर्धारित नहीं है।' };
+      }
+
+      const meetingStart = new Date(ev.datetime || ev.date);
+      if (isNaN(meetingStart.getTime())) {
+        return { active: false, reason: 'अमान्य दिनांक व समय' };
+      }
+
+      const now = new Date();
+      // Allow participation 30 minutes before meeting starts until 6 hours after start
+      const windowStart = new Date(meetingStart.getTime() - (30 * 60 * 1000));
+      const windowEnd = new Date(meetingStart.getTime() + (6 * 60 * 60 * 1000));
+
+      if (now < windowStart) {
+        const timeDiffMs = meetingStart - now;
+        const diffHours = Math.floor(timeDiffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffHours / 24);
+        let timeMsg = diffDays > 0 ? `${diffDays} दिन बाद` : `${diffHours} घंटे बाद`;
+        return { 
+          active: false, 
+          reason: `बैठक अभी शुरू नहीं हुई है। यह बैठक के निर्धारित दिन एवं समय पर ही एक्टिव होगी (${timeMsg})।` 
+        };
+      }
+
+      if (now > windowEnd) {
+        return { active: false, reason: 'बैठक की निर्धारित समय सीमा समाप्त हो चुकी है।' };
+      }
+
+      return { active: true, reason: 'बैठक वर्तमान में जारी (Active) है।' };
+    }
+
+    function isMemberAlreadyParticipated(ev, memberId) {
+      if (!ev || !ev.participants || !memberId) return false;
+      return ev.participants.some(p => (p.memberId || p.id) === memberId);
+    }
+
+    function renderEventParticipationUI(eventId) {
+      const box = document.getElementById('m-modal-event-participation-box');
+      if (!box) return;
+
+      const ev = (allEvents || []).find(e => e.id === eventId);
+      if (!ev) { box.innerHTML = ''; return; }
+
+      const member = currentLoggedInMember;
+      const memberId = member ? member.id : null;
+      const alreadyJoined = isMemberAlreadyParticipated(ev, memberId);
+      const activeCheck = checkIsMeetingActiveNow(ev);
+
+      if (alreadyJoined) {
+        const pRecord = (ev.participants || []).find(p => (p.memberId || p.id) === memberId) || {};
+        const pTime = pRecord.joinedAt ? new Date(pRecord.joinedAt).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : '';
+        box.innerHTML = `
+          <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 animate-in fade-in">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg flex-shrink-0">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <div class="flex-1">
+                <span class="text-xs font-black uppercase tracking-wider block text-emerald-800">उपस्थिति दर्ज (Participated)</span>
+                <p class="text-[11px] text-emerald-700 font-medium mt-0.5">
+                  आप इस बैठक में सफलतापूर्वक भाग ले चुके हैं। ${pTime ? `(समय: ${pTime})` : ''}
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      if (!activeCheck.active) {
+        box.innerHTML = `
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700">
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-lock text-slate-400 text-sm mt-0.5"></i>
+              <div class="flex-1 text-xs">
+                <span class="font-bold text-slate-800 block">भागीदारी / उपस्थिति (Participate)</span>
+                <p class="text-[11px] text-slate-500 mt-0.5">${activeCheck.reason}</p>
+              </div>
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-600 flex-shrink-0">
+                निष्क्रिय
+              </span>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Active Meeting - Show Geolocation Participate Button
+      box.innerHTML = `
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 border border-emerald-200 text-slate-800 space-y-3 shadow-xs">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-emerald-500 text-white shadow-xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                बैठक जारी है (Active Now)
+              </span>
+              <h5 class="text-xs font-extrabold text-slate-900 mt-1">अपनी लाइव उपस्थिति दर्ज करें</h5>
+              <p class="text-[11px] text-slate-500 mt-0.5">
+                नियम: भागीदारी के लिए आपका बैठक स्थल के <strong>20 मीटर</strong> के दायरे में होना अनिवार्य है।
+              </p>
+            </div>
+            <i class="fa-solid fa-location-crosshairs text-xl text-emerald-600 mt-1"></i>
+          </div>
+
+          <div id="m-participate-feedback" class="hidden text-xs p-2.5 rounded-xl font-medium"></div>
+
+          <button 
+            type="button" 
+            id="btn-participate-action"
+            onclick="handleEventParticipation('${ev.id}')"
+            class="w-full py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-hand-holding-hand"></i>
+            <span>उपस्थिति दर्ज करें (Participate Now)</span>
+          </button>
+        </div>
+      `;
+    }
+
+    async function handleEventParticipation(eventId) {
+      const ev = (allEvents || []).find(e => e.id === eventId);
+      if (!ev) return;
+
+      const member = currentLoggedInMember;
+      if (!member) {
+        alert('कृपया उपस्थिति दर्ज करने के लिए पहले सदस्य पोर्टल में लॉगिन करें।');
+        return;
+      }
+
+      const activeCheck = checkIsMeetingActiveNow(ev);
+      if (!activeCheck.active) {
+        alert(activeCheck.reason);
+        return;
+      }
+
+      const btn = document.getElementById('btn-participate-action');
+      const feedback = document.getElementById('m-participate-feedback');
+
+      const setFeedback = (msg, isError = true) => {
+        if (!feedback) return;
+        feedback.classList.remove('hidden', 'bg-rose-50', 'text-rose-700', 'border-rose-200', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+        if (isError) {
+          feedback.className = 'text-xs p-3 rounded-xl font-medium bg-rose-50 text-rose-700 border border-rose-200 flex items-start gap-2 animate-in fade-in';
+          feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mt-0.5 text-sm flex-shrink-0"></i><span>${msg}</span>`;
+        } else {
+          feedback.className = 'text-xs p-3 rounded-xl font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-start gap-2 animate-in fade-in';
+          feedback.innerHTML = `<i class="fa-solid fa-circle-check mt-0.5 text-sm flex-shrink-0"></i><span>${msg}</span>`;
+        }
+      };
+
+      if (!navigator.geolocation) {
+        setFeedback('आपके ब्राउज़र में GPS / Geolocation सेवा उपलब्ध नहीं है। कृपया मोबाइल ब्राउज़र में स्थान (Location) की अनुमति दें।');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>जीपीएस लोकेशन जाँची जा रही है...</span>`;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          const accuracy = position.coords.accuracy || 10;
+
+          const targetVenue = getVenueCoordsForEvent(ev);
+          const distance = calculateDistanceInMeters(userLat, userLng, targetVenue.lat, targetVenue.lng);
+
+          const MAX_DISTANCE_METERS = 20;
+
+          if (distance > MAX_DISTANCE_METERS) {
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = `<i class="fa-solid fa-hand-holding-hand"></i> <span>पुनः प्रयास करें</span>`;
+            }
+            setFeedback(
+              `त्रुटि: आप बैठक/इवेंट स्थल पर उपस्थित नहीं हैं!\n\n` +
+              `• बैठक स्थल: ${ev.venue || targetVenue.name}\n` +
+              `• आपकी दूरी: लगभग ${Math.round(distance)} मीटर दूर\n` +
+              `• आवश्यक सीमा: 20 मीटर के भीतर होना आवश्यक है।`,
+              true
+            );
+            return;
+          }
+
+          // Successfully within 20 meters! Record participation
+          const participantRecord = {
+            memberId: member.id,
+            name: member.name,
+            phone: member.phone || '',
+            joinedAt: new Date().toISOString(),
+            userCoords: { lat: userLat, lng: userLng, accuracy: accuracy },
+            distanceMeters: Math.round(distance)
+          };
+
+          if (!ev.participants) ev.participants = [];
+          ev.participants.push(participantRecord);
+
+          // Save to local storage / state
+          const evIndex = allEvents.findIndex(e => e.id === ev.id);
+          if (evIndex !== -1) allEvents[evIndex] = ev;
+
+          // Save to backend API
+          try {
+            await fetch('/api/events/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(ev)
+            });
+          } catch (err) {
+            console.warn('Event participation save warning:', err);
+          }
+
+          setFeedback('सफलता! आपकी उपस्थिति बैठक स्थल पर सफलतापूर्वक दर्ज कर ली गई है।', false);
+
+          setTimeout(() => {
+            renderEventParticipationUI(ev.id);
+            renderMemberUpcomingEvents();
+          }, 1200);
+        },
+        (error) => {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-hand-holding-hand"></i> <span>उपस्थिति दर्ज करें</span>`;
+          }
+          let errorMsg = 'लोकेशन प्राप्त नहीं हो सकी।';
+          if (error.code === error.PERMISSION_DENIED) {
+            errorMsg = 'लोकेशन एक्सेस अस्वीकार कर दिया गया। कृपया अपने मोबाइल/ब्राउज़र में Location Permission चालू करें।';
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            errorMsg = 'GPS सिग्नल अनुपलब्ध है। कृपया खुले स्थान पर प्रयास करें।';
+          } else if (error.code === error.TIMEOUT) {
+            errorMsg = 'लोकेशन प्राप्त करने में समय समाप्त हो गया। कृपया पुनः प्रयास करें।';
+          }
+          setFeedback(errorMsg, true);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
     }
 
     function renderMemberDonations(member) {
@@ -11303,6 +11605,8 @@ ID: ${item.id}
     window.renderMemberDonationsPage = renderMemberDonationsPage;
     window.openMemberEventDetailModal = openMemberEventDetailModal;
     window.closeMemberEventDetailModal = closeMemberEventDetailModal;
+    window.handleEventParticipation = handleEventParticipation;
+    window.renderEventParticipationUI = renderEventParticipationUI;
 
     window.addEventListener('DOMContentLoaded', async () => {
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
