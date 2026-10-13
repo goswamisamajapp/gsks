@@ -2127,70 +2127,41 @@
         </div>
       </section>
 
-      <!-- 3. MY DONATIONS & 4. MY DUES DETAILS GRID -->
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        <!-- 3. MY DONATIONS (मेरे दान एवं सहयोग की रसीदें) -->
-        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
-                <i class="fa-solid fa-receipt"></i>
-              </div>
-              <div>
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
-                  मेरे दान व रसीदें (My Donations)
-                </h3>
-                <p class="text-xs text-slate-400">समिति कोष में आपके द्वारा दिया गया दान</p>
-              </div>
+      <!-- 3. MY DONATIONS (मेरे दान एवं सहयोग की रसीदें - Full Width) -->
+      <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
+              <i class="fa-solid fa-receipt"></i>
             </div>
-            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" id="user-donations-total-badge">
-              ₹ 0
-            </span>
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                मेरे दान व रसीदें (My Donations)
+              </h3>
+              <p class="text-xs text-slate-400">समिति कोष में आपके द्वारा दिया गया दान</p>
+            </div>
           </div>
-
-          <!-- Donations Table Container -->
-          <div class="overflow-x-auto rounded-2xl border border-slate-100">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
-                <tr>
-                  <th class="p-3 pl-4">रसीद सं. / दिनांक</th>
-                  <th class="p-3">योजना / मद</th>
-                  <th class="p-3">माध्यम</th>
-                  <th class="p-3 font-mono text-right pr-4">राशि (Amount)</th>
-                </tr>
-              </thead>
-              <tbody id="user-donations-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
-                <!-- Populated dynamically via JS -->
-              </tbody>
-            </table>
-          </div>
+          <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" id="user-donations-total-badge">
+            ₹ 0
+          </span>
         </div>
 
-        <!-- 4. MY DUES BREAKDOWN (बकाया विवरण एवं सदस्यता अंशदान) -->
-        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-base">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-              </div>
-              <div>
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
-                  बकाया विवरण (My Dues)
-                </h3>
-                <p class="text-xs text-slate-400">मासिक सहयोग व वार्षिक सदस्यता शुल्क की स्थिति</p>
-              </div>
-            </div>
-            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200" id="user-dues-badge">
-              ₹ 0
-            </span>
-          </div>
-
-          <div class="space-y-3" id="user-dues-content">
-            <!-- Populated dynamically via JS -->
-          </div>
+        <!-- Donations Table Container -->
+        <div class="overflow-x-auto rounded-2xl border border-slate-100">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="p-3 pl-4">रसीद सं. / दिनांक</th>
+                <th class="p-3">योजना / मद</th>
+                <th class="p-3">माध्यम</th>
+                <th class="p-3 font-mono text-right pr-4">राशि (Amount)</th>
+              </tr>
+            </thead>
+            <tbody id="user-donations-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
         </div>
-
       </section>
 
       <!-- 6. COMPLETE PROFILE DETAILS (प्रोफ़ाइल विवरण) -->
@@ -5098,9 +5069,8 @@
       const statDuesEl = document.getElementById('user-stat-dues');
       const statStatusEl = document.getElementById('user-stat-dues-status');
       const contentEl = document.getElementById('user-dues-content');
-      if (!contentEl) return;
 
-      const duesAmt = Number(member.dues) || 0;
+      const duesAmt = Number(member ? member.dues : 0) || 0;
       if (badgeEl) badgeEl.textContent = `₹ ${duesAmt.toLocaleString('en-IN')}`;
       if (statDuesEl) statDuesEl.textContent = `₹ ${duesAmt.toLocaleString('en-IN')}`;
       if (statStatusEl) {
@@ -5108,40 +5078,9 @@
         statStatusEl.className = duesAmt > 0 ? 'text-[10px] text-rose-600 font-bold' : 'text-[10px] text-emerald-600 font-semibold';
       }
 
-      contentEl.innerHTML = `
-        <div class="p-4 rounded-2xl ${duesAmt > 0 ? 'bg-rose-50 border border-rose-200' : 'bg-emerald-50 border border-emerald-200'}">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs font-bold ${duesAmt > 0 ? 'text-rose-900' : 'text-emerald-900'} block">
-                ${duesAmt > 0 ? 'वर्तमान बकाया सहयोग राशि (Pending Dues)' : 'कोई बकाया देय नहीं (No Dues)'}
-              </span>
-              <p class="text-[11px] ${duesAmt > 0 ? 'text-rose-600' : 'text-emerald-700'} mt-0.5">
-                ${duesAmt > 0 ? 'कृपया आगामी बैठक में या कोषाध्यक्ष के पास अंशदान जमा करें।' : 'आपकी सदस्यता का समस्त शुल्क पूर्ण रूप से चुकता है।'}
-              </p>
-            </div>
-            <span class="text-xl font-mono font-black ${duesAmt > 0 ? 'text-rose-600' : 'text-emerald-600'}">
-              ₹ ${duesAmt.toLocaleString('en-IN')}
-            </span>
-          </div>
-        </div>
-
-        <!-- Trust Schemes Contribution Guide -->
-        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-2.5 text-xs">
-          <h4 class="font-bold text-slate-800 text-[11px] uppercase tracking-wider">नियमित सदस्यता अंशदान नियम:</h4>
-          <div class="flex items-center justify-between py-1 border-b border-slate-200/60 text-slate-600">
-            <span>• मासिक पारिवारिक सहयोग (Monthly Sewa):</span>
-            <span class="font-mono font-bold text-slate-800">₹150 / माह</span>
-          </div>
-          <div class="flex items-center justify-between py-1 border-b border-slate-200/60 text-slate-600">
-            <span>• वार्षिक सदस्यता नवीनीकरण (Annual Dues):</span>
-            <span class="font-mono font-bold text-slate-800">₹1,200 / वर्ष</span>
-          </div>
-          <div class="flex items-center justify-between py-1 text-slate-600">
-            <span>• भुगतान माध्यम:</span>
-            <span class="font-semibold text-indigo-700">नकद (कोषाध्यक्ष) अथवा ट्रस्ट SBI बैंक खाता</span>
-          </div>
-        </div>
-      `;
+      if (contentEl) {
+        contentEl.innerHTML = '';
+      }
     }
 
     function renderMemberProfile(member) {
