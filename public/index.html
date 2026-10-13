@@ -3660,16 +3660,60 @@
           <div class="flex flex-col justify-between">
             <div class="flex items-center justify-between mb-1.5 min-h-[26px]">
               <label class="font-bold text-slate-700">स्थान / वेन्यू (Venue) *</label>
-              <select onchange="if(this.value){document.getElementById('event-venue').value=this.value;}" class="bg-rose-50 text-rose-700 font-bold text-[11px] rounded-lg px-2.5 py-1 border border-rose-200 focus:outline-none cursor-pointer" id="event-venue-presets">
+              <select onchange="onEventVenuePresetChange(this.value)" class="bg-rose-50 text-rose-700 font-bold text-[11px] rounded-lg px-2.5 py-1 border border-rose-200 focus:outline-none cursor-pointer" id="event-venue-presets">
                 <option value="">⚡ मास्टर से चुनें (Preset)</option>
                 <option value="शिव मंदिर परिसर, गुनघसा">शिव मंदिर परिसर, गुनघसा</option>
                 <option value="सामुदायिक भवन, गोमो">सामुदायिक भवन, गोमो</option>
                 <option value="केंद्रीय ट्रस्ट कार्यालय, धनबाद">केंद्रीय ट्रस्ट कार्यालय, धनबाद</option>
               </select>
             </div>
-            <div class="relative">
-              <i class="fa-solid fa-location-dot absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-              <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+            
+            <!-- Venue Input with Live Location Picker Button -->
+            <div class="space-y-1.5">
+              <div class="relative flex items-center gap-1.5">
+                <div class="relative flex-1">
+                  <i class="fa-solid fa-location-dot absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                  <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+                </div>
+
+                <!-- Live Location Fetch Button -->
+                <button 
+                  type="button" 
+                  onclick="detectEventCurrentLocation()" 
+                  id="btn-detect-event-gps" 
+                  class="px-3 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 active:scale-95 transition-all flex-shrink-0 cursor-pointer"
+                  title="वर्तमान जीपीएस लोकेशन फेच करें और पता भरें"
+                >
+                  <i class="fa-solid fa-location-crosshairs text-xs"></i>
+                  <span class="hidden sm:inline">लोकेशन लें</span>
+                </button>
+              </div>
+
+              <!-- Mini Latitude & Longitude Inputs Directly Below Venue -->
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200/80 text-[11px]">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold text-slate-400">Lat:</span>
+                  <input 
+                    type="number" 
+                    step="any" 
+                    id="event-latitude" 
+                    placeholder="23.868850" 
+                    class="w-full bg-white border border-slate-200 rounded-lg px-2 py-0.5 font-mono text-[11px] text-slate-800 font-semibold focus:outline-none focus:border-indigo-500"
+                    title="बैठक स्थल का Latitude (अक्षांश)"
+                  >
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold text-slate-400">Lng:</span>
+                  <input 
+                    type="number" 
+                    step="any" 
+                    id="event-longitude" 
+                    placeholder="86.155400" 
+                    class="w-full bg-white border border-slate-200 rounded-lg px-2 py-0.5 font-mono text-[11px] text-slate-800 font-semibold focus:outline-none focus:border-indigo-500"
+                    title="बैठक स्थल का Longitude (देशांतर)"
+                  >
+                </div>
+              </div>
             </div>
           </div>
 
@@ -8435,6 +8479,88 @@
       }).join('');
     }
 
+    function onEventVenuePresetChange(val) {
+      if (!val) return;
+      const venueInput = document.getElementById('event-venue');
+      if (venueInput) venueInput.value = val;
+
+      // Find matching venue in masterSettings to auto-fill its latitude and longitude
+      if (masterSettings && Array.isArray(masterSettings.eventVenues)) {
+        const found = masterSettings.eventVenues.find(v => v.venue && v.venue.trim().toLowerCase() === val.trim().toLowerCase());
+        if (found && found.latitude && found.longitude) {
+          const latInput = document.getElementById('event-latitude');
+          const lngInput = document.getElementById('event-longitude');
+          if (latInput) latInput.value = parseFloat(found.latitude).toFixed(6);
+          if (lngInput) lngInput.value = parseFloat(found.longitude).toFixed(6);
+        }
+      }
+    }
+    window.onEventVenuePresetChange = onEventVenuePresetChange;
+
+    async function detectEventCurrentLocation() {
+      const btn = document.getElementById('btn-detect-event-gps');
+      const venueInput = document.getElementById('event-venue');
+      const latInput = document.getElementById('event-latitude');
+      const lngInput = document.getElementById('event-longitude');
+
+      if (!navigator.geolocation) {
+        alert('आपके डिवाइस / ब्राउज़र में GPS सुविधा उपलब्ध नहीं है');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>स्थान फेच हो रहा है...</span>`;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+
+          if (latInput) latInput.value = lat.toFixed(6);
+          if (lngInput) lngInput.value = lng.toFixed(6);
+
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> <span>लोकेशन सेट!</span>`;
+            setTimeout(() => {
+              btn.innerHTML = `<i class="fa-solid fa-location-crosshairs text-xs"></i> <span class="hidden sm:inline">लोकेशन लें</span>`;
+            }, 3000);
+          }
+
+          // Optional reverse geocoding via OpenStreetMap Nominatim for auto address fill if empty
+          if (venueInput && (!venueInput.value || venueInput.value.trim() === '')) {
+            try {
+              const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+              if (res.ok) {
+                const data = await res.json();
+                if (data && data.display_name) {
+                  // Format brief readable address
+                  const parts = [];
+                  if (data.address.amenity) parts.push(data.address.amenity);
+                  if (data.address.road || data.address.suburb) parts.push(data.address.road || data.address.suburb);
+                  if (data.address.village || data.address.town || data.address.city) parts.push(data.address.village || data.address.town || data.address.city);
+                  venueInput.value = parts.length > 0 ? parts.join(', ') : data.display_name.split(',').slice(0, 3).join(', ');
+                }
+              }
+            } catch (e) {
+              console.warn('Reverse geocoding error:', e);
+            }
+          }
+        },
+        (err) => {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-location-crosshairs text-xs"></i> <span class="hidden sm:inline">लोकेशन लें</span>`;
+          }
+          alert('GPS लोकेशन प्राप्त नहीं हो सकी: ' + (err.message || 'अनुमति अस्वीकृत'));
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    }
+    window.detectEventCurrentLocation = detectEventCurrentLocation;
+
     function openEventModal(eventId = null) {
       try {
         closeAllModals();
@@ -8477,6 +8603,8 @@
 
           if (document.getElementById('event-title')) document.getElementById('event-title').value = ev.title || '';
           if (document.getElementById('event-venue')) document.getElementById('event-venue').value = ev.venue || '';
+          if (document.getElementById('event-latitude')) document.getElementById('event-latitude').value = ev.latitude || '';
+          if (document.getElementById('event-longitude')) document.getElementById('event-longitude').value = ev.longitude || '';
           if (document.getElementById('event-datetime')) document.getElementById('event-datetime').value = ev.datetime || '';
           if (document.getElementById('event-description')) document.getElementById('event-description').value = ev.description || '';
           if (document.getElementById('event-audience')) document.getElementById('event-audience').value = ev.audience || 'All User';
@@ -8498,6 +8626,8 @@
 
           if (document.getElementById('event-title')) document.getElementById('event-title').value = '';
           if (document.getElementById('event-venue')) document.getElementById('event-venue').value = '';
+          if (document.getElementById('event-latitude')) document.getElementById('event-latitude').value = '';
+          if (document.getElementById('event-longitude')) document.getElementById('event-longitude').value = '';
           
           // Default datetime to tomorrow at 10:00 AM
           const now = new Date();
@@ -8553,12 +8683,19 @@
         selectedMembers = Array.from(checkboxes).map(cb => cb.value);
       }
 
+      const latInput = document.getElementById('event-latitude');
+      const lngInput = document.getElementById('event-longitude');
+      const latitude = latInput && latInput.value ? parseFloat(latInput.value) : null;
+      const longitude = lngInput && lngInput.value ? parseFloat(lngInput.value) : null;
+
       const eventPayload = {
         id: id,
         category: selectedCat,
         status: selectedStatus,
         title: document.getElementById('event-title').value.trim(),
         venue: document.getElementById('event-venue').value.trim(),
+        latitude: latitude,
+        longitude: longitude,
         datetime: document.getElementById('event-datetime').value,
         description: document.getElementById('event-description').value.trim(),
         audience: audienceVal,
