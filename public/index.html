@@ -4350,6 +4350,12 @@
         if (errBox) errBox.classList.add('hidden');
         currentLoggedInMember = member;
         localStorage.setItem('gsks_member_auth', JSON.stringify({ id: member.id, phone: member.phone }));
+        if (!allEvents || allEvents.length === 0) {
+          await loadEventsFallback();
+        }
+        if (!allDonations || allDonations.length === 0) {
+          await loadDonationsFallback();
+        }
         showMemberDashboard(member);
       } else {
         if (errBox) {
@@ -4777,7 +4783,30 @@
       const countEl = document.getElementById('user-events-count');
       if (!listEl) return;
 
-      const events = (allEvents || []).filter(e => (e.status || 'Upcoming') !== 'Cancelled');
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      // Show upcoming or active events (exclude cancelled or past closed events)
+      let events = (allEvents || []).filter(e => {
+        if ((e.status || '').toLowerCase() === 'cancelled') return false;
+        const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
+        if (e.status === 'Upcoming' || e.status === 'Open') return true;
+        if (dt && !isNaN(dt) && dt >= todayStart) return true;
+        return false;
+      });
+
+      // If no future events, fallback to non-cancelled events so list isn't empty if admin entered an event
+      if (events.length === 0) {
+        events = (allEvents || []).filter(e => (e.status || '').toLowerCase() !== 'cancelled');
+      }
+
+      // Sort upcoming events: soonest first
+      events.sort((a, b) => {
+        const da = new Date(a.datetime || a.date);
+        const db = new Date(b.datetime || b.date);
+        return da - db;
+      });
+
       if (countEl) countEl.textContent = `${events.length} कार्यक्रम`;
 
       if (events.length === 0) {
@@ -5135,6 +5164,13 @@
           allEvents.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
           updateEventsStats();
           renderEventsList();
+          if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+            renderMemberNotification(currentLoggedInMember);
+            renderMemberUpcomingEvents();
+            if (typeof renderMemberAllNotifications === 'function') {
+              renderMemberAllNotifications(currentLoggedInMember);
+            }
+          }
         }, (err) => {
           console.warn("Firestore events onSnapshot error:", err);
           loadEventsFallback();
@@ -5257,8 +5293,16 @@
       try {
         const res = await fetch('/api/events');
         allEvents = await res.json();
+        allEvents.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
         updateEventsStats();
         renderEventsList();
+        if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+          renderMemberNotification(currentLoggedInMember);
+          renderMemberUpcomingEvents();
+          if (typeof renderMemberAllNotifications === 'function') {
+            renderMemberAllNotifications(currentLoggedInMember);
+          }
+        }
       } catch (err) {
         console.error(err);
       }
