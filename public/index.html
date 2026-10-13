@@ -5840,11 +5840,37 @@
         return true;
       });
 
-      // Sort date-wise: New to Old (Latest date on top)
+      // Sort events by lifecycle and date:
+      // Priority 1: OPEN (चालू बैठकें - सबसे पहले)
+      // Priority 2: UPCOMING (आगामी बैठकें - तारीख के क्रम में, जैसे 17 तारीख फिर 25 तारीख)
+      // Priority 3: CLOSED (संपन्न बैठकें - हाल ही में संपन्न पहले, जैसे 11 तारीख फिर 5 तारीख)
       events.sort((a, b) => {
+        const getPriority = (item) => {
+          const st = (item.status || 'Upcoming').toLowerCase();
+          if (st === 'open') return 1;
+          if (st === 'upcoming') return 2;
+          if (st === 'closed') return 3;
+          if (st === 'cancelled') return 4;
+          return 2;
+        };
+
+        const pa = getPriority(a);
+        const pb = getPriority(b);
+
+        if (pa !== pb) {
+          return pa - pb; // OPEN (1) -> UPCOMING (2) -> CLOSED (3)
+        }
+
         const da = new Date(a.datetime || a.date || 0);
         const db = new Date(b.datetime || b.date || 0);
-        return db - da; // New to old (Latest date first)
+
+        if (pa === 3 || pa === 4) {
+          // CLOSED / CANCELLED: जो हाल ही में खत्म हुआ वो ऊपर (जैसे 11 तारीख फिर 5 तारीख)
+          return db - da;
+        }
+
+        // OPEN & UPCOMING: जो तारीख पहले आने वाली है वो ऊपर (जैसे 17 तारीख फिर 25 तारीख)
+        return da - db;
       });
 
       if (countEl) countEl.textContent = `${events.length} कार्यक्रम`;
@@ -8382,11 +8408,37 @@
         return true;
       });
 
-      // Sort events date-wise: New to Old (Latest date on top)
+      // Sort events by lifecycle and date:
+      // Priority 1: OPEN (चालू बैठकें - सबसे पहले)
+      // Priority 2: UPCOMING (आगामी बैठकें - तारीख के क्रम में, जैसे 17 तारीख फिर 25 तारीख)
+      // Priority 3: CLOSED (संपन्न बैठकें - हाल ही में संपन्न पहले, जैसे 11 तारीख फिर 5 तारीख)
       filtered.sort((a, b) => {
+        const getPriority = (item) => {
+          const st = (item.status || 'Upcoming').toLowerCase();
+          if (st === 'open') return 1;
+          if (st === 'upcoming') return 2;
+          if (st === 'closed') return 3;
+          if (st === 'cancelled') return 4;
+          return 2;
+        };
+
+        const pa = getPriority(a);
+        const pb = getPriority(b);
+
+        if (pa !== pb) {
+          return pa - pb; // OPEN (1) -> UPCOMING (2) -> CLOSED (3)
+        }
+
         const da = new Date(a.datetime || a.date || 0);
         const db = new Date(b.datetime || b.date || 0);
-        return db - da; // New to old (Latest date first)
+
+        if (pa === 3 || pa === 4) {
+          // CLOSED / CANCELLED: जो हाल ही में खत्म हुआ वो ऊपर (जैसे 11 तारीख फिर 5 तारीख)
+          return db - da;
+        }
+
+        // OPEN & UPCOMING: जो तारीख पहले आने वाली है वो ऊपर (जैसे 17 तारीख फिर 25 तारीख)
+        return da - db;
       });
 
       if (filtered.length === 0) {
