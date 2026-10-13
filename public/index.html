@@ -2024,7 +2024,7 @@
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block" id="user-notice-badge">
                     नवीनतम सूचना / Notification
                   </span>
                   <span class="text-[11px] bg-black/20 px-2.5 py-0.5 rounded-full font-mono font-medium text-amber-100" id="user-notice-date">
@@ -5520,33 +5520,140 @@
     let currentActiveMemberNotice = null;
 
     function renderMemberNotification(member) {
+      const noticePanel = document.getElementById('user-notification-panel');
+      const noticeBadge = document.getElementById('user-notice-badge');
       const noticeTitle = document.getElementById('user-notice-title');
       const noticeDate = document.getElementById('user-notice-date');
       const noticeBody = document.getElementById('user-notice-body');
 
-      // Check upcoming events for latest meeting notice
-      const upcomingMeeting = (allEvents || []).find(e => {
-        const d = new Date(e.datetime || e.date);
-        return !isNaN(d) && d >= new Date(new Date().setHours(0,0,0,0));
-      });
+      if (!member) member = currentLoggedInMember;
+      const duesAmt = Number(member ? member.dues : 0) || 0;
 
-      if (upcomingMeeting) {
-        const dt = new Date(upcomingMeeting.datetime);
-        const dateStr = dt.toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', weekday: 'short' });
-        const timeStr = dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
-        const venueStr = upcomingMeeting.venue || 'शिव मंदिर, गुनघसा';
+      // ==============================================================
+      // PRIORITY 1: DUES NOTIFICATION (यदि सदस्य पर बकाया है - HIGHEST PRIORITY)
+      // ==============================================================
+      if (duesAmt > 0) {
+        if (noticePanel) {
+          noticePanel.className = 'bg-gradient-to-r from-rose-600 via-rose-500 to-amber-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-rose-500/20 relative overflow-hidden';
+        }
+        if (noticeBadge) {
+          noticeBadge.textContent = 'अति-आवश्यक / DUES ALERT';
+          noticeBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block animate-pulse';
+        }
+        if (noticeDate) noticeDate.textContent = 'तत्काल देय';
+        if (noticeTitle) noticeTitle.textContent = '⚠️ सदस्यता अंशदान एवं सहयोग बकाया सूचना';
+
+        const duesMsg = `सादर प्रणाम ${member.name || 'सदस्य'} जी! आपके खाते में वर्तमान सदस्यता अंशदान कुल ₹${duesAmt.toLocaleString('en-IN')} बकाया है। कृपया समय पर अंशदान जमा कर समिति के सामाजिक व कल्याणकारी कार्यों को सुचारु बनाने में सहयोग करें।`;
+
+        if (noticeBody) {
+          noticeBody.innerHTML = `
+            <div class="flex items-center gap-2 flex-wrap mb-1 text-[11px] font-semibold text-rose-100">
+              <span><i class="fa-solid fa-clock-rotate-left"></i> कुल बकाया राशि: <strong>₹${duesAmt.toLocaleString('en-IN')}</strong></span>
+              <span>•</span>
+              <span><i class="fa-solid fa-building-columns"></i> कोषाध्यक्ष / समिति कार्यालय</span>
+            </div>
+            <p class="line-clamp-2 text-white/95 text-[11px] sm:text-xs font-medium">${duesMsg}</p>
+          `;
+        }
 
         currentActiveMemberNotice = {
-          badge: upcomingMeeting.category || 'आगामी बैठक',
-          title: upcomingMeeting.title || 'समिति की आगामी बैठक',
+          badge: '⚠️ बकाया अंशदान सूचना (Dues Notice)',
+          title: 'सदस्यता अंशदान एवं सहयोग बकाया सूचना',
+          date: new Date().toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
+          time: 'तत्काल देय',
+          venue: 'कोषाध्यक्ष कार्यालय, गुनघसा • SBI खाता',
+          description: duesMsg
+        };
+        return;
+      }
+
+      // ==============================================================
+      // PRIORITY 2: PERSONAL / TARGETED PUSH NOTIFICATION (व्यक्तिगत सूचना)
+      // Checks if member is specifically targeted in any active meeting/announcement
+      // ==============================================================
+      const memberId = member ? (member.id || '').trim().toLowerCase() : '';
+      const personalNotice = (allEvents || []).find(e => {
+        if (!e) return false;
+        if (e.status === 'Closed' || e.status === 'Cancelled') return false;
+        if (e.audience === 'Selected User' && Array.isArray(e.selectedMembers)) {
+          return e.selectedMembers.some(mId => (mId || '').trim().toLowerCase() === memberId);
+        }
+        return false;
+      });
+
+      if (personalNotice) {
+        if (noticePanel) {
+          noticePanel.className = 'bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-indigo-500/20 relative overflow-hidden';
+        }
+        if (noticeBadge) {
+          noticeBadge.textContent = 'व्यक्तिगत सूचना / PERSONAL ALERT';
+          noticeBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block';
+        }
+
+        const dt = personalNotice.datetime ? new Date(personalNotice.datetime) : (personalNotice.date ? new Date(personalNotice.date) : null);
+        const dateStr = dt && !isNaN(dt) ? dt.toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', weekday: 'short' }) : (personalNotice.date || 'आज');
+        const timeStr = dt && !isNaN(dt) ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : (personalNotice.time || '05:00 PM');
+        const venueStr = personalNotice.venue || 'शिव मंदिर, गुनघसा';
+
+        if (noticeDate) noticeDate.textContent = `📅 ${dateStr}`;
+        if (noticeTitle) noticeTitle.textContent = `🎯 ${personalNotice.title || 'आपके लिए विशेष बैठक / सूचना'}`;
+        if (noticeBody) {
+          noticeBody.innerHTML = `
+            <div class="flex items-center gap-2 flex-wrap mb-1 text-[11px] font-semibold text-indigo-100">
+              <span><i class="fa-solid fa-location-dot text-rose-300"></i> ${venueStr}</span>
+              <span>•</span>
+              <span><i class="fa-regular fa-clock text-amber-200"></i> ${timeStr}</span>
+            </div>
+            <p class="line-clamp-2 text-white/95 text-[11px] sm:text-xs font-medium">${personalNotice.description || 'आपको इस विशेष बैठक / कार्यक्रम में सादर आमंत्रित किया गया है।'}</p>
+          `;
+        }
+
+        currentActiveMemberNotice = {
+          badge: '🎯 व्यक्तिगत सूचना (Personal Alert)',
+          title: personalNotice.title || 'आपके लिए विशेष सूचना',
           date: dateStr,
           time: timeStr,
           venue: venueStr,
-          description: upcomingMeeting.description || 'सभी सदस्यों की उपस्थिति प्रार्थनीय है।'
+          description: personalNotice.description || 'आपको इस विशेष बैठक में सादर आमंत्रित किया गया है।'
         };
+        return;
+      }
 
-        if (noticeTitle) noticeTitle.textContent = `📢 ${upcomingMeeting.title || 'समिति की आगामी बैठक'}`;
+      // ==============================================================
+      // PRIORITY 3: LATEST ACTIVE MEETING / GENERAL NOTIFICATION (नवीनतम नोटिस)
+      // Sort all active events to pick the most relevant/latest one
+      // ==============================================================
+      const activeEvents = (allEvents || []).filter(e => {
+        if (!e) return false;
+        if (e.status === 'Closed' || e.status === 'Cancelled') return false;
+        return true;
+      });
+
+      // Sort by datetime/date ascending (soonest event first)
+      activeEvents.sort((a, b) => {
+        const da = new Date(a.datetime || a.date || 0);
+        const db = new Date(b.datetime || b.date || 0);
+        return da - db;
+      });
+
+      const latestEvent = activeEvents[0];
+
+      if (latestEvent) {
+        if (noticePanel) {
+          noticePanel.className = 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden';
+        }
+        if (noticeBadge) {
+          noticeBadge.textContent = 'नवीनतम सूचना / NOTIFICATION';
+          noticeBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block';
+        }
+
+        const dt = latestEvent.datetime ? new Date(latestEvent.datetime) : (latestEvent.date ? new Date(latestEvent.date) : null);
+        const dateStr = dt && !isNaN(dt) ? dt.toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', weekday: 'short' }) : (latestEvent.date || 'आगामी');
+        const timeStr = dt && !isNaN(dt) ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : (latestEvent.time || '05:00 PM');
+        const venueStr = latestEvent.venue || 'काली मंदिर प्रांगण, गुनघसा';
+
         if (noticeDate) noticeDate.textContent = `📅 ${dateStr}`;
+        if (noticeTitle) noticeTitle.textContent = `📢 ${latestEvent.title || 'समिति की आगामी बैठक'}`;
         if (noticeBody) {
           noticeBody.innerHTML = `
             <div class="flex items-center gap-2 flex-wrap mb-1 text-[11px] font-semibold text-white/95">
@@ -5554,29 +5661,44 @@
               <span>•</span>
               <span><i class="fa-regular fa-clock text-amber-200"></i> ${timeStr}</span>
             </div>
-            <p class="line-clamp-2 text-white/90 text-[11px] sm:text-xs">${upcomingMeeting.description || 'सभी सदस्यों की उपस्थिति प्रार्थनीय है।'}</p>
+            <p class="line-clamp-2 text-white/90 text-[11px] sm:text-xs font-medium">${latestEvent.description || 'समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।'}</p>
           `;
         }
-      } else {
-        const dues = Number(member ? member.dues : 0) || 0;
-        const msg = dues > 0 
-          ? `सादर प्रणाम ${member.name || 'सदस्य'} जी! आपके खाते में वर्तमान बकाया सहयोग राशि ₹${dues.toLocaleString('en-IN')} है। कृपया समय पर अंशदान जमा कर समिति के सामाजिक कार्यों को सुदृढ़ बनाएं।`
-          : `सादर प्रणाम ${member ? member.name : 'सदस्य'} जी! समिति में आपकी नियमित सहभागिता और निष्ठा सराहनीय है। आपका समस्त अंशदान अद्यतन है।`;
 
         currentActiveMemberNotice = {
-          badge: dues > 0 ? 'सहयोग सूचना' : 'समिति संदेश',
-          title: dues > 0 ? 'मासिक सहयोग एवं अंशदान सूचना' : 'समिति कल्याण संदेश',
+          badge: latestEvent.category || 'आगामी बैठक',
+          title: latestEvent.title || 'समिति की आगामी बैठक',
+          date: dateStr,
+          time: timeStr,
+          venue: venueStr,
+          description: latestEvent.description || 'समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।'
+        };
+      } else {
+        // Fallback: If no dues, no personal message, and no active events
+        if (noticePanel) {
+          noticePanel.className = 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-emerald-500/15 relative overflow-hidden';
+        }
+        if (noticeBadge) {
+          noticeBadge.textContent = 'समिति संदेश / ALL CLEAR';
+          noticeBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block';
+        }
+        if (noticeDate) noticeDate.textContent = 'अद्यतन';
+        if (noticeTitle) noticeTitle.textContent = '✨ समिति कल्याण एवं आभार संदेश';
+
+        const clearMsg = `सादर प्रणाम ${member ? member.name : 'सदस्य'} जी! समिति में आपकी नियमित सहभागिता और निष्ठा सराहनीय है। आपका समस्त अंशदान अद्यतन है एवं वर्तमान में कोई नई बैठक निर्धारित नहीं है।`;
+
+        if (noticeBody) {
+          noticeBody.innerHTML = `<p class="line-clamp-2 text-white/95 text-[11px] sm:text-xs font-medium">${clearMsg}</p>`;
+        }
+
+        currentActiveMemberNotice = {
+          badge: '✨ समिति संदेश',
+          title: 'समिति कल्याण एवं आभार संदेश',
           date: new Date().toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
           time: 'अद्यतन',
-          venue: 'कोषाध्यक्ष कार्यालय, गुनघसा',
-          description: msg
+          venue: 'समिति कार्यालय, गुनघसा',
+          description: clearMsg
         };
-
-        if (noticeTitle) noticeTitle.textContent = dues > 0 ? `⚠️ मासिक सहयोग एवं अंशदान सूचना` : `✨ समिति कल्याण संदेश`;
-        if (noticeDate) noticeDate.textContent = currentActiveMemberNotice.date;
-        if (noticeBody) {
-          noticeBody.innerHTML = `<p class="line-clamp-2 text-white/90 text-[11px] sm:text-xs">${msg}</p>`;
-        }
       }
     }
 
