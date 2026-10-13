@@ -2121,6 +2121,93 @@
           </div>
         </div>
 
+      <!-- Quick Action Buttons Row (Donation, PASY, Notifications, Profile) -->
+      <section class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-500 font-devanagari">त्वरित सेवाएं (Quick Actions)</h4>
+          </div>
+          <span class="text-[10px] text-slate-400 font-medium">एक क्लिक में मुख्य सेवाएं</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <!-- 1. Donation Quick Button -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('donations')" 
+            class="group p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/60 hover:from-emerald-100/80 hover:to-teal-100/80 border border-emerald-200/80 hover:border-emerald-300 transition-all text-left flex items-center gap-3 shadow-2xs hover:shadow-sm cursor-pointer active:scale-98"
+          >
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-emerald-600 group-hover:bg-emerald-700 text-white flex items-center justify-center text-lg shadow-sm shadow-emerald-600/30 transition-transform group-hover:scale-105 flex-shrink-0">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-xs sm:text-sm font-black text-slate-900 group-hover:text-emerald-950 block truncate font-devanagari">
+                Donation
+              </span>
+              <span class="text-[10px] sm:text-[11px] text-emerald-700 font-semibold block truncate">
+                मेरे दान व रसीदें
+              </span>
+            </div>
+          </button>
+
+          <!-- 2. PASY (पारिवारिक आर्थिक सहायता योजना) Quick Button -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('pasy')" 
+            class="group p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-cyan-50 to-blue-50/60 hover:from-cyan-100/80 hover:to-blue-100/80 border border-cyan-200/80 hover:border-cyan-300 transition-all text-left flex items-center gap-3 shadow-2xs hover:shadow-sm cursor-pointer active:scale-98"
+          >
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-cyan-600 group-hover:bg-cyan-700 text-white flex items-center justify-center text-lg shadow-sm shadow-cyan-600/30 transition-transform group-hover:scale-105 flex-shrink-0">
+              <i class="fa-solid fa-hands-holding-child"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-xs sm:text-sm font-black text-slate-900 group-hover:text-cyan-950 block truncate font-devanagari">
+                PASY
+              </span>
+              <span class="text-[10px] sm:text-[11px] text-cyan-700 font-semibold block truncate">
+                पारिवारिक सहायता
+              </span>
+            </div>
+          </button>
+
+          <!-- 3. Notifications Quick Button -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('notifications')" 
+            class="group p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50/60 hover:from-amber-100/80 hover:to-orange-100/80 border border-amber-200/80 hover:border-amber-300 transition-all text-left flex items-center gap-3 shadow-2xs hover:shadow-sm cursor-pointer active:scale-98"
+          >
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-500 group-hover:bg-amber-600 text-white flex items-center justify-center text-lg shadow-sm shadow-amber-500/30 transition-transform group-hover:scale-105 flex-shrink-0">
+              <i class="fa-solid fa-bell"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-xs sm:text-sm font-black text-slate-900 group-hover:text-amber-950 block truncate font-devanagari">
+                Notifications
+              </span>
+              <span class="text-[10px] sm:text-[11px] text-amber-700 font-semibold block truncate">
+                सभी सूचनाएं
+              </span>
+            </div>
+          </button>
+
+          <!-- 4. Profile Quick Button -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('profile')" 
+            class="group p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-purple-50 to-indigo-50/60 hover:from-purple-100/80 hover:to-indigo-100/80 border border-purple-200/80 hover:border-purple-300 transition-all text-left flex items-center gap-3 shadow-2xs hover:shadow-sm cursor-pointer active:scale-98"
+          >
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-purple-600 group-hover:bg-purple-700 text-white flex items-center justify-center text-lg shadow-sm shadow-purple-600/30 transition-transform group-hover:scale-105 flex-shrink-0">
+              <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <div class="min-w-0">
+              <span class="text-xs sm:text-sm font-black text-slate-900 group-hover:text-purple-950 block truncate font-devanagari">
+                Profile
+              </span>
+              <span class="text-[10px] sm:text-[11px] text-purple-700 font-semibold block truncate">
+                मेरी प्रोफ़ाइल विवरण
+              </span>
+            </div>
+          </button>
+        </div>
       </section>
 
       <!-- 2. UPCOMING MEETINGS & EVENTS (आगामी बैठकें एवं कार्यक्रम) -->
@@ -2451,6 +2538,102 @@
         </div>
 
       </div><!-- End member-view-donations -->
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW 5: PASY (पारिवारिक आर्थिक सहायता योजना) -->
+      <!-- ============================================== -->
+      <div id="member-view-pasy" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- PASY Header Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+              <i class="fa-solid fa-hands-holding-child"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  पारिवारिक आर्थिक सहायता योजना (PASY)
+                </h2>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-100 text-cyan-800 border border-cyan-200" id="m-pasy-member-badge">
+                  सदस्य स्थिति
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">मासिक अंशदान ₹150 • 30 माह का सामूहिक सुरक्षा कोष</p>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            onclick="switchMemberView('dashboard')" 
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-arrow-left text-[11px]"></i>
+            <span>वापस डैशबोर्ड</span>
+          </button>
+        </div>
+
+        <!-- PASY 3 Quick Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white rounded-3xl p-5 border border-cyan-100 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">कुल जमा अंशदान</span>
+              <h3 class="text-xl sm:text-2xl font-black text-cyan-700 font-mono mt-0.5" id="m-pasy-stat-paid">₹ 0</h3>
+              <p class="text-[10px] text-slate-400" id="m-pasy-stat-paid-months">0 माह जमा</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-rose-100 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">बकाया अंशदान</span>
+              <h3 class="text-xl sm:text-2xl font-black text-rose-600 font-mono mt-0.5" id="m-pasy-stat-dues">₹ 0</h3>
+              <p class="text-[10px] text-slate-400" id="m-pasy-stat-dues-months">0 माह शेष</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-5 border border-emerald-100 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">सुरक्षा योजना लक्ष्य</span>
+              <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5">₹ 4,500</h3>
+              <p class="text-[10px] text-slate-400">30 माह x ₹150 प्रति सदस्य</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASY Member Status / Info Banner -->
+        <div id="m-pasy-membership-banner" class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-4">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- 30 Months Installments Status Grid -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <i class="fa-regular fa-calendar-check text-cyan-600 text-sm"></i>
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                मासिक किश्त विवरण (Sep 2025 - Feb 2028)
+              </h3>
+            </div>
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+              कुल 30 माह
+            </span>
+          </div>
+
+          <div id="m-pasy-months-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </div><!-- End member-view-pasy -->
 
       <!-- ============================================== -->
       <!-- SUB-VIEW 3: MY PROFILE SEPARATE PAGE           -->
@@ -4925,6 +5108,7 @@
       const viewDash = document.getElementById('member-view-dashboard');
       const viewNotices = document.getElementById('member-view-notifications');
       const viewDonations = document.getElementById('member-view-donations');
+      const viewPasy = document.getElementById('member-view-pasy');
       const viewProfile = document.getElementById('member-view-profile');
 
       const btnDash = document.getElementById('user-nav-btn-dash');
@@ -4932,10 +5116,11 @@
       const btnDonations = document.getElementById('user-nav-btn-donations');
       const btnProfile = document.getElementById('user-nav-btn-profile');
 
-      // Reset all 4 views
+      // Reset all views
       if (viewDash) viewDash.classList.add('hidden');
       if (viewNotices) viewNotices.classList.add('hidden');
       if (viewDonations) viewDonations.classList.add('hidden');
+      if (viewPasy) viewPasy.classList.add('hidden');
       if (viewProfile) viewProfile.classList.add('hidden');
 
       // Reset button styles
@@ -4956,6 +5141,9 @@
         if (viewDonations) viewDonations.classList.remove('hidden');
         if (btnDonations) btnDonations.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
         renderMemberDonationsPage(currentLoggedInMember);
+      } else if (view === 'pasy') {
+        if (viewPasy) viewPasy.classList.remove('hidden');
+        renderMemberPasyPage(currentLoggedInMember);
       } else {
         if (viewDash) viewDash.classList.remove('hidden');
         if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
@@ -6061,6 +6249,128 @@
     function closeMemberDonationDetailModal() {
       const modal = document.getElementById('member-donation-detail-modal');
       if (modal) modal.classList.add('hidden');
+    }
+
+    // ==============================================
+    // MEMBER PASY (पारिवारिक आर्थिक सहायता योजना) LOGIC
+    // ==============================================
+    function renderMemberPasyPage(member) {
+      if (!member) member = currentLoggedInMember;
+      if (!member) return;
+
+      const isEnrolled = isPariwarikMember(member);
+      const badgeEl = document.getElementById('m-pasy-member-badge');
+      const statPaid = document.getElementById('m-pasy-stat-paid');
+      const statPaidMonths = document.getElementById('m-pasy-stat-paid-months');
+      const statDues = document.getElementById('m-pasy-stat-dues');
+      const statDuesMonths = document.getElementById('m-pasy-stat-dues-months');
+      const bannerEl = document.getElementById('m-pasy-membership-banner');
+      const gridEl = document.getElementById('m-pasy-months-grid');
+
+      if (badgeEl) {
+        badgeEl.textContent = isEnrolled ? '✅ नामांकित सदस्य (Enrolled)' : 'ℹ️ सामान्य सदस्य';
+        badgeEl.className = isEnrolled 
+          ? 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-100 text-cyan-800 border border-cyan-200'
+          : 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200';
+      }
+
+      // Calculate paid / dues months
+      let paidMonthsCount = 0;
+      let duesMonthsCount = 0;
+
+      const totalMonths = PARIWARIK_MONTHS.length; // 30
+      PARIWARIK_MONTHS.forEach(mCfg => {
+        if (isPariwarikPaidForMonth(member, mCfg.key)) {
+          paidMonthsCount++;
+        } else {
+          duesMonthsCount++;
+        }
+      });
+
+      const totalPaidAmount = paidMonthsCount * PARIWARIK_MONTHLY_FEE;
+      const totalDuesAmount = duesMonthsCount * PARIWARIK_MONTHLY_FEE;
+
+      if (statPaid) statPaid.textContent = `₹ ${totalPaidAmount.toLocaleString('en-IN')}`;
+      if (statPaidMonths) statPaidMonths.textContent = `${paidMonthsCount} माह जमा (₹${PARIWARIK_MONTHLY_FEE}/माह)`;
+      if (statDues) statDues.textContent = `₹ ${totalDuesAmount.toLocaleString('en-IN')}`;
+      if (statDuesMonths) statDuesMonths.textContent = `${duesMonthsCount} माह शेष`;
+
+      // Membership Banner
+      if (bannerEl) {
+        if (isEnrolled) {
+          bannerEl.innerHTML = `
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg flex-shrink-0">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-slate-900 font-devanagari">
+                    आप पारिवारिक आर्थिक सहायता योजना (PASY) में सक्रिय रूप से नामांकित हैं
+                  </h4>
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    सदस्य पहचान: <strong>${member.id}</strong> • कुल योजना अवधि: सितंबर 2025 से फरवरी 2028 (30 महीने)
+                  </p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-xl text-xs font-black bg-cyan-50 text-cyan-800 border border-cyan-200 flex-shrink-0">
+                अंशदान: ₹150 / माह
+              </span>
+            </div>
+          `;
+        } else {
+          bannerEl.innerHTML = `
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg flex-shrink-0">
+                  <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-slate-900 font-devanagari">
+                    पारिवारिक आर्थिक सहायता योजना (PASY) सदस्यता
+                  </h4>
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    इस सुरक्षा योजना में भाग लेने अथवा अद्यतन हेतु समिति व्यवस्थापक से संपर्क करें।
+                  </p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 flex-shrink-0">
+                नियमित अंशदान: ₹150 / माह
+              </span>
+            </div>
+          `;
+        }
+      }
+
+      // Render 30 Months Grid
+      if (gridEl) {
+        gridEl.innerHTML = PARIWARIK_MONTHS.map((mCfg, idx) => {
+          const isPaid = isPariwarikPaidForMonth(member, mCfg.key);
+          const badgeBg = isPaid 
+            ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+            : 'bg-rose-50 text-rose-700 border-rose-200';
+          const icon = isPaid 
+            ? '<i class="fa-solid fa-check text-emerald-600"></i>' 
+            : '<i class="fa-solid fa-clock text-rose-500"></i>';
+          const statusText = isPaid ? 'जमा (Paid)' : 'बकाया (Due)';
+
+          return `
+            <div class="p-3 rounded-2xl border ${badgeBg} flex flex-col justify-between transition-all">
+              <div class="flex items-center justify-between gap-1 mb-1.5">
+                <span class="font-mono text-[10px] font-bold text-slate-500">#${idx + 1}</span>
+                <span class="text-xs">${icon}</span>
+              </div>
+              <div>
+                <strong class="text-xs font-black block font-mono">${mCfg.label}</strong>
+                <span class="text-[10px] font-bold block mt-0.5">${statusText}</span>
+              </div>
+              <div class="mt-2 pt-1.5 border-t border-slate-200/40 text-[10px] font-mono font-semibold text-right">
+                ₹${PARIWARIK_MONTHLY_FEE}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     function renderMemberDues(member) {
@@ -11607,6 +11917,7 @@ ID: ${item.id}
     window.closeMemberEventDetailModal = closeMemberEventDetailModal;
     window.handleEventParticipation = handleEventParticipation;
     window.renderEventParticipationUI = renderEventParticipationUI;
+    window.renderMemberPasyPage = renderMemberPasyPage;
 
     window.addEventListener('DOMContentLoaded', async () => {
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
