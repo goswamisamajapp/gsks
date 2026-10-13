@@ -8611,7 +8611,7 @@
             <input type="checkbox" name="selected-member-id" value="${m.id}" ${isChecked} class="rounded text-indigo-600 focus:ring-0">
             <span class="font-bold text-slate-800">${m.name}</span>
             <span class="text-[10px] text-slate-400 font-mono">(${m.id})</span>
-            <span class="text-[10px] text-slate-500">• ${m.address}</span>
+            <span class="text-[10px] text-slate-500">• ${m.father ? 'पिता: ' + m.father : ''}</span>
           </label>
         `;
       }).join('');
@@ -10296,7 +10296,7 @@
       const nonRemoved = allMembers.filter(m => m.status !== 'removed');
       select.innerHTML = `<option value="">-- सदस्य चुनें (Select Registered Member) --</option>` +
         `<option value="NON_MEMBER">➕ अन्य / गैर-सदस्य दानदाता (Guest / Non-Member)</option>` +
-        nonRemoved.map(m => `<option value="${m.id}" data-name="${m.name}" data-phone="${m.phone || ''}">${m.name} (${m.id}) • ${m.address}</option>`).join('');
+        nonRemoved.map(m => `<option value="${m.id}" data-name="${m.name}" data-phone="${m.phone || ''}">${m.name} (${m.id}) • ${m.father ? 'पिता: ' + m.father : ''}</option>`).join('');
     }
 
     function handleDonationMemberSelect(memberId) {
@@ -10742,7 +10742,7 @@
       let html = '<option value="">-- सदस्य चुनें (Select Member) --</option>';
       members.forEach(m => {
         const sel = (m.name === selectedVal || m.id === selectedVal) ? 'selected' : '';
-        html += `<option value="${m.name} (${m.id})" ${sel}>${m.name} [ID: ${m.id}] - ${m.address || ''}</option>`;
+        html += `<option value="${m.name} (${m.id})" ${sel}>${m.name} [ID: ${m.id}] - ${m.father ? 'पिता: ' + m.father : ''}</option>`;
       });
       select.innerHTML = html;
     }
