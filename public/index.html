@@ -2066,61 +2066,6 @@
           </div>
         </section>
 
-      <!-- Welcome Profile Banner & 4 Quick Stats -->
-      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        
-        <!-- Welcome Card (Spans 2 cols on md) -->
-        <div class="md:col-span-2 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div class="relative flex-shrink-0">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-100 to-amber-100 border-2 border-orange-300 flex items-center justify-center text-orange-600 text-2xl font-black font-devanagari" id="user-avatar-initial">
-              ग
-            </div>
-            <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-white shadow-xs font-mono" id="user-card-id">
-              GSKS-000
-            </span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="text-base sm:text-lg font-black text-slate-900 truncate" id="user-card-name">
-                सदस्य का नाम
-              </h3>
-              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="user-card-status">
-                सक्रिय सदस्य
-              </span>
-            </div>
-            <p class="text-xs text-slate-500 mt-1 truncate">
-              पिता/संरक्षक: <span class="font-semibold text-slate-700" id="user-card-father">--</span>
-            </p>
-            <p class="text-[11px] text-slate-400 mt-0.5">
-              ग्राम/पता: <span class="text-slate-600 font-medium" id="user-card-address">--</span> • सदस्यता वर्ष: <span class="font-mono text-slate-600 font-medium" id="user-card-since">2025</span>
-            </p>
-          </div>
-        </div>
-
-        <!-- Quick Stat 1: My Dues (बकाया अंशदान) -->
-        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-          </div>
-          <div>
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">मेरा बकाया (My Dues)</p>
-            <h3 class="text-xl sm:text-2xl font-black text-rose-600 font-mono mt-0.5" id="user-stat-dues">₹ 0</h3>
-            <p class="text-[10px] text-slate-400" id="user-stat-dues-status">कोई बकाया नहीं</p>
-          </div>
-        </div>
-
-        <!-- Quick Stat 2: My Total Donations (कुल दिया गया सहयोग/दान) -->
-        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
-            <i class="fa-solid fa-hand-holding-heart"></i>
-          </div>
-          <div>
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल दान (My Donations)</p>
-            <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5" id="user-stat-donations">₹ 0</h3>
-            <p class="text-[10px] text-emerald-600 font-semibold" id="user-stat-donations-count">0 रसीदें</p>
-          </div>
-        </div>
-
       <!-- Quick Action Buttons Row (Donation, PASY, Notifications, Profile) -->
       <section class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm">
         <div class="flex items-center justify-between mb-3 px-1">
@@ -2207,6 +2152,62 @@
               </span>
             </div>
           </button>
+        </div>
+      </section>
+
+      <!-- Welcome Profile Banner & 4 Quick Stats -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <!-- Welcome Card (Spans 2 cols on md) -->
+        <div class="md:col-span-2 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div class="relative flex-shrink-0">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-100 to-amber-100 border-2 border-orange-300 flex items-center justify-center text-orange-600 text-2xl font-black font-devanagari" id="user-avatar-initial">
+              ग
+            </div>
+            <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-white shadow-xs font-mono" id="user-card-id">
+              GSKS-000
+            </span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-base sm:text-lg font-black text-slate-900 truncate" id="user-card-name">
+                सदस्य का नाम
+              </h3>
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="user-card-status">
+                सक्रिय सदस्य
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1 truncate">
+              पिता/संरक्षक: <span class="font-semibold text-slate-700" id="user-card-father">--</span>
+            </p>
+            <p class="text-[11px] text-slate-400 mt-0.5">
+              ग्राम/पता: <span class="text-slate-600 font-medium" id="user-card-address">--</span> • सदस्यता वर्ष: <span class="font-mono text-slate-600 font-medium" id="user-card-since">2025</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Stat 1: My Dues (बकाया अंशदान) -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">मेरा बकाया (My Dues)</p>
+            <h3 class="text-xl sm:text-2xl font-black text-rose-600 font-mono mt-0.5" id="user-stat-dues">₹ 0</h3>
+            <p class="text-[10px] text-slate-400" id="user-stat-dues-status">कोई बकाया नहीं</p>
+          </div>
+        </div>
+
+        <!-- Quick Stat 2: My Total Donations (कुल दिया गया सहयोग/दान) -->
+        <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल दान (My Donations)</p>
+            <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5" id="user-stat-donations">₹ 0</h3>
+            <p class="text-[10px] text-emerald-600 font-semibold" id="user-stat-donations-count">0 रसीदें</p>
+          </div>
         </div>
       </section>
 
