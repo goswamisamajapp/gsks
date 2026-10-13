@@ -1036,7 +1036,46 @@
           </div>
         </div>
 
-        <!-- 3. Monthly Tabs Grid (Sep 2025 to Feb 2028 - Total 30 Months in 3 Rows of 10) -->
+        <!-- 3. Row 3: Month Winner & Total Distributed Amount (2 Cards) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Row 3 Card 1: Month Winner Name -->
+          <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-amber-400/30">
+            <div>
+              <p class="text-xs font-bold text-amber-100 flex items-center gap-1.5 uppercase tracking-wider">
+                <i class="fa-solid fa-trophy text-yellow-200"></i>
+                <span>माह विजेता सदस्य (Month Winner)</span>
+              </p>
+              <h3 class="text-xl sm:text-2xl font-black mt-1.5 text-white truncate max-w-md" id="pariwarik-stat-winner-name">Winner not declared yet</h3>
+              <p class="text-[11px] text-amber-100 mt-1 flex items-center gap-1.5 font-medium" id="pariwarik-stat-winner-sub">
+                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-stat-winner-badge">राशि: ₹4,000</span>
+                <span id="pariwarik-stat-winner-month-lbl">• चयनित माह</span>
+              </p>
+            </div>
+            <div class="w-13 h-13 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shadow-inner shrink-0 text-yellow-100 border border-white/25">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+          </div>
+
+          <!-- Row 3 Card 2: Total Distributed Amount -->
+          <div class="bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-purple-500/30">
+            <div>
+              <p class="text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider">
+                <i class="fa-solid fa-hand-holding-dollar text-purple-300"></i>
+                <span>कुल वितरित राशि (Total Distributed)</span>
+              </p>
+              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-purple-200" id="pariwarik-total-distributed">₹ 0</h3>
+              <p class="text-[11px] text-purple-100 mt-1 flex items-center gap-1.5 font-medium">
+                <span class="bg-white/15 px-2 py-0.5 rounded-full text-purple-200 font-bold text-[10px]" id="pariwarik-distributed-calc">0 माह × ₹4,000</span>
+                <span>• विजेता सहयोग वितरण</span>
+              </p>
+            </div>
+            <div class="w-13 h-13 rounded-2xl bg-purple-500/25 text-purple-300 border border-purple-400/20 flex items-center justify-center text-2xl shadow-inner shrink-0">
+              <i class="fa-solid fa-gift"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Monthly Tabs Grid (Sep 2025 to Feb 2028 - Total 30 Months in 3 Rows of 10) -->
         <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-xs space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
             <div class="flex items-center gap-2">
@@ -1128,6 +1167,7 @@
                   <th class="p-3.5 pl-5">सदस्य / पिता का नाम</th>
                   <th class="p-3.5">मोबाइल / पता</th>
                   <th class="p-3.5 text-center">भुगतान स्थिति (Paid Yes/No)</th>
+                  <th class="p-3.5 text-center">माह विजेता (Winner)</th>
                   <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
                   <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
                   <th class="p-3.5 font-mono text-right">कुल / Total (₹)</th>
@@ -12124,6 +12164,41 @@ ID: ${item.id}
       }
     }
 
+    async function togglePariwarikWinnerStatus(memberId, isChecked) {
+      if (!masterSettings) masterSettings = {};
+      if (!masterSettings.pariwarikWinners || typeof masterSettings.pariwarikWinners !== 'object') {
+        masterSettings.pariwarikWinners = {};
+      }
+
+      if (isChecked) {
+        masterSettings.pariwarikWinners[currentPariwarikMonth] = memberId;
+      } else {
+        if (masterSettings.pariwarikWinners[currentPariwarikMonth] === memberId) {
+          delete masterSettings.pariwarikWinners[currentPariwarikMonth];
+        }
+      }
+
+      // Re-render view immediately
+      renderPariwarikView();
+
+      // Persist to Cloud Firestore & Express API
+      try {
+        if (typeof settingsCol !== 'undefined' && settingsCol) {
+          await settingsCol.doc('master').set(masterSettings, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore settings save warning for winner:', err);
+      }
+
+      try {
+        if (typeof saveSettingsToBackend === 'function') {
+          await saveSettingsToBackend(masterSettings);
+        }
+      } catch (err) {
+        console.warn('Server settings save warning for winner:', err);
+      }
+    }
+
     function renderPariwarikView() {
       // 0. Render Monthly Tabs
       renderPariwarikMonthsTabs();
@@ -12207,6 +12282,32 @@ ID: ${item.id}
       const elFundDeposit = document.getElementById('pariwarik-fund-deposit');
       const elFundDepositCalc = document.getElementById('pariwarik-fund-deposit-calc');
 
+      // Total Distributed: completedMonthsCount * 4,000
+      const prizePerMonth = 4000;
+      const totalDistributed = completedMonthsCount * prizePerMonth;
+      const elTotalDistributed = document.getElementById('pariwarik-total-distributed');
+      const elDistributedCalc = document.getElementById('pariwarik-distributed-calc');
+
+      // Month Winner display for current selected month
+      const winnersMap = (masterSettings && masterSettings.pariwarikWinners) ? masterSettings.pariwarikWinners : {};
+      const currentWinnerMemberId = winnersMap[currentPariwarikMonth] || null;
+      const currentWinnerMember = currentWinnerMemberId ? allMembers.find(m => m.id === currentWinnerMemberId) : null;
+
+      const elWinnerName = document.getElementById('pariwarik-stat-winner-name');
+      const elWinnerSub = document.getElementById('pariwarik-stat-winner-sub');
+      const elWinnerBadge = document.getElementById('pariwarik-stat-winner-badge');
+      const elWinnerMonthLbl = document.getElementById('pariwarik-stat-winner-month-lbl');
+
+      if (elWinnerMonthLbl) elWinnerMonthLbl.textContent = `• ${activeMonthCfg.label}`;
+
+      if (currentWinnerMember) {
+        if (elWinnerName) elWinnerName.innerHTML = `<span class="text-yellow-100 flex items-center gap-2"><i class="fa-solid fa-trophy text-amber-200 text-lg"></i> ${currentWinnerMember.name} <span class="text-xs font-mono opacity-90">(${currentWinnerMember.id})</span></span>`;
+        if (elWinnerBadge) elWinnerBadge.textContent = `विजेता राशि: ₹4,000`;
+      } else {
+        if (elWinnerName) elWinnerName.textContent = 'Winner not declared yet';
+        if (elWinnerBadge) elWinnerBadge.textContent = 'राशि: ₹4,000';
+      }
+
       if (elGrandTotal) elGrandTotal.textContent = `₹ ${overallGrandTotal.toLocaleString('en-IN')}`;
       if (elGrandMonthsCount) elGrandMonthsCount.textContent = `${totalMonthsInScheme} Months Total`;
       if (elOverallPaid) elOverallPaid.textContent = `₹ ${overallTotalPaid.toLocaleString('en-IN')}`;
@@ -12215,6 +12316,8 @@ ID: ${item.id}
       if (elRemainingMonths) elRemainingMonths.textContent = `${remainingMonthsCount} Rest Months`;
       if (elFundDeposit) elFundDeposit.textContent = `₹ ${totalFundDeposit.toLocaleString('en-IN')}`;
       if (elFundDepositCalc) elFundDepositCalc.textContent = `${completedMonthsCount} माह × ₹500`;
+      if (elTotalDistributed) elTotalDistributed.textContent = `₹ ${totalDistributed.toLocaleString('en-IN')}`;
+      if (elDistributedCalc) elDistributedCalc.textContent = `${completedMonthsCount} माह × ₹4,000`;
 
       // ==========================================
       // TABLE BREAKDOWN (Filter by Search Term)
@@ -12226,7 +12329,7 @@ ID: ${item.id}
       if (pariwarikMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="7" class="p-10 text-center text-slate-400">
+            <td colspan="8" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-cyan-600"></i>
               <p class="text-xs font-bold text-slate-600">सदस्य सूची लोड हो रही है...</p>
               <p class="text-[11px] text-slate-400 mt-1">कृपया एक क्षण प्रतीक्षा करें।</p>
@@ -12261,7 +12364,7 @@ ID: ${item.id}
       if (filteredMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="7" class="p-10 text-center text-slate-400">
+            <td colspan="8" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-300"></i>
               <p class="text-xs font-bold text-slate-600">"${currentPariwarikSearchTerm}" के लिए कोई सदस्य नहीं मिला।</p>
               <p class="text-[11px] text-slate-400 mt-1">कृपया सही नाम, मोबाइल नंबर या सदस्य ID दर्ज करें।</p>
@@ -12275,13 +12378,17 @@ ID: ${item.id}
 
       tbody.innerHTML = filteredMembers.map(m => {
         const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
+        const isWinner = (currentWinnerMemberId === m.id);
         const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
         const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
 
         return `
-          <tr class="hover:bg-slate-50/80 transition-colors">
+          <tr class="hover:bg-slate-50/80 transition-colors ${isWinner ? 'bg-amber-50/50' : ''}">
             <td class="p-3.5 pl-5">
-              <div class="font-bold text-slate-900">${m.name || '--'}</div>
+              <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                <span>${m.name || '--'}</span>
+                ${isWinner ? '<span class="text-amber-500 text-xs" title="माह विजेता (Winner)"><i class="fa-solid fa-crown"></i></span>' : ''}
+              </div>
               <div class="text-[10px] text-slate-500 font-medium">${m.father ? `पिता: ${m.father}` : '--'}</div>
             </td>
             <td class="p-3.5 text-slate-600">
@@ -12293,6 +12400,13 @@ ID: ${item.id}
               <label class="relative inline-flex items-center cursor-pointer select-none" title="${hasPaid ? 'Paid (Yes)' : 'Unpaid (No)'}">
                 <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="sr-only peer">
                 <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+              </label>
+            </td>
+            <!-- Pure iOS Style Month Winner Toggle Switch (Golden Yellow) -->
+            <td class="p-3.5 text-center">
+              <label class="relative inline-flex items-center cursor-pointer select-none" title="${isWinner ? 'माह विजेता (Winner)' : 'विजेता बनाएं'}">
+                <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" ${isWinner ? 'checked' : ''} class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
               </label>
             </td>
             <!-- Paid (₹) -->
@@ -12466,6 +12580,7 @@ ID: ${item.id}
     window.isPariwarikPaidForMonth = isPariwarikPaidForMonth;
     window.selectPariwarikMonth = selectPariwarikMonth;
     window.togglePariwarikPaidStatus = togglePariwarikPaidStatus;
+    window.togglePariwarikWinnerStatus = togglePariwarikWinnerStatus;
     window.renderPariwarikView = renderPariwarikView;
     window.handlePariwarikSearch = handlePariwarikSearch;
     window.clearPariwarikSearch = clearPariwarikSearch;
