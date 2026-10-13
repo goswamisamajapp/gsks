@@ -4097,10 +4097,10 @@
   <!-- ============================================================== -->
   <!-- MODAL 9: ADD/EDIT EVENT VENUE MODAL                            -->
   <!-- ============================================================== -->
-  <div id="eventvenue-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-        <h3 id="eventvenue-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+  <div id="eventvenue-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+        <h3 id="eventvenue-modal-heading" class="text-base font-extrabold text-slate-900 flex items-center gap-2">
           <i class="fa-solid fa-location-dot text-rose-500"></i> मानक वेन्यू जोड़ें
         </h3>
         <button onclick="closeEventVenueModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
@@ -4108,19 +4108,19 @@
         </button>
       </div>
 
-      <form onsubmit="handleSaveEventVenue(event)" class="space-y-3.5 text-xs">
+      <form onsubmit="handleSaveEventVenue(event)" class="space-y-4 text-xs">
         <input type="hidden" id="eventvenue-item-id">
 
         <!-- 1. Venue Name -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">स्थान का नाम (Venue Name) *</label>
-          <input type="text" id="eventvenue-item-name" required placeholder="जैसे: काली मंदिर प्रांगण, नीचे टोला, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
+          <label class="block font-bold text-slate-700 mb-1 text-xs sm:text-sm">स्थान का नाम (Venue Name) *</label>
+          <input type="text" id="eventvenue-item-name" required placeholder="जैसे: काली मंदिर प्रांगण, नीचे टोला, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500">
         </div>
 
         <!-- 2. Google / Live GPS Location Section -->
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/90 space-y-2.5">
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/90 space-y-3">
           <div class="flex items-center justify-between gap-2 flex-wrap">
-            <span class="font-extrabold text-slate-800 flex items-center gap-1.5">
+            <span class="font-extrabold text-slate-800 text-xs sm:text-sm flex items-center gap-1.5">
               <i class="fa-solid fa-map-location-dot text-indigo-600"></i>
               <span>गूगल मैप लोकेशन (20m Geofencing)</span>
             </span>
@@ -4128,7 +4128,7 @@
               type="button" 
               onclick="detectAdminCurrentVenueLocation()" 
               id="btn-detect-venue-gps" 
-              class="px-2.5 py-1 rounded-lg font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-[11px] flex items-center gap-1 transition-all cursor-pointer shadow-2xs"
+              class="px-3 py-1.5 rounded-xl font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs"
               title="जहाँ आप अभी खड़े हैं वहाँ का GPS स्थान स्वतः लें"
             >
               <i class="fa-solid fa-location-crosshairs text-indigo-600"></i>
@@ -4136,11 +4136,12 @@
             </button>
           </div>
 
-          <!-- Interactive Leaflet Map Container -->
-          <div class="relative w-full h-44 rounded-xl overflow-hidden border border-slate-300 shadow-inner bg-slate-200">
+          <!-- Interactive Leaflet Map Container (Enlarged) -->
+          <div class="relative w-full h-72 sm:h-80 rounded-2xl overflow-hidden border border-slate-300 shadow-inner bg-slate-200">
             <div id="venue-picker-map" class="w-full h-full z-0"></div>
-            <div class="absolute bottom-1.5 left-1.5 z-[400] bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md text-[10px] font-bold text-slate-700 border border-slate-200 shadow-2xs pointer-events-none">
-              🟢 हरा दायरा = 20 मीटर उपस्थिति सीमा
+            <div class="absolute bottom-2 left-2 z-[400] bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-700 border border-slate-200 shadow-sm pointer-events-none flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+              <span>हरा दायरा = 20 मीटर उपस्थिति सीमा (20m Attendance Radius)</span>
             </div>
           </div>
 
