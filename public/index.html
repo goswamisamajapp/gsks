@@ -2213,7 +2213,49 @@
       <!-- SUB-VIEW 1: MEMBER MAIN DASHBOARD -->
       <div id="member-view-dashboard" class="space-y-6 animate-in fade-in duration-200">
         
-        <!-- 1. SABSE UPAR: LATEST NOTIFICATION PANEL -->
+        <!-- 1. SABSE UPAR: WELCOME MEMBER PROFILE BANNER (Full Page Width Single Line Layout) -->
+        <section class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
+            <div class="relative flex-shrink-0">
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-orange-100 to-amber-100 border-2 border-orange-300 flex items-center justify-center text-orange-600 text-2xl font-black font-devanagari shadow-xs" id="user-avatar-initial">
+                ग
+              </div>
+              <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-white shadow-xs font-mono" id="user-card-id">
+                GSKS-000
+              </span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+                <h3 class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-tight" id="user-card-name">
+                  सदस्य का नाम
+                </h3>
+                <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="user-card-status">
+                  सक्रिय सदस्य
+                </span>
+                <!-- Member Designation Badge -->
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs font-devanagari" id="user-card-designation">
+                  <i class="fa-solid fa-user-tie text-[10px] text-indigo-600"></i>
+                  <span id="user-card-designation-text">सदस्य (Member)</span>
+                </span>
+              </div>
+              <div class="mt-1 flex items-center gap-2 sm:gap-4 flex-wrap text-xs text-slate-500">
+                <p class="truncate">
+                  पिता/संरक्षक: <span class="font-bold text-slate-700" id="user-card-father">--</span>
+                </p>
+                <span class="hidden sm:inline text-slate-300">•</span>
+                <p class="truncate">
+                  ग्राम/पता: <span class="font-medium text-slate-700" id="user-card-address">--</span>
+                </p>
+                <span class="hidden sm:inline text-slate-300">•</span>
+                <p class="font-mono text-slate-500">
+                  सदस्यता: <span class="font-bold text-slate-700" id="user-card-since">2025</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. LATEST NOTIFICATION PANEL -->
         <section id="user-notification-panel" class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden">
           <div class="absolute -right-4 -bottom-6 text-white/10 text-8xl pointer-events-none">
             <i class="fa-solid fa-bullhorn"></i>
@@ -2248,7 +2290,7 @@
             <div class="flex items-center gap-2 self-end md:self-center flex-shrink-0 pt-1 md:pt-0">
               <button 
                 type="button" 
-                id="btn-view-notice-modal"
+                id="btn-view-notice-modal" 
                 onclick="openNoticeDetailModal()" 
                 class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-white text-orange-700 hover:bg-orange-50 active:scale-95 transition-all flex items-center gap-1.5 shadow-md shadow-black/10 cursor-pointer"
               >
@@ -2357,44 +2399,8 @@
         </div>
       </section>
 
-      <!-- Welcome Profile Banner & 4 Quick Stats -->
-      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        
-        <!-- Welcome Card (Spans 2 cols on md) -->
-        <div class="md:col-span-2 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div class="relative flex-shrink-0">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-100 to-amber-100 border-2 border-orange-300 flex items-center justify-center text-orange-600 text-2xl font-black font-devanagari" id="user-avatar-initial">
-              ग
-            </div>
-            <span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-amber-500 text-white shadow-xs font-mono" id="user-card-id">
-              GSKS-000
-            </span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="text-base sm:text-lg font-black text-slate-900 truncate" id="user-card-name">
-                सदस्य का नाम
-              </h3>
-              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="user-card-status">
-                सक्रिय सदस्य
-              </span>
-            </div>
-            <!-- Member Designation (Second Line) -->
-            <div class="mt-1 flex items-center gap-1.5 flex-wrap">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs font-devanagari" id="user-card-designation">
-                <i class="fa-solid fa-user-tie text-[10px] text-indigo-600"></i>
-                <span id="user-card-designation-text">सदस्य (Member)</span>
-              </span>
-            </div>
-            <p class="text-xs text-slate-500 mt-1 truncate">
-              पिता/संरक्षक: <span class="font-semibold text-slate-700" id="user-card-father">--</span>
-            </p>
-            <p class="text-[11px] text-slate-400 mt-0.5">
-              ग्राम/पता: <span class="text-slate-600 font-medium" id="user-card-address">--</span> • सदस्यता वर्ष: <span class="font-mono text-slate-600 font-medium" id="user-card-since">2025</span>
-            </p>
-          </div>
-        </div>
-
+      <!-- 4 Quick Stats Grid: Dues & Donations Side-by-Side -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Quick Stat 1: My Dues (बकाया अंशदान - Light Red) -->
         <div class="bg-rose-50/70 rounded-3xl p-5 border border-rose-200/90 shadow-sm flex items-center gap-3.5">
           <div class="w-12 h-12 rounded-2xl bg-white text-rose-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs border border-rose-100">
