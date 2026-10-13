@@ -3718,11 +3718,21 @@
           </div>
 
           <div class="flex flex-col justify-between">
-            <div class="flex items-center mb-1.5 min-h-[26px]">
+            <div class="flex items-center justify-between mb-1.5 min-h-[26px]">
               <label class="font-bold text-slate-700">दिनांक एवं समय (Date & Time) *</label>
+              <span id="event-datetime-auto-hint" class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200">
+                ⚡ ऑटो स्टेटस
+              </span>
             </div>
             <div>
-              <input type="datetime-local" id="event-datetime" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium">
+              <input 
+                type="datetime-local" 
+                id="event-datetime" 
+                required 
+                onchange="autoSetEventStatusFromDatetime(this.value)"
+                oninput="autoSetEventStatusFromDatetime(this.value)"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium"
+              >
             </div>
           </div>
         </div>
@@ -6019,14 +6029,13 @@
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
       let events = (allEvents || []).filter(e => {
-        if ((e.status || '').toLowerCase() === 'cancelled') return false;
-        const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
-        const isFuture = (e.status === 'Upcoming' || e.status === 'Open' || (dt && !isNaN(dt) && dt >= todayStart));
+        const effStatus = getEffectiveEventStatus(e);
+        if (effStatus.toLowerCase() === 'cancelled') return false;
         
         if (currentUserEventDateFilter === 'UPCOMING') {
-          return isFuture && e.status !== 'Closed';
+          return effStatus !== 'Closed';
         } else if (currentUserEventDateFilter === 'PAST') {
-          return e.status === 'Closed' || (dt && !isNaN(dt) && dt < todayStart);
+          return effStatus === 'Closed';
         }
         // ALL
         return true;
@@ -6038,7 +6047,7 @@
       // Priority 3: CLOSED (संपन्न बैठकें - हाल ही में संपन्न पहले, जैसे 11 तारीख फिर 5 तारीख)
       events.sort((a, b) => {
         const getPriority = (item) => {
-          const st = (item.status || 'Upcoming').toLowerCase();
+          const st = getEffectiveEventStatus(item).toLowerCase();
           if (st === 'open') return 1;
           if (st === 'upcoming') return 2;
           if (st === 'closed') return 3;
@@ -6082,6 +6091,7 @@
       }
 
       listEl.innerHTML = events.slice(0, 4).map(e => {
+        const effStatus = getEffectiveEventStatus(e);
         const dt = e.datetime ? new Date(e.datetime) : null;
         const dateStr = dt && !isNaN(dt) 
           ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
@@ -6094,6 +6104,15 @@
           ? 'bg-rose-100 text-rose-700 border-rose-200' 
           : (e.category === 'Special Event' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200');
 
+        let statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-blue-100 text-blue-700 border border-blue-200">आगामी (Upcoming)</span>';
+        if (effStatus === 'Open') {
+          statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> चालू (Open)</span>';
+        } else if (effStatus === 'Closed') {
+          statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-200 text-slate-700">संपन्न (Closed)</span>';
+        } else if (effStatus === 'Cancelled') {
+          statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-rose-100 text-rose-700 border border-rose-200">रद्द (Cancelled)</span>';
+        }
+
         return `
           <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 hover:bg-slate-100/70 border border-slate-200 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="flex-1 min-w-0">
@@ -6101,9 +6120,7 @@
                 <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold border ${badgeColor}">
                   ${e.category || 'बैठक'}
                 </span>
-                ${e.status === 'Closed' ? '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-200 text-slate-700">संपन्न (Closed)</span>' : ''}
-                ${e.status === 'Cancelled' ? '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-rose-100 text-rose-700 border border-rose-200">रद्द (Cancelled)</span>' : ''}
-                ${(!e.status || e.status === 'Upcoming' || e.status === 'Open') ? '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">आगामी (Upcoming)</span>' : ''}
+                ${statusBadgeHtml}
                 <span class="text-[11px] font-mono font-bold text-indigo-700 flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-slate-200">
                   <i class="fa-regular fa-clock text-[10px]"></i> ${timeStr}
                 </span>
@@ -6178,10 +6195,13 @@
         ? 'bg-rose-100 text-rose-700 border-rose-200'
         : (ev.category === 'Special Event' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200');
 
-      let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">🟢 आगामी (Upcoming)</span>';
-      if (ev.status === 'Closed') {
+      const effStatus = getEffectiveEventStatus(ev);
+      let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">🔵 आगामी (Upcoming)</span>';
+      if (effStatus === 'Open') {
+        statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> 🟢 चालू (Open)</span>';
+      } else if (effStatus === 'Closed') {
         statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">⚪ संपन्न (Closed)</span>';
-      } else if (ev.status === 'Cancelled') {
+      } else if (effStatus === 'Cancelled') {
         statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">🔴 रद्द (Cancelled)</span>';
       }
 
@@ -6261,12 +6281,44 @@
       return R * c;
     }
 
+    // Dynamic status determination:
+    // 1. If admin manually closed or cancelled, retain Closed/Cancelled.
+    // 2. If event datetime has arrived (now >= datetime), auto becomes 'Open' (until marked Closed by admin).
+    // 3. If event datetime is in future (now < datetime), status is 'Upcoming'.
+    function getEffectiveEventStatus(ev) {
+      if (!ev) return 'Upcoming';
+      const rawStatus = (ev.status || '').trim();
+      if (rawStatus === 'Closed' || rawStatus === 'Cancelled') {
+        return rawStatus;
+      }
+
+      if (!ev.datetime && !ev.date) {
+        return rawStatus || 'Upcoming';
+      }
+
+      const dt = new Date(ev.datetime || ev.date);
+      if (isNaN(dt.getTime())) {
+        return rawStatus || 'Upcoming';
+      }
+
+      const now = new Date();
+      // If datetime has reached (or starts within 15 mins), it automatically becomes OPEN
+      const openThreshold = new Date(dt.getTime() - (15 * 60 * 1000));
+      if (now >= openThreshold) {
+        return 'Open';
+      }
+      return 'Upcoming';
+    }
+    window.getEffectiveEventStatus = getEffectiveEventStatus;
+
     function checkIsMeetingActiveNow(ev) {
       if (!ev) return { active: false, reason: 'कार्यक्रम नहीं मिला' };
-      if (ev.status === 'Closed') {
+      const effectiveStatus = getEffectiveEventStatus(ev);
+
+      if (effectiveStatus === 'Closed') {
         return { active: false, reason: 'बैठक संपन्न (Closed) हो चुकी है।' };
       }
-      if (ev.status === 'Cancelled') {
+      if (effectiveStatus === 'Cancelled') {
         return { active: false, reason: 'बैठक रद्द (Cancelled) कर दी गई है।' };
       }
 
@@ -6280,9 +6332,8 @@
       }
 
       const now = new Date();
-      // Allow participation 30 minutes before meeting starts until 6 hours after start
-      const windowStart = new Date(meetingStart.getTime() - (30 * 60 * 1000));
-      const windowEnd = new Date(meetingStart.getTime() + (6 * 60 * 60 * 1000));
+      // Allow participation from 15 minutes before meeting starts until admin marks as Closed
+      const windowStart = new Date(meetingStart.getTime() - (15 * 60 * 1000));
 
       if (now < windowStart) {
         const timeDiffMs = meetingStart - now;
@@ -6293,10 +6344,6 @@
           active: false, 
           reason: `बैठक अभी शुरू नहीं हुई है। यह बैठक के निर्धारित दिन एवं समय पर ही एक्टिव होगी (${timeMsg})।` 
         };
-      }
-
-      if (now > windowEnd) {
-        return { active: false, reason: 'बैठक की निर्धारित समय सीमा समाप्त हो चुकी है।' };
       }
 
       return { active: true, reason: 'बैठक वर्तमान में जारी (Active) है।' };
@@ -8398,9 +8445,9 @@
       const speCount = allEvents.filter(e => e.category === 'Special Event').length;
       const emgCount = allEvents.filter(e => e.category === 'Emergency meeting').length;
 
-      const stOpenCount = allEvents.filter(e => (e.status || 'Upcoming') === 'Open').length;
-      const stUpCount = allEvents.filter(e => (e.status || 'Upcoming') === 'Upcoming').length;
-      const stClosedCount = allEvents.filter(e => (e.status || 'Upcoming') === 'Closed').length;
+      const stOpenCount = allEvents.filter(e => getEffectiveEventStatus(e) === 'Open').length;
+      const stUpCount = allEvents.filter(e => getEffectiveEventStatus(e) === 'Upcoming').length;
+      const stClosedCount = allEvents.filter(e => getEffectiveEventStatus(e) === 'Closed').length;
 
       const elNav = document.getElementById('nav-events-count');
       const elQuick = document.getElementById('quick-events-count');
@@ -8674,7 +8721,10 @@
           now.setDate(now.getDate() + 1);
           now.setHours(10, 0, 0, 0);
           const isoString = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-          if (document.getElementById('event-datetime')) document.getElementById('event-datetime').value = isoString;
+          if (document.getElementById('event-datetime')) {
+            document.getElementById('event-datetime').value = isoString;
+            autoSetEventStatusFromDatetime(isoString);
+          }
 
           if (document.getElementById('event-description')) document.getElementById('event-description').value = '';
           if (document.getElementById('event-audience')) document.getElementById('event-audience').value = 'All User';
@@ -8687,6 +8737,48 @@
         console.error('Error opening event modal:', err);
       }
     }
+
+    function autoSetEventStatusFromDatetime(dtVal) {
+      if (!dtVal) return;
+      const dt = new Date(dtVal);
+      if (isNaN(dt.getTime())) return;
+
+      const now = new Date();
+      // If datetime is in past (back date), default to Closed.
+      // If datetime is in future, default to Upcoming.
+      // If datetime is around now (starts within next 15 mins or in progress), default to Open.
+      let targetStatus = 'Upcoming';
+      const isPast = (dt < now);
+      const isVeryNearOrCurrent = Math.abs(now - dt) <= (15 * 60 * 1000);
+
+      if (isPast) {
+        targetStatus = 'Closed';
+      } else if (isVeryNearOrCurrent) {
+        targetStatus = 'Open';
+      } else {
+        targetStatus = 'Upcoming';
+      }
+
+      const stRadios = document.getElementsByName('event-status');
+      for (const r of stRadios) {
+        r.checked = (r.value === targetStatus);
+      }
+
+      const hintEl = document.getElementById('event-datetime-auto-hint');
+      if (hintEl) {
+        if (targetStatus === 'Closed') {
+          hintEl.className = 'text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-300';
+          hintEl.textContent = '⚡ बैक डेट: Closed सेट हुआ';
+        } else if (targetStatus === 'Open') {
+          hintEl.className = 'text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-300';
+          hintEl.textContent = '⚡ वर्तमान: Open सेट हुआ';
+        } else {
+          hintEl.className = 'text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-300';
+          hintEl.textContent = '⚡ भविष्य: Upcoming सेट हुआ';
+        }
+      }
+    }
+    window.autoSetEventStatusFromDatetime = autoSetEventStatusFromDatetime;
 
     function closeEventModal() {
       const modal = document.getElementById('event-form-modal');
@@ -8824,14 +8916,17 @@
       }
     }
 
-    function getEventStatusBadge(status) {
-      const st = status || 'Upcoming';
+    function getEventStatusBadge(statusOrEv) {
+      const st = (typeof statusOrEv === 'object' && statusOrEv !== null)
+        ? getEffectiveEventStatus(statusOrEv)
+        : (statusOrEv || 'Upcoming');
+
       if (st === 'Open') {
-        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> Open</span>`;
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> Open / चालू</span>`;
       } else if (st === 'Closed') {
-        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1"><i class="fa-solid fa-lock text-[9px] text-slate-500"></i> Closed</span>`;
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1"><i class="fa-solid fa-lock text-[9px] text-slate-500"></i> Closed / संपन्न</span>`;
       }
-      return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><i class="fa-regular fa-clock text-[9px] text-blue-600"></i> Upcoming</span>`;
+      return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><i class="fa-regular fa-clock text-[9px] text-blue-600"></i> Upcoming / आगामी</span>`;
     }
 
     function getEventBadge(cat) {
@@ -8880,7 +8975,7 @@
       document.getElementById('view-event-category-badge').innerHTML = getEventBadge(ev.category);
       const stBadgeEl = document.getElementById('view-event-status-badge');
       if (stBadgeEl) {
-        stBadgeEl.innerHTML = getEventStatusBadge(ev.status);
+        stBadgeEl.innerHTML = getEventStatusBadge(ev);
       }
       document.getElementById('view-event-title').textContent = ev.title || 'शीर्षक उपलब्ध नहीं';
       document.getElementById('view-event-datetime').textContent = formatEventDate(ev.datetime);
@@ -8951,6 +9046,42 @@
       }
     }
 
+    // Quick admin action to mark an event as Closed
+    async function markEventAsClosed(id) {
+      const ev = allEvents.find(e => e.id === id);
+      if (!ev) return;
+
+      const confirmed = confirm(`क्या आप "${ev.title || 'इस बैठक'}" को 'Closed' (संपन्न) मार्क करना चाहते हैं?`);
+      if (!confirmed) return;
+
+      ev.status = 'Closed';
+      ev.updatedAt = new Date().toISOString();
+
+      updateEventsStats();
+      renderEventsList();
+
+      // Persist to Backend API
+      try {
+        await fetch('/api/events/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ev)
+        });
+      } catch (err) {
+        console.warn('API mark as closed error:', err);
+      }
+
+      // Persist to Firestore Realtime
+      try {
+        if (typeof eventsCol !== 'undefined' && eventsCol) {
+          await eventsCol.doc(ev.id).set(ev, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore mark as closed error:', err);
+      }
+    }
+    window.markEventAsClosed = markEventAsClosed;
+
     function handleEventParticipants(id) {
       if (typeof openMemberEventParticipantsModal === 'function') {
         openMemberEventParticipantsModal(id);
@@ -8973,8 +9104,8 @@
 
       let filtered = allEvents.filter(e => {
         const matchesCategory = (currentEventFilter === 'ALL' || e.category === currentEventFilter);
-        const eventStatus = e.status || 'Upcoming';
-        const matchesStatus = (currentEventStatusFilter === 'ALL' || eventStatus === currentEventStatusFilter);
+        const effStatus = getEffectiveEventStatus(e);
+        const matchesStatus = (currentEventStatusFilter === 'ALL' || effStatus === currentEventStatusFilter);
         if (!matchesCategory || !matchesStatus) return false;
 
         // Date filter
@@ -8982,7 +9113,7 @@
         if (currentEventDateFilter === 'ALL') {
           return true;
         } else if (currentEventDateFilter === 'UPCOMING') {
-          return (eventStatus === 'Upcoming' || eventStatus === 'Open') || (dt && !isNaN(dt) && dt >= todayStart && eventStatus !== 'Closed');
+          return effStatus !== 'Closed';
         } else if (currentEventDateFilter === 'TODAY') {
           if (!dt || isNaN(dt)) return false;
           return dt >= todayStart && dt <= todayEnd;
@@ -8990,7 +9121,7 @@
           if (!dt || isNaN(dt)) return false;
           return dt >= firstDayOfMonth && dt <= lastDayOfMonth;
         } else if (currentEventDateFilter === 'PAST') {
-          return eventStatus === 'Closed' || (dt && !isNaN(dt) && dt < todayStart);
+          return effStatus === 'Closed';
         } else if (currentEventDateFilter === 'CUSTOM') {
           if (!dt || isNaN(dt)) return true;
           if (currentEventDateFrom) {
@@ -9014,7 +9145,7 @@
       // Priority 3: CLOSED (संपन्न बैठकें - हाल ही में संपन्न पहले, जैसे 11 तारीख फिर 5 तारीख)
       filtered.sort((a, b) => {
         const getPriority = (item) => {
-          const st = (item.status || 'Upcoming').toLowerCase();
+          const st = getEffectiveEventStatus(item).toLowerCase();
           if (st === 'open') return 1;
           if (st === 'upcoming') return 2;
           if (st === 'closed') return 3;
@@ -9054,14 +9185,16 @@
         return;
       }
 
-      container.innerHTML = filtered.map(e => `
+      container.innerHTML = filtered.map(e => {
+        const effStatus = getEffectiveEventStatus(e);
+        return `
         <div class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between group">
           <div>
             <!-- Top Strip: Category Badge, Status Badge & Audience Tag (Previously at bottom) -->
             <div class="flex items-start justify-between gap-2 mb-3">
               <div class="flex items-center gap-1.5 flex-wrap">
                 ${getEventBadge(e.category)}
-                ${getEventStatusBadge(e.status)}
+                ${getEventStatusBadge(e)}
               </div>
               <div class="flex-shrink-0">
                 ${getAudienceBadge(e.audience, e.selectedMembers ? e.selectedMembers.length : 0)}
@@ -9091,10 +9224,10 @@
             </p>
           </div>
 
-          <!-- Bottom Strip: Actions (Participants, View, Edit, Delete) (Previously at top) -->
+          <!-- Bottom Strip: Actions (Participants, View, Edit, Close, Delete) -->
           <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
             <span class="text-[11px] text-slate-400 font-medium">कार्रवाई (Actions):</span>
-            <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+            <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity flex-wrap justify-end">
               <!-- 0. Participants Button with Count Badge -->
               <button onclick="handleEventParticipants('${e.id}')" class="h-7 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs gap-1" title="उपस्थिति / प्रतिभागी (Participants)">
                 <i class="fa-solid fa-user-check text-[11px]"></i>
@@ -9104,6 +9237,15 @@
                   </span>
                 ` : ''}
               </button>
+
+              ${effStatus !== 'Closed' ? `
+                <!-- Mark As Closed Button -->
+                <button onclick="markEventAsClosed('${e.id}')" class="h-7 px-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center justify-center text-[10px] font-bold transition-colors shadow-2xs gap-1" title="बैठक संपन्न मार्क करें (Mark as Closed)">
+                  <i class="fa-solid fa-lock text-[10px]"></i>
+                  <span class="hidden sm:inline">क्लोज करें</span>
+                </button>
+              ` : ''}
+
               <!-- 1. View Button -->
               <button onclick="openViewEventModal('${e.id}')" class="w-7 h-7 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="विवरण देखें (View Event)">
                 <i class="fa-solid fa-eye"></i>
@@ -9119,7 +9261,8 @@
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     // Clear all members from both Cloud Firestore & Central Express Server
