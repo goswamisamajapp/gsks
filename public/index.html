@@ -1972,6 +1972,18 @@
             <span class="text-xs font-bold text-amber-900" id="user-header-name">सदस्य</span>
           </div>
 
+          <!-- Setting Gear Button for My Profile -->
+          <button 
+            type="button"
+            id="user-nav-btn-profile"
+            onclick="switchMemberView('profile')" 
+            class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 font-bold text-xs transition-colors border border-slate-200 flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            title="मेरी प्रोफ़ाइल (Settings & Profile)"
+          >
+            <i class="fa-solid fa-gear text-slate-600 hover:text-orange-600 text-xs"></i>
+            <span class="hidden sm:inline">प्रोफ़ाइल</span>
+          </button>
+
           <button 
             type="button"
             onclick="logoutMember()" 
@@ -2164,65 +2176,6 @@
         </div>
       </section>
 
-      <!-- 6. COMPLETE PROFILE DETAILS (प्रोफ़ाइल विवरण) -->
-      <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
-              <i class="fa-solid fa-id-badge"></i>
-            </div>
-            <div>
-              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
-                मेरी प्रोफ़ाइल (My Profile Details)
-              </h3>
-              <p class="text-xs text-slate-400">समिति के आधिकारिक रजिस्टर में दर्ज विवरण</p>
-            </div>
-          </div>
-          <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 font-mono" id="user-profile-id-pill">
-            GSKS-000
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">पूरा नाम (Full Name)</span>
-            <span class="font-extrabold text-slate-800 text-sm mt-0.5 block" id="user-prof-name">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">पिता / अभिभावक का नाम (Father's Name)</span>
-            <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-father">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">पंजीकृत मोबाइल नंबर (Mobile No.)</span>
-            <span class="font-mono font-bold text-slate-800 text-sm mt-0.5 block" id="user-prof-phone">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">स्थायी पता / ग्राम (Address)</span>
-            <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-address">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">सदस्यता श्रेणी (Membership Status)</span>
-            <span class="font-bold text-amber-700 mt-0.5 block" id="user-prof-status">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">रक्त समूह (Blood Group)</span>
-            <span class="font-mono font-bold text-rose-600 mt-0.5 block" id="user-prof-blood">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">सदस्यता प्रारंभ तिथि (Member Since)</span>
-            <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-since">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">परिवार पहचान संख्या (Family ID)</span>
-            <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-family-id">--</span>
-          </div>
-          <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/70">
-            <span class="text-[11px] text-slate-400 font-medium block">ट्रस्ट शाखा (Trust Branch)</span>
-            <span class="font-bold text-slate-800 mt-0.5 block">गुनघसा, गोमो, धनबाद (828401)</span>
-          </div>
-        </div>
-      </section>
-
       </div><!-- End member-view-dashboard -->
 
       <!-- ============================================== -->
@@ -2343,6 +2296,129 @@
         </div>
 
       </div><!-- End member-view-notifications -->
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW 3: MY PROFILE SEPARATE PAGE           -->
+      <!-- ============================================== -->
+      <div id="member-view-profile" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Profile Header Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+              <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  मेरी प्रोफ़ाइल एवं सेटिंग्स (My Profile)
+                </h2>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800 border border-orange-200 font-mono" id="user-profile-id-pill">
+                  GSKS-000
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">समिति के आधिकारिक रजिस्टर में दर्ज आपकी व्यक्तिगत एवं सदस्यता जानकारी</p>
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            onclick="switchMemberView('dashboard')" 
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-arrow-left text-[11px]"></i>
+            <span>वापस डैशबोर्ड</span>
+          </button>
+        </div>
+
+        <!-- 1. Profile Identity Hero Card -->
+        <div class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 rounded-3xl p-6 sm:p-7 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden">
+          <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl pointer-events-none">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+
+          <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div class="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md border-2 border-white/40 flex items-center justify-center text-white text-3xl font-black font-devanagari shadow-inner flex-shrink-0" id="user-profile-avatar-big">
+              ग
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-xl sm:text-2xl font-black text-white font-devanagari truncate" id="user-profile-main-name">
+                  सदस्य का नाम
+                </h3>
+                <span class="px-2.5 py-0.5 rounded-lg text-[11px] font-extrabold bg-white/25 text-white border border-white/30 backdrop-blur-sm" id="user-profile-main-status">
+                  सक्रिय सदस्य
+                </span>
+              </div>
+              <p class="text-xs text-amber-100 mt-1">
+                गोस्वामी समाज कल्याण समिति, गुनघसा (गोमो, धनबाद) • शैव समाज ट्रस्ट
+              </p>
+              <div class="mt-3 flex items-center gap-4 text-xs font-mono text-amber-50">
+                <span>ID: <strong class="text-white" id="user-profile-main-id">GSKS-000</strong></span>
+                <span>•</span>
+                <span>Family ID: <strong class="text-white" id="user-profile-main-famid">FAM-000</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Profile Details 9-Grid (आधिकारिक रजिस्टर विवरण) -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
+                <i class="fa-solid fa-address-card"></i>
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                  रजिस्टर में दर्ज पूर्ण विवरण (Registered Information)
+                </h3>
+                <p class="text-xs text-slate-400">समिति के आधिकारिक रिकॉर्ड में सुरक्षित जानकारी</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">पूरा नाम (Full Name)</span>
+              <span class="font-extrabold text-slate-800 text-sm mt-0.5 block" id="user-prof-name">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">पिता / अभिभावक का नाम (Father's Name)</span>
+              <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-father">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">पंजीकृत मोबाइल नंबर (Mobile No.)</span>
+              <span class="font-mono font-bold text-slate-800 text-sm mt-0.5 block" id="user-prof-phone">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">स्थायी पता / ग्राम (Address)</span>
+              <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-address">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">सदस्यता श्रेणी (Membership Status)</span>
+              <span class="font-bold text-amber-700 mt-0.5 block" id="user-prof-status">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">रक्त समूह (Blood Group)</span>
+              <span class="font-mono font-bold text-rose-600 mt-0.5 block" id="user-prof-blood">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">सदस्यता प्रारंभ तिथि (Member Since)</span>
+              <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-since">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">परिवार पहचान संख्या (Family ID)</span>
+              <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-family-id">--</span>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
+              <span class="text-[11px] text-slate-400 font-medium block">ट्रस्ट शाखा (Trust Branch)</span>
+              <span class="font-bold text-slate-800 mt-0.5 block">गुनघसा, गोमो, धनबाद (828401)</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- End member-view-profile -->
 
       <!-- Trust Footer for Member -->
       <footer class="text-center py-6 border-t border-slate-200 text-xs text-slate-400">
@@ -4523,20 +4599,33 @@
       currentMemberSubView = view;
       const viewDash = document.getElementById('member-view-dashboard');
       const viewNotices = document.getElementById('member-view-notifications');
+      const viewProfile = document.getElementById('member-view-profile');
+
       const btnDash = document.getElementById('user-nav-btn-dash');
       const btnNotices = document.getElementById('user-nav-btn-notices');
+      const btnProfile = document.getElementById('user-nav-btn-profile');
 
-      if (view === 'notifications') {
-        if (viewDash) viewDash.classList.add('hidden');
+      // Reset all 3 views
+      if (viewDash) viewDash.classList.add('hidden');
+      if (viewNotices) viewNotices.classList.add('hidden');
+      if (viewProfile) viewProfile.classList.add('hidden');
+
+      // Reset button styles
+      if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
+      if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
+      if (btnProfile) btnProfile.className = 'px-2.5 sm:px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 border border-slate-200 cursor-pointer shadow-2xs';
+
+      if (view === 'profile') {
+        if (viewProfile) viewProfile.classList.remove('hidden');
+        if (btnProfile) btnProfile.className = 'px-2.5 sm:px-3 py-1.5 rounded-xl font-black transition-all text-xs flex items-center gap-1.5 bg-orange-600 text-white shadow-sm border border-orange-600 cursor-pointer';
+        renderMemberProfile(currentLoggedInMember);
+      } else if (view === 'notifications') {
         if (viewNotices) viewNotices.classList.remove('hidden');
-        if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
         if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
         renderMemberAllNotifications(currentLoggedInMember);
       } else {
-        if (viewNotices) viewNotices.classList.add('hidden');
         if (viewDash) viewDash.classList.remove('hidden');
         if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
-        if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -5084,6 +5173,7 @@
     }
 
     function renderMemberProfile(member) {
+      if (!member) return;
       const pName = document.getElementById('user-prof-name');
       const pFather = document.getElementById('user-prof-father');
       const pPhone = document.getElementById('user-prof-phone');
@@ -5094,15 +5184,30 @@
       const pFamilyId = document.getElementById('user-prof-family-id');
       const pPill = document.getElementById('user-profile-id-pill');
 
+      const heroAvatar = document.getElementById('user-profile-avatar-big');
+      const heroName = document.getElementById('user-profile-main-name');
+      const heroStatus = document.getElementById('user-profile-main-status');
+      const heroId = document.getElementById('user-profile-main-id');
+      const heroFamId = document.getElementById('user-profile-main-famid');
+
+      const famIdVal = member.familyId || `FAM-${member.id ? member.id.replace(/\D/g,'') : '001'}`;
+      const statusText = member.status === 'Prime Member' ? '⭐ विशिष्ट सदस्य (Prime Member)' : (member.status || 'सक्रिय सदस्य');
+
       if (pName) pName.textContent = member.name || '--';
       if (pFather) pFather.textContent = member.father || '--';
       if (pPhone) pPhone.textContent = member.phone || '--';
       if (pAddress) pAddress.textContent = member.address || '--';
-      if (pStatus) pStatus.textContent = member.status === 'Prime Member' ? 'विशिष्ट सदस्य (Prime Member)' : (member.status || 'सक्रिय सदस्य');
+      if (pStatus) pStatus.textContent = statusText;
       if (pBlood) pBlood.textContent = member.bloodGroup || 'दर्ज नहीं';
       if (pSince) pSince.textContent = member.since || '2025';
-      if (pFamilyId) pFamilyId.textContent = member.familyId || `FAM-${member.id ? member.id.replace(/\D/g,'') : '001'}`;
+      if (pFamilyId) pFamilyId.textContent = famIdVal;
       if (pPill) pPill.textContent = member.id || 'GSKS-000';
+
+      if (heroAvatar) heroAvatar.textContent = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
+      if (heroName) heroName.textContent = member.name || 'सदस्य';
+      if (heroStatus) heroStatus.textContent = statusText;
+      if (heroId) heroId.textContent = member.id || 'GSKS-000';
+      if (heroFamId) heroFamId.textContent = famIdVal;
     }
 
     function updateDate() {
