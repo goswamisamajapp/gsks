@@ -12009,14 +12009,106 @@ ID: ${item.id}
     async function togglePariwarikPaidStatus(memberId, isChecked) {
       const idx = allMembers.findIndex(m => m.id === memberId);
       if (idx === -1) return;
+      const mem = allMembers[idx];
       
-      if (!allMembers[idx].pariwarikMonthlyPaid || typeof allMembers[idx].pariwarikMonthlyPaid !== 'object') {
-        allMembers[idx].pariwarikMonthlyPaid = {};
+      if (!mem.pariwarikMonthlyPaid || typeof mem.pariwarikMonthlyPaid !== 'object') {
+        mem.pariwarikMonthlyPaid = {};
       }
-      allMembers[idx].pariwarikMonthlyPaid[currentPariwarikMonth] = !!isChecked;
+      mem.pariwarikMonthlyPaid[currentPariwarikMonth] = !!isChecked;
       
       // Also update general flag if current month is active
-      allMembers[idx].pariwarikPaid = !!isChecked;
+      mem.pariwarikPaid = !!isChecked;
+
+      // Handle donation entry sync
+      const installmentMonthLabel = (typeof getPariwarikInstallmentMonthLabel === 'function') 
+        ? getPariwarikInstallmentMonthLabel(currentPariwarikMonth) 
+        : currentPariwarikMonth;
+      const pariwarikSchemeName = 'पारिवारिक आर्थिक सहायता योजना';
+
+      if (isChecked) {
+        // Check if an entry for this member and this month's installment already exists
+        const exists = (allDonations || []).some(d => 
+          d.memberId === memberId && 
+          d.scheme === pariwarikSchemeName && 
+          (d.pariwarikMonthKey === currentPariwarikMonth || (d.remarks && d.remarks.includes(installmentMonthLabel)))
+        );
+
+        if (!exists) {
+          const now = new Date();
+          const todayStr = now.toISOString().slice(0, 10);
+          const autoDonationId = `DON-${Date.now().toString().slice(-6)}`;
+          const donationPayload = {
+            id: autoDonationId,
+            memberId: mem.id,
+            donorName: mem.name || '',
+            phone: mem.phone || '',
+            scheme: pariwarikSchemeName,
+            amount: PARIWARIK_MONTHLY_FEE,
+            date: todayStr,
+            method: 'Cash',
+            remarks: `पारिवारिक योजना किस्त (${installmentMonthLabel})`,
+            pariwarikMonthKey: currentPariwarikMonth,
+            createdAt: now.toISOString()
+          };
+
+          if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+            allDonations.unshift(donationPayload);
+          }
+          if (typeof updateDonationsStats === 'function') updateDonationsStats();
+          if (typeof renderDonationsList === 'function') renderDonationsList();
+
+          // Save donation to Server & Firestore
+          try {
+            await fetch('/api/donations/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(donationPayload)
+            });
+          } catch (err) {
+            console.warn('Auto donation API save warning:', err);
+          }
+
+          try {
+            if (typeof donationsCol !== 'undefined' && donationsCol) {
+              await donationsCol.doc(donationPayload.id).set(donationPayload, { merge: true });
+            }
+          } catch (err) {
+            console.warn('Auto donation Firestore save warning:', err);
+          }
+        }
+      } else {
+        // If toggled OFF, remove the associated auto donation
+        const autoDonation = (allDonations || []).find(d => 
+          d.memberId === memberId && 
+          d.scheme === pariwarikSchemeName && 
+          (d.pariwarikMonthKey === currentPariwarikMonth || (d.remarks && d.remarks.includes(installmentMonthLabel)))
+        );
+
+        if (autoDonation) {
+          const delId = autoDonation.id;
+          allDonations = allDonations.filter(d => d.id !== delId);
+          if (typeof updateDonationsStats === 'function') updateDonationsStats();
+          if (typeof renderDonationsList === 'function') renderDonationsList();
+
+          try {
+            await fetch('/api/donations/delete', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id: delId })
+            });
+          } catch (err) {
+            console.warn('Auto donation API delete warning:', err);
+          }
+
+          try {
+            if (typeof donationsCol !== 'undefined' && donationsCol) {
+              await donationsCol.doc(delId).delete();
+            }
+          } catch (err) {
+            console.warn('Auto donation Firestore delete warning:', err);
+          }
+        }
+      }
 
       renderPariwarikView();
 
@@ -12024,8 +12116,8 @@ ID: ${item.id}
       try {
         await syncMemberToBackend({
           id: memberId,
-          pariwarikMonthlyPaid: allMembers[idx].pariwarikMonthlyPaid,
-          pariwarikPaid: allMembers[idx].pariwarikPaid
+          pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid,
+          pariwarikPaid: mem.pariwarikPaid
         });
       } catch (err) {
         console.warn('Error saving pariwarik paid status:', err);
