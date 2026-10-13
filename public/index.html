@@ -12170,10 +12170,32 @@ ID: ${item.id}
         masterSettings.pariwarikWinners = {};
       }
 
+      const existingWinnerForMonth = masterSettings.pariwarikWinners[currentPariwarikMonth];
+
       if (isChecked) {
+        // Rule 1: Only 1 winner per month. Cannot mark another member until existing winner is turned off
+        if (existingWinnerForMonth && existingWinnerForMonth !== memberId) {
+          const prevWinnerMem = allMembers.find(m => m.id === existingWinnerForMonth);
+          const prevName = prevWinnerMem ? prevWinnerMem.name : existingWinnerForMonth;
+          alert(`⚠️ इस माह के विजेता पहले से "${prevName}" चयनित हैं!\n\nकिसी अन्य सदस्य को विजेता बनाने के लिए पहले पूर्व विजेता का स्विच OFF करें।`);
+          renderPariwarikView();
+          return;
+        }
+
+        // Rule 2: Cannot mark a member who is already a winner in any other month
+        for (const [mKey, winId] of Object.entries(masterSettings.pariwarikWinners)) {
+          if (mKey !== currentPariwarikMonth && winId === memberId) {
+            const mCfg = PARIWARIK_MONTHS.find(pm => pm.key === mKey);
+            const mLabel = mCfg ? mCfg.label : mKey;
+            alert(`⚠️ यह सदस्य पहले ही "${mLabel}" के विजेता बन चुके हैं!\n\nएक सदस्य को केवल एक ही माह का विजेता बनाया जा सकता है।`);
+            renderPariwarikView();
+            return;
+          }
+        }
+
         masterSettings.pariwarikWinners[currentPariwarikMonth] = memberId;
       } else {
-        if (masterSettings.pariwarikWinners[currentPariwarikMonth] === memberId) {
+        if (existingWinnerForMonth === memberId) {
           delete masterSettings.pariwarikWinners[currentPariwarikMonth];
         }
       }
@@ -12378,9 +12400,51 @@ ID: ${item.id}
 
       tbody.innerHTML = filteredMembers.map(m => {
         const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
-        const isWinner = (currentWinnerMemberId === m.id);
-        const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
-        const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+        // Check if member already won in any other month
+        let otherWonMonthKey = null;
+        for (const [mKey, winId] of Object.entries(winnersMap)) {
+          if (mKey !== currentPariwarikMonth && winId === m.id) {
+            otherWonMonthKey = mKey;
+            break;
+          }
+        }
+
+        let winnerCellHtml = '';
+        if (otherWonMonthKey) {
+          // Member already won in a different month: Hide toggle switch, show clean badge
+          const otherCfg = PARIWARIK_MONTHS.find(pm => pm.key === otherWonMonthKey);
+          const otherLabel = otherCfg ? otherCfg.label : otherWonMonthKey;
+          winnerCellHtml = `
+            <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/80 text-[10px] font-bold" title="${otherLabel} के विजेता">
+              <i class="fa-solid fa-trophy text-[9px] text-amber-500"></i>
+              <span>${otherLabel}</span>
+            </div>
+          `;
+        } else if (isWinner) {
+          // Current Month Winner: Active ON Toggle
+          winnerCellHtml = `
+            <label class="relative inline-flex items-center cursor-pointer select-none" title="माह विजेता (Winner) - बंद करने के लिए क्लिक करें">
+              <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+            </label>
+          `;
+        } else if (currentWinnerMemberId) {
+          // Another member is already marked winner in current month: Disabled toggle
+          winnerCellHtml = `
+            <label class="relative inline-flex items-center cursor-not-allowed opacity-40 select-none" title="इस माह के विजेता पहले से चयनित हैं। पहले उन्हें OFF करें।">
+              <input type="checkbox" disabled class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 rounded-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 shadow-inner"></div>
+            </label>
+          `;
+        } else {
+          // Normal Available: Can be toggled ON
+          winnerCellHtml = `
+            <label class="relative inline-flex items-center cursor-pointer select-none" title="माह विजेता बनाएं (Mark Winner)">
+              <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+            </label>
+          `;
+        }
 
         return `
           <tr class="hover:bg-slate-50/80 transition-colors ${isWinner ? 'bg-amber-50/50' : ''}">
@@ -12404,10 +12468,7 @@ ID: ${item.id}
             </td>
             <!-- Pure iOS Style Month Winner Toggle Switch (Golden Yellow) -->
             <td class="p-3.5 text-center">
-              <label class="relative inline-flex items-center cursor-pointer select-none" title="${isWinner ? 'माह विजेता (Winner)' : 'विजेता बनाएं'}">
-                <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" ${isWinner ? 'checked' : ''} class="sr-only peer">
-                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
-              </label>
+              ${winnerCellHtml}
             </td>
             <!-- Paid (₹) -->
             <td class="p-3.5 text-right font-mono font-bold ${hasPaid ? 'text-emerald-600 font-black' : 'text-slate-400'}">
