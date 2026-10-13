@@ -6628,6 +6628,7 @@
 
     let activeParticipantsEventId = null;
     let manualPartSearchTerm = '';
+    let selectedManualParticipantIds = new Set();
 
     function openMemberEventParticipantsModal(eventId) {
       if (!eventId) return;
@@ -6785,6 +6786,10 @@
       const shouldShow = (forceState !== null) ? forceState : section.classList.contains('hidden');
       if (shouldShow) {
         section.classList.remove('hidden');
+        selectedManualParticipantIds.clear();
+        manualPartSearchTerm = '';
+        const searchInput = document.getElementById('manual-part-search-input');
+        if (searchInput) searchInput.value = '';
 
         // Set default time to current time
         const timeInput = document.getElementById('manual-part-time-input');
@@ -6801,6 +6806,15 @@
       }
     }
     window.toggleManualAddParticipantForm = toggleManualAddParticipantForm;
+
+    function toggleManualParticipantSelect(memberId, isChecked) {
+      if (isChecked) {
+        selectedManualParticipantIds.add(memberId);
+      } else {
+        selectedManualParticipantIds.delete(memberId);
+      }
+    }
+    window.toggleManualParticipantSelect = toggleManualParticipantSelect;
 
     function renderManualParticipantsChecklist() {
       const container = document.getElementById('manual-parts-checklist-container');
@@ -6826,6 +6840,7 @@
 
       container.innerHTML = filteredMembers.map(m => {
         const isAlreadyJoined = existingPartIds.has(m.id);
+        const isChecked = selectedManualParticipantIds.has(m.id);
 
         return `
           <label class="flex items-center justify-between p-1.5 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors ${isAlreadyJoined ? 'opacity-50 pointer-events-none bg-emerald-50/40' : ''}">
@@ -6834,7 +6849,8 @@
                 type="checkbox" 
                 name="manual-select-member-cb" 
                 value="${m.id}" 
-                ${isAlreadyJoined ? 'disabled checked' : ''}
+                onchange="toggleManualParticipantSelect('${m.id}', this.checked)"
+                ${isAlreadyJoined ? 'disabled checked' : (isChecked ? 'checked' : '')}
                 class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5 cursor-pointer"
               >
               <div class="min-w-0">
@@ -6861,8 +6877,29 @@
     window.filterManualParticipantsList = filterManualParticipantsList;
 
     function selectAllManualParticipants(check = true) {
-      const checkboxes = document.querySelectorAll('input[name="manual-select-member-cb"]:not(:disabled)');
-      checkboxes.forEach(cb => { cb.checked = check; });
+      const ev = (allEvents || []).find(e => e.id === activeParticipantsEventId);
+      const existingPartIds = new Set((ev && ev.participants ? ev.participants : []).map(p => p.memberId));
+
+      const term = (manualPartSearchTerm || '').trim().toLowerCase();
+      const currentList = (allMembers || []).filter(m => {
+        if (existingPartIds.has(m.id)) return false;
+        if (!term) return true;
+        const name = (m.name || '').toLowerCase();
+        const id = (m.id || '').toLowerCase();
+        const phone = (m.phone || '').toLowerCase();
+        const father = (m.father || '').toLowerCase();
+        return name.includes(term) || id.includes(term) || phone.includes(term) || father.includes(term);
+      });
+
+      currentList.forEach(m => {
+        if (check) {
+          selectedManualParticipantIds.add(m.id);
+        } else {
+          selectedManualParticipantIds.delete(m.id);
+        }
+      });
+
+      renderManualParticipantsChecklist();
     }
     window.selectAllManualParticipants = selectAllManualParticipants;
 
@@ -6871,8 +6908,8 @@
       const ev = (allEvents || []).find(e => e.id === activeParticipantsEventId);
       if (!ev) return;
 
-      const checkedBoxes = Array.from(document.querySelectorAll('input[name="manual-select-member-cb"]:checked:not(:disabled)'));
-      if (checkedBoxes.length === 0) {
+      const selectedIds = Array.from(selectedManualParticipantIds);
+      if (selectedIds.length === 0) {
         alert('कृपया कम से कम एक सदस्य चुनें जिसे उपस्थिति सूची में जोड़ना है।');
         return;
       }
@@ -6890,21 +6927,27 @@
 
       if (!ev.participants) ev.participants = [];
 
-      checkedBoxes.forEach(cb => {
-        const memId = cb.value;
+      selectedIds.forEach(memId => {
         const memberObj = (allMembers || []).find(m => m.id === memId);
         if (memberObj) {
-          ev.participants.push({
-            memberId: memberObj.id,
-            name: memberObj.name,
-            phone: memberObj.phone || '',
-            joinedAt: now.toISOString(),
-            time: timeVal,
-            isManual: true,
-            distanceMeters: null // Manually marked by admin
-          });
+          // Avoid duplicate entry if already present
+          const alreadyIn = ev.participants.some(p => (p.memberId === memberObj.id || p.id === memberObj.id));
+          if (!alreadyIn) {
+            ev.participants.push({
+              memberId: memberObj.id,
+              name: memberObj.name,
+              phone: memberObj.phone || '',
+              joinedAt: now.toISOString(),
+              time: timeVal,
+              isManual: true,
+              distanceMeters: null // Manually marked by admin
+            });
+          }
         }
       });
+
+      // Clear the selection set after saving
+      selectedManualParticipantIds.clear();
 
       // Atomic Sync to local state, Express API & Firestore
       await syncEventToBackendAndCloud(ev);
@@ -6921,7 +6964,7 @@
       if (typeof renderMemberUpcomingEvents === 'function') renderMemberUpcomingEvents();
       if (typeof renderMemberAllNotifications === 'function') renderMemberAllNotifications(currentLoggedInMember);
 
-      alert(`✅ ${checkedBoxes.length} सदस्यों की उपस्थिति सफलतापूर्वक दर्ज कर दी गई!`);
+      alert(`✅ ${selectedIds.length} सदस्यों की उपस्थिति सफलतापूर्वक दर्ज कर दी गई!`);
     }
     window.saveManualParticipantsToEvent = saveManualParticipantsToEvent;
 
