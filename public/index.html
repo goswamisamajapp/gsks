@@ -1500,61 +1500,126 @@
           </div>
         </div>
 
-        <!-- Master Tabs Nav -->
-        <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-2 overflow-x-auto">
+        <!-- Master Settings Cards Grid (Compact & Modern) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <!-- Card 1: Status Master -->
           <button 
+            type="button"
             onclick="switchSettingsTab('status')" 
             id="tab-btn-status"
-            class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-orange-500 text-white shadow-sm flex-shrink-0"
+            class="group p-3 rounded-2xl bg-white border border-orange-500 shadow-md ring-2 ring-orange-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
-            <i class="fa-solid fa-tags"></i>
-            <span>1. Status Master</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20" id="badge-count-status">3</span>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-100 text-orange-700 font-mono" id="badge-count-status">3</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 1</p>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-orange-600 transition-colors truncate">Status Master</h4>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">सदस्यता स्थिति</p>
+            </div>
           </button>
+
+          <!-- Card 2: Event Master -->
           <button 
+            type="button"
             onclick="switchSettingsTab('event')" 
             id="tab-btn-event"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
-            <i class="fa-solid fa-calendar-check"></i>
-            <span>2. Event Master</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200" id="badge-count-event">3+</span>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 font-mono" id="badge-count-event">3+</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 2</p>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors truncate">Event Master</h4>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">कार्यक्रम / बैठक</p>
+            </div>
           </button>
+
+          <!-- Card 3: Scheme Master -->
           <button 
+            type="button"
             onclick="switchSettingsTab('scheme')" 
             id="tab-btn-scheme"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-amber-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
-            <i class="fa-solid fa-hand-holding-heart"></i>
-            <span>3. Scheme Master</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200" id="badge-count-scheme">4</span>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 font-mono" id="badge-count-scheme">4</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 3</p>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-amber-600 transition-colors truncate">Scheme Master</h4>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">कल्याणकारी योजनाएं</p>
+            </div>
           </button>
+
+          <!-- Card 4: Fund Management -->
           <button 
+            type="button"
             onclick="switchSettingsTab('fund')" 
             id="tab-btn-fund"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-teal-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
-            <i class="fa-solid fa-vault"></i>
-            <span>4. Fund Management (कोष प्रबंधन)</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200" id="badge-count-fund">0</span>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-vault"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 font-mono" id="badge-count-fund">0</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 4</p>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-teal-600 transition-colors truncate">Fund Management</h4>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">कोष व बैंक खाते</p>
+            </div>
           </button>
+
+          <!-- Card 5: Expense Master -->
           <button 
+            type="button"
             onclick="switchSettingsTab('expense')" 
             id="tab-btn-expense"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-rose-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
-            <i class="fa-solid fa-file-invoice-dollar"></i>
-            <span>5. Expense Master (खर्च मास्टर)</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-700 font-bold" id="badge-count-expense">Master</span>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-700 font-mono" id="badge-count-expense">Master</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 5</p>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-rose-600 transition-colors truncate">Expense Master</h4>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">खर्च व वेंडर प्रबंधन</p>
+            </div>
           </button>
+
+          <!-- Card 6: Team Members -->
           <button 
+            type="button"
             onclick="switchSettingsTab('designation')" 
             id="tab-btn-designation"
-            class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0"
+            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
-            <i class="fa-solid fa-user-tie"></i>
-            <span>6. Team Members (कार्यकारिणी / पदनाम)</span>
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-indigo-100 text-indigo-700 font-bold" id="badge-count-designation">8</span>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-700 font-mono" id="badge-count-designation">8</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 6</p>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors truncate">Team Members</h4>
+              <p class="text-[10px] text-slate-500 truncate mt-0.5">समिति पदनाम प्रबंधन</p>
+            </div>
           </button>
         </div>
 
@@ -9637,9 +9702,10 @@
       const pageExpense = document.getElementById('settings-page-expense');
       const pageDesignation = document.getElementById('settings-page-designation');
 
-      // Reset tabs styling
+      // Reset all cards to inactive sleek state
+      const defaultCardClass = 'group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
       [tabBtnStatus, tabBtnEvent, tabBtnScheme, tabBtnFund, tabBtnExpense, tabBtnDesignation].forEach(btn => {
-        if (btn) btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center gap-2 flex-shrink-0';
+        if (btn) btn.className = defaultCardClass;
       });
 
       // Hide all pages
@@ -9651,28 +9717,28 @@
       if (pageDesignation) pageDesignation.classList.add('hidden');
 
       if (tab === 'event') {
-        if (tabBtnEvent) tabBtnEvent.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow-sm flex-shrink-0';
+        if (tabBtnEvent) tabBtnEvent.className = 'group p-3 rounded-2xl bg-indigo-50/40 border-2 border-indigo-500 shadow-md ring-2 ring-indigo-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageEvent) pageEvent.classList.remove('hidden');
       } else if (tab === 'scheme') {
-        if (tabBtnScheme) tabBtnScheme.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-amber-600 text-white shadow-sm flex-shrink-0';
+        if (tabBtnScheme) tabBtnScheme.className = 'group p-3 rounded-2xl bg-amber-50/40 border-2 border-amber-500 shadow-md ring-2 ring-amber-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageScheme) pageScheme.classList.remove('hidden');
       } else if (tab === 'fund') {
-        if (tabBtnFund) tabBtnFund.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-teal-600 text-white shadow-sm flex-shrink-0';
+        if (tabBtnFund) tabBtnFund.className = 'group p-3 rounded-2xl bg-teal-50/40 border-2 border-teal-500 shadow-md ring-2 ring-teal-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageFund) pageFund.classList.remove('hidden');
         renderOpeningBalancesCard();
         renderFundTypesGrid();
         renderBankAccountsGrid();
         renderFundTransfersList();
       } else if (tab === 'expense') {
-        if (tabBtnExpense) tabBtnExpense.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-rose-600 text-white shadow-sm flex-shrink-0';
+        if (tabBtnExpense) tabBtnExpense.className = 'group p-3 rounded-2xl bg-rose-50/40 border-2 border-rose-500 shadow-md ring-2 ring-rose-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageExpense) pageExpense.classList.remove('hidden');
         renderExpenseMasterTab();
       } else if (tab === 'designation') {
-        if (tabBtnDesignation) tabBtnDesignation.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-indigo-600 text-white shadow-sm flex-shrink-0';
+        if (tabBtnDesignation) tabBtnDesignation.className = 'group p-3 rounded-2xl bg-indigo-50/40 border-2 border-indigo-600 shadow-md ring-2 ring-indigo-600/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageDesignation) pageDesignation.classList.remove('hidden');
         renderDesignationMasterTab();
       } else {
-        if (tabBtnStatus) tabBtnStatus.className = 'px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-orange-500 text-white shadow-sm flex-shrink-0';
+        if (tabBtnStatus) tabBtnStatus.className = 'group p-3 rounded-2xl bg-orange-50/40 border-2 border-orange-500 shadow-md ring-2 ring-orange-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageStatus) pageStatus.classList.remove('hidden');
       }
     }
