@@ -6144,11 +6144,11 @@
           ? 'bg-rose-100 text-rose-700 border-rose-200' 
           : (e.category === 'Special Event' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200');
 
-        let statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-blue-100 text-blue-700 border border-blue-200">आगामी (Upcoming)</span>';
+        let statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-blue-100 text-blue-800 border border-blue-300">आगामी (Upcoming)</span>';
         if (effStatus === 'Open') {
           statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> चालू (Open)</span>';
         } else if (effStatus === 'Closed') {
-          statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-200 text-slate-700">संपन्न (Closed)</span>';
+          statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-rose-100 text-rose-800 border border-rose-300">संपन्न (Closed)</span>';
         } else if (effStatus === 'Cancelled') {
           statusBadgeHtml = '<span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-rose-100 text-rose-700 border border-rose-200">रद्द (Cancelled)</span>';
         }
@@ -6236,11 +6236,11 @@
         : (ev.category === 'Special Event' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200');
 
       const effStatus = getEffectiveEventStatus(ev);
-      let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">🔵 आगामी (Upcoming)</span>';
+      let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300">🔵 आगामी (Upcoming)</span>';
       if (effStatus === 'Open') {
         statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> 🟢 चालू (Open)</span>';
       } else if (effStatus === 'Closed') {
-        statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">⚪ संपन्न (Closed)</span>';
+        statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">🔴 संपन्न (Closed)</span>';
       } else if (effStatus === 'Cancelled') {
         statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">🔴 रद्द (Cancelled)</span>';
       }
@@ -9058,7 +9058,7 @@
       if (st === 'Open') {
         return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> Open / चालू</span>`;
       } else if (st === 'Closed') {
-        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1"><i class="fa-solid fa-lock text-[9px] text-slate-500"></i> Closed / संपन्न</span>`;
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300 flex items-center gap-1"><i class="fa-solid fa-lock text-[9px] text-rose-600"></i> Closed / संपन्न</span>`;
       }
       return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><i class="fa-regular fa-clock text-[9px] text-blue-600"></i> Upcoming / आगामी</span>`;
     }
