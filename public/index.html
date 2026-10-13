@@ -3010,6 +3010,63 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL: EVENT PARTICIPANTS LIST POPUP (प्रतिभागी सदस्य सूची)      -->
+  <!-- ============================================================== -->
+  <div id="member-event-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button onclick="closeMemberEventParticipantsModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+        <div class="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg flex-shrink-0 shadow-xs">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="min-w-0 pr-6">
+          <div class="flex items-center gap-2">
+            <h3 class="text-base font-black text-slate-900 font-devanagari truncate">
+              उपस्थित प्रतिभागी सूची (Participants)
+            </h3>
+            <span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 flex-shrink-0" id="m-modal-parts-count">
+              0
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 truncate" id="m-modal-parts-event-title">बैठक शीर्षक</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats / Meeting Info -->
+      <div class="my-3.5 bg-slate-50 p-3 rounded-2xl border border-slate-200/70 flex items-center justify-between text-xs text-slate-600">
+        <div class="flex items-center gap-1.5 truncate">
+          <i class="fa-solid fa-location-dot text-rose-500 text-[11px]"></i>
+          <span class="truncate" id="m-modal-parts-venue">--</span>
+        </div>
+        <span class="font-mono text-[11px] text-slate-500 flex-shrink-0 font-medium" id="m-modal-parts-date">--</span>
+      </div>
+
+      <!-- Participants List Table / Container -->
+      <div class="space-y-2 mb-4">
+        <div class="max-h-72 overflow-y-auto rounded-2xl border border-slate-200 divide-y divide-slate-100" id="m-modal-parts-list-body">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <button 
+        type="button" 
+        onclick="closeMemberEventParticipantsModal()" 
+        class="w-full py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-sm"
+      >
+        <span>ठीक है (Close)</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL 1: VIEW FULL DETAILS (Center Big Photo, Badges & Dues)   -->
   <!-- ============================================================== -->
   <div id="view-member-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -5430,9 +5487,28 @@
               </div>
               <div class="pt-2.5 text-xs text-slate-600">
                 <p class="line-clamp-2">${n.summary}</p>
-                <div class="mt-2 flex items-center gap-4 text-[11px] text-slate-400 font-medium">
-                  <span><i class="fa-solid fa-location-dot text-slate-400 mr-1"></i> ${n.venue}</span>
-                  <span><i class="fa-solid fa-clock text-slate-400 mr-1"></i> ${n.timeFormatted || n.time || '--'}</span>
+                <div class="mt-2.5 pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-slate-500 font-medium">
+                  <div class="flex items-center gap-4">
+                    <span><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> ${n.venue}</span>
+                    <span><i class="fa-solid fa-clock text-indigo-500 mr-1"></i> ${n.timeFormatted || n.time || '--'}</span>
+                  </div>
+
+                  ${(n.rawItem && n.rawItem.id) ? `
+                    <button 
+                      type="button" 
+                      onclick="openMemberEventParticipantsModal('${n.rawItem.id}')" 
+                      class="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs self-end sm:self-center"
+                      title="इस बैठक में उपस्थित रहे सदस्यों की सूची देखें"
+                    >
+                      <i class="fa-solid fa-users text-[11px]"></i>
+                      <span>प्रतिभागी देखें (View Participants)</span>
+                      ${(n.rawItem.participants && n.rawItem.participants.length > 0) ? `
+                        <span class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-white text-indigo-800 border border-indigo-200 ml-0.5">
+                          ${n.rawItem.participants.length}
+                        </span>
+                      ` : ''}
+                    </button>
+                  ` : ''}
                 </div>
               </div>
             </div>
@@ -5990,6 +6066,93 @@
           maximumAge: 0
         }
       );
+    }
+
+    function openMemberEventParticipantsModal(eventId) {
+      if (!eventId) return;
+      const ev = (allEvents || []).find(e => e.id === eventId);
+      if (!ev) {
+        alert('बैठक / कार्यक्रम का विवरण प्राप्त नहीं हो सका');
+        return;
+      }
+
+      const modal = document.getElementById('member-event-participants-modal');
+      const titleEl = document.getElementById('m-modal-parts-event-title');
+      const countEl = document.getElementById('m-modal-parts-count');
+      const venueEl = document.getElementById('m-modal-parts-venue');
+      const dateEl = document.getElementById('m-modal-parts-date');
+      const bodyEl = document.getElementById('m-modal-parts-list-body');
+
+      const dt = ev.datetime ? new Date(ev.datetime) : null;
+      const dateStr = dt && !isNaN(dt)
+        ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+        : (ev.date || '--');
+
+      if (titleEl) titleEl.textContent = ev.title || 'समिति बैठक';
+      if (venueEl) venueEl.textContent = ev.venue || 'शिव मंदिर, गुनघसा';
+      if (dateEl) dateEl.textContent = dateStr;
+
+      const participants = ev.participants || [];
+      if (countEl) countEl.textContent = `${participants.length} उपस्थित`;
+
+      if (bodyEl) {
+        if (participants.length === 0) {
+          bodyEl.innerHTML = `
+            <div class="p-8 text-center bg-slate-50 text-slate-400">
+              <i class="fa-solid fa-user-slash text-2xl text-slate-300 mb-1.5 block"></i>
+              <p class="text-xs font-bold text-slate-600">इस बैठक में अभी तक कोई प्रतिभागी उपस्थिति दर्ज नहीं है</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">बैठक के समय 20 मीटर दायरे में उपस्थित सदस्यों द्वारा उपस्थिति दर्ज की जाती है।</p>
+            </div>
+          `;
+        } else {
+          bodyEl.innerHTML = participants.map((p, idx) => {
+            const timeStr = p.joinedAt ? new Date(p.joinedAt).toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : '--';
+            const initial = (p.name ? p.name.trim().charAt(0) : 'स').toUpperCase();
+            const memberObj = (allMembers || []).find(m => m.id === p.memberId);
+            const fatherName = memberObj ? memberObj.father : '';
+
+            return `
+              <div class="p-3 sm:p-3.5 bg-white hover:bg-slate-50 transition-colors flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-black text-xs font-devanagari flex-shrink-0 shadow-2xs">
+                    ${initial}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                      <span class="font-extrabold text-slate-900 text-xs truncate font-devanagari">
+                        ${p.name || 'सदस्य'}
+                      </span>
+                      <span class="px-2 py-0.2 rounded-md text-[9px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                        ${p.memberId || '--'}
+                      </span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 truncate mt-0.5">
+                      ${fatherName ? `पिता: ${fatherName} • ` : ''}दूरी: ${p.distanceMeters != null ? `${p.distanceMeters}m` : 'सत्यापित'}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="text-right flex-shrink-0">
+                  <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                    <i class="fa-solid fa-check text-[9px]"></i>
+                    <span>उपस्थित</span>
+                  </span>
+                  <span class="text-[9px] font-mono text-slate-400 block mt-0.5">
+                    ${timeStr}
+                  </span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeMemberEventParticipantsModal() {
+      const modal = document.getElementById('member-event-participants-modal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function renderMemberDonations(member) {
@@ -11939,6 +12102,8 @@ ID: ${item.id}
     window.handleEventParticipation = handleEventParticipation;
     window.renderEventParticipationUI = renderEventParticipationUI;
     window.renderMemberPasyPage = renderMemberPasyPage;
+    window.openMemberEventParticipantsModal = openMemberEventParticipantsModal;
+    window.closeMemberEventParticipantsModal = closeMemberEventParticipantsModal;
 
     window.addEventListener('DOMContentLoaded', async () => {
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
