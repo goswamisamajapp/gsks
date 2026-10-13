@@ -711,9 +711,31 @@
             </button>
           </div>
 
-          <!-- Status Dropdown Filter (Right) -->
-          <div class="flex items-center gap-2 self-end sm:self-auto w-full sm:w-auto">
-            <div class="relative w-full sm:w-auto min-w-[190px]">
+          <!-- Status & Date Filters (Right) -->
+          <div class="flex items-center gap-2 flex-wrap self-end sm:self-auto w-full sm:w-auto">
+            <!-- Date Filter Dropdown -->
+            <div class="relative w-full sm:w-auto min-w-[170px]">
+              <i class="fa-regular fa-calendar-days absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
+              <select id="event-date-filter-select" onchange="filterEventDate(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
+                <option value="ALL">📅 सभी दिनांक (All Dates)</option>
+                <option value="UPCOMING">⏳ आगामी दिनांक (Upcoming)</option>
+                <option value="TODAY">📍 आज की बैठक (Today)</option>
+                <option value="THIS_MONTH">🗓️ इस माह (This Month)</option>
+                <option value="PAST">⏪ पुरानी बैठकें (Past)</option>
+                <option value="CUSTOM">📆 कस्टम रेंज (Custom Range)</option>
+              </select>
+              <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+            </div>
+
+            <!-- Custom Date Inputs (Hidden by default, shown when CUSTOM is picked) -->
+            <div id="event-custom-date-container" class="hidden items-center gap-1.5 bg-slate-50 p-1 rounded-xl border border-slate-200 text-xs">
+              <input type="date" id="event-date-from" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="शुरुआती दिनांक">
+              <span class="text-slate-400 text-[10px]">से</span>
+              <input type="date" id="event-date-to" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="अंतिम दिनांक">
+            </div>
+
+            <!-- Status Dropdown Filter -->
+            <div class="relative w-full sm:w-auto min-w-[170px]">
               <i class="fa-solid fa-filter absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
               <select id="event-status-filter-select" onchange="filterEventStatus(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
                 <option value="ALL">📋 सभी स्टेटस (All Status)</option>
@@ -2213,9 +2235,9 @@
 
       <!-- 2. UPCOMING MEETINGS & EVENTS (आगामी बैठकें एवं कार्यक्रम) -->
       <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
           <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base">
+            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base flex-shrink-0">
               <i class="fa-solid fa-calendar-check"></i>
             </div>
             <div>
@@ -2225,9 +2247,40 @@
               <p class="text-xs text-slate-400">समिति द्वारा आयोजित आगामी महत्वपूर्ण कार्यक्रम</p>
             </div>
           </div>
-          <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200" id="user-events-count">
-            0 कार्यक्रम
-          </span>
+
+          <!-- Date Filter for User Dashboard -->
+          <div class="flex items-center gap-2 self-start sm:self-center flex-wrap">
+            <div class="inline-flex p-1 bg-slate-100/90 rounded-xl text-xs gap-1">
+              <button 
+                type="button" 
+                id="user-event-filter-upcoming" 
+                onclick="filterUserEventsDate('UPCOMING')" 
+                class="px-2.5 py-1 rounded-lg font-bold bg-white text-indigo-700 shadow-2xs transition-all cursor-pointer"
+              >
+                आगामी (Upcoming)
+              </button>
+              <button 
+                type="button" 
+                id="user-event-filter-all" 
+                onclick="filterUserEventsDate('ALL')" 
+                class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+              >
+                सभी (All)
+              </button>
+              <button 
+                type="button" 
+                id="user-event-filter-past" 
+                onclick="filterUserEventsDate('PAST')" 
+                class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+              >
+                संपन्न (Past)
+              </button>
+            </div>
+
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200" id="user-events-count">
+              0 कार्यक्रम
+            </span>
+          </div>
         </div>
 
         <!-- Events Container (Full Width Adaptive) -->
@@ -4792,6 +4845,10 @@
     let currentFundTransferFilter = 'ALL';
     let currentEventFilter = 'ALL';
     let currentEventStatusFilter = 'ALL';
+    let currentEventDateFilter = 'ALL';
+    let currentEventDateFrom = '';
+    let currentEventDateTo = '';
+    let currentUserEventDateFilter = 'UPCOMING';
     let pendingDeleteEventId = null;
     let pendingDeleteDonationId = null;
     let currentFilterAddress = 'ALL';
@@ -5737,6 +5794,30 @@
       if (modal) modal.classList.add('hidden');
     }
 
+    function filterUserEventsDate(filter) {
+      currentUserEventDateFilter = filter || 'UPCOMING';
+
+      const btnUpcoming = document.getElementById('user-event-filter-upcoming');
+      const btnAll = document.getElementById('user-event-filter-all');
+      const btnPast = document.getElementById('user-event-filter-past');
+
+      [btnUpcoming, btnAll, btnPast].forEach(btn => {
+        if (!btn) return;
+        btn.className = 'px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
+      });
+
+      if (filter === 'ALL' && btnAll) {
+        btnAll.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-indigo-700 shadow-2xs transition-all cursor-pointer';
+      } else if (filter === 'PAST' && btnPast) {
+        btnPast.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-indigo-700 shadow-2xs transition-all cursor-pointer';
+      } else if (btnUpcoming) {
+        btnUpcoming.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-indigo-700 shadow-2xs transition-all cursor-pointer';
+      }
+
+      renderMemberUpcomingEvents();
+    }
+    window.filterUserEventsDate = filterUserEventsDate;
+
     function renderMemberUpcomingEvents() {
       const listEl = document.getElementById('user-events-list');
       const countEl = document.getElementById('user-events-count');
@@ -5745,34 +5826,39 @@
       const now = new Date();
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-      // Show upcoming or active events (exclude cancelled or past closed events)
       let events = (allEvents || []).filter(e => {
         if ((e.status || '').toLowerCase() === 'cancelled') return false;
         const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
-        if (e.status === 'Upcoming' || e.status === 'Open') return true;
-        if (dt && !isNaN(dt) && dt >= todayStart) return true;
-        return false;
+        const isFuture = (e.status === 'Upcoming' || e.status === 'Open' || (dt && !isNaN(dt) && dt >= todayStart));
+        
+        if (currentUserEventDateFilter === 'UPCOMING') {
+          return isFuture && e.status !== 'Closed';
+        } else if (currentUserEventDateFilter === 'PAST') {
+          return e.status === 'Closed' || (dt && !isNaN(dt) && dt < todayStart);
+        }
+        // ALL
+        return true;
       });
 
-      // If no future events, fallback to non-cancelled events so list isn't empty if admin entered an event
-      if (events.length === 0) {
-        events = (allEvents || []).filter(e => (e.status || '').toLowerCase() !== 'cancelled');
-      }
-
-      // Sort upcoming events: soonest first
+      // Sort according to date filter:
+      // UPCOMING: soonest date first (da - db)
+      // PAST / ALL: latest date first (db - da)
       events.sort((a, b) => {
-        const da = new Date(a.datetime || a.date);
-        const db = new Date(b.datetime || b.date);
-        return da - db;
+        const da = new Date(a.datetime || a.date || 0);
+        const db = new Date(b.datetime || b.date || 0);
+        return currentUserEventDateFilter === 'UPCOMING' ? (da - db) : (db - da);
       });
 
       if (countEl) countEl.textContent = `${events.length} कार्यक्रम`;
 
       if (events.length === 0) {
+        const emptyMsg = currentUserEventDateFilter === 'PAST' 
+          ? 'कोई पूर्व संपन्न बैठक उपलब्ध नहीं है' 
+          : 'फिलहाल कोई आगामी बैठक या कार्यक्रम निर्धारित नहीं है';
         listEl.innerHTML = `
           <div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
             <i class="fa-solid fa-calendar-xmark text-3xl mb-2 text-slate-300"></i>
-            <p class="text-xs font-bold text-slate-600">फिलहाल कोई आगामी बैठक या कार्यक्रम निर्धारित नहीं है</p>
+            <p class="text-xs font-bold text-slate-600">${emptyMsg}</p>
             <p class="text-[11px] text-slate-400 mt-1">नई बैठक तय होने पर यहाँ तुरंत दिखाई देगी</p>
           </div>
         `;
@@ -7852,6 +7938,32 @@
       }
       renderEventsList();
     }
+    window.filterEventStatus = filterEventStatus;
+
+    function filterEventDate(dateType) {
+      currentEventDateFilter = dateType;
+      const customContainer = document.getElementById('event-custom-date-container');
+      if (customContainer) {
+        if (dateType === 'CUSTOM') {
+          customContainer.classList.remove('hidden');
+          customContainer.classList.add('flex');
+        } else {
+          customContainer.classList.add('hidden');
+          customContainer.classList.remove('flex');
+        }
+      }
+      renderEventsList();
+    }
+    window.filterEventDate = filterEventDate;
+
+    function applyCustomEventDateFilter() {
+      const fromEl = document.getElementById('event-date-from');
+      const toEl = document.getElementById('event-date-to');
+      currentEventDateFrom = fromEl ? fromEl.value : '';
+      currentEventDateTo = toEl ? toEl.value : '';
+      renderEventsList();
+    }
+    window.applyCustomEventDateFilter = applyCustomEventDateFilter;
 
     window.filterEventStatus = filterEventStatus;
 
@@ -8229,11 +8341,59 @@
       const container = document.getElementById('events-cards-grid');
       if (!container) return;
 
-      const filtered = allEvents.filter(e => {
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+      let filtered = allEvents.filter(e => {
         const matchesCategory = (currentEventFilter === 'ALL' || e.category === currentEventFilter);
         const eventStatus = e.status || 'Upcoming';
         const matchesStatus = (currentEventStatusFilter === 'ALL' || eventStatus === currentEventStatusFilter);
-        return matchesCategory && matchesStatus;
+        if (!matchesCategory || !matchesStatus) return false;
+
+        // Date filter
+        const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
+        if (currentEventDateFilter === 'ALL') {
+          return true;
+        } else if (currentEventDateFilter === 'UPCOMING') {
+          return (eventStatus === 'Upcoming' || eventStatus === 'Open') || (dt && !isNaN(dt) && dt >= todayStart && eventStatus !== 'Closed');
+        } else if (currentEventDateFilter === 'TODAY') {
+          if (!dt || isNaN(dt)) return false;
+          return dt >= todayStart && dt <= todayEnd;
+        } else if (currentEventDateFilter === 'THIS_MONTH') {
+          if (!dt || isNaN(dt)) return false;
+          return dt >= firstDayOfMonth && dt <= lastDayOfMonth;
+        } else if (currentEventDateFilter === 'PAST') {
+          return eventStatus === 'Closed' || (dt && !isNaN(dt) && dt < todayStart);
+        } else if (currentEventDateFilter === 'CUSTOM') {
+          if (!dt || isNaN(dt)) return true;
+          if (currentEventDateFrom) {
+            const fDate = new Date(currentEventDateFrom);
+            fDate.setHours(0, 0, 0, 0);
+            if (dt < fDate) return false;
+          }
+          if (currentEventDateTo) {
+            const tDate = new Date(currentEventDateTo);
+            tDate.setHours(23, 59, 59, 999);
+            if (dt > tDate) return false;
+          }
+          return true;
+        }
+        return true;
+      });
+
+      // Sort events date-wise:
+      // When filtering PAST: newest past event first (descending)
+      // Otherwise: upcoming soonest event first, then recent
+      filtered.sort((a, b) => {
+        const da = new Date(a.datetime || a.date || 0);
+        const db = new Date(b.datetime || b.date || 0);
+        if (currentEventDateFilter === 'PAST') {
+          return db - da;
+        }
+        return da - db;
       });
 
       if (filtered.length === 0) {
