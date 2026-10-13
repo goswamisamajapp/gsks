@@ -5840,13 +5840,11 @@
         return true;
       });
 
-      // Sort according to date filter:
-      // UPCOMING: soonest date first (da - db)
-      // PAST / ALL: latest date first (db - da)
+      // Sort date-wise: New to Old (Latest date on top)
       events.sort((a, b) => {
         const da = new Date(a.datetime || a.date || 0);
         const db = new Date(b.datetime || b.date || 0);
-        return currentUserEventDateFilter === 'UPCOMING' ? (da - db) : (db - da);
+        return db - da; // New to old (Latest date first)
       });
 
       if (countEl) countEl.textContent = `${events.length} कार्यक्रम`;
@@ -8384,16 +8382,11 @@
         return true;
       });
 
-      // Sort events date-wise:
-      // When filtering PAST: newest past event first (descending)
-      // Otherwise: upcoming soonest event first, then recent
+      // Sort events date-wise: New to Old (Latest date on top)
       filtered.sort((a, b) => {
         const da = new Date(a.datetime || a.date || 0);
         const db = new Date(b.datetime || b.date || 0);
-        if (currentEventDateFilter === 'PAST') {
-          return db - da;
-        }
-        return da - db;
+        return db - da; // New to old (Latest date first)
       });
 
       if (filtered.length === 0) {
