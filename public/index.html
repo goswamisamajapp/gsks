@@ -13950,6 +13950,46 @@ ID: ${item.id}
       const idx = allMembers.findIndex(m => m.id === memberId);
       if (idx === -1) return;
       const mem = allMembers[idx];
+
+      // CRITICAL: Calculate any accrued fine BEFORE changing the month payment status!
+      const preFineInfo = calculateMemberPasyFine(mem);
+      const thisMonthBreakdown = (preFineInfo.fineBreakdown || []).find(b => b.monthKey === currentPariwarikMonth);
+
+      if (isChecked) {
+        if (!mem.pariwarikPaidAt || typeof mem.pariwarikPaidAt !== 'object') {
+          mem.pariwarikPaidAt = {};
+        }
+        mem.pariwarikPaidAt[currentPariwarikMonth] = new Date().toISOString();
+
+        // If member had an overdue fine for this month, lock it into masterSettings so paying 150 NEVER wipes the fine!
+        if (thisMonthBreakdown && thisMonthBreakdown.fine > 0) {
+          if (!masterSettings) masterSettings = {};
+          if (!masterSettings.pariwarikLateFines || typeof masterSettings.pariwarikLateFines !== 'object') {
+            masterSettings.pariwarikLateFines = {};
+          }
+          if (!masterSettings.pariwarikLateFines[memberId] || typeof masterSettings.pariwarikLateFines[memberId] !== 'object') {
+            masterSettings.pariwarikLateFines[memberId] = {};
+          }
+          masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth] = thisMonthBreakdown.fine;
+          try {
+            if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
+          } catch (e) {
+            console.warn('Failed to save locked late fine:', e);
+          }
+        }
+      } else {
+        if (mem.pariwarikPaidAt && mem.pariwarikPaidAt[currentPariwarikMonth]) {
+          delete mem.pariwarikPaidAt[currentPariwarikMonth];
+        }
+        if (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[memberId]) {
+          delete masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth];
+          try {
+            if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
+          } catch (e) {
+            console.warn('Failed to clear locked late fine:', e);
+          }
+        }
+      }
       
       if (!mem.pariwarikMonthlyPaid || typeof mem.pariwarikMonthlyPaid !== 'object') {
         mem.pariwarikMonthlyPaid = {};
@@ -14046,45 +14086,6 @@ ID: ${item.id}
             }
           } catch (err) {
             console.warn('Auto donation Firestore delete warning:', err);
-          }
-        }
-      }
-
-      if (isChecked) {
-        if (!mem.pariwarikPaidAt || typeof mem.pariwarikPaidAt !== 'object') {
-          mem.pariwarikPaidAt = {};
-        }
-        const nowIso = new Date().toISOString();
-        mem.pariwarikPaidAt[currentPariwarikMonth] = nowIso;
-
-        // If member is late when paying ₹150, lock the accrued fine so it remains due
-        const preFineInfo = calculateMemberPasyFine(mem);
-        const thisMonthBreakdown = (preFineInfo.fineBreakdown || []).find(b => b.monthKey === currentPariwarikMonth);
-        if (thisMonthBreakdown && thisMonthBreakdown.fine > 0) {
-          if (!masterSettings) masterSettings = {};
-          if (!masterSettings.pariwarikLateFines || typeof masterSettings.pariwarikLateFines !== 'object') {
-            masterSettings.pariwarikLateFines = {};
-          }
-          if (!masterSettings.pariwarikLateFines[memberId] || typeof masterSettings.pariwarikLateFines[memberId] !== 'object') {
-            masterSettings.pariwarikLateFines[memberId] = {};
-          }
-          masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth] = thisMonthBreakdown.fine;
-          try {
-            if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
-          } catch (e) {
-            console.warn('Failed to save locked late fine:', e);
-          }
-        }
-      } else {
-        if (mem.pariwarikPaidAt && mem.pariwarikPaidAt[currentPariwarikMonth]) {
-          delete mem.pariwarikPaidAt[currentPariwarikMonth];
-        }
-        if (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[memberId]) {
-          delete masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth];
-          try {
-            if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
-          } catch (e) {
-            console.warn('Failed to clear locked late fine:', e);
           }
         }
       }
