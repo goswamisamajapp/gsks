@@ -430,20 +430,20 @@
             </div>
 
             <!-- 5. Dues Amount -->
-            <div class="bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-3xl p-5 border border-purple-200/90 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-purple-300 transition-all">
+            <div onclick="switchAdminView('dues')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-3xl p-5 border border-purple-200/90 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-purple-400 transition-all group">
               <div>
                 <div class="flex items-center justify-between text-slate-500 mb-2">
                   <span class="text-xs font-bold uppercase tracking-wider text-purple-800">Dues Amount</span>
-                  <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm shadow-xs">
+                  <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm shadow-xs group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                   </div>
                 </div>
                 <p class="text-2xl sm:text-3xl font-black text-purple-950 mt-1" id="dash-dues-fund">₹ 0</p>
-                <p class="text-xs text-purple-700/80 font-medium mt-1">कुल सदस्यों की बकाया राशि</p>
+                <p class="text-xs text-purple-700/80 font-medium mt-1 flex items-center gap-1">कुल बकाया विवरण <i class="fa-solid fa-arrow-right text-[10px] text-purple-500"></i></p>
               </div>
               <div class="mt-4 pt-3 border-t border-purple-200/60 flex items-center justify-between text-xs">
                 <span class="text-purple-800 bg-purple-100/70 border border-purple-200 px-2 py-0.5 rounded-md font-semibold">Pending Dues</span>
-                <span class="text-purple-700/80 text-[11px] font-medium">Uncollected</span>
+                <span class="text-purple-700/80 text-[11px] font-medium">बकाया सूची देखें →</span>
               </div>
             </div>
           </div>
@@ -1465,6 +1465,174 @@
               </thead>
               <tbody id="bank-transactions-table-body" class="divide-y divide-slate-100">
                 <!-- Dynamically populated via renderBankTransactionsView() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB: DUES & OUTSTANDING MANAGEMENT PAGE        -->
+      <!-- ============================================== -->
+      <div id="view-dues-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  समस्त बकाया विवरण व वसूली प्रबंधन (Dues Register)
+                </h2>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">
+                  सामान्य सदस्यता, पारिवारिक योजना किस्त एवं लेट फाइन (जुर्माना) बकाया का एकीकृत विवरण
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button onclick="switchAdminView('dashboard')" class="px-3.5 py-2 rounded-xl text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>डैशबोर्ड</span>
+            </button>
+            <button onclick="openDuesBulkWhatsAppModal()" class="px-3.5 py-2 rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              <span>सभी को WhatsApp भेजें</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Summary Stat Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          <!-- Total Outstanding -->
+          <div class="bg-gradient-to-br from-purple-500 to-indigo-600 text-white rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between opacity-90">
+              <span class="text-xs font-bold uppercase tracking-wider">कुल समस्त बकाया</span>
+              <i class="fa-solid fa-calculator text-lg"></i>
+            </div>
+            <div class="mt-3">
+              <p class="text-2xl sm:text-3xl font-black font-mono tracking-tight" id="dues-stat-total">₹ 0</p>
+              <p class="text-[11px] opacity-80 mt-0.5 font-medium" id="dues-stat-members-count">0 सदस्य बकायादार</p>
+            </div>
+          </div>
+
+          <!-- General / Membership Dues -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700">सामान्य सदस्यता</span>
+              <div class="w-7 h-7 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-slate-900" id="dues-stat-general">₹ 0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="dues-stat-general-count">0 सदस्य</p>
+            </div>
+          </div>
+
+          <!-- PASY Installment Dues -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-cyan-700">पारिवारिक किस्त (₹150)</span>
+              <div class="w-7 h-7 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-cyan-900" id="dues-stat-pasy">₹ 0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="dues-stat-pasy-count">0 किस्तें बकाया</p>
+            </div>
+          </div>
+
+          <!-- PASY Late Fine Dues -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-700">विलंब शुल्क (Fine)</span>
+              <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-amber-600" id="dues-stat-fine">₹ 0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="dues-stat-fine-count">0 सदस्य जुर्माना देय</p>
+            </div>
+          </div>
+
+          <!-- Total Defaulters Count -->
+          <div class="col-span-2 sm:col-span-2 lg:col-span-1 bg-white rounded-3xl p-4 sm:p-5 border border-rose-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-700">कुल बकायादार</span>
+              <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-user-xmark"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-rose-700" id="dues-stat-defaulters">0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">सक्रिय सदस्यों में से</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Pills & Search Bar -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+            
+            <!-- Type Filter Tabs -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 text-xs scrollbar-none" id="dues-filter-pills">
+              <button onclick="filterDuesType('ALL')" id="filter-dues-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>समस्त बकाया (All)</span>
+                <span class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full font-mono" id="dues-badge-all">0</span>
+              </button>
+              <button onclick="filterDuesType('GENERAL')" id="filter-dues-general" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>सामान्य सदस्यता</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="dues-badge-general">(0)</span>
+              </button>
+              <button onclick="filterDuesType('PASY')" id="filter-dues-pasy" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>पारिवारिक किस्त</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="dues-badge-pasy">(0)</span>
+              </button>
+              <button onclick="filterDuesType('FINE')" id="filter-dues-fine" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>विलंब शुल्क (Fine)</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="dues-badge-fine">(0)</span>
+              </button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative w-full lg:w-80">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="dues-search-input" 
+                oninput="handleDuesSearch(this.value)" 
+                placeholder="सदस्य का नाम / मोबाइल / ID खोजें..." 
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all font-medium"
+              >
+            </div>
+          </div>
+
+          <!-- Dues Table -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 pl-5">सदस्य / पिता का नाम</th>
+                  <th class="p-3.5">मोबाइल व पता</th>
+                  <th class="p-3.5">बकाया श्रेणी (Category)</th>
+                  <th class="p-3.5">विस्तृत विवरण (Details)</th>
+                  <th class="p-3.5 text-right font-mono">सामान्य बकाया (₹)</th>
+                  <th class="p-3.5 text-right font-mono">PASY किस्त (₹)</th>
+                  <th class="p-3.5 text-right font-mono text-amber-600">फाइन (₹)</th>
+                  <th class="p-3.5 text-right font-mono font-black text-rose-600">कुल देय (₹)</th>
+                  <th class="p-3.5 text-center pr-5">कार्रवाई</th>
+                </tr>
+              </thead>
+              <tbody id="dues-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderDuesView() -->
               </tbody>
             </table>
           </div>
@@ -5298,6 +5466,57 @@
     </div>
   </div>
   <!-- ============================================================== -->
+  <!-- MODAL: DUES BULK WHATSAPP REMINDER                             -->
+  <!-- ============================================================== -->
+  <div id="dues-bulk-whatsapp-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button onclick="closeDuesBulkWhatsAppModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100">
+        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl shadow-sm">
+          <i class="fa-brands fa-whatsapp"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            बकायादार सदस्यों को WhatsApp रिमाइंडर
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">सामान्य सदस्यता, PASY किस्त व लेट फाइन बकाया वाले सदस्यों की सूची</p>
+        </div>
+      </div>
+
+      <!-- Quick Summary Card -->
+      <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-4 flex items-center justify-between text-xs">
+        <div>
+          <span class="text-slate-500 font-medium">कुल बकायादार:</span>
+          <span class="text-rose-600 font-black font-mono text-sm ml-1.5" id="dues-bulk-unpaid-count">0</span>
+        </div>
+        <div>
+          <span class="text-slate-500 font-medium">कुल बकाया राशि:</span>
+          <span class="text-purple-700 font-black font-mono text-sm ml-1" id="dues-bulk-unpaid-sum">₹0</span>
+        </div>
+      </div>
+
+      <!-- Scrollable List of Members with Dues -->
+      <div class="max-h-80 overflow-y-auto space-y-2 pr-1 divide-y divide-slate-100" id="dues-bulk-members-list">
+        <!-- Dynamically populated via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between pt-4 mt-4 border-t border-slate-100 text-xs">
+        <span class="text-[11px] text-slate-400">💡 सदस्य के सामने "भेजें" पर क्लिक करते ही विवरण सहित WhatsApp मैसेज खुल जाएगा।</span>
+        <button type="button" onclick="closeDuesBulkWhatsAppModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors cursor-pointer">
+          बंद करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL: PASY FINE WAIVER (जुर्माना माफी / छूट व्यवस्था)         -->
   <!-- ============================================================== -->
   <div id="pariwarik-fine-waiver-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
@@ -8985,6 +9204,7 @@
       const expensesSection = document.getElementById('view-expenses-section');
       const bankSection = document.getElementById('view-bank-section');
       const pariwarikSection = document.getElementById('view-pariwarik-section');
+      const duesSection = document.getElementById('view-dues-section');
       const settingsSection = document.getElementById('view-settings-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
@@ -9021,9 +9241,13 @@
       if (expensesSection) expensesSection.classList.add('hidden');
       if (bankSection) bankSection.classList.add('hidden');
       if (pariwarikSection) pariwarikSection.classList.add('hidden');
+      if (duesSection) duesSection.classList.add('hidden');
       if (settingsSection) settingsSection.classList.add('hidden');
 
-      if (view === 'settings') {
+      if (view === 'dues') {
+        if (duesSection) duesSection.classList.remove('hidden');
+        renderDuesView();
+      } else if (view === 'settings') {
         if (settingsSection) settingsSection.classList.remove('hidden');
         if (navSettings) navSettings.className = 'px-3.5 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/20';
         if (mobSettings) mobSettings.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
@@ -9536,8 +9760,18 @@
       const elExpensesSplit = document.getElementById('dash-expenses-split');
       const elQuickExpensesCount = document.getElementById('quick-expenses-count');
 
-      // Calculate total pending dues (from all active/nonRemoved members)
-      const totalDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
+      // Calculate total pending dues (Unified: General + PASY Installments + Fine Dues)
+      let totalDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
+      try {
+        if (typeof calculateAllDuesData === 'function') {
+          const allDuesObj = calculateAllDuesData();
+          if (allDuesObj && typeof allDuesObj.grandTotalDues === 'number') {
+            totalDuesAmount = allDuesObj.grandTotalDues;
+          }
+        }
+      } catch (e) {
+        console.warn('Dashboard dues calc fallback:', e);
+      }
 
       if (elTotalFund) elTotalFund.textContent = `₹ ${totalAvailableFund.toLocaleString('en-IN')}`;
       if (elBankFund) elBankFund.textContent = `₹ ${netBankAmount.toLocaleString('en-IN')}`;
@@ -9818,6 +10052,7 @@
         'bankaccount-modal',
         'fund-transfer-modal',
         'pariwarik-bulk-whatsapp-modal',
+        'dues-bulk-whatsapp-modal',
         'pariwarik-fine-waiver-modal',
         'member-edit-profile-modal',
         'member-change-password-modal',
@@ -14851,6 +15086,387 @@ ID: ${item.id}
     window.recalcFineWaiverModalPreview = recalcFineWaiverModalPreview;
     window.handleSaveFineWaiver = handleSaveFineWaiver;
     window.togglePariwarikFinePaid = togglePariwarikFinePaid;
+
+    // ==============================================================
+    // DUES & OUTSTANDING MANAGEMENT MODULE (समस्त बकाया विवरण व प्रबंधन)
+    // Sources:
+    // 1. General / Membership Dues (m.dues)
+    // 2. PASY Monthly Installment Dues (current selected month or all due months)
+    // 3. PASY Late Fine Dues (grossFine - waiver, unpaid)
+    // ==============================================================
+    let currentDuesFilter = 'ALL'; // 'ALL', 'GENERAL', 'PASY', 'FINE'
+    let currentDuesSearchTerm = '';
+    let currentDuesBulkList = [];
+
+    function calculateAllDuesData() {
+      const nonRemoved = (allMembers || []).filter(m => m && m.status !== 'removed');
+      const items = [];
+
+      let totalGeneralDues = 0;
+      let totalPasyDues = 0;
+      let totalFineDues = 0;
+
+      let generalCount = 0;
+      let pasyCount = 0;
+      let fineCount = 0;
+
+      const pasyFee = typeof PARIWARIK_MONTHLY_FEE !== 'undefined' ? PARIWARIK_MONTHLY_FEE : 150;
+
+      nonRemoved.forEach(m => {
+        const isPasy = typeof isPariwarikMember === 'function' ? isPariwarikMember(m) : false;
+
+        // 1. General / Membership Dues
+        const genDues = Number(m.dues) || 0;
+
+        // 2. PASY Installment Dues for the current selected month
+        let mPasyDues = 0;
+        let pasyDueMonthsLabels = [];
+        if (isPasy) {
+          const hasPaidCurrent = typeof isPariwarikPaidForMonth === 'function' ? isPariwarikPaidForMonth(m, currentPariwarikMonth) : false;
+          if (!hasPaidCurrent) {
+            mPasyDues = pasyFee;
+            const installmentMonthLabel = typeof getPariwarikInstallmentMonthLabel === 'function' 
+              ? getPariwarikInstallmentMonthLabel(currentPariwarikMonth) 
+              : currentPariwarikMonth;
+            pasyDueMonthsLabels.push(installmentMonthLabel);
+          }
+        }
+
+        // 3. PASY Fine Dues
+        let mFineDues = 0;
+        let fineInfo = null;
+        if (isPasy && typeof calculateMemberPasyFine === 'function') {
+          fineInfo = calculateMemberPasyFine(m);
+          if (fineInfo && !fineInfo.isPaid && fineInfo.netFine > 0) {
+            mFineDues = fineInfo.netFine;
+          }
+        }
+
+        const totalMemberDues = genDues + mPasyDues + mFineDues;
+
+        if (genDues > 0) {
+          totalGeneralDues += genDues;
+          generalCount++;
+        }
+        if (mPasyDues > 0) {
+          totalPasyDues += mPasyDues;
+          pasyCount++;
+        }
+        if (mFineDues > 0) {
+          totalFineDues += mFineDues;
+          fineCount++;
+        }
+
+        if (totalMemberDues > 0) {
+          // Categories list
+          const categories = [];
+          const detailsList = [];
+
+          if (genDues > 0) {
+            categories.push('GENERAL');
+            detailsList.push(`सामान्य सदस्यता: ₹${genDues.toLocaleString('en-IN')}`);
+          }
+          if (mPasyDues > 0) {
+            categories.push('PASY');
+            detailsList.push(`PASY किस्त (${pasyDueMonthsLabels.join(', ')}): ₹${mPasyDues}`);
+          }
+          if (mFineDues > 0) {
+            categories.push('FINE');
+            detailsList.push(`विलंब शुल्क (Fine): ₹${mFineDues}`);
+          }
+
+          items.push({
+            member: m,
+            generalDues: genDues,
+            pasyDues: mPasyDues,
+            fineDues: mFineDues,
+            totalDues: totalMemberDues,
+            categories,
+            details: detailsList.join(' • '),
+            fineInfo
+          });
+        }
+      });
+
+      const grandTotalDues = totalGeneralDues + totalPasyDues + totalFineDues;
+
+      return {
+        items,
+        totalGeneralDues,
+        totalPasyDues,
+        totalFineDues,
+        grandTotalDues,
+        generalCount,
+        pasyCount,
+        fineCount,
+        defaultersCount: items.length
+      };
+    }
+
+    function renderDuesView() {
+      const data = calculateAllDuesData();
+
+      // 1. Update Stat Cards
+      const elTotal = document.getElementById('dues-stat-total');
+      const elCount = document.getElementById('dues-stat-members-count');
+      const elGeneral = document.getElementById('dues-stat-general');
+      const elGeneralCount = document.getElementById('dues-stat-general-count');
+      const elPasy = document.getElementById('dues-stat-pasy');
+      const elPasyCount = document.getElementById('dues-stat-pasy-count');
+      const elFine = document.getElementById('dues-stat-fine');
+      const elFineCount = document.getElementById('dues-stat-fine-count');
+      const elDefaulters = document.getElementById('dues-stat-defaulters');
+
+      if (elTotal) elTotal.textContent = `₹ ${data.grandTotalDues.toLocaleString('en-IN')}`;
+      if (elCount) elCount.textContent = `${data.defaultersCount} सदस्य बकायादार`;
+      if (elGeneral) elGeneral.textContent = `₹ ${data.totalGeneralDues.toLocaleString('en-IN')}`;
+      if (elGeneralCount) elGeneralCount.textContent = `${data.generalCount} सदस्य`;
+      if (elPasy) elPasy.textContent = `₹ ${data.totalPasyDues.toLocaleString('en-IN')}`;
+      if (elPasyCount) elPasyCount.textContent = `${data.pasyCount} किस्तें बकाया`;
+      if (elFine) elFine.textContent = `₹ ${data.totalFineDues.toLocaleString('en-IN')}`;
+      if (elFineCount) elFineCount.textContent = `${data.fineCount} सदस्य जुर्माना देय`;
+      if (elDefaulters) elDefaulters.textContent = data.defaultersCount;
+
+      // Update Badges on filter pills
+      const badgeAll = document.getElementById('dues-badge-all');
+      const badgeGeneral = document.getElementById('dues-badge-general');
+      const badgePasy = document.getElementById('dues-badge-pasy');
+      const badgeFine = document.getElementById('dues-badge-fine');
+
+      if (badgeAll) badgeAll.textContent = data.defaultersCount;
+      if (badgeGeneral) badgeGeneral.textContent = `(${data.generalCount})`;
+      if (badgePasy) badgePasy.textContent = `(${data.pasyCount})`;
+      if (badgeFine) badgeFine.textContent = `(${data.fineCount})`;
+
+      // 2. Filter & Search items
+      let filtered = data.items.filter(item => {
+        if (currentDuesFilter !== 'ALL' && !item.categories.includes(currentDuesFilter)) {
+          return false;
+        }
+        if (currentDuesSearchTerm) {
+          const m = item.member;
+          const name = (m.name || '').toLowerCase();
+          const phone = (m.phone || '').toLowerCase();
+          const id = (m.id || '').toLowerCase();
+          const addr = (m.address || '').toLowerCase();
+          const term = currentDuesSearchTerm.toLowerCase();
+          return name.includes(term) || phone.includes(term) || id.includes(term) || addr.includes(term);
+        }
+        return true;
+      });
+
+      // Sort by total dues descending
+      filtered.sort((a, b) => b.totalDues - a.totalDues);
+
+      // 3. Render Table
+      const tbody = document.getElementById('dues-table-body');
+      if (!tbody) return;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="p-12 text-center text-slate-400">
+              <div class="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <h4 class="text-sm font-bold text-slate-700">कोई बकाया नहीं मिला!</h4>
+              <p class="text-xs text-slate-400 mt-1">
+                ${currentDuesSearchTerm ? `"${currentDuesSearchTerm}" के लिए कोई रिकॉर्ड नहीं मिला।` : 'इस श्रेणी में सभी सदस्यों का भुगतान चुकता (All Clear) है।'}
+              </p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const m = item.member;
+        
+        // Badges for categories
+        const badgesHtml = item.categories.map(c => {
+          if (c === 'GENERAL') return '<span class="px-2 py-0.5 rounded-md bg-orange-50 text-orange-700 border border-orange-200 text-[10px] font-bold">सामान्य सदस्यता</span>';
+          if (c === 'PASY') return '<span class="px-2 py-0.5 rounded-md bg-cyan-50 text-cyan-700 border border-cyan-200 text-[10px] font-bold">PASY किस्त</span>';
+          if (c === 'FINE') return '<span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-bold">लेट फाइन</span>';
+          return '';
+        }).join(' ');
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="p-3.5 pl-5">
+              <div class="font-bold text-slate-900">${m.name || '--'}</div>
+              <div class="text-[10px] text-slate-500 font-medium">${m.father ? `पिता: ${m.father}` : '--'} <span class="text-slate-400 font-mono">(${m.id})</span></div>
+            </td>
+            <td class="p-3.5 text-slate-600">
+              <div class="font-mono text-xs">${m.phone || '--'}</div>
+              <div class="text-[10px] text-slate-400 truncate max-w-[140px]">${m.address || '--'}</div>
+            </td>
+            <td class="p-3.5">
+              <div class="flex flex-wrap gap-1">
+                ${badgesHtml}
+              </div>
+            </td>
+            <td class="p-3.5 text-slate-600">
+              <div class="text-[11px] font-medium leading-tight max-w-[200px]">${item.details}</div>
+            </td>
+            <td class="p-3.5 text-right font-mono font-bold ${item.generalDues > 0 ? 'text-slate-800' : 'text-slate-300'}">
+              ₹${item.generalDues.toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 text-right font-mono font-bold ${item.pasyDues > 0 ? 'text-cyan-700 font-black' : 'text-slate-300'}">
+              ₹${item.pasyDues.toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 text-right font-mono font-bold ${item.fineDues > 0 ? 'text-amber-600 font-black' : 'text-slate-300'}">
+              ₹${item.fineDues.toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 text-right font-mono font-black text-sm text-rose-600">
+              ₹${item.totalDues.toLocaleString('en-IN')}
+            </td>
+            <td class="p-3.5 text-center pr-5">
+              <div class="inline-flex items-center gap-1.5 justify-center">
+                <button type="button" 
+                        onclick="sendDuesWhatsAppNotification('${m.id}')" 
+                        class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-[11px] rounded-xl shadow-xs transition-all flex items-center gap-1 cursor-pointer" 
+                        title="व्हाट्सएप पर बकाया रिमाइंडर भेजें">
+                  <i class="fa-brands fa-whatsapp text-xs"></i>
+                  <span>WhatsApp</span>
+                </button>
+                ${item.pasyDues > 0 ? `
+                  <button type="button" 
+                          onclick="switchAdminView('pariwarik')" 
+                          class="px-2 py-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-700 font-bold text-[10px] rounded-xl transition-colors cursor-pointer" 
+                          title="पारिवारिक योजना रजिस्टर पर जाएं">
+                    PASY →
+                  </button>
+                ` : `
+                  <button type="button" 
+                          onclick="viewMemberDetails('${m.id}')" 
+                          class="px-2 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-xl transition-colors cursor-pointer" 
+                          title="सदस्य प्रोफाइल देखें">
+                    विवरण
+                  </button>
+                `}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterDuesType(type) {
+      currentDuesFilter = type || 'ALL';
+      const pills = ['all', 'general', 'pasy', 'fine'];
+      pills.forEach(p => {
+        const btn = document.getElementById(`filter-dues-${p}`);
+        if (!btn) return;
+        if (p.toUpperCase() === currentDuesFilter) {
+          btn.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
+        }
+      });
+      renderDuesView();
+    }
+
+    function handleDuesSearch(term) {
+      currentDuesSearchTerm = (term || '').trim();
+      renderDuesView();
+    }
+
+    function sendDuesWhatsAppNotification(memberId) {
+      const data = calculateAllDuesData();
+      const item = data.items.find(x => x.member.id === memberId);
+      if (!item) {
+        alert('इस सदस्य का कोई बकाया विवरण नहीं मिला!');
+        return;
+      }
+
+      const m = item.member;
+      const cleanPhone = (m.phone || '').replace(/\D/g, '');
+      const validPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+
+      if (!validPhone) {
+        alert(`सदस्य ${m.name || memberId} का मोबाइल नंबर उपलब्ध नहीं है!`);
+        return;
+      }
+
+      let breakdownText = '';
+      if (item.generalDues > 0) breakdownText += `\n• सामान्य सदस्यता बकाया: ₹${item.generalDues.toLocaleString('en-IN')}`;
+      if (item.pasyDues > 0) breakdownText += `\n• पारिवारिक योजना किस्त बकाया: ₹${item.pasyDues.toLocaleString('en-IN')}`;
+      if (item.fineDues > 0) breakdownText += `\n• पारिवारिक योजना विलंब शुल्क (Fine): ₹${item.fineDues.toLocaleString('en-IN')}`;
+
+      const msg = `हर हर महादेव 🙏\n\nआदरणीय *${m.name || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* की ओर से सादर प्रणाम।\n\nआपके खाते में निम्नलिखित सहयोग राशि/अंशदान बकाया है:${breakdownText}\n\n*कुल देय बकाया राशि: ₹${item.totalDues.toLocaleString('en-IN')}*\n\nकृपया शीघ्र भुगतान कर समिति के कार्यों में सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति, गुमो`;
+
+      const waUrl = `https://wa.me/${validPhone}?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    }
+
+    function openDuesBulkWhatsAppModal() {
+      const modal = document.getElementById('dues-bulk-whatsapp-modal');
+      const listContainer = document.getElementById('dues-bulk-members-list');
+      const countEl = document.getElementById('dues-bulk-unpaid-count');
+      const sumEl = document.getElementById('dues-bulk-unpaid-sum');
+      if (!modal || !listContainer) return;
+
+      const data = calculateAllDuesData();
+      currentDuesBulkList = data.items;
+
+      if (countEl) countEl.textContent = `${data.items.length} सदस्य`;
+      if (sumEl) sumEl.textContent = `₹ ${data.grandTotalDues.toLocaleString('en-IN')}`;
+
+      if (data.items.length === 0) {
+        listContainer.innerHTML = `
+          <div class="p-8 text-center text-slate-400">
+            <i class="fa-solid fa-circle-check text-4xl text-emerald-500 mb-2"></i>
+            <p class="text-sm font-bold text-slate-700">बधाई हो! कोई भी बकाया नहीं है।</p>
+            <p class="text-xs text-slate-400 mt-1">सभी सदस्यों का सामान्य, पारिवारिक व फाइन भुगतान चुकता है।</p>
+          </div>
+        `;
+      } else {
+        listContainer.innerHTML = data.items.map((item, idx) => {
+          const m = item.member;
+          const cleanPhone = (m.phone || '').replace(/\D/g, '');
+          const hasValidPhone = cleanPhone.length >= 10;
+          return `
+            <div class="p-3 bg-white hover:bg-slate-50/80 rounded-2xl flex items-center justify-between gap-3 border border-slate-100 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                  ${idx + 1}
+                </span>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-800 leading-tight">${m.name || '--'}</h4>
+                  <p class="text-[10px] text-slate-400 font-mono mt-0.5">${m.id || '--'} • 📞 ${m.phone || 'नंबर नहीं है'}</p>
+                  <p class="text-[10px] text-purple-700 font-medium mt-0.5">${item.details}</p>
+                </div>
+              </div>
+              <div class="shrink-0 flex items-center gap-2">
+                <span class="text-rose-600 font-mono font-black text-xs">₹${item.totalDues.toLocaleString('en-IN')}</span>
+                <button type="button" 
+                        onclick="sendDuesWhatsAppNotification('${m.id}')" 
+                        ${!hasValidPhone ? 'disabled' : ''}
+                        class="px-3 py-1.5 ${hasValidPhone ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-slate-300 cursor-not-allowed'} text-white font-bold text-[11px] rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                  <i class="fa-brands fa-whatsapp"></i>
+                  <span>भेजें</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeDuesBulkWhatsAppModal() {
+      const modal = document.getElementById('dues-bulk-whatsapp-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    window.calculateAllDuesData = calculateAllDuesData;
+    window.renderDuesView = renderDuesView;
+    window.filterDuesType = filterDuesType;
+    window.handleDuesSearch = handleDuesSearch;
+    window.sendDuesWhatsAppNotification = sendDuesWhatsAppNotification;
+    window.openDuesBulkWhatsAppModal = openDuesBulkWhatsAppModal;
+    window.closeDuesBulkWhatsAppModal = closeDuesBulkWhatsAppModal;
     // ==============================================================
     // EXPENSES MANAGEMENT & EXPENSE MASTER IMPLEMENTATION
     // ==============================================================
