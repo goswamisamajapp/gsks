@@ -14136,14 +14136,18 @@ ID: ${item.id}
       if (elUnpaidCount) elUnpaidCount.textContent = `${selectedMonthUnpaidCount} सदस्य Unpaid`;
 
       // ==========================================
-      // ROW 2: OVERALL SCHEME SUMMARY (3 Cards)
+      // ROW 2: OVERALL SCHEME SUMMARY (4 Cards)
       // Grand Total = 30 members * 30 months * 150 = 1,35,000
+      // NOTE: Fund Deposit (₹500/mo) and Distributed (₹4,000/mo) are completed ONLY when month winner is declared!
       // ==========================================
       const totalMonthsInScheme = PARIWARIK_MONTHS.length; // 30
       const overallGrandTotal = memberCount * totalMonthsInScheme * PARIWARIK_MONTHLY_FEE;
 
+      const winnersMap = (masterSettings && masterSettings.pariwarikWinners) ? masterSettings.pariwarikWinners : {};
+
       let overallTotalPaid = 0;
-      let completedMonthsCount = 0;
+      let completedMonthsCount = 0; // Months with a declared winner
+      let allPaidMonthsCount = 0;   // Months where all 30 members have paid
 
       PARIWARIK_MONTHS.forEach(mCfg => {
         let mPaidMembers = 0;
@@ -14153,8 +14157,14 @@ ID: ${item.id}
             mPaidMembers++;
           }
         });
-        // Month is counted as completed if all members have paid
         if (memberCount > 0 && mPaidMembers === memberCount) {
+          allPaidMonthsCount++;
+        }
+
+        // Scheme rule: A month is considered formally COMPLETED (Fund deposited & prize distributed)
+        // ONLY when that month's winner has been chosen/declared!
+        const hasWinner = Boolean(winnersMap[mCfg.key]);
+        if (hasWinner) {
           completedMonthsCount++;
         }
       });
@@ -14169,20 +14179,19 @@ ID: ${item.id}
       const elOverallDues = document.getElementById('pariwarik-overall-dues');
       const elRemainingMonths = document.getElementById('pariwarik-remaining-months-count');
 
-      // Fund Deposit: completedMonthsCount * 500 (e.g., 14 x 500 = 7,000)
+      // Fund Deposit: completedMonthsCount * 500 (Counts only declared winner months, e.g. 13 x 500 = 6,500)
       const fundDepositPerMonth = 500;
       const totalFundDeposit = completedMonthsCount * fundDepositPerMonth;
       const elFundDeposit = document.getElementById('pariwarik-fund-deposit');
       const elFundDepositCalc = document.getElementById('pariwarik-fund-deposit-calc');
 
-      // Total Distributed: completedMonthsCount * 4,000
+      // Total Distributed: completedMonthsCount * 4,000 (Counts only declared winner months, e.g. 13 x 4,000 = 52,000)
       const prizePerMonth = 4000;
       const totalDistributed = completedMonthsCount * prizePerMonth;
       const elTotalDistributed = document.getElementById('pariwarik-total-distributed');
       const elDistributedCalc = document.getElementById('pariwarik-distributed-calc');
 
       // Month Winner display for current selected month
-      const winnersMap = (masterSettings && masterSettings.pariwarikWinners) ? masterSettings.pariwarikWinners : {};
       const currentWinnerMemberId = winnersMap[currentPariwarikMonth] || null;
       const currentWinnerMember = currentWinnerMemberId ? allMembers.find(m => m.id === currentWinnerMemberId) : null;
 
