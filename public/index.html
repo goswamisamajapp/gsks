@@ -1170,6 +1170,7 @@
                   <th class="p-3.5 text-center">माह विजेता (Winner)</th>
                   <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
                   <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
+                  <th class="p-3.5 font-mono text-right text-amber-700">जुर्माना / Fine (₹)</th>
                   <th class="p-3.5 font-mono text-right">कुल / Total (₹)</th>
                   <th class="p-3.5 text-center pr-5">नोटिफिकेशन / Alert</th>
                 </tr>
@@ -2854,8 +2855,8 @@
           </button>
         </div>
 
-        <!-- PASY 3 Quick Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- PASY 4 Quick Summary Cards (Paid, Dues, Target, Fine) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-white rounded-3xl p-5 border border-cyan-100 shadow-sm flex items-center gap-4">
             <div class="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl flex-shrink-0">
               <i class="fa-solid fa-sack-dollar"></i>
@@ -2886,6 +2887,18 @@
               <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">सुरक्षा योजना लक्ष्य</span>
               <h3 class="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-0.5">₹ 4,500</h3>
               <p class="text-[10px] text-slate-400">30 माह x ₹150 प्रति सदस्य</p>
+            </div>
+          </div>
+
+          <!-- 4th Card: विलंब शुल्क / जुर्माना (PASY Fine) -->
+          <div class="bg-white rounded-3xl p-5 border border-amber-200 shadow-sm flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl flex-shrink-0">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">विलंब शुल्क / जुर्माना (Fine)</span>
+              <h3 class="text-xl sm:text-2xl font-black text-amber-600 font-mono mt-0.5" id="m-pasy-stat-fine">₹ 0</h3>
+              <p class="text-[10px] text-slate-400" id="m-pasy-stat-fine-desc">कोई जुर्माना नहीं</p>
             </div>
           </div>
         </div>
@@ -5026,6 +5039,63 @@
       </div>
     </div>
   </div>
+  <!-- ============================================================== -->
+  <!-- MODAL: PASY FINE WAIVER (जुर्माना माफी / छूट व्यवस्था)         -->
+  <!-- ============================================================== -->
+  <div id="pariwarik-fine-waiver-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-tags text-amber-500"></i> विलंब शुल्क माफ़ी (Fine Waiver)
+        </h3>
+        <button type="button" onclick="closeFineWaiverModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveFineWaiver(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="fine-waiver-member-id">
+
+        <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-2xl space-y-1">
+          <div class="font-bold text-slate-800 text-sm" id="fine-waiver-member-name">--</div>
+          <div class="text-[11px] text-slate-500">सदस्य पहचान: <span id="fine-waiver-member-id-disp" class="font-mono font-bold">--</span></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-center">
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200">
+            <span class="text-[10px] font-bold text-slate-400 block uppercase">कुल गणना जुर्माना</span>
+            <span class="text-base font-black font-mono text-rose-600 mt-1 block" id="fine-waiver-gross-amt">₹0</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200">
+            <span class="text-[10px] font-bold text-slate-400 block uppercase">माफ़ी बाद शेष</span>
+            <span class="text-base font-black font-mono text-emerald-600 mt-1 block" id="fine-waiver-net-amt">₹0</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">माफ़ की जाने वाली राशि (Waiver Amount ₹) *</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2.5 text-slate-400 font-bold">₹</span>
+            <input type="number" id="fine-waiver-input-amt" min="0" step="1" required 
+                   oninput="recalcFineWaiverModalPreview()"
+                   placeholder="0" 
+                   class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">जितना रुपया एडमिन माफ़ करना चाहते हैं, यहां दर्ज करें (जैसे ₹20, ₹40 या पूर्ण ₹60)।</p>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeFineWaiverModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all">
+            छूट सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
   <!-- ============================================================== -->
   <!-- MODAL: ADD / EDIT EXPENSE (खर्च दर्ज/संशोधित करें)            -->
@@ -5438,6 +5508,93 @@
       return mCfg ? mCfg.defaultPaid : false;
     }
 
+    // ==============================================================
+    // PASY FINE CALCULATION (पारिवारिक योजना विलंब शुल्क / जुर्माना गणना)
+    // Rule: Monthly fee ₹150 due by 3rd Sunday.
+    // If unpaid past 3rd Sunday: Next Monday to 4th Sunday = ₹20.
+    // Subsequent weeks / passing Sundays add +₹20 each.
+    // ==============================================================
+    function calculateMemberPasyFine(member) {
+      if (!member) {
+        return { grossFine: 0, waiver: 0, netFine: 0, isPaid: false, fineBreakdown: [], overdueMonthsCount: 0 };
+      }
+
+      const now = new Date();
+      let grossFine = 0;
+      const fineBreakdown = [];
+
+      PARIWARIK_MONTHS.forEach(mCfg => {
+        // If already paid for this month, no fine applies for this month
+        if (isPariwarikPaidForMonth(member, mCfg.key)) return;
+
+        const [yStr, mStr] = mCfg.key.split('-');
+        const year = parseInt(yStr, 10);
+        const monthIndex = parseInt(mStr, 10) - 1;
+
+        // Find all Sundays in this month
+        const sundays = [];
+        const d = new Date(year, monthIndex, 1);
+        while (d.getMonth() === monthIndex) {
+          if (d.getDay() === 0) {
+            sundays.push(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999));
+          }
+          d.setDate(d.getDate() + 1);
+        }
+
+        // If month has fewer than 3 Sundays (impossible in Gregorian calendar), skip
+        if (sundays.length < 3) return;
+
+        const thirdSunday = sundays[2]; // End of 3rd Sunday: 23:59:59
+        if (now <= thirdSunday) {
+          // 3rd Sunday deadline not crossed yet
+          return;
+        }
+
+        // Starting Monday after 3rd Sunday (00:00:00)
+        const startMonday = new Date(thirdSunday);
+        startMonday.setDate(startMonday.getDate() + 1);
+        startMonday.setHours(0, 0, 0, 0);
+
+        if (now < startMonday) return;
+
+        // Calculate weeks passed / entered
+        const diffMs = now.getTime() - startMonday.getTime();
+        const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
+        const weekCount = Math.floor(diffDays / 7) + 1;
+        const monthFine = weekCount * 20;
+
+        if (monthFine > 0) {
+          grossFine += monthFine;
+          fineBreakdown.push({
+            monthKey: mCfg.key,
+            label: mCfg.label,
+            weekCount,
+            fine: monthFine
+          });
+        }
+      });
+
+      // Check waiver
+      const waivers = (masterSettings && masterSettings.pariwarikFineWaivers) || {};
+      const waiver = Math.max(0, parseFloat(waivers[member.id]) || 0);
+      const netFine = Math.max(0, grossFine - waiver);
+
+      // Check if fine is paid
+      const finePaidMap = (masterSettings && masterSettings.pariwarikFinePaid) || {};
+      const paidEntry = finePaidMap[member.id];
+      const isPaid = (paidEntry === true || (paidEntry && typeof paidEntry === 'object' && paidEntry.paid === true));
+
+      return {
+        grossFine,
+        waiver,
+        netFine,
+        isPaid,
+        fineBreakdown,
+        overdueMonthsCount: fineBreakdown.length
+      };
+    }
+    window.calculateMemberPasyFine = calculateMemberPasyFine;
+
     // Master Settings State
     let currentSettingsTab = 'status';
     let currentSchemeFilter = 'ALL';
@@ -5513,7 +5670,9 @@
         { id: 'exs_2', name: 'बैठक एवं कार्यालय व्यय (Meeting/Office)', description: 'चाय-नाश्ता, रजिस्टर, स्टेशनरी व व्यवस्था व्यय' },
         { id: 'exs_3', name: 'आपातकालीन चिकित्सा व सहायता अनुदान', description: 'ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता' },
         { id: 'exs_4', name: 'सामाजिक विकास एवं विविध व्यय', description: 'सामुदायिक कार्य एवं अन्य आकस्मिक व्यय' }
-      ]
+      ],
+      pariwarikFineWaivers: {},
+      pariwarikFinePaid: {}
     };
 
     // Switch between Admin and Member login portals
@@ -7682,6 +7841,31 @@
       if (statDues) statDues.textContent = `₹ ${totalDuesAmount.toLocaleString('en-IN')}`;
       if (statDuesMonths) statDuesMonths.textContent = `${duesMonthsCount} माह शेष`;
 
+      // 4th Card: PASY Fine (विलंब शुल्क)
+      const statFine = document.getElementById('m-pasy-stat-fine');
+      const statFineDesc = document.getElementById('m-pasy-stat-fine-desc');
+      const fineInfo = calculateMemberPasyFine(member);
+
+      if (statFine && statFineDesc) {
+        if (fineInfo.isPaid) {
+          statFine.textContent = '₹ 0 (जमा)';
+          statFine.className = 'text-xl sm:text-2xl font-black text-emerald-600 font-mono mt-0.5';
+          statFineDesc.textContent = `₹${fineInfo.netFine} जुर्माना जमा हो चुका है`;
+          statFineDesc.className = 'text-[10px] text-emerald-600 font-bold';
+        } else if (fineInfo.netFine > 0) {
+          statFine.textContent = `₹ ${fineInfo.netFine.toLocaleString('en-IN')}`;
+          statFine.className = 'text-xl sm:text-2xl font-black text-amber-600 font-mono mt-0.5';
+          const waiverText = fineInfo.waiver > 0 ? ` (छूट: ₹${fineInfo.waiver})` : '';
+          statFineDesc.textContent = `${fineInfo.overdueMonthsCount} माह विलंब${waiverText}`;
+          statFineDesc.className = 'text-[10px] text-amber-700 font-semibold';
+        } else {
+          statFine.textContent = '₹ 0';
+          statFine.className = 'text-xl sm:text-2xl font-black text-slate-700 font-mono mt-0.5';
+          statFineDesc.textContent = 'कोई जुर्माना नहीं';
+          statFineDesc.className = 'text-[10px] text-slate-400';
+        }
+      }
+
       // Membership Banner
       if (bannerEl) {
         if (isEnrolled) {
@@ -8822,6 +9006,7 @@
         'bankaccount-modal',
         'fund-transfer-modal',
         'pariwarik-bulk-whatsapp-modal',
+        'pariwarik-fine-waiver-modal',
         'expense-modal',
         'opening-balance-modal',
         'vendor-master-modal',
@@ -13186,7 +13371,7 @@ ID: ${item.id}
       if (pariwarikMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="8" class="p-10 text-center text-slate-400">
+            <td colspan="9" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-cyan-600"></i>
               <p class="text-xs font-bold text-slate-600">सदस्य सूची लोड हो रही है...</p>
               <p class="text-[11px] text-slate-400 mt-1">कृपया एक क्षण प्रतीक्षा करें।</p>
@@ -13221,7 +13406,7 @@ ID: ${item.id}
       if (filteredMembers.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="8" class="p-10 text-center text-slate-400">
+            <td colspan="9" class="p-10 text-center text-slate-400">
               <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-300"></i>
               <p class="text-xs font-bold text-slate-600">"${currentPariwarikSearchTerm}" के लिए कोई सदस्य नहीं मिला।</p>
               <p class="text-[11px] text-slate-400 mt-1">कृपया सही नाम, मोबाइल नंबर या सदस्य ID दर्ज करें।</p>
@@ -13238,6 +13423,7 @@ ID: ${item.id}
         const isWinner = (currentWinnerMemberId === m.id);
         const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
         const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+        const fineInfo = calculateMemberPasyFine(m);
         // Check if member already won in any other month
         let otherWonMonthKey = null;
         for (const [mKey, winId] of Object.entries(winnersMap)) {
@@ -13315,6 +13501,27 @@ ID: ${item.id}
             <!-- Dues (₹) -->
             <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
               ₹${mDues.toLocaleString('en-IN')}
+            </td>
+            <!-- Fine (₹) + Waiver Edit Button + iOS Style Paid Toggle Switch -->
+            <td class="p-3.5 text-right">
+              <div class="inline-flex items-center justify-end gap-2">
+                <div class="text-right">
+                  <div class="font-mono font-black text-xs ${fineInfo.isPaid ? 'text-emerald-600 line-through' : (fineInfo.netFine > 0 ? 'text-amber-600' : 'text-slate-300')}">
+                    ₹${fineInfo.netFine.toLocaleString('en-IN')}
+                  </div>
+                  ${fineInfo.waiver > 0 ? `<div class="text-[9px] text-emerald-600 font-bold" title="छूट: ₹${fineInfo.waiver}">-₹${fineInfo.waiver} छूट</div>` : ''}
+                </div>
+                <button type="button" 
+                        onclick="openFineWaiverModal('${m.id}')" 
+                        class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer" 
+                        title="विलंब शुल्क छूट / माफ़ी दर्ज करें (Set Fine Waiver)">
+                  <i class="fa-solid fa-tags text-[10px]"></i>
+                </button>
+                <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'जुर्माना जमा (Paid)' : (fineInfo.netFine > 0 ? 'जुर्माना बकाया (Unpaid) - जमा करने के लिए स्विच चालू करें' : 'कोई जुर्माना नहीं')}">
+                  <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked)" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
+                  <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-40 cursor-not-allowed' : ''}"></div>
+                </label>
+              </div>
             </td>
             <!-- Cumulative Total (₹) up to this month -->
             <td class="p-3.5 text-right font-mono font-black text-slate-900">
@@ -13487,6 +13694,233 @@ ID: ${item.id}
     window.sendPariwarikWhatsAppNotification = sendPariwarikWhatsAppNotification;
     window.openPariwarikBulkWhatsAppModal = openPariwarikBulkWhatsAppModal;
     window.closePariwarikBulkWhatsAppModal = closePariwarikBulkWhatsAppModal;
+
+    // ==============================================================
+    // PASY FINE PAYMENT & WAIVER MANAGEMENT (विलंब शुल्क भुगतान व छूट)
+    // ==============================================================
+    let activeFineWaiverMember = null;
+
+    function openFineWaiverModal(memberId) {
+      const member = (allMembers || []).find(m => m.id === memberId);
+      if (!member) return;
+      activeFineWaiverMember = member;
+
+      const modal = document.getElementById('pariwarik-fine-waiver-modal');
+      const idInput = document.getElementById('fine-waiver-member-id');
+      const nameEl = document.getElementById('fine-waiver-member-name');
+      const idDisp = document.getElementById('fine-waiver-member-id-disp');
+      const grossEl = document.getElementById('fine-waiver-gross-amt');
+      const netEl = document.getElementById('fine-waiver-net-amt');
+      const waiverInput = document.getElementById('fine-waiver-input-amt');
+
+      const fineInfo = calculateMemberPasyFine(member);
+
+      if (idInput) idInput.value = member.id;
+      if (nameEl) nameEl.textContent = member.name || '--';
+      if (idDisp) idDisp.textContent = member.id;
+      if (grossEl) grossEl.textContent = `₹${fineInfo.grossFine.toLocaleString('en-IN')}`;
+      if (netEl) netEl.textContent = `₹${fineInfo.netFine.toLocaleString('en-IN')}`;
+      if (waiverInput) waiverInput.value = fineInfo.waiver || 0;
+
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeFineWaiverModal() {
+      const modal = document.getElementById('pariwarik-fine-waiver-modal');
+      if (modal) modal.classList.add('hidden');
+      activeFineWaiverMember = null;
+    }
+
+    function recalcFineWaiverModalPreview() {
+      if (!activeFineWaiverMember) return;
+      const waiverInput = document.getElementById('fine-waiver-input-amt');
+      const netEl = document.getElementById('fine-waiver-net-amt');
+      if (!waiverInput || !netEl) return;
+
+      const fineInfo = calculateMemberPasyFine(activeFineWaiverMember);
+      const customWaiver = Math.max(0, parseFloat(waiverInput.value) || 0);
+      const previewNet = Math.max(0, fineInfo.grossFine - customWaiver);
+      netEl.textContent = `₹${previewNet.toLocaleString('en-IN')}`;
+    }
+
+    async function handleSaveFineWaiver(e) {
+      if (e) e.preventDefault();
+      const idInput = document.getElementById('fine-waiver-member-id');
+      const waiverInput = document.getElementById('fine-waiver-input-amt');
+      if (!idInput || !waiverInput) return;
+
+      const memberId = idInput.value;
+      const waiverAmt = Math.max(0, parseFloat(waiverInput.value) || 0);
+
+      if (!masterSettings) masterSettings = {};
+      if (!masterSettings.pariwarikFineWaivers || typeof masterSettings.pariwarikFineWaivers !== 'object') {
+        masterSettings.pariwarikFineWaivers = {};
+      }
+
+      if (waiverAmt > 0) {
+        masterSettings.pariwarikFineWaivers[memberId] = waiverAmt;
+      } else {
+        delete masterSettings.pariwarikFineWaivers[memberId];
+      }
+
+      closeFineWaiverModal();
+      renderPariwarikView();
+      if (typeof renderMemberPasyPage === 'function' && currentLoggedInMember && currentLoggedInMember.id === memberId) {
+        renderMemberPasyPage(currentLoggedInMember);
+      }
+
+      // Persist to server / Firestore
+      try {
+        if (typeof settingsCol !== 'undefined' && settingsCol) {
+          await settingsCol.doc('master').set(masterSettings, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore fine waiver save warning:', err);
+      }
+      try {
+        if (typeof saveSettingsToBackend === 'function') {
+          await saveSettingsToBackend(masterSettings);
+        }
+      } catch (err) {
+        console.warn('Backend fine waiver save warning:', err);
+      }
+    }
+
+    async function togglePariwarikFinePaid(memberId, isChecked) {
+      const member = (allMembers || []).find(m => m.id === memberId);
+      if (!member) return;
+
+      if (!masterSettings) masterSettings = {};
+      if (!masterSettings.pariwarikFinePaid || typeof masterSettings.pariwarikFinePaid !== 'object') {
+        masterSettings.pariwarikFinePaid = {};
+      }
+
+      const fineInfo = calculateMemberPasyFine(member);
+      const fineDonationScheme = 'पारिवारिक योजना विलंब शुल्क (PASY Fine)';
+      const fineRemarks = `पारिवारिक योजना विलंब शुल्क (सदस्य: ${member.name || memberId})`;
+
+      if (isChecked) {
+        // Collect fine amount: must be > 0 (or grossFine if netFine already 0 due to waiver)
+        const amtToCollect = fineInfo.netFine > 0 ? fineInfo.netFine : fineInfo.grossFine;
+        if (amtToCollect <= 0) {
+          alert('इस सदस्य पर कोई विलंब शुल्क (Fine) देय नहीं है!');
+          renderPariwarikView();
+          return;
+        }
+
+        const now = new Date();
+        const todayStr = now.toISOString().slice(0, 10);
+        const autoFineDonationId = `DON-FINE-${Date.now().toString().slice(-6)}`;
+
+        const donationPayload = {
+          id: autoFineDonationId,
+          memberId: member.id,
+          donorName: member.name || '',
+          phone: member.phone || '',
+          scheme: fineDonationScheme,
+          amount: amtToCollect,
+          date: todayStr,
+          method: 'Cash',
+          remarks: fineRemarks,
+          isPasyFine: true,
+          createdAt: now.toISOString()
+        };
+
+        // Mark as paid in masterSettings
+        masterSettings.pariwarikFinePaid[memberId] = {
+          paid: true,
+          amount: amtToCollect,
+          donationId: autoFineDonationId,
+          paidAt: now.toISOString()
+        };
+
+        // Add to allDonations (Strictly Donation - Not Monthly PASY installment)
+        if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+          allDonations.unshift(donationPayload);
+        }
+        if (typeof updateDonationsStats === 'function') updateDonationsStats();
+        if (typeof renderDonationsList === 'function') renderDonationsList();
+
+        // Save Donation to Central API & Firestore
+        try {
+          await fetch('/api/donations/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(donationPayload)
+          });
+        } catch (err) {
+          console.warn('Fine donation save API warning:', err);
+        }
+
+        try {
+          if (typeof donationsCol !== 'undefined' && donationsCol) {
+            await donationsCol.doc(donationPayload.id).set(donationPayload, { merge: true });
+          }
+        } catch (err) {
+          console.warn('Fine donation Firestore save warning:', err);
+        }
+
+      } else {
+        // Unchecked: Cancel fine payment and delete fine donation receipt
+        const paidEntry = masterSettings.pariwarikFinePaid[memberId];
+        const delDonationId = paidEntry && typeof paidEntry === 'object' ? paidEntry.donationId : null;
+
+        delete masterSettings.pariwarikFinePaid[memberId];
+
+        // Remove from allDonations
+        if (delDonationId) {
+          allDonations = (allDonations || []).filter(d => d.id !== delDonationId);
+          if (typeof updateDonationsStats === 'function') updateDonationsStats();
+          if (typeof renderDonationsList === 'function') renderDonationsList();
+
+          try {
+            await fetch('/api/donations/delete', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id: delDonationId })
+            });
+          } catch (err) {
+            console.warn('Fine donation delete API warning:', err);
+          }
+
+          try {
+            if (typeof donationsCol !== 'undefined' && donationsCol) {
+              await donationsCol.doc(delDonationId).delete();
+            }
+          } catch (err) {
+            console.warn('Fine donation Firestore delete warning:', err);
+          }
+        }
+      }
+
+      // Re-render Views
+      renderPariwarikView();
+      if (typeof renderMemberPasyPage === 'function' && currentLoggedInMember && currentLoggedInMember.id === memberId) {
+        renderMemberPasyPage(currentLoggedInMember);
+      }
+
+      // Persist Settings
+      try {
+        if (typeof settingsCol !== 'undefined' && settingsCol) {
+          await settingsCol.doc('master').set(masterSettings, { merge: true });
+        }
+      } catch (err) {
+        console.warn('Firestore fine paid status save warning:', err);
+      }
+      try {
+        if (typeof saveSettingsToBackend === 'function') {
+          await saveSettingsToBackend(masterSettings);
+        }
+      } catch (err) {
+        console.warn('Backend fine paid status save warning:', err);
+      }
+    }
+
+    window.openFineWaiverModal = openFineWaiverModal;
+    window.closeFineWaiverModal = closeFineWaiverModal;
+    window.recalcFineWaiverModalPreview = recalcFineWaiverModalPreview;
+    window.handleSaveFineWaiver = handleSaveFineWaiver;
+    window.togglePariwarikFinePaid = togglePariwarikFinePaid;
     // ==============================================================
     // EXPENSES MANAGEMENT & EXPENSE MASTER IMPLEMENTATION
     // ==============================================================
