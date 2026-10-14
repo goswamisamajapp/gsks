@@ -6212,23 +6212,56 @@
         const thirdSunday = sundays[2]; // End of 3rd Sunday of prior month: 23:59:59
 
         // If already paid for this month:
-        // By default, paid months have NO fine, UNLESS an accrued fine was locked when the late payment was made!
+        // Monthly installment (150) and Late Fine are strictly separate!
+        // If the installment was paid late (after 3rd Sunday) or before fine was settled, the fine is preserved!
         const isPaidInstallment = isPariwarikPaidForMonth(member, mCfg.key);
         if (isPaidInstallment) {
           const accruedFines = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
+          let monthFine = 0;
+          let weekCount = 0;
+
           if (accruedFines[mCfg.key] !== undefined) {
-            const lockedFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
-            if (lockedFine > 0) {
-              grossFine += lockedFine;
-              fineBreakdown.push({
-                monthKey: mCfg.key,
-                label: mCfg.label,
-                weekCount: Math.round(lockedFine / (getPasyFineWeekRate() || 20)),
-                fine: lockedFine
-              });
+            monthFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
+            weekCount = Math.round(monthFine / (getPasyFineWeekRate() || 20));
+          } else if (!mCfg.defaultPaid) {
+            // Only non-default-paid months (e.g. Oct 2026 onwards) can have an accrued late fine if paid late
+            let paidTime = null;
+            if (member.pariwarikPaidAt && member.pariwarikPaidAt[mCfg.key]) {
+              paidTime = new Date(member.pariwarikPaidAt[mCfg.key]);
+            }
+            if (paidTime && !isNaN(paidTime.getTime()) && paidTime > thirdSunday) {
+              const startMonday = new Date(thirdSunday);
+              startMonday.setDate(startMonday.getDate() + 1);
+              startMonday.setHours(0, 0, 0, 0);
+              if (paidTime >= startMonday) {
+                const diffMs = paidTime.getTime() - startMonday.getTime();
+                const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
+                weekCount = Math.floor(diffDays / 7) + 1;
+                monthFine = weekCount * getPasyFineWeekRate();
+              }
+            } else if (!paidTime && now > thirdSunday) {
+              // If member paid after deadline was already crossed
+              const startMonday = new Date(thirdSunday);
+              startMonday.setDate(startMonday.getDate() + 1);
+              startMonday.setHours(0, 0, 0, 0);
+              if (now >= startMonday) {
+                const diffMs = now.getTime() - startMonday.getTime();
+                const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
+                weekCount = Math.floor(diffDays / 7) + 1;
+                monthFine = weekCount * getPasyFineWeekRate();
+              }
             }
           }
-          // Already paid and handled -> Do not calculate live fine for past months
+
+          if (monthFine > 0) {
+            grossFine += monthFine;
+            fineBreakdown.push({
+              monthKey: mCfg.key,
+              label: mCfg.label,
+              weekCount,
+              fine: monthFine
+            });
+          }
           return;
         }
 
@@ -14208,6 +14241,9 @@ ID: ${item.id}
           masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth] = thisMonthBreakdown.fine;
           try {
             if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
+            if (typeof settingsCol !== 'undefined' && settingsCol) {
+              settingsCol.doc('master').set(masterSettings, { merge: true });
+            }
           } catch (e) {
             console.warn('Failed to save locked late fine:', e);
           }
@@ -14220,6 +14256,9 @@ ID: ${item.id}
           delete masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth];
           try {
             if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
+            if (typeof settingsCol !== 'undefined' && settingsCol) {
+              settingsCol.doc('master').set(masterSettings, { merge: true });
+            }
           } catch (e) {
             console.warn('Failed to clear locked late fine:', e);
           }
