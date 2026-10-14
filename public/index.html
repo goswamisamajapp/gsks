@@ -2343,6 +2343,7 @@
           <!-- 2. PASY (पारिवारिक आर्थिक सहायता योजना) Quick Button -->
           <button 
             type="button" 
+            id="user-quick-btn-pasy"
             onclick="switchMemberView('pasy')" 
             class="group p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-cyan-50 to-blue-50/60 hover:from-cyan-100/80 hover:to-blue-100/80 border border-cyan-200/80 hover:border-cyan-300 transition-all text-left flex items-center gap-3 shadow-2xs hover:shadow-sm cursor-pointer active:scale-98"
           >
@@ -2414,7 +2415,7 @@
         </div>
 
         <!-- Card 2: PASY Payment (पारिवारिक योजना भुगतान - Light Green) -->
-        <div class="bg-emerald-50/75 rounded-3xl p-4 sm:p-5 border border-emerald-200/90 shadow-sm flex items-center gap-3.5 hover:shadow-md transition-all">
+        <div id="user-card-stat-pasy" class="bg-emerald-50/75 rounded-3xl p-4 sm:p-5 border border-emerald-200/90 shadow-sm flex items-center gap-3.5 hover:shadow-md transition-all">
           <div class="w-12 h-12 rounded-2xl bg-white text-emerald-600 flex items-center justify-center text-xl flex-shrink-0 shadow-xs border border-emerald-100">
             <i class="fa-solid fa-hands-holding-child"></i>
           </div>
@@ -5698,11 +5699,23 @@
       if (elCardFather) elCardFather.textContent = member.father || '--';
       if (elCardAddress) elCardAddress.textContent = member.address || '--';
       if (elCardSince) elCardSince.textContent = member.since || '2025';
+      
+      // Member Types & Styling: Active, Inactive, Prime
+      const memStatus = (member.status || 'Active').trim();
+      const isPrime = memStatus === 'Prime Member' || memStatus.toLowerCase() === 'prime';
+      const isInactive = memStatus === 'Inactive' || memStatus.toLowerCase() === 'inactive';
+      
       if (elCardStatus) {
-        elCardStatus.textContent = member.status === 'Prime Member' ? '⭐ विशिष्ट सदस्य (Prime)' : (member.status || 'सक्रिय सदस्य');
-        elCardStatus.className = member.status === 'Prime Member' 
-          ? 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300'
-          : 'px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+        if (isPrime) {
+          elCardStatus.innerHTML = '<i class="fa-solid fa-crown text-[9px] text-amber-600 mr-1"></i>⭐ विशिष्ट सदस्य (Prime)';
+          elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center';
+        } else if (isInactive) {
+          elCardStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>निष्क्रिय सदस्य (Inactive)';
+          elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 shadow-2xs inline-flex items-center';
+        } else {
+          elCardStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>सक्रिय सदस्य (Active)';
+          elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs inline-flex items-center';
+        }
       }
       
       const elCardDesText = document.getElementById('user-card-designation-text');
@@ -5712,13 +5725,33 @@
 
       if (elAvatar) elAvatar.textContent = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
 
+      // PASY Visibility Control:
+      // Only PASY enabled members have access to the PASY button and PASY card
+      const isPasyEnabled = typeof isPariwarikMember === 'function' ? isPariwarikMember(member) : false;
+      const elPasyQuickBtn = document.getElementById('user-quick-btn-pasy');
+      if (elPasyQuickBtn) {
+        if (isPasyEnabled) {
+          elPasyQuickBtn.classList.remove('hidden');
+        } else {
+          elPasyQuickBtn.classList.add('hidden');
+        }
+      }
+      const elPasyStatCard = document.getElementById('user-card-stat-pasy');
+      if (elPasyStatCard) {
+        if (isPasyEnabled) {
+          elPasyStatCard.classList.remove('hidden');
+        } else {
+          elPasyStatCard.classList.add('hidden');
+        }
+      }
+
       // 2. LATEST NOTIFICATION PANEL (Sabse Upar)
       renderMemberNotification(member);
 
       // 3. UPCOMING MEETINGS & EVENTS
       renderMemberUpcomingEvents();
 
-      // 4. MY DONATIONS
+      // 4. MY DONATIONS / PAYMENTS
       renderMemberDonations(member);
 
       // 5. MY DUES
@@ -5777,6 +5810,13 @@
         if (btnDonations) btnDonations.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
         renderMemberDonationsPage(currentLoggedInMember);
       } else if (view === 'pasy') {
+        const canAccessPasy = typeof isPariwarikMember === 'function' ? isPariwarikMember(currentLoggedInMember) : false;
+        if (!canAccessPasy) {
+          alert('⚠️ पारिवारिक आर्थिक सहायता योजना (PASY) का उपयोग केवल नामांकित (PASY Enabled) सदस्यों के लिए उपलब्ध है।');
+          if (viewDash) viewDash.classList.remove('hidden');
+          if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
+          return;
+        }
         if (viewPasy) viewPasy.classList.remove('hidden');
         renderMemberPasyPage(currentLoggedInMember);
       } else {
@@ -7769,6 +7809,14 @@
       if (badgeDuesEl) badgeDuesEl.textContent = `₹ ${totalDues.toLocaleString('en-IN')}`;
 
       // 3. Card 2: PASY Payment (पारिवारिक योजना में किए गए कुल भुगतान)
+      const elCardStatPasy = document.getElementById('user-card-stat-pasy');
+      if (elCardStatPasy) {
+        if (isEnrolled) {
+          elCardStatPasy.classList.remove('hidden');
+        } else {
+          elCardStatPasy.classList.add('hidden');
+        }
+      }
       const elStatPasyPayment = document.getElementById('user-stat-pasy-payment');
       const elStatPasyPaymentCount = document.getElementById('user-stat-pasy-payment-count');
       if (elStatPasyPayment) elStatPasyPayment.textContent = `₹ ${pasyPaidAmount.toLocaleString('en-IN')}`;
@@ -7894,7 +7942,12 @@
       const heroFamId = document.getElementById('user-profile-main-famid');
 
       const famIdVal = member.familyId || `FAM-${member.id ? member.id.replace(/\D/g,'') : '001'}`;
-      const statusText = member.status === 'Prime Member' ? '⭐ विशिष्ट सदस्य (Prime Member)' : (member.status || 'सक्रिय सदस्य');
+      const memStatus = (member.status || 'Active').trim();
+      const isPrime = memStatus === 'Prime Member' || memStatus.toLowerCase() === 'prime';
+      const isInactive = memStatus === 'Inactive' || memStatus.toLowerCase() === 'inactive';
+      const statusText = isPrime 
+        ? '⭐ विशिष्ट सदस्य (Prime Member)' 
+        : (isInactive ? '⚪ निष्क्रिय सदस्य (Inactive)' : '🟢 सक्रिय सदस्य (Active)');
 
       if (pName) pName.textContent = member.name || '--';
       if (pFather) pFather.textContent = member.father || '--';
@@ -7908,7 +7961,14 @@
 
       if (heroAvatar) heroAvatar.textContent = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
       if (heroName) heroName.textContent = member.name || 'सदस्य';
-      if (heroStatus) heroStatus.textContent = statusText;
+      if (heroStatus) {
+        heroStatus.textContent = statusText;
+        heroStatus.className = isPrime 
+          ? 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300' 
+          : (isInactive 
+              ? 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300' 
+              : 'px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300');
+      }
       if (heroId) heroId.textContent = member.id || 'GSKS-000';
       if (heroFamId) heroFamId.textContent = famIdVal;
     }
