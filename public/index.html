@@ -5966,26 +5966,36 @@
         // If already paid for this month, no fine applies for this month
         if (isPariwarikPaidForMonth(member, mCfg.key)) return;
 
+        // 1-Month Advance Rule: किस्त माह का अंशदान 1 माह पूर्व के 3rd Sunday तक जमा होना अनिवार्य है
+        // Example: Oct 2026 किस्त -> डेडलाइन: Sep 2026 का 3rd Sunday
         const [yStr, mStr] = mCfg.key.split('-');
-        const year = parseInt(yStr, 10);
-        const monthIndex = parseInt(mStr, 10) - 1;
+        let year = parseInt(yStr, 10);
+        let monthIndex = parseInt(mStr, 10) - 1; // 0 to 11
 
-        // Find all Sundays in this month
+        // Previous month (1 month advance deadline)
+        let deadlineYear = year;
+        let deadlineMonthIndex = monthIndex - 1;
+        if (deadlineMonthIndex < 0) {
+          deadlineMonthIndex = 11;
+          deadlineYear -= 1;
+        }
+
+        // Find all Sundays in the prior (deadline) month
         const sundays = [];
-        const d = new Date(year, monthIndex, 1);
-        while (d.getMonth() === monthIndex) {
+        const d = new Date(deadlineYear, deadlineMonthIndex, 1);
+        while (d.getMonth() === deadlineMonthIndex) {
           if (d.getDay() === 0) {
             sundays.push(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999));
           }
           d.setDate(d.getDate() + 1);
         }
 
-        // If month has fewer than 3 Sundays (impossible in Gregorian calendar), skip
+        // Need at least 3 Sundays
         if (sundays.length < 3) return;
 
-        const thirdSunday = sundays[2]; // End of 3rd Sunday: 23:59:59
+        const thirdSunday = sundays[2]; // End of 3rd Sunday of prior month: 23:59:59
         if (now <= thirdSunday) {
-          // 3rd Sunday deadline not crossed yet
+          // Deadline not crossed yet
           return;
         }
 
