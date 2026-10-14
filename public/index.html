@@ -5992,28 +5992,10 @@
 
         const thirdSunday = sundays[2]; // End of 3rd Sunday of prior month: 23:59:59
 
-        // If member already paid for this month:
-        // Check if member paid AFTER the 3rd Sunday deadline (late payment).
-        // If paid on time (before deadline), no fine was incurred.
-        // If paid late, the late fine incurred up to payment date (or now) remains due until the fine itself is paid!
+        // If already paid for this month:
+        // By default, paid months have NO fine, UNLESS an accrued fine was locked when the late payment was made!
         const isPaidInstallment = isPariwarikPaidForMonth(member, mCfg.key);
-        let effectiveCalcDate = now;
-
         if (isPaidInstallment) {
-          const paidDates = member.pariwarikPaidAt || {};
-          const paidAtIso = paidDates[mCfg.key];
-          if (paidAtIso) {
-            const paidDate = new Date(paidAtIso);
-            if (!isNaN(paidDate.getTime())) {
-              if (paidDate <= thirdSunday) {
-                // Paid on time before deadline -> No fine
-                return;
-              }
-              // Paid late -> Freeze fine calculation up to the payment date
-              effectiveCalcDate = paidDate;
-            }
-          }
-          // Also check if an accrued fine was locked when installment was paid
           const accruedFines = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
           if (accruedFines[mCfg.key] !== undefined) {
             const lockedFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
@@ -6026,11 +6008,12 @@
                 fine: lockedFine
               });
             }
-            return;
           }
+          // Already paid and handled -> Do not calculate live fine for past months
+          return;
         }
 
-        if (effectiveCalcDate <= thirdSunday) {
+        if (now <= thirdSunday) {
           // Deadline not crossed yet
           return;
         }
@@ -6040,10 +6023,10 @@
         startMonday.setDate(startMonday.getDate() + 1);
         startMonday.setHours(0, 0, 0, 0);
 
-        if (effectiveCalcDate < startMonday) return;
+        if (now < startMonday) return;
 
         // Calculate weeks passed / entered
-        const diffMs = effectiveCalcDate.getTime() - startMonday.getTime();
+        const diffMs = now.getTime() - startMonday.getTime();
         const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
         const weekCount = Math.floor(diffDays / 7) + 1;
         const finePerWeek = getPasyFineWeekRate();
