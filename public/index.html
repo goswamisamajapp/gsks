@@ -3004,7 +3004,7 @@
 
         <!-- 2. Profile Details 9-Grid (आधिकारिक रजिस्टर विवरण) -->
         <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2.5">
               <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
                 <i class="fa-solid fa-address-card"></i>
@@ -3015,6 +3015,28 @@
                 </h3>
                 <p class="text-xs text-slate-400">समिति के आधिकारिक रिकॉर्ड में सुरक्षित जानकारी</p>
               </div>
+            </div>
+
+            <!-- Profile Action Buttons: Edit Profile & Change Password -->
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button 
+                type="button" 
+                onclick="openMemberEditProfileModal()" 
+                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 active:scale-95 text-white transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                title="अपनी जानकारी संशोधित करें"
+              >
+                <i class="fa-solid fa-user-pen text-[11px]"></i>
+                <span>प्रोफ़ाइल बदलें</span>
+              </button>
+              <button 
+                type="button" 
+                onclick="openMemberChangePasswordModal()" 
+                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 hover:text-slate-900 transition-all border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                title="नया पासवर्ड सेट करें"
+              >
+                <i class="fa-solid fa-key text-[11px] text-amber-600"></i>
+                <span>पासवर्ड बदलें</span>
+              </button>
             </div>
           </div>
 
@@ -3054,6 +3076,87 @@
             <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
               <span class="text-[11px] text-slate-400 font-medium block">ट्रस्ट शाखा (Trust Branch)</span>
               <span class="font-bold text-slate-800 mt-0.5 block">गुनघसा, गोमो, धनबाद (828401)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Current Plan & Membership Details Section (वर्तमान सदस्यता प्लान एवं सुविधाएं) -->
+        <div class="bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-white rounded-3xl p-5 sm:p-6 border border-indigo-200/80 shadow-sm space-y-5 relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-200/30 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-indigo-100/80 relative z-10">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-gem"></i>
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+                  वर्तमान सदस्यता प्लान (Current Plan & Membership)
+                </h3>
+                <p class="text-xs text-slate-500">आपकी सक्रिय सदस्यता योजना, विशेषाधिकार एवं वार्षिक नवीनीकरण</p>
+              </div>
+            </div>
+
+            <!-- Action Buttons: Upgrade Plan & Renew Plan -->
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button 
+                type="button" 
+                onclick="handleMemberUpgradePlan()" 
+                id="btn-member-plan-upgrade"
+                class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <i class="fa-solid fa-crown text-[11px]"></i>
+                <span id="btn-member-plan-upgrade-text">प्लान अपग्रेड करें (Upgrade)</span>
+              </button>
+              <button 
+                type="button" 
+                onclick="handleMemberRenewPlan()" 
+                class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <i class="fa-solid fa-rotate text-[11px]"></i>
+                <span>नवीनीकरण करें (Renew)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Plan Details 3-Cards Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+            <!-- 1. Current Plan Card -->
+            <div class="p-4 bg-white/90 rounded-2xl border border-indigo-100 shadow-2xs space-y-1.5">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">वर्तमान प्लान (Current Plan)</span>
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black text-slate-900 font-devanagari" id="plan-display-name">
+                  विशिष्ट सदस्य (Prime Member)
+                </span>
+              </div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="plan-badge-status">
+                सक्रिय सदस्यता
+              </span>
+            </div>
+
+            <!-- 2. Yearly Membership Fee Card -->
+            <div class="p-4 bg-white/90 rounded-2xl border border-indigo-100 shadow-2xs space-y-1">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">वार्षिक सदस्यता शुल्क (Yearly Fee)</span>
+              <h4 class="text-xl sm:text-2xl font-black text-indigo-700 font-mono" id="plan-display-fee">₹ 1,200</h4>
+              <p class="text-[10px] text-slate-500">वार्षिक नवीनीकरण शुल्क • देय प्रतिवर्ष</p>
+            </div>
+
+            <!-- 3. Validity / Status Card -->
+            <div class="p-4 bg-white/90 rounded-2xl border border-indigo-100 shadow-2xs space-y-1">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">सदस्यता वैधता (Validity)</span>
+              <h4 class="text-base font-black text-emerald-700 font-devanagari" id="plan-display-validity">आजीवन सक्रिय (Active)</h4>
+              <p class="text-[10px] text-slate-400" id="plan-display-validity-desc">समिति रिकॉर्ड में सत्यापित</p>
+            </div>
+          </div>
+
+          <!-- Benefits Checklist Box -->
+          <div class="p-4 bg-white/80 rounded-2xl border border-indigo-100 space-y-2.5 relative z-10">
+            <span class="text-xs font-black text-slate-800 flex items-center gap-1.5 font-devanagari">
+              <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
+              प्लान अंतर्गत प्राप्त सुविधाएं एवं लाभ (Benefits):
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs" id="plan-benefits-checklist">
+              <!-- Dynamically populated via JS -->
             </div>
           </div>
         </div>
@@ -5103,6 +5206,167 @@
       </form>
     </div>
   </div>
+  <!-- ============================================================== -->
+  <!-- MODAL: MEMBER EDIT OWN PROFILE (सदस्य प्रोफ़ाइल संपादन)       -->
+  <!-- ============================================================== -->
+  <div id="member-edit-profile-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeMemberEditProfileModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100 pr-8">
+        <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl shadow-xs">
+          <i class="fa-solid fa-user-pen"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-slate-900 font-devanagari">
+            व्यक्तिगत विवरण संशोधित करें (Edit Profile)
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">अपनी आधिकारिक संपर्क एवं व्यक्तिगत जानकारी अद्यतन करें</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveMemberOwnProfile(event)" class="space-y-3.5 text-xs">
+        <!-- Read-only Member ID & Family ID Pill -->
+        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between text-slate-600">
+          <div>
+            <span class="text-[10px] text-slate-400 block font-medium">सदस्य पहचान (Member ID)</span>
+            <span class="font-mono font-bold text-slate-800 text-xs" id="m-edit-prof-id-disp">GSKS-000</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block font-medium">परिवार ID (Family ID)</span>
+            <span class="font-mono font-bold text-slate-800 text-xs" id="m-edit-prof-famid-disp">FAM-000</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block font-medium">सदस्यता श्रेणी</span>
+            <span class="font-bold text-amber-700 text-xs" id="m-edit-prof-status-disp">Active</span>
+          </div>
+        </div>
+
+        <!-- 1. Full Name -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">पूरा नाम (Full Name) *</label>
+          <input type="text" id="m-edit-prof-name" required placeholder="अपना पूरा नाम लिखें" 
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+        </div>
+
+        <!-- 2. Father's Name -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">पिता / अभिभावक का नाम (Father's Name) *</label>
+          <input type="text" id="m-edit-prof-father" required placeholder="पिता या अभिभावक का नाम" 
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+        </div>
+
+        <!-- 3. Mobile Number -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">पंजीकृत मोबाइल नंबर (Mobile No.) *</label>
+          <input type="tel" id="m-edit-prof-phone" required pattern="[0-9]{10}" placeholder="10 अंकों का मोबाइल नंबर" 
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+        </div>
+
+        <!-- 4. Address -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">स्थायी पता / ग्राम (Address) *</label>
+          <input type="text" id="m-edit-prof-address" required placeholder="जैसे: गुनघसा, गोमो" 
+                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+        </div>
+
+        <!-- 5. Blood Group Dropdown -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">रक्त समूह (Blood Group)</label>
+          <select id="m-edit-prof-blood" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500">
+            <option value="">-- रक्त समूह चुनें --</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+
+        <p class="text-[10px] text-slate-400">💡 नोट: सुरक्षा कारणों से Member ID, सदस्यता श्रेणी एवं शुरुआत तिथि केवल व्यवस्थापक द्वारा ही बदली जा सकती है।</p>
+
+        <!-- Submit & Cancel -->
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeMemberEditProfileModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all cursor-pointer">
+            विवरण सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: MEMBER CHANGE PASSWORD (सदस्य पासवर्ड बदलाव)          -->
+  <!-- ============================================================== -->
+  <div id="member-change-password-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeMemberChangePasswordModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100 pr-8">
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shadow-xs">
+          <i class="fa-solid fa-key"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-slate-900 font-devanagari">
+            लॉगिन पासवर्ड बदलें (Change Password)
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">अपने खाते की सुरक्षा हेतु नया पासवर्ड सेट करें</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleSaveMemberNewPassword(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">नया पासवर्ड (New Password) *</label>
+          <div class="relative">
+            <input type="password" id="m-new-password" required minlength="4" placeholder="न्यूनतम 4 अक्षर/अंक" 
+                   class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 pr-10 text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            <button type="button" onclick="togglePasswordVisibility('m-new-password', 'm-new-pass-eye')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm">
+              <i class="fa-regular fa-eye" id="m-new-pass-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">नए पासवर्ड की पुष्टि करें (Confirm Password) *</label>
+          <div class="relative">
+            <input type="password" id="m-confirm-password" required minlength="4" placeholder="दोबारा वही पासवर्ड लिखें" 
+                   class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 pr-10 text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            <button type="button" onclick="togglePasswordVisibility('m-confirm-password', 'm-confirm-pass-eye')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-sm">
+              <i class="fa-regular fa-eye" id="m-confirm-pass-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="text-[10px] text-slate-400">🔒 पासवर्ड सुरक्षित रूप से सहेजा जाएगा। अगली बार सदस्य पोर्टल पर लॉगिन करते समय इसी नए पासवर्ड का उपयोग करें।</p>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeMemberChangePasswordModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all cursor-pointer">
+            पासवर्ड अपडेट करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
 
   <!-- ============================================================== -->
@@ -8167,7 +8431,340 @@
       }
       if (heroId) heroId.textContent = member.id || 'GSKS-000';
       if (heroFamId) heroFamId.textContent = famIdVal;
+
+      // Render Current Plan Details
+      renderMemberCurrentPlan(member);
     }
+
+    function renderMemberCurrentPlan(member) {
+      if (!member) member = currentLoggedInMember;
+      if (!member) return;
+
+      const memStatus = (member.status || 'Active').trim();
+      const isPrime = memStatus === 'Prime Member' || memStatus.toLowerCase() === 'prime';
+      const isInactive = memStatus === 'Inactive' || memStatus.toLowerCase() === 'inactive';
+
+      const planNameEl = document.getElementById('plan-display-name');
+      const planBadgeEl = document.getElementById('plan-badge-status');
+      const planFeeEl = document.getElementById('plan-display-fee');
+      const planValEl = document.getElementById('plan-display-validity');
+      const planValDescEl = document.getElementById('plan-display-validity-desc');
+      const benefitsListEl = document.getElementById('plan-benefits-checklist');
+      const btnUpgrade = document.getElementById('btn-member-plan-upgrade');
+      const btnUpgradeText = document.getElementById('btn-member-plan-upgrade-text');
+
+      if (isPrime) {
+        if (planNameEl) planNameEl.textContent = '⭐ विशिष्ट सदस्य (Prime Member)';
+        if (planBadgeEl) {
+          planBadgeEl.textContent = '👑 VIP प्रीमियम प्लान सक्रिय';
+          planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300';
+        }
+        if (planFeeEl) planFeeEl.textContent = '₹ 1,200 / वर्ष';
+        if (planValEl) {
+          planValEl.textContent = 'आजीवन वीआईपी सक्रिय';
+          planValEl.className = 'text-base font-black text-amber-700 font-devanagari';
+        }
+        if (planValDescEl) planValDescEl.textContent = 'समिति के सर्वोच्च विशेषाधिकार प्राप्त';
+
+        if (btnUpgradeText) btnUpgradeText.textContent = '👑 Prime Active (सर्वोच्च प्लान)';
+        if (btnUpgrade) {
+          btnUpgrade.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed flex items-center justify-center gap-1.5 opacity-80';
+          btnUpgrade.disabled = true;
+        }
+
+        if (benefitsListEl) {
+          benefitsListEl.innerHTML = `
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">PASY सामूहिक सुरक्षा योजना में पात्रता</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">पारिवारिक वैवाहिक (Matrimony) पोर्टल पहुंच</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">व्यापार एवं सेवा डायरेक्टरी (Business Listing)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">ट्रस्ट आम सभा एवं निर्णयों में वीआईपी विशेषाधिकार</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">आपातकालीन कल्याण कोष एवं अनुदान प्राथमिकता</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">व्यक्तिगत डिजिटल दान रसीदें एवं इतिहास</span>
+            </div>
+          `;
+        }
+      } else if (isInactive) {
+        if (planNameEl) planNameEl.textContent = '⚪ निष्क्रिय सदस्य (Inactive)';
+        if (planBadgeEl) {
+          planBadgeEl.textContent = '⚠️ सदस्यता नवीनीकरण प्रतीक्षित';
+          planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300';
+        }
+        if (planFeeEl) planFeeEl.textContent = '₹ 600 / वर्ष';
+        if (planValEl) {
+          planValEl.textContent = 'निष्क्रिय (Inactive)';
+          planValEl.className = 'text-base font-black text-rose-600 font-devanagari';
+        }
+        if (planValDescEl) planValDescEl.textContent = 'नवीनीकरण कर पुनः सक्रिय करें';
+
+        if (btnUpgradeText) btnUpgradeText.textContent = '⚡ Prime में अपग्रेड करें';
+        if (btnUpgrade) {
+          btnUpgrade.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer';
+          btnUpgrade.disabled = false;
+        }
+
+        if (benefitsListEl) {
+          benefitsListEl.innerHTML = `
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600">
+              <i class="fa-solid fa-circle-info text-slate-400 text-sm flex-shrink-0"></i>
+              <span class="font-medium">सामान्य सूचनाएं एवं बैठकों की जानकारी</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-rose-50/50 border border-rose-200/60 text-rose-700">
+              <i class="fa-solid fa-circle-xmark text-rose-500 text-sm flex-shrink-0"></i>
+              <span class="font-medium">PASY सुरक्षा योजना (अपग्रेड आवश्यक)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-rose-50/50 border border-rose-200/60 text-rose-700">
+              <i class="fa-solid fa-circle-xmark text-rose-500 text-sm flex-shrink-0"></i>
+              <span class="font-medium">वैवाहिक व व्यापार सुविधाएं (अपग्रेड आवश्यक)</span>
+            </div>
+          `;
+        }
+      } else {
+        // Active Member
+        if (planNameEl) planNameEl.textContent = '🟢 सक्रिय सदस्य (Active Member)';
+        if (planBadgeEl) {
+          planBadgeEl.textContent = '✅ सक्रिय सामान्य प्लान';
+          planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+        }
+        if (planFeeEl) planFeeEl.textContent = '₹ 600 / वर्ष';
+        if (planValEl) {
+          planValEl.textContent = 'सक्रिय (Active)';
+          planValEl.className = 'text-base font-black text-emerald-700 font-devanagari';
+        }
+        if (planValDescEl) planValDescEl.textContent = 'समिति में नियमित सक्रिय सदस्यता';
+
+        if (btnUpgradeText) btnUpgradeText.textContent = '⭐ Prime में अपग्रेड करें (Upgrade)';
+        if (btnUpgrade) {
+          btnUpgrade.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer';
+          btnUpgrade.disabled = false;
+        }
+
+        if (benefitsListEl) {
+          benefitsListEl.innerHTML = `
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-emerald-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">समिति की सभी सामान्य बैठकों व आयोजनों में भागीदारी</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-emerald-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">आधिकारिक सदस्यता पहचान (ID Card) एवं रिकॉर्ड</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/70 text-slate-800">
+              <i class="fa-solid fa-circle-check text-emerald-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">डिजिटल दान रसीदें एवं सहयोग इतिहास</span>
+            </div>
+            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-900">
+              <i class="fa-solid fa-crown text-amber-600 text-sm flex-shrink-0"></i>
+              <span class="font-semibold">Prime अपग्रेड करने पर PASY, Matrimony व Business पहुंच</span>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // ==============================================================
+    // MEMBER EDIT OWN PROFILE & CHANGE PASSWORD HANDLERS
+    // ==============================================================
+    function openMemberEditProfileModal() {
+      const member = currentLoggedInMember;
+      if (!member) {
+        alert('सत्र समाप्त हो गया है। कृपया पुनः लॉगिन करें।');
+        return;
+      }
+
+      const modal = document.getElementById('member-edit-profile-modal');
+      const idDisp = document.getElementById('m-edit-prof-id-disp');
+      const famIdDisp = document.getElementById('m-edit-prof-famid-disp');
+      const statusDisp = document.getElementById('m-edit-prof-status-disp');
+
+      const nameInp = document.getElementById('m-edit-prof-name');
+      const fatherInp = document.getElementById('m-edit-prof-father');
+      const phoneInp = document.getElementById('m-edit-prof-phone');
+      const addrInp = document.getElementById('m-edit-prof-address');
+      const bloodInp = document.getElementById('m-edit-prof-blood');
+
+      if (idDisp) idDisp.textContent = member.id || '--';
+      if (famIdDisp) famIdDisp.textContent = member.familyId || `FAM-${member.id ? member.id.replace(/\D/g,'') : '001'}`;
+      if (statusDisp) statusDisp.textContent = member.status || 'Active';
+
+      if (nameInp) nameInp.value = member.name || '';
+      if (fatherInp) fatherInp.value = member.father || '';
+      if (phoneInp) phoneInp.value = (member.phone || '').replace(/\D/g, '');
+      if (addrInp) addrInp.value = member.address || '';
+      if (bloodInp) bloodInp.value = member.bloodGroup || '';
+
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeMemberEditProfileModal() {
+      const modal = document.getElementById('member-edit-profile-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSaveMemberOwnProfile(e) {
+      if (e) e.preventDefault();
+      const member = currentLoggedInMember;
+      if (!member) return;
+
+      const nameInp = document.getElementById('m-edit-prof-name');
+      const fatherInp = document.getElementById('m-edit-prof-father');
+      const phoneInp = document.getElementById('m-edit-prof-phone');
+      const addrInp = document.getElementById('m-edit-prof-address');
+      const bloodInp = document.getElementById('m-edit-prof-blood');
+
+      const updatedName = (nameInp ? nameInp.value : '').trim();
+      const updatedFather = (fatherInp ? fatherInp.value : '').trim();
+      const updatedPhone = (phoneInp ? phoneInp.value : '').replace(/\D/g, '');
+      const updatedAddress = (addrInp ? addrInp.value : '').trim();
+      const updatedBlood = (bloodInp ? bloodInp.value : '').trim();
+
+      if (!updatedName || !updatedFather || !updatedPhone || !updatedAddress) {
+        alert('कृपया सभी आवश्यक जानकारी दर्ज करें!');
+        return;
+      }
+
+      if (updatedPhone.length !== 10) {
+        alert('कृपया 10 अंकों का मान्य मोबाइल नंबर दर्ज करें!');
+        return;
+      }
+
+      // Check if phone number is changed and already taken by another member
+      const phoneConflict = (allMembers || []).some(m => m.id !== member.id && m.status !== 'removed' && (m.phone || '').replace(/\D/g, '') === updatedPhone);
+      if (phoneConflict) {
+        alert('⚠️ यह मोबाइल नंबर पहले से किसी अन्य सदस्य के खाते में पंजीकृत है!');
+        return;
+      }
+
+      // Prepare payload with only allowed fields
+      const updatePayload = {
+        id: member.id,
+        name: updatedName,
+        father: updatedFather,
+        phone: updatedPhone,
+        address: updatedAddress,
+        bloodGroup: updatedBlood
+      };
+
+      // 1. Update in-memory objects
+      Object.assign(member, updatePayload);
+      const memIdx = (allMembers || []).findIndex(m => m.id === member.id);
+      if (memIdx !== -1) {
+        allMembers[memIdx] = { ...allMembers[memIdx], ...updatePayload };
+      }
+
+      // 2. Re-render UI
+      renderMemberProfile(member);
+      const userNavName = document.getElementById('user-nav-name');
+      if (userNavName) userNavName.textContent = member.name.toUpperCase();
+
+      closeMemberEditProfileModal();
+
+      // 3. Persist to Backend & Firestore
+      try {
+        if (typeof syncMemberToBackend === 'function') {
+          await syncMemberToBackend(updatePayload);
+        }
+      } catch (err) {
+        console.warn('Member profile sync warning:', err);
+      }
+
+      alert('✅ आपकी प्रोफ़ाइल जानकारी सफलतापूर्वक अपडेट कर दी गई है!');
+    }
+
+    function openMemberChangePasswordModal() {
+      const modal = document.getElementById('member-change-password-modal');
+      const passInp = document.getElementById('m-new-password');
+      const confInp = document.getElementById('m-confirm-password');
+
+      if (passInp) passInp.value = '';
+      if (confInp) confInp.value = '';
+
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeMemberChangePasswordModal() {
+      const modal = document.getElementById('member-change-password-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSaveMemberNewPassword(e) {
+      if (e) e.preventDefault();
+      const member = currentLoggedInMember;
+      if (!member) return;
+
+      const passInp = document.getElementById('m-new-password');
+      const confInp = document.getElementById('m-confirm-password');
+
+      const newPass = passInp ? passInp.value.trim() : '';
+      const confirmPass = confInp ? confInp.value.trim() : '';
+
+      if (!newPass || newPass.length < 4) {
+        alert('पासवर्ड कम से कम 4 अक्षरों या अंकों का होना चाहिए!');
+        return;
+      }
+
+      if (newPass !== confirmPass) {
+        alert('दोनों पासवर्ड मेल नहीं खा रहे हैं! कृपया दोबारा जांचें।');
+        return;
+      }
+
+      // Update password
+      member.password = newPass;
+      const memIdx = (allMembers || []).findIndex(m => m.id === member.id);
+      if (memIdx !== -1) {
+        allMembers[memIdx].password = newPass;
+      }
+
+      closeMemberChangePasswordModal();
+
+      // Persist to Backend and Firestore
+      try {
+        if (typeof syncMemberToBackend === 'function') {
+          await syncMemberToBackend({ id: member.id, password: newPass });
+        }
+      } catch (err) {
+        console.warn('Password sync warning:', err);
+      }
+
+      alert('🔐 आपका पासवर्ड सफलतापूर्वक बदल दिया गया है! अगली बार लॉगिन करने के लिए नए पासवर्ड का उपयोग करें।');
+    }
+
+    function handleMemberUpgradePlan() {
+      const member = currentLoggedInMember;
+      if (!member) return;
+      alert(`⭐ सदस्यता प्लान अपग्रेड:\n\nप्रिय ${member.name || 'सदस्य'} जी,\nअपने खाते को "विशिष्ट सदस्य (Prime Member)" में अपग्रेड करने हेतु कृपया समिति व्यवस्थापक या कोषाध्यक्ष से संपर्क करें।\n\nफोन / व्हाट्सएप: +91 7781931880 / +91 9934149950\nकार्यालय: गुनघसा, गोमो`);
+    }
+
+    function handleMemberRenewPlan() {
+      const member = currentLoggedInMember;
+      if (!member) return;
+      alert(`🔄 सदस्यता नवीनीकरण (Membership Renewal):\n\nसदस्य: ${member.name || '--'} (${member.id})\nवार्षिक शुल्क: ₹1,200\n\nआप वार्षिक शुल्क ऑनलाइन अथवा समिति कार्यालय में नकद जमा कर सकते हैं। अधिक सहायता हेतु व्यवस्थापक से संपर्क करें।`);
+    }
+
+    window.openMemberEditProfileModal = openMemberEditProfileModal;
+    window.closeMemberEditProfileModal = closeMemberEditProfileModal;
+    window.handleSaveMemberOwnProfile = handleSaveMemberOwnProfile;
+    window.openMemberChangePasswordModal = openMemberChangePasswordModal;
+    window.closeMemberChangePasswordModal = closeMemberChangePasswordModal;
+    window.handleSaveMemberNewPassword = handleSaveMemberNewPassword;
+    window.handleMemberUpgradePlan = handleMemberUpgradePlan;
+    window.handleMemberRenewPlan = handleMemberRenewPlan;
 
     function updateDate() {
       const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
@@ -9019,6 +9616,8 @@
         'fund-transfer-modal',
         'pariwarik-bulk-whatsapp-modal',
         'pariwarik-fine-waiver-modal',
+        'member-edit-profile-modal',
+        'member-change-password-modal',
         'expense-modal',
         'opening-balance-modal',
         'vendor-master-modal',
