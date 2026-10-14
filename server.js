@@ -355,6 +355,15 @@ app.post('/api/settings/save', (req, res) => {
   }
 });
 
+// Lightweight Keep-Alive / Health endpoints for UptimeRobot / Ping monitors
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
