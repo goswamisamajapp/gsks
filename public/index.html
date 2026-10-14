@@ -6172,7 +6172,7 @@
     // If unpaid past 3rd Sunday: Next Monday to 4th Sunday = ₹20.
     // Subsequent weeks / passing Sundays add +₹20 each.
     // ==============================================================
-    function calculateMemberPasyFine(member) {
+    function calculateMemberPasyFine(member, targetMonthKey = null) {
       if (!member) {
         return { grossFine: 0, waiver: 0, netFine: 0, isPaid: false, fineBreakdown: [], overdueMonthsCount: 0 };
       }
@@ -6181,7 +6181,14 @@
       let grossFine = 0;
       const fineBreakdown = [];
 
-      PARIWARIK_MONTHS.forEach(mCfg => {
+      const monthsToEvaluate = targetMonthKey 
+        ? PARIWARIK_MONTHS.filter(mCfg => mCfg.key === targetMonthKey) 
+        : PARIWARIK_MONTHS;
+
+      monthsToEvaluate.forEach(mCfg => {
+        // Strictly ignore defaultPaid months (Sep 2025 - Sep 2026 pre-settled): ZERO fine
+        if (mCfg.defaultPaid) return;
+
         // 1-Month Advance Rule: किस्त माह का अंशदान 1 माह पूर्व के 3rd Sunday तक जमा होना अनिवार्य है
         // Example: Oct 2026 किस्त -> डेडलाइन: Sep 2026 का 3rd Sunday
         const [yStr, mStr] = mCfg.key.split('-');
@@ -6223,7 +6230,7 @@
           if (accruedFines[mCfg.key] !== undefined) {
             monthFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
             weekCount = Math.round(monthFine / (getPasyFineWeekRate() || 20));
-          } else if (!mCfg.defaultPaid) {
+          } else {
             // Only non-default-paid months (e.g. Oct 2026 onwards) can have an accrued late fine if paid late
             let paidTime = null;
             if (member.pariwarikPaidAt && member.pariwarikPaidAt[mCfg.key]) {
@@ -6295,15 +6302,48 @@
         }
       });
 
-      // Check waiver
+      // Check waiver (supports month-specific map or global number)
       const waivers = (masterSettings && masterSettings.pariwarikFineWaivers) || {};
-      const waiver = Math.max(0, parseFloat(waivers[member.id]) || 0);
+      let waiver = 0;
+      if (targetMonthKey) {
+        const memWaiver = waivers[member.id];
+        if (memWaiver && typeof memWaiver === 'object' && memWaiver[targetMonthKey] !== undefined) {
+          waiver = Math.max(0, parseFloat(memWaiver[targetMonthKey]) || 0);
+        } else if (typeof memWaiver === 'number' || typeof memWaiver === 'string') {
+          waiver = Math.max(0, parseFloat(memWaiver) || 0);
+        }
+      } else {
+        const memWaiver = waivers[member.id];
+        if (memWaiver && typeof memWaiver === 'object') {
+          waiver = Object.values(memWaiver).reduce((s, v) => s + (Math.max(0, parseFloat(v) || 0)), 0);
+        } else {
+          waiver = Math.max(0, parseFloat(memWaiver) || 0);
+        }
+      }
       const netFine = Math.max(0, grossFine - waiver);
 
-      // Check if fine is paid
+      // Check if fine is paid (supports month-specific entry or global member entry)
       const finePaidMap = (masterSettings && masterSettings.pariwarikFinePaid) || {};
       const paidEntry = finePaidMap[member.id];
-      const isPaid = (paidEntry === true || (paidEntry && typeof paidEntry === 'object' && paidEntry.paid === true));
+      let isPaid = false;
+      if (targetMonthKey) {
+        if (paidEntry && typeof paidEntry === 'object' && paidEntry[targetMonthKey]) {
+          const mEntry = paidEntry[targetMonthKey];
+          isPaid = (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
+        } else if (paidEntry === true || (paidEntry && typeof paidEntry === 'object' && paidEntry.paid === true)) {
+          isPaid = true;
+        }
+      } else {
+        if (paidEntry === true || (paidEntry && typeof paidEntry === 'object' && paidEntry.paid === true)) {
+          isPaid = true;
+        } else if (paidEntry && typeof paidEntry === 'object') {
+          const overdueKeys = fineBreakdown.map(b => b.monthKey);
+          isPaid = overdueKeys.length > 0 && overdueKeys.every(k => {
+            const mEntry = paidEntry[k];
+            return (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
+          });
+        }
+      }
 
       return {
         grossFine,
@@ -14627,7 +14667,7 @@ ID: ${item.id}
         const isWinner = (currentWinnerMemberId === m.id);
         const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
         const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
-        const fineInfo = calculateMemberPasyFine(m);
+        const fineInfo = calculateMemberPasyFine(m, currentPariwarikMonth);
         // Check if member already won in any other month
         let otherWonMonthKey = null;
         for (const [mKey, winId] of Object.entries(winnersMap)) {
@@ -14716,13 +14756,13 @@ ID: ${item.id}
                   ${fineInfo.waiver > 0 ? `<div class="text-[9px] text-emerald-600 font-bold" title="छूट: ₹${fineInfo.waiver}">-₹${fineInfo.waiver} छूट</div>` : ''}
                 </div>
                 <button type="button" 
-                        onclick="openFineWaiverModal('${m.id}')" 
+                        onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
                         class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer" 
                         title="विलंब शुल्क छूट / माफ़ी दर्ज करें (Set Fine Waiver)">
                   <i class="fa-solid fa-tags text-[10px]"></i>
                 </button>
                 <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'जुर्माना जमा (Paid)' : (fineInfo.netFine > 0 ? 'जुर्माना बकाया (Unpaid) - जमा करने के लिए स्विच चालू करें' : 'कोई जुर्माना नहीं')}">
-                  <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked)" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
+                  <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
                   <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-40 cursor-not-allowed' : ''}"></div>
                 </label>
               </div>
@@ -14903,11 +14943,13 @@ ID: ${item.id}
     // PASY FINE PAYMENT & WAIVER MANAGEMENT (विलंब शुल्क भुगतान व छूट)
     // ==============================================================
     let activeFineWaiverMember = null;
+    let activeFineWaiverMonthKey = null;
 
-    function openFineWaiverModal(memberId) {
+    function openFineWaiverModal(memberId, monthKey = null) {
       const member = (allMembers || []).find(m => m.id === memberId);
       if (!member) return;
       activeFineWaiverMember = member;
+      activeFineWaiverMonthKey = monthKey || currentPariwarikMonth;
 
       const modal = document.getElementById('pariwarik-fine-waiver-modal');
       const idInput = document.getElementById('fine-waiver-member-id');
@@ -14917,11 +14959,11 @@ ID: ${item.id}
       const netEl = document.getElementById('fine-waiver-net-amt');
       const waiverInput = document.getElementById('fine-waiver-input-amt');
 
-      const fineInfo = calculateMemberPasyFine(member);
+      const fineInfo = calculateMemberPasyFine(member, activeFineWaiverMonthKey);
 
       if (idInput) idInput.value = member.id;
       if (nameEl) nameEl.textContent = member.name || '--';
-      if (idDisp) idDisp.textContent = member.id;
+      if (idDisp) idDisp.textContent = `${member.id} (${activeFineWaiverMonthKey || 'कुल'})`;
       if (grossEl) grossEl.textContent = `₹${fineInfo.grossFine.toLocaleString('en-IN')}`;
       if (netEl) netEl.textContent = `₹${fineInfo.netFine.toLocaleString('en-IN')}`;
       if (waiverInput) waiverInput.value = fineInfo.waiver || 0;
@@ -14933,6 +14975,7 @@ ID: ${item.id}
       const modal = document.getElementById('pariwarik-fine-waiver-modal');
       if (modal) modal.classList.add('hidden');
       activeFineWaiverMember = null;
+      activeFineWaiverMonthKey = null;
     }
 
     function recalcFineWaiverModalPreview() {
@@ -14941,7 +14984,7 @@ ID: ${item.id}
       const netEl = document.getElementById('fine-waiver-net-amt');
       if (!waiverInput || !netEl) return;
 
-      const fineInfo = calculateMemberPasyFine(activeFineWaiverMember);
+      const fineInfo = calculateMemberPasyFine(activeFineWaiverMember, activeFineWaiverMonthKey);
       const customWaiver = Math.max(0, parseFloat(waiverInput.value) || 0);
       const previewNet = Math.max(0, fineInfo.grossFine - customWaiver);
       netEl.textContent = `₹${previewNet.toLocaleString('en-IN')}`;
@@ -14955,16 +14998,28 @@ ID: ${item.id}
 
       const memberId = idInput.value;
       const waiverAmt = Math.max(0, parseFloat(waiverInput.value) || 0);
+      const monthKey = activeFineWaiverMonthKey || currentPariwarikMonth;
 
       if (!masterSettings) masterSettings = {};
       if (!masterSettings.pariwarikFineWaivers || typeof masterSettings.pariwarikFineWaivers !== 'object') {
         masterSettings.pariwarikFineWaivers = {};
       }
 
-      if (waiverAmt > 0) {
-        masterSettings.pariwarikFineWaivers[memberId] = waiverAmt;
+      if (monthKey) {
+        if (!masterSettings.pariwarikFineWaivers[memberId] || typeof masterSettings.pariwarikFineWaivers[memberId] !== 'object') {
+          masterSettings.pariwarikFineWaivers[memberId] = {};
+        }
+        if (waiverAmt > 0) {
+          masterSettings.pariwarikFineWaivers[memberId][monthKey] = waiverAmt;
+        } else {
+          delete masterSettings.pariwarikFineWaivers[memberId][monthKey];
+        }
       } else {
-        delete masterSettings.pariwarikFineWaivers[memberId];
+        if (waiverAmt > 0) {
+          masterSettings.pariwarikFineWaivers[memberId] = waiverAmt;
+        } else {
+          delete masterSettings.pariwarikFineWaivers[memberId];
+        }
       }
 
       closeFineWaiverModal();
@@ -14990,18 +15045,20 @@ ID: ${item.id}
       }
     }
 
-    async function togglePariwarikFinePaid(memberId, isChecked) {
+    async function togglePariwarikFinePaid(memberId, isChecked, targetMonthKey = null) {
       const member = (allMembers || []).find(m => m.id === memberId);
       if (!member) return;
+      const monthKey = targetMonthKey || currentPariwarikMonth;
 
       if (!masterSettings) masterSettings = {};
       if (!masterSettings.pariwarikFinePaid || typeof masterSettings.pariwarikFinePaid !== 'object') {
         masterSettings.pariwarikFinePaid = {};
       }
 
-      const fineInfo = calculateMemberPasyFine(member);
+      const fineInfo = calculateMemberPasyFine(member, monthKey);
       const fineDonationScheme = 'पारिवारिक योजना विलंब शुल्क (PASY Fine)';
-      const fineRemarks = `पारिवारिक योजना विलंब शुल्क (सदस्य: ${member.name || memberId})`;
+      const monthLabel = (PARIWARIK_MONTHS.find(x => x.key === monthKey) || {}).label || monthKey;
+      const fineRemarks = `पारिवारिक योजना विलंब शुल्क (${monthLabel}, सदस्य: ${member.name || memberId})`;
 
       if (isChecked) {
         // Collect fine amount: must be > 0 (or grossFine if netFine already 0 due to waiver)
@@ -15027,11 +15084,15 @@ ID: ${item.id}
           method: 'Cash',
           remarks: fineRemarks,
           isPasyFine: true,
+          monthKey: monthKey,
           createdAt: now.toISOString()
         };
 
-        // Mark as paid in masterSettings
-        masterSettings.pariwarikFinePaid[memberId] = {
+        // Mark as paid in masterSettings (month-keyed)
+        if (!masterSettings.pariwarikFinePaid[memberId] || typeof masterSettings.pariwarikFinePaid[memberId] !== 'object' || masterSettings.pariwarikFinePaid[memberId].paid !== undefined) {
+          masterSettings.pariwarikFinePaid[memberId] = {};
+        }
+        masterSettings.pariwarikFinePaid[memberId][monthKey] = {
           paid: true,
           amount: amtToCollect,
           donationId: autoFineDonationId,
@@ -15065,11 +15126,18 @@ ID: ${item.id}
         }
 
       } else {
-        // Unchecked: Cancel fine payment and delete fine donation receipt
-        const paidEntry = masterSettings.pariwarikFinePaid[memberId];
-        const delDonationId = paidEntry && typeof paidEntry === 'object' ? paidEntry.donationId : null;
-
-        delete masterSettings.pariwarikFinePaid[memberId];
+        // Unchecked: Cancel fine payment and delete fine donation receipt for this month
+        let delDonationId = null;
+        if (masterSettings.pariwarikFinePaid[memberId]) {
+          const mEntry = masterSettings.pariwarikFinePaid[memberId][monthKey];
+          if (mEntry && typeof mEntry === 'object') {
+            delDonationId = mEntry.donationId;
+            delete masterSettings.pariwarikFinePaid[memberId][monthKey];
+          } else if (masterSettings.pariwarikFinePaid[memberId].donationId) {
+            delDonationId = masterSettings.pariwarikFinePaid[memberId].donationId;
+            delete masterSettings.pariwarikFinePaid[memberId];
+          }
+        }
 
         // Remove from allDonations
         if (delDonationId) {
