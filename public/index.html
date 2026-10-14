@@ -1783,6 +1783,153 @@
               <!-- Populated via JS -->
             </div>
           </div>
+
+          <!-- Section 2: Membership & Plans Rates Master (सदस्यता शुल्क एवं योजना दर नियंत्रण) -->
+          <div class="bg-gradient-to-br from-amber-50/70 via-orange-50/40 to-white rounded-3xl p-5 sm:p-6 border border-amber-200/90 shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-amber-200/70">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm sm:text-base font-black text-slate-900 font-devanagari">
+                    सदस्यता शुल्क एवं योजना दर नियंत्रण (Membership & Plans Rate Master)
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-0.5">PASY मासिक अंशदान, विलंब शुल्क (Fine) एवं प्रीमियम/सामान्य सदस्यता वार्षिक शुल्क का केंद्रीय नियंत्रण</p>
+                </div>
+              </div>
+              <button 
+                type="button" 
+                onclick="handleSaveMembershipPlanRates()" 
+                class="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 active:scale-95 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <i class="fa-solid fa-floppy-disk text-xs"></i>
+                <span>दरें सुरक्षित करें (Save Rates)</span>
+              </button>
+            </div>
+
+            <!-- 3 Columns Control Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <!-- 1. PASY Monthly Contribution Rate Card -->
+              <div class="p-4 bg-white rounded-2xl border border-cyan-200 shadow-xs flex flex-col justify-between space-y-3">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-700 font-mono">1. PASY CONTRIBUTION</span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-hands-holding-child text-cyan-600"></i>
+                    पारिवारिक योजना मासिक अंशदान
+                  </h4>
+                  <p class="text-[10px] text-slate-400 mt-0.5">प्रति सदस्य प्रति माह देय अंशदान राशि</p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100">
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">मासिक दर (₹ / Month):</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2.5 text-slate-400 font-bold text-xs">₹</span>
+                    <input 
+                      type="number" 
+                      id="rate-pasy-monthly-fee" 
+                      min="1" 
+                      step="1" 
+                      value="150" 
+                      class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500"
+                    >
+                  </div>
+                  <span class="text-[10px] text-cyan-700 font-medium mt-1 block">डिफ़ॉल्ट: ₹150 / माह (30 माह)</span>
+                </div>
+              </div>
+
+              <!-- 2. PASY Fine Rate Card -->
+              <div class="p-4 bg-white rounded-2xl border border-rose-200 shadow-xs flex flex-col justify-between space-y-3">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700 font-mono">2. PASY FINE RATE</span>
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                    विलंब शुल्क दर (Late Fine Rate)
+                  </h4>
+                  <p class="text-[10px] text-slate-400 mt-0.5">3rd Sunday के बाद प्रति सप्ताह जुड़ने वाला जुर्माना</p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100">
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">प्रति सप्ताह विलंब दर (₹ / Week):</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2.5 text-slate-400 font-bold text-xs">₹</span>
+                    <input 
+                      type="number" 
+                      id="rate-pasy-fine-week" 
+                      min="0" 
+                      step="1" 
+                      value="20" 
+                      class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                    >
+                  </div>
+                  <span class="text-[10px] text-rose-700 font-medium mt-1 block">डिफ़ॉल्ट: ₹20 प्रति सप्ताह / रविवार</span>
+                </div>
+              </div>
+
+              <!-- 3. Membership Fee Rates Card (Premium vs Normal) -->
+              <div class="p-4 bg-white rounded-2xl border border-amber-300 shadow-xs flex flex-col justify-between space-y-3">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 font-mono">3. MEMBERSHIP PLANS</span>
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-crown text-amber-500"></i>
+                    सदस्यता वार्षिक शुल्क (Membership Fee)
+                  </h4>
+                  <p class="text-[10px] text-slate-400 mt-0.5">प्रीमियम एवं सामान्य सदस्यों का वार्षिक शुल्क</p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 space-y-2">
+                  <!-- Premium Rate -->
+                  <div>
+                    <label class="flex items-center justify-between text-[11px] font-bold text-amber-900 mb-0.5">
+                      <span>👑 प्रीमियम सदस्य (Premium / Prime):</span>
+                      <span class="text-[9px] text-amber-600 font-mono">प्रति वर्ष</span>
+                    </label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
+                      <input 
+                        type="number" 
+                        id="rate-membership-premium" 
+                        min="0" 
+                        step="1" 
+                        value="1200" 
+                        class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      >
+                    </div>
+                  </div>
+
+                  <!-- Normal Rate -->
+                  <div>
+                    <label class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-0.5">
+                      <span>🟢 सामान्य सदस्य (Normal / Active):</span>
+                      <span class="text-[9px] text-slate-400 font-mono">प्रति वर्ष</span>
+                    </label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
+                      <input 
+                        type="number" 
+                        id="rate-membership-normal" 
+                        min="0" 
+                        step="1" 
+                        value="600" 
+                        class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-slate-400/20 focus:border-slate-400"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
 
         <!-- ========================================== -->
@@ -5705,8 +5852,28 @@
     let activeViewingMemberId = null;
     let pendingDeleteMemberId = null;
 
-    // Pariwarik Arthik Constants & Helpers (Sep 2025 to Feb 2028 - 30 Months)
-    const PARIWARIK_MONTHLY_FEE = 150;
+    // Pariwarik Arthik & Membership Plan Rates Getters (Sep 2025 to Feb 2028 - 30 Months)
+    let PARIWARIK_MONTHLY_FEE = 150;
+    function getPasyMonthlyFee() {
+      const rate = masterSettings && masterSettings.planRates && masterSettings.planRates.pasyMonthlyFee;
+      return (typeof rate === 'number' && rate > 0) ? rate : (PARIWARIK_MONTHLY_FEE || 150);
+    }
+    function getPasyFineWeekRate() {
+      const rate = masterSettings && masterSettings.planRates && masterSettings.planRates.pasyFineWeek;
+      return (typeof rate === 'number' && rate >= 0) ? rate : 20;
+    }
+    function getMembershipFee(status = 'Active') {
+      const rates = (masterSettings && masterSettings.planRates) || {};
+      const s = String(status || '').trim().toLowerCase();
+      if (s.includes('prime') || s.includes('premium')) {
+        return (typeof rates.membershipPremium === 'number' && rates.membershipPremium >= 0) ? rates.membershipPremium : 1200;
+      }
+      return (typeof rates.membershipNormal === 'number' && rates.membershipNormal >= 0) ? rates.membershipNormal : 600;
+    }
+    window.getPasyMonthlyFee = getPasyMonthlyFee;
+    window.getPasyFineWeekRate = getPasyFineWeekRate;
+    window.getMembershipFee = getMembershipFee;
+
     const PARIWARIK_MONTHS = [
       { key: '2025-09', label: 'Sep 2025', defaultPaid: true },
       { key: '2025-10', label: 'Oct 2025', defaultPaid: true },
@@ -5833,7 +6000,8 @@
         const diffMs = now.getTime() - startMonday.getTime();
         const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
         const weekCount = Math.floor(diffDays / 7) + 1;
-        const monthFine = weekCount * 20;
+        const finePerWeek = getPasyFineWeekRate();
+        const monthFine = weekCount * finePerWeek;
 
         if (monthFine > 0) {
           grossFine += monthFine;
@@ -5944,7 +6112,13 @@
         { id: 'exs_4', name: 'सामाजिक विकास एवं विविध व्यय', description: 'सामुदायिक कार्य एवं अन्य आकस्मिक व्यय' }
       ],
       pariwarikFineWaivers: {},
-      pariwarikFinePaid: {}
+      pariwarikFinePaid: {},
+      planRates: {
+        pasyMonthlyFee: 150,
+        pasyFineWeek: 20,
+        membershipPremium: 1200,
+        membershipNormal: 600
+      }
     };
 
     // Switch between Admin and Member login portals
@@ -8459,7 +8633,7 @@
           planBadgeEl.textContent = '👑 VIP प्रीमियम प्लान सक्रिय';
           planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300';
         }
-        if (planFeeEl) planFeeEl.textContent = '₹ 1,200 / वर्ष';
+        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Prime Member')).toLocaleString('en-IN')} / वर्ष`;
         if (planValEl) {
           planValEl.textContent = 'आजीवन वीआईपी सक्रिय';
           planValEl.className = 'text-base font-black text-amber-700 font-devanagari';
@@ -8506,7 +8680,7 @@
           planBadgeEl.textContent = '⚠️ सदस्यता नवीनीकरण प्रतीक्षित';
           planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300';
         }
-        if (planFeeEl) planFeeEl.textContent = '₹ 600 / वर्ष';
+        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Active')).toLocaleString('en-IN')} / वर्ष`;
         if (planValEl) {
           planValEl.textContent = 'निष्क्रिय (Inactive)';
           planValEl.className = 'text-base font-black text-rose-600 font-devanagari';
@@ -8542,7 +8716,7 @@
           planBadgeEl.textContent = '✅ सक्रिय सामान्य प्लान';
           planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
         }
-        if (planFeeEl) planFeeEl.textContent = '₹ 600 / वर्ष';
+        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Active')).toLocaleString('en-IN')} / वर्ष`;
         if (planValEl) {
           planValEl.textContent = 'सक्रिय (Active)';
           planValEl.className = 'text-base font-black text-emerald-700 font-devanagari';
@@ -10816,6 +10990,7 @@
       } else if (tab === 'scheme') {
         if (tabBtnScheme) tabBtnScheme.className = 'group p-3 rounded-2xl bg-amber-50/40 border-2 border-amber-500 shadow-md ring-2 ring-amber-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageScheme) pageScheme.classList.remove('hidden');
+        populateMembershipPlanRatesInputs();
       } else if (tab === 'fund') {
         if (tabBtnFund) tabBtnFund.className = 'group p-3 rounded-2xl bg-teal-50/40 border-2 border-teal-500 shadow-md ring-2 ring-teal-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between';
         if (pageFund) pageFund.classList.remove('hidden');
@@ -10840,6 +11015,9 @@
     function applySettings(data) {
       if (!data) return;
       masterSettings = { ...masterSettings, ...data };
+      if (masterSettings.planRates && typeof masterSettings.planRates.pasyMonthlyFee === 'number') {
+        PARIWARIK_MONTHLY_FEE = masterSettings.planRates.pasyMonthlyFee;
+      }
       updateDropdownsFromSettings();
       renderSettingsView();
       updateStats();
@@ -10868,6 +11046,7 @@
       renderFundTransfersList();
       renderExpenseMasterTab();
       renderDesignationMasterTab();
+      populateMembershipPlanRatesInputs();
 
       // 2. Render Status Master Table
       const statusTbody = document.getElementById('status-master-tbody');
@@ -11612,6 +11791,65 @@
       closeSchemeModal();
       await saveAllSettingsToCloud();
     }
+
+    // ==============================================================
+    // MEMBERSHIP & PLANS RATE MASTER CONTROLLER
+    // ==============================================================
+    function populateMembershipPlanRatesInputs() {
+      const rates = (masterSettings && masterSettings.planRates) || {};
+      const elPasyFee = document.getElementById('rate-pasy-monthly-fee');
+      const elPasyFine = document.getElementById('rate-pasy-fine-week');
+      const elMemPrem = document.getElementById('rate-membership-premium');
+      const elMemNorm = document.getElementById('rate-membership-normal');
+
+      if (elPasyFee) elPasyFee.value = typeof rates.pasyMonthlyFee === 'number' ? rates.pasyMonthlyFee : 150;
+      if (elPasyFine) elPasyFine.value = typeof rates.pasyFineWeek === 'number' ? rates.pasyFineWeek : 20;
+      if (elMemPrem) elMemPrem.value = typeof rates.membershipPremium === 'number' ? rates.membershipPremium : 1200;
+      if (elMemNorm) elMemNorm.value = typeof rates.membershipNormal === 'number' ? rates.membershipNormal : 600;
+    }
+
+    async function handleSaveMembershipPlanRates() {
+      const elPasyFee = document.getElementById('rate-pasy-monthly-fee');
+      const elPasyFine = document.getElementById('rate-pasy-fine-week');
+      const elMemPrem = document.getElementById('rate-membership-premium');
+      const elMemNorm = document.getElementById('rate-membership-normal');
+
+      const pasyMonthlyFee = elPasyFee ? Math.max(1, parseFloat(elPasyFee.value) || 150) : 150;
+      const pasyFineWeek = elPasyFine ? Math.max(0, parseFloat(elPasyFine.value) || 0) : 20;
+      const membershipPremium = elMemPrem ? Math.max(0, parseFloat(elMemPrem.value) || 0) : 1200;
+      const membershipNormal = elMemNorm ? Math.max(0, parseFloat(elMemNorm.value) || 0) : 600;
+
+      if (!masterSettings) masterSettings = {};
+      masterSettings.planRates = {
+        pasyMonthlyFee,
+        pasyFineWeek,
+        membershipPremium,
+        membershipNormal
+      };
+
+      // Also sync global runtime PARIWARIK_MONTHLY_FEE
+      PARIWARIK_MONTHLY_FEE = pasyMonthlyFee;
+
+      // Persist to Cloud & Server JSON
+      await saveAllSettingsToCloud(false);
+
+      // Re-render UI components relying on these rates
+      if (typeof renderPariwarikView === 'function') {
+        renderPariwarikView();
+      }
+      if (typeof currentLoggedInMember !== 'undefined' && currentLoggedInMember) {
+        if (typeof renderMemberCurrentPlan === 'function') {
+          renderMemberCurrentPlan(currentLoggedInMember);
+        }
+        if (typeof renderMemberPasyPage === 'function') {
+          renderMemberPasyPage(currentLoggedInMember);
+        }
+      }
+
+      alert(`✅ सदस्यता एवं योजना दरें सफलतापूर्वक सुरक्षित हो गईं!\n\n• PASY मासिक अंशदान: ₹${pasyMonthlyFee}/माह\n• PASY विलंब शुल्क (Fine): ₹${pasyFineWeek}/सप्ताह\n• प्रीमियम सदस्यता शुल्क: ₹${membershipPremium}/वर्ष\n• सामान्य सदस्यता शुल्क: ₹${membershipNormal}/वर्ष`);
+    }
+    window.populateMembershipPlanRatesInputs = populateMembershipPlanRatesInputs;
+    window.handleSaveMembershipPlanRates = handleSaveMembershipPlanRates;
 
     // Delete Item from Masters
     async function deleteStatusMasterItem(id) {
@@ -13507,6 +13745,8 @@ ID: ${item.id}
     window.deleteSchemeItem = deleteSchemeItem;
     window.filterSchemes = filterSchemes;
     window.toggleSchemeAmountType = toggleSchemeAmountType;
+    window.handleSaveMembershipPlanRates = handleSaveMembershipPlanRates;
+    window.populateMembershipPlanRatesInputs = populateMembershipPlanRatesInputs;
 
     window.openAddFundTypeModal = openAddFundTypeModal;
     window.editFundTypeItem = editFundTypeItem;
