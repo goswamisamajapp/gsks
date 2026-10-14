@@ -5963,9 +5963,6 @@
       const fineBreakdown = [];
 
       PARIWARIK_MONTHS.forEach(mCfg => {
-        // If already paid for this month, no fine applies for this month
-        if (isPariwarikPaidForMonth(member, mCfg.key)) return;
-
         // 1-Month Advance Rule: किस्त माह का अंशदान 1 माह पूर्व के 3rd Sunday तक जमा होना अनिवार्य है
         // Example: Oct 2026 किस्त -> डेडलाइन: Sep 2026 का 3rd Sunday
         const [yStr, mStr] = mCfg.key.split('-');
@@ -5994,7 +5991,46 @@
         if (sundays.length < 3) return;
 
         const thirdSunday = sundays[2]; // End of 3rd Sunday of prior month: 23:59:59
-        if (now <= thirdSunday) {
+
+        // If member already paid for this month:
+        // Check if member paid AFTER the 3rd Sunday deadline (late payment).
+        // If paid on time (before deadline), no fine was incurred.
+        // If paid late, the late fine incurred up to payment date (or now) remains due until the fine itself is paid!
+        const isPaidInstallment = isPariwarikPaidForMonth(member, mCfg.key);
+        let effectiveCalcDate = now;
+
+        if (isPaidInstallment) {
+          const paidDates = member.pariwarikPaidAt || {};
+          const paidAtIso = paidDates[mCfg.key];
+          if (paidAtIso) {
+            const paidDate = new Date(paidAtIso);
+            if (!isNaN(paidDate.getTime())) {
+              if (paidDate <= thirdSunday) {
+                // Paid on time before deadline -> No fine
+                return;
+              }
+              // Paid late -> Freeze fine calculation up to the payment date
+              effectiveCalcDate = paidDate;
+            }
+          }
+          // Also check if an accrued fine was locked when installment was paid
+          const accruedFines = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
+          if (accruedFines[mCfg.key] !== undefined) {
+            const lockedFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
+            if (lockedFine > 0) {
+              grossFine += lockedFine;
+              fineBreakdown.push({
+                monthKey: mCfg.key,
+                label: mCfg.label,
+                weekCount: Math.round(lockedFine / (getPasyFineWeekRate() || 20)),
+                fine: lockedFine
+              });
+            }
+            return;
+          }
+        }
+
+        if (effectiveCalcDate <= thirdSunday) {
           // Deadline not crossed yet
           return;
         }
@@ -6004,10 +6040,10 @@
         startMonday.setDate(startMonday.getDate() + 1);
         startMonday.setHours(0, 0, 0, 0);
 
-        if (now < startMonday) return;
+        if (effectiveCalcDate < startMonday) return;
 
         // Calculate weeks passed / entered
-        const diffMs = now.getTime() - startMonday.getTime();
+        const diffMs = effectiveCalcDate.getTime() - startMonday.getTime();
         const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
         const weekCount = Math.floor(diffDays / 7) + 1;
         const finePerWeek = getPasyFineWeekRate();
@@ -14031,6 +14067,45 @@ ID: ${item.id}
         }
       }
 
+      if (isChecked) {
+        if (!mem.pariwarikPaidAt || typeof mem.pariwarikPaidAt !== 'object') {
+          mem.pariwarikPaidAt = {};
+        }
+        const nowIso = new Date().toISOString();
+        mem.pariwarikPaidAt[currentPariwarikMonth] = nowIso;
+
+        // If member is late when paying ₹150, lock the accrued fine so it remains due
+        const preFineInfo = calculateMemberPasyFine(mem);
+        const thisMonthBreakdown = (preFineInfo.fineBreakdown || []).find(b => b.monthKey === currentPariwarikMonth);
+        if (thisMonthBreakdown && thisMonthBreakdown.fine > 0) {
+          if (!masterSettings) masterSettings = {};
+          if (!masterSettings.pariwarikLateFines || typeof masterSettings.pariwarikLateFines !== 'object') {
+            masterSettings.pariwarikLateFines = {};
+          }
+          if (!masterSettings.pariwarikLateFines[memberId] || typeof masterSettings.pariwarikLateFines[memberId] !== 'object') {
+            masterSettings.pariwarikLateFines[memberId] = {};
+          }
+          masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth] = thisMonthBreakdown.fine;
+          try {
+            if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
+          } catch (e) {
+            console.warn('Failed to save locked late fine:', e);
+          }
+        }
+      } else {
+        if (mem.pariwarikPaidAt && mem.pariwarikPaidAt[currentPariwarikMonth]) {
+          delete mem.pariwarikPaidAt[currentPariwarikMonth];
+        }
+        if (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[memberId]) {
+          delete masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth];
+          try {
+            if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
+          } catch (e) {
+            console.warn('Failed to clear locked late fine:', e);
+          }
+        }
+      }
+
       renderPariwarikView();
 
       // Persist to Central Server
@@ -14038,7 +14113,8 @@ ID: ${item.id}
         await syncMemberToBackend({
           id: memberId,
           pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid,
-          pariwarikPaid: mem.pariwarikPaid
+          pariwarikPaid: mem.pariwarikPaid,
+          pariwarikPaidAt: mem.pariwarikPaidAt
         });
       } catch (err) {
         console.warn('Error saving pariwarik paid status:', err);
