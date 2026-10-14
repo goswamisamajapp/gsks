@@ -6223,6 +6223,7 @@
         // If the installment was paid late (after 3rd Sunday) or before fine was settled, the fine is preserved!
         const isPaidInstallment = isPariwarikPaidForMonth(member, mCfg.key);
         if (isPaidInstallment) {
+          // If member has paid for this month, they have NO late fine unless an explicit fine was recorded
           const accruedFines = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
           let monthFine = 0;
           let weekCount = 0;
@@ -6230,34 +6231,6 @@
           if (accruedFines[mCfg.key] !== undefined) {
             monthFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
             weekCount = Math.round(monthFine / (getPasyFineWeekRate() || 20));
-          } else {
-            // Only non-default-paid months (e.g. Oct 2026 onwards) can have an accrued late fine if paid late
-            let paidTime = null;
-            if (member.pariwarikPaidAt && member.pariwarikPaidAt[mCfg.key]) {
-              paidTime = new Date(member.pariwarikPaidAt[mCfg.key]);
-            }
-            if (paidTime && !isNaN(paidTime.getTime()) && paidTime > thirdSunday) {
-              const startMonday = new Date(thirdSunday);
-              startMonday.setDate(startMonday.getDate() + 1);
-              startMonday.setHours(0, 0, 0, 0);
-              if (paidTime >= startMonday) {
-                const diffMs = paidTime.getTime() - startMonday.getTime();
-                const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
-                weekCount = Math.floor(diffDays / 7) + 1;
-                monthFine = weekCount * getPasyFineWeekRate();
-              }
-            } else if (!paidTime && now > thirdSunday) {
-              // If member paid after deadline was already crossed
-              const startMonday = new Date(thirdSunday);
-              startMonday.setDate(startMonday.getDate() + 1);
-              startMonday.setHours(0, 0, 0, 0);
-              if (now >= startMonday) {
-                const diffMs = now.getTime() - startMonday.getTime();
-                const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
-                weekCount = Math.floor(diffDays / 7) + 1;
-                monthFine = weekCount * getPasyFineWeekRate();
-              }
-            }
           }
 
           if (monthFine > 0) {
