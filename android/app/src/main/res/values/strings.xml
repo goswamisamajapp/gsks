@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">GSKS - गोस्वामी समाज</string>
-    <string name="title_activity_main">GSKS</string>
+    <string name="app_name">Goswami Samaj Kalyan Samiti</string>
+    <string name="title_activity_main">Goswami Samaj Kalyan Samiti</string>
     <string name="package_name">org.gsks.trust</string>
     <string name="custom_url_scheme">org.gsks.trust</string>
 </resources>

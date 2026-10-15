@@ -9994,6 +9994,7 @@
                 id: Math.floor(Math.random() * 1000000),
                 schedule: { at: new Date(Date.now() + 100) },
                 sound: 'beep.wav',
+                channelId: 'gsks_default_channel',
                 smallIcon: 'ic_launcher_round',
                 actionTypeId: '',
                 extra: null
@@ -10027,9 +10028,44 @@
       } catch (e) {}
     }
 
+    // Request system push notification permissions on app startup
+    async function requestNotificationPermissions() {
+      try {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+          const ln = window.Capacitor.Plugins.LocalNotifications;
+          await ln.requestPermissions();
+          // Create default high-importance channel for Android 8.0+
+          try {
+            await ln.createChannel({
+              id: 'gsks_default_channel',
+              name: 'समिति महत्वपूर्ण सूचनाएँ (GSKS Alerts)',
+              description: 'General notifications, meeting updates and PASY payment receipts',
+              importance: 5,
+              visibility: 1,
+              sound: 'beep.wav',
+              vibration: true
+            });
+          } catch (chErr) {
+            console.warn('Channel creation error:', chErr);
+          }
+        }
+      } catch (e) {
+        console.warn('Capacitor notification permission request warning:', e);
+      }
+
+      try {
+        if ('Notification' in window && Notification.permission === 'default') {
+          await Notification.requestPermission();
+        }
+      } catch (e) {}
+    }
+
     async function initFirebaseRealtime() {
       if (realtimeListenerInitialized) return;
       realtimeListenerInitialized = true;
+
+      // Ask for notification permission early
+      requestNotificationPermissions();
 
       try {
         console.log("Subscribing to Firestore members collection...");
