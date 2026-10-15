@@ -6044,9 +6044,9 @@
     </div>
   </div>
 
-
+  <script src="members-preloaded.js"></script>
   <script>
-    let allMembers = [];
+    let allMembers = (typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__)) ? [...window.__INITIAL_MEMBERS__] : [];
     let allEvents = [];
     let allDonations = [];
     let allFundTransfers = [];
@@ -6478,8 +6478,30 @@
         adminDash.classList.remove('hidden');
         adminDash.style.display = 'flex';
       }
+
+      // Reset directory filters so all members are visible immediately
+      currentSearchTerm = '';
+      currentFilterAddress = 'ALL';
+      currentFilterStatus = 'ALL';
+      const searchInp = document.getElementById('member-search-input');
+      if (searchInp) searchInp.value = '';
+      const filterAdd = document.getElementById('member-filter-address');
+      if (filterAdd) filterAdd.value = 'ALL';
+      const filterSt = document.getElementById('member-filter-status');
+      if (filterSt) filterSt.value = 'ALL';
+
+      // Immediate memory hydration from preloaded cache if available
+      if ((!allMembers || allMembers.length === 0) && typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__) && window.__INITIAL_MEMBERS__.length > 0) {
+        allMembers = [...window.__INITIAL_MEMBERS__];
+      }
+
       updateDate();
       initFirebaseRealtime();
+
+      if (!allMembers || allMembers.length === 0) {
+        loadMembersDataFallback();
+      }
+
       if (typeof updateStats === 'function') updateStats();
       if (typeof renderMembers === 'function') renderMembers();
       if (typeof renderPariwarikView === 'function') renderPariwarikView();
@@ -9528,7 +9550,12 @@
             list.push(doc.data());
           });
 
-          allMembers = list;
+          if (list.length > 0) {
+            allMembers = list;
+          } else if ((!allMembers || allMembers.length === 0)) {
+            loadMembersDataFallback();
+            return;
+          }
           allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
           updateStats();
           renderMembers();
