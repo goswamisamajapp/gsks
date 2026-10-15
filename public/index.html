@@ -358,7 +358,7 @@
             </button>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
             <!-- Card 1: Total Members -->
             <div onclick="switchAdminView('members', 'ALL')" class="cursor-pointer bg-gradient-to-br from-orange-50 via-amber-50/30 to-white rounded-2xl p-3 sm:p-4 border border-orange-200/90 shadow-xs flex flex-col justify-between hover:border-orange-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
@@ -398,7 +398,20 @@
               </div>
             </div>
 
-            <!-- Card 4: Inactive Members -->
+            <!-- Card 4: Pending Members -->
+            <div onclick="switchAdminView('members', 'Pending')" class="cursor-pointer bg-gradient-to-br from-yellow-50 via-amber-50/30 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">Pending</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-user-clock"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-pending-members">0</p>
+              </div>
+            </div>
+
+            <!-- Card 5: Inactive Members -->
             <div onclick="switchAdminView('members', 'Inactive')" class="cursor-pointer bg-gradient-to-br from-slate-100/80 via-slate-50 to-white rounded-2xl p-3 sm:p-4 border border-slate-200/90 shadow-xs flex flex-col justify-between hover:border-slate-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-slate-700">Inactive</span>
@@ -411,7 +424,7 @@
               </div>
             </div>
 
-            <!-- Card 5: Archived Members -->
+            <!-- Card 6: Archived Members -->
             <div onclick="switchAdminView('archived')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-pink-50/30 to-white rounded-2xl p-3 sm:p-4 border border-rose-200/90 shadow-xs flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-rose-900">Archived</span>
@@ -434,7 +447,7 @@
             </h3>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
             <!-- 1. Total Fund Available -->
             <div class="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl p-3 sm:p-4 border border-emerald-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-emerald-300 transition-all">
               <div class="flex items-center justify-between">
@@ -488,8 +501,8 @@
               </div>
             </div>
 
-            <!-- 5. Dues Amount -->
-            <div onclick="switchAdminView('dues')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-2xl p-3 sm:p-4 border border-purple-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-purple-400 transition-all group">
+            <!-- 5. General / Total Dues Amount -->
+            <div onclick="switchAdminView('dues', 'ALL')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-2xl p-3 sm:p-4 border border-purple-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-purple-400 transition-all group">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-purple-900">Dues</span>
                 <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
@@ -498,6 +511,19 @@
               </div>
               <div class="mt-2">
                 <p class="text-xl sm:text-2xl font-black text-purple-950" id="dash-dues-fund">₹ 0</p>
+              </div>
+            </div>
+
+            <!-- 6. PASY Dues Amount -->
+            <div onclick="switchAdminView('dues', 'PASY')" class="cursor-pointer bg-gradient-to-br from-cyan-50 via-teal-50/30 to-white rounded-2xl p-3 sm:p-4 border border-cyan-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-cyan-400 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-cyan-900">PASY Dues</span>
+                <span class="w-7 h-7 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-cyan-950" id="dash-pasy-dues">₹ 0</p>
               </div>
             </div>
           </div>
@@ -567,6 +593,7 @@
               <option value="ALL">सभी Status</option>
               <option value="Active">Active</option>
               <option value="Prime Member">Prime Member</option>
+              <option value="Pending">Pending</option>
               <option value="Inactive">Inactive</option>
             </select>
           </div>
@@ -6646,6 +6673,7 @@
       statuses: [
         { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'सक्रिय सदस्य' },
         { id: 'st_2', name: 'Prime Member', badgeColor: 'amber', isSystem: true, description: 'विशिष्ट सदस्य (VIP)' },
+        { id: 'st_pending', name: 'Pending', badgeColor: 'amber', isSystem: true, description: 'लंबित सत्यापन / सदस्यता' },
         { id: 'st_3', name: 'Inactive', badgeColor: 'slate', isSystem: true, description: 'निष्क्रिय सदस्य' }
       ],
       eventCategories: [
@@ -9748,7 +9776,11 @@
 
       if (view === 'dues') {
         if (duesSection) duesSection.classList.remove('hidden');
-        renderDuesView();
+        if (statusFilter && typeof filterDuesType === 'function') {
+          filterDuesType(statusFilter.toUpperCase());
+        } else {
+          renderDuesView();
+        }
       } else if (view === 'settings') {
         if (settingsSection) settingsSection.classList.remove('hidden');
         if (navSettings) navSettings.className = 'px-3.5 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/20';
@@ -10366,6 +10398,7 @@
       const nonRemoved = allMembers.filter(m => m.status !== 'removed');
       const activeCount = allMembers.filter(m => m.status === 'Active').length;
       const primeCount = allMembers.filter(m => m.status === 'Prime Member').length;
+      const pendingCount = allMembers.filter(m => m.status === 'Pending' || m.status === 'pending' || m.pendingApproval).length;
       const inactiveCount = allMembers.filter(m => m.status === 'Inactive').length;
       const archivedCount = allMembers.filter(m => m.status === 'removed').length;
 
@@ -10378,6 +10411,8 @@
       document.getElementById('dash-prime-members').textContent = primeCount;
       if (document.getElementById('nav-prime-count')) document.getElementById('nav-prime-count').textContent = primeCount;
       if (document.getElementById('mob-prime-count')) document.getElementById('mob-prime-count').textContent = primeCount;
+
+      if (document.getElementById('dash-pending-members')) document.getElementById('dash-pending-members').textContent = pendingCount;
 
       document.getElementById('dash-inactive-members').textContent = inactiveCount;
       if (document.getElementById('nav-archived-count')) document.getElementById('nav-archived-count').textContent = archivedCount;
@@ -10454,17 +10489,22 @@
       const elBankFund = document.getElementById('dash-bank-fund');
       const elCashFund = document.getElementById('dash-cash-fund');
       const elDuesFund = document.getElementById('dash-dues-fund');
+      const elPasyDues = document.getElementById('dash-pasy-dues');
       const elExpensesTotal = document.getElementById('dash-expenses-total');
       const elExpensesSplit = document.getElementById('dash-expenses-split');
       const elQuickExpensesCount = document.getElementById('quick-expenses-count');
 
       // Calculate total pending dues (Unified: General + PASY Installments + Fine Dues)
       let totalDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
+      let pasyDuesAmount = 0;
       try {
         if (typeof calculateAllDuesData === 'function') {
           const allDuesObj = calculateAllDuesData();
           if (allDuesObj && typeof allDuesObj.grandTotalDues === 'number') {
             totalDuesAmount = allDuesObj.grandTotalDues;
+          }
+          if (allDuesObj && typeof allDuesObj.totalPasyDues === 'number') {
+            pasyDuesAmount = allDuesObj.totalPasyDues;
           }
         }
       } catch (e) {
@@ -10475,6 +10515,7 @@
       if (elBankFund) elBankFund.textContent = `₹ ${netBankAmount.toLocaleString('en-IN')}`;
       if (elCashFund) elCashFund.textContent = `₹ ${netCashInHand.toLocaleString('en-IN')}`;
       if (elDuesFund) elDuesFund.textContent = `₹ ${totalDuesAmount.toLocaleString('en-IN')}`;
+      if (elPasyDues) elPasyDues.textContent = `₹ ${pasyDuesAmount.toLocaleString('en-IN')}`;
       if (elExpensesTotal) elExpensesTotal.textContent = `₹ ${totalExpenses.toLocaleString('en-IN')}`;
       if (elExpensesSplit) elExpensesSplit.textContent = `नकद: ₹${expenseCashTotal.toLocaleString('en-IN')} | बैंक: ₹${expenseOnlineTotal.toLocaleString('en-IN')}`;
       if (elQuickExpensesCount) elQuickExpensesCount.textContent = (typeof allExpenses !== 'undefined' ? allExpenses.length : 0);
@@ -10549,6 +10590,9 @@
           const dotClass = getStatusDotClass(found.badgeColor);
           return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${colorClass} inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full ${dotClass}"></span> ${found.name}</span>`;
         }
+      }
+      if (status === 'Pending' || status === 'pending') {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-300 flex items-center gap-1"><i class="fa-solid fa-clock text-[9px]"></i> Pending</span>`;
       }
       if (status === 'Inactive') {
         return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300">Inactive</span>`;
