@@ -6045,10 +6045,12 @@
   </div>
 
   <script src="members-preloaded.js"></script>
+  <script src="events-preloaded.js"></script>
+  <script src="donations-preloaded.js"></script>
   <script>
     let allMembers = (typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__)) ? [...window.__INITIAL_MEMBERS__] : [];
-    let allEvents = [];
-    let allDonations = [];
+    let allEvents = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? [...window.__INITIAL_EVENTS__] : [];
+    let allDonations = (typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__)) ? [...window.__INITIAL_DONATIONS__] : [];
     let allFundTransfers = [];
     let allExpenses = [];
     let currentExpenseMethodFilter = 'ALL';
@@ -6491,6 +6493,12 @@
       if ((!allMembers || allMembers.length === 0) && typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__) && window.__INITIAL_MEMBERS__.length > 0) {
         allMembers = [...window.__INITIAL_MEMBERS__];
       }
+      if ((!allEvents || allEvents.length === 0) && typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__) && window.__INITIAL_EVENTS__.length > 0) {
+        allEvents = [...window.__INITIAL_EVENTS__];
+      }
+      if ((!allDonations || allDonations.length === 0) && typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__) && window.__INITIAL_DONATIONS__.length > 0) {
+        allDonations = [...window.__INITIAL_DONATIONS__];
+      }
 
       updateDate();
       initFirebaseRealtime();
@@ -6498,10 +6506,29 @@
       if (!allMembers || allMembers.length === 0) {
         loadMembersDataFallback();
       }
+      if (!allEvents || allEvents.length === 0) {
+        loadEventsFallback();
+      }
+      if (!allDonations || allDonations.length === 0) {
+        loadDonationsFallback();
+      }
+      if (!allExpenses || allExpenses.length === 0) {
+        loadExpensesFallback();
+      }
+      if (!allFundTransfers || allFundTransfers.length === 0) {
+        loadFundTransfersFallback();
+      }
+      loadSettingsFallback();
 
       if (typeof updateStats === 'function') updateStats();
       if (typeof renderMembers === 'function') renderMembers();
       if (typeof renderPariwarikView === 'function') renderPariwarikView();
+      if (typeof updateEventsStats === 'function') updateEventsStats();
+      if (typeof renderEventsList === 'function') renderEventsList();
+      if (typeof updateDonationsStats === 'function') updateDonationsStats();
+      if (typeof renderDonationsList === 'function') renderDonationsList();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+      if (typeof renderExpensesList === 'function') renderExpensesList();
     }
 
     function logoutAdmin() {
@@ -9586,7 +9613,12 @@
             }
             eList.push(remoteEv);
           });
-          allEvents = eList;
+          if (eList.length > 0) {
+            allEvents = eList;
+          } else if (!allEvents || allEvents.length === 0) {
+            loadEventsFallback();
+            return;
+          }
           // Sort events by date descending
           allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
           updateEventsStats();
@@ -9610,7 +9642,12 @@
         donationsCol.onSnapshot((liveDonationsSnap) => {
           const dList = [];
           liveDonationsSnap.forEach(doc => dList.push(doc.data()));
-          allDonations = dList;
+          if (dList.length > 0) {
+            allDonations = dList;
+          } else if (!allDonations || allDonations.length === 0) {
+            loadDonationsFallback();
+            return;
+          }
           // Sort donations by date / timestamp descending (recent first)
           allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateDonationsStats();
@@ -9629,7 +9666,12 @@
         expensesCol.onSnapshot((liveExpensesSnap) => {
           const expList = [];
           liveExpensesSnap.forEach(doc => expList.push(doc.data()));
-          allExpenses = expList;
+          if (expList.length > 0) {
+            allExpenses = expList;
+          } else if (!allExpenses || allExpenses.length === 0) {
+            loadExpensesFallback();
+            return;
+          }
           allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           updateExpensesStats();
@@ -9644,7 +9686,12 @@
         fundTransfersCol.onSnapshot((liveSnap) => {
           const ftList = [];
           liveSnap.forEach(doc => ftList.push(doc.data()));
-          allFundTransfers = ftList;
+          if (ftList.length > 0) {
+            allFundTransfers = ftList;
+          } else if (!allFundTransfers || allFundTransfers.length === 0) {
+            loadFundTransfersFallback();
+            return;
+          }
           allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           renderFundTransfersList();
