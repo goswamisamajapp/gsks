@@ -9452,24 +9452,51 @@
     const notificationsCol = db.collection('notifications');
 
     let allNotifications = [];
-    let realtimeListenerInitialized = false;
+    let lastDeliveredNotifId = null;
 
-    // Trigger local push notification sound/vibration & native alert if supported
-    function triggerDevicePushAlert(title, body) {
+    // Trigger true system push notification in Android notification bar using Capacitor LocalNotifications & Web Notification fallback
+    async function triggerDevicePushAlert(title, body) {
+      // 1. Try Capacitor LocalNotifications (directly displays in Android Notification Bar/Shade)
+      try {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+          const ln = window.Capacitor.Plugins.LocalNotifications;
+          await ln.schedule({
+            notifications: [
+              {
+                title: title,
+                body: body,
+                id: Math.floor(Math.random() * 1000000),
+                schedule: { at: new Date(Date.now() + 100) },
+                sound: 'beep.wav',
+                smallIcon: 'ic_launcher_round',
+                actionTypeId: '',
+                extra: null
+              }
+            ]
+          });
+          console.log('Native local notification posted to status bar successfully');
+        }
+      } catch (capErr) {
+        console.warn('Capacitor LocalNotifications error:', capErr);
+      }
+
+      // 2. Standard Web Notification API fallback
       try {
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification(title, {
             body: body,
             icon: 'icon.png',
-            vibrate: [200, 100, 200]
+            vibrate: [300, 100, 300]
           });
         }
       } catch (e) {
-        console.warn('Native notification trigger failed:', e);
+        console.warn('Web notification trigger failed:', e);
       }
+
+      // 3. Hardware vibration
       try {
         if ('vibrate' in navigator) {
-          navigator.vibrate([200, 100, 200]);
+          navigator.vibrate([300, 100, 300, 100, 300]);
         }
       } catch (e) {}
     }
@@ -9611,28 +9638,54 @@
             nList.push(doc.data());
           });
           nList.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-          
-          // Check for newly arrived push notification for current member
-          if (!isFirstNotifLoad && currentLoggedInMember && nList.length > (allNotifications || []).length) {
-            const latestNotif = nList[0];
-            const memberId = (currentLoggedInMember.id || '').trim().toLowerCase();
-            const target = (latestNotif.targetMemberId || '').trim().toLowerCase();
-            if (target === memberId || target === 'all') {
-              triggerDevicePushAlert(latestNotif.title || '🔔 नई सूचना', latestNotif.body || '');
-              if (typeof showFloatingToast === 'function') {
-                showFloatingToast(latestNotif.title || '🔔 नई सूचना', latestNotif.body || '');
+
+          // Resolve currently active logged-in member ID from memory or saved localStorage session
+          let activeMemberId = '';
+          if (currentLoggedInMember && currentLoggedInMember.id) {
+            activeMemberId = currentLoggedInMember.id.trim().toLowerCase();
+          } else {
+            try {
+              const savedAuth = localStorage.getItem('gsks_member_auth');
+              if (savedAuth) {
+                const parsed = JSON.parse(savedAuth);
+                if (parsed && parsed.id) activeMemberId = parsed.id.trim().toLowerCase();
               }
-            }
+            } catch(e) {}
           }
+
+          // Real-time detection of newly added notification documents
+          if (!isFirstNotifLoad) {
+            notifSnap.docChanges().forEach(change => {
+              if (change.type === 'added') {
+                const newDoc = change.doc.data();
+                if (newDoc && newDoc.id !== lastDeliveredNotifId) {
+                  const target = (newDoc.targetMemberId || '').trim().toLowerCase();
+                  if (target === 'all' || (activeMemberId && target === activeMemberId)) {
+                    lastDeliveredNotifId = newDoc.id;
+                    triggerDevicePushAlert(newDoc.title || '🔔 नई समिति सूचना', newDoc.body || '');
+                    if (typeof showFloatingToast === 'function') {
+                      showFloatingToast(newDoc.title || '🔔 नई सूचना', newDoc.body || '');
+                    }
+                  }
+                }
+              }
+            });
+          } else if (nList.length > 0) {
+            lastDeliveredNotifId = nList[0].id;
+          }
+
           isFirstNotifLoad = false;
           allNotifications = nList;
 
-          if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+          // Always ensure member views stay instantly refreshed without relogging
+          const mem = currentLoggedInMember || (activeMemberId ? (allMembers || []).find(m => (m.id || '').toLowerCase() === activeMemberId) : null);
+          if (mem) {
+            currentLoggedInMember = mem;
             if (typeof renderMemberNotification === 'function') {
-              renderMemberNotification(currentLoggedInMember);
+              renderMemberNotification(mem);
             }
             if (typeof renderMemberAllNotifications === 'function') {
-              renderMemberAllNotifications(currentLoggedInMember);
+              renderMemberAllNotifications(mem);
             }
           }
         }, (err) => {

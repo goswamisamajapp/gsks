@@ -31,6 +31,13 @@ allprojects {
                 }
             }
         }
+        if (project.plugins.hasPlugin('kotlin-android') || project.hasProperty('kotlin')) {
+            try {
+                project.kotlin {
+                    jvmToolchain(17)
+                }
+            } catch(Exception ignored) {}
+        }
     }
 }
 
