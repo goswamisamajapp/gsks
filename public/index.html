@@ -347,6 +347,90 @@
         </div>
       </div>
 
+        <!-- Membership Stats (Dynamic Breakdown) -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i class="fa-solid fa-address-book text-orange-500 text-sm"></i> Member Statistics (सदस्य विवरण)
+            </h3>
+            <button onclick="switchAdminView('members')" class="text-xs text-orange-600 font-semibold hover:underline">
+              पूरी सूची देखें →
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <!-- Card 1: Total Members -->
+            <div onclick="switchAdminView('members', 'ALL')" class="cursor-pointer bg-gradient-to-br from-orange-50 via-amber-50/30 to-white rounded-3xl p-4 sm:p-5 border border-orange-200/90 shadow-sm flex flex-col justify-between hover:border-orange-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-orange-900">Total Members</span>
+                <span class="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-users"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-orange-950" id="dash-total-members">0</p>
+                <p class="text-xs text-orange-700/80 font-medium mt-0.5 flex items-center gap-1">कुल सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-orange-600"></i></p>
+              </div>
+            </div>
+
+            <!-- Card 2: Active Members -->
+            <div onclick="switchAdminView('members', 'Active')" class="cursor-pointer bg-gradient-to-br from-emerald-50 via-green-50/30 to-white rounded-3xl p-4 sm:p-5 border border-emerald-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">Active</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-user-check"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-emerald-950" id="dash-active-members">0</p>
+                <p class="text-xs text-emerald-700/80 font-medium mt-0.5 flex items-center gap-1">सक्रिय सामान्य सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-emerald-600"></i></p>
+              </div>
+            </div>
+
+            <!-- Card 3: Prime Members (DEDICATED VIP CARD) -->
+            <div onclick="switchAdminView('prime')" class="cursor-pointer bg-gradient-to-br from-amber-100/60 via-yellow-50 to-white rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-sm flex flex-col justify-between hover:border-amber-500 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-950">Prime Members</span>
+                <span class="w-8 h-8 rounded-xl bg-amber-200/80 text-amber-800 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-crown text-amber-700"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-amber-950" id="dash-prime-members">0</p>
+                <p class="text-xs text-amber-800 font-semibold mt-0.5 flex items-center gap-1">विशिष्ट सदस्य (VIP) <i class="fa-solid fa-arrow-right text-[10px] text-amber-700"></i></p>
+              </div>
+            </div>
+
+            <!-- Card 4: Inactive Members -->
+            <div onclick="switchAdminView('members', 'Inactive')" class="cursor-pointer bg-gradient-to-br from-slate-100/80 via-slate-50 to-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-700">Inactive</span>
+                <span class="w-8 h-8 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-user-slash"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-slate-800" id="dash-inactive-members">0</p>
+                <p class="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1">निष्क्रिय सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-slate-600"></i></p>
+              </div>
+            </div>
+
+            <!-- Card 5: Archived Members -->
+            <div onclick="switchAdminView('archived')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-pink-50/30 to-white rounded-3xl p-4 sm:p-5 border border-rose-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-900">Archived</span>
+                <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-xs shadow-xs">
+                  <i class="fa-solid fa-box-archive"></i>
+                </span>
+              </div>
+              <div class="mt-3">
+                <p class="text-2xl sm:text-3xl font-black text-rose-800" id="dash-archived-members">0</p>
+                <p class="text-xs text-rose-700/80 font-semibold mt-0.5">हटाए गए सदस्य</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Treasury Section -->
         <div>
           <div class="flex items-center justify-between mb-3 px-1">
@@ -443,90 +527,6 @@
               <div class="mt-4 pt-3 border-t border-purple-200/60 flex items-center justify-between text-xs">
                 <span class="text-purple-800 bg-purple-100/70 border border-purple-200 px-2 py-0.5 rounded-md font-semibold">Pending Dues</span>
                 <span class="text-purple-700/80 text-[11px] font-medium">बकाया सूची देखें →</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Membership Stats (Dynamic Breakdown) -->
-        <div>
-          <div class="flex items-center justify-between mb-3 px-1">
-            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
-              <i class="fa-solid fa-address-book text-orange-500 text-sm"></i> Member Statistics (सदस्य विवरण)
-            </h3>
-            <button onclick="switchAdminView('members')" class="text-xs text-orange-600 font-semibold hover:underline">
-              पूरी सूची देखें →
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            <!-- Card 1: Total Members -->
-            <div onclick="switchAdminView('members', 'ALL')" class="cursor-pointer bg-gradient-to-br from-orange-50 via-amber-50/30 to-white rounded-3xl p-4 sm:p-5 border border-orange-200/90 shadow-sm flex flex-col justify-between hover:border-orange-400 hover:shadow-md transition-all group">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-orange-900">Total Members</span>
-                <span class="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
-                  <i class="fa-solid fa-users"></i>
-                </span>
-              </div>
-              <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-orange-950" id="dash-total-members">0</p>
-                <p class="text-xs text-orange-700/80 font-medium mt-0.5 flex items-center gap-1">कुल सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-orange-600"></i></p>
-              </div>
-            </div>
-
-            <!-- Card 2: Active Members -->
-            <div onclick="switchAdminView('members', 'Active')" class="cursor-pointer bg-gradient-to-br from-emerald-50 via-green-50/30 to-white rounded-3xl p-4 sm:p-5 border border-emerald-200/90 shadow-sm flex flex-col justify-between hover:border-emerald-400 hover:shadow-md transition-all group">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-emerald-900">Active</span>
-                <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
-                  <i class="fa-solid fa-user-check"></i>
-                </span>
-              </div>
-              <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-emerald-950" id="dash-active-members">0</p>
-                <p class="text-xs text-emerald-700/80 font-medium mt-0.5 flex items-center gap-1">सक्रिय सामान्य सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-emerald-600"></i></p>
-              </div>
-            </div>
-
-            <!-- Card 3: Prime Members (DEDICATED VIP CARD) -->
-            <div onclick="switchAdminView('prime')" class="cursor-pointer bg-gradient-to-br from-amber-100/60 via-yellow-50 to-white rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-sm flex flex-col justify-between hover:border-amber-500 hover:shadow-md transition-all group">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-amber-950">Prime Members</span>
-                <span class="w-8 h-8 rounded-xl bg-amber-200/80 text-amber-800 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
-                  <i class="fa-solid fa-crown text-amber-700"></i>
-                </span>
-              </div>
-              <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-amber-950" id="dash-prime-members">0</p>
-                <p class="text-xs text-amber-800 font-semibold mt-0.5 flex items-center gap-1">विशिष्ट सदस्य (VIP) <i class="fa-solid fa-arrow-right text-[10px] text-amber-700"></i></p>
-              </div>
-            </div>
-
-            <!-- Card 4: Inactive Members -->
-            <div onclick="switchAdminView('members', 'Inactive')" class="cursor-pointer bg-gradient-to-br from-slate-100/80 via-slate-50 to-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-400 hover:shadow-md transition-all group">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-700">Inactive</span>
-                <span class="w-8 h-8 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
-                  <i class="fa-solid fa-user-slash"></i>
-                </span>
-              </div>
-              <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-slate-800" id="dash-inactive-members">0</p>
-                <p class="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1">निष्क्रिय सदस्य <i class="fa-solid fa-arrow-right text-[10px] text-slate-600"></i></p>
-              </div>
-            </div>
-
-            <!-- Card 5: Archived Members -->
-            <div onclick="switchAdminView('archived')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-pink-50/30 to-white rounded-3xl p-4 sm:p-5 border border-rose-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-rose-900">Archived</span>
-                <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-xs shadow-xs">
-                  <i class="fa-solid fa-box-archive"></i>
-                </span>
-              </div>
-              <div class="mt-3">
-                <p class="text-2xl sm:text-3xl font-black text-rose-800" id="dash-archived-members">0</p>
-                <p class="text-xs text-rose-700/80 font-semibold mt-0.5">हटाए गए सदस्य</p>
               </div>
             </div>
           </div>
