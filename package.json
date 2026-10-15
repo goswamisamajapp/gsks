@@ -9,6 +9,9 @@
     "build": "echo 'Build step complete'"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "express": "^4.22.3",
     "firebase": "^11.4.0",
     "iconv-lite": "^0.7.3"

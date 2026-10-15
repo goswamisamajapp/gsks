@@ -6852,6 +6852,43 @@
         });
       }
 
+      // 3. Live Broadcast & Targeted Push Notifications (from Firestore notifications collection)
+      const currentMemId = member ? (member.id || '').trim().toLowerCase() : '';
+      if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
+        allNotifications.forEach(notif => {
+          if (!notif) return;
+          const target = (notif.targetMemberId || '').trim().toLowerCase();
+          // Show if targeted to current member or broadcast to all
+          if (target === 'all' || target === currentMemId) {
+            const dt = notif.createdAt ? new Date(notif.createdAt) : new Date();
+            const dtFormatted = dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+            const timeFormatted = dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
+
+            rawNotices.push({
+              id: notif.id || ('NOTIF-' + Math.random().toString().slice(2, 6)),
+              title: notif.title || '🔔 समिति आवश्यक सूचना',
+              category: notif.type === 'PASY_INSTALLMENT' ? 'पारिवारिक अंशदान' : (notif.category || 'पुश नोटिफिकेशन'),
+              date: notif.createdAt ? notif.createdAt.split('T')[0] : new Date().toISOString().split('T')[0],
+              dateFormatted: dtFormatted,
+              timeFormatted: timeFormatted,
+              status: 'Open',
+              statusLabel: '🔔 लाइव पुश (ACTIVE)',
+              statusBadgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
+              statusDotColor: 'bg-amber-600 animate-pulse',
+              isOpen: true,
+              isUpcoming: false,
+              isClosed: false,
+              badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
+              badgeText: '🔔 पुश सूचना',
+              summary: notif.body || 'समिति द्वारा प्रेषित विशेष सूचना',
+              details: notif.details || notif.body || '',
+              venue: notif.venue || 'गोस्वामी समाज कल्याण समिति, गुनघसा',
+              rawItem: notif
+            });
+          }
+        });
+      }
+
       // Filter and Search according to filter rule:
       // ALL = show all
       // OPEN = show open/in-progress
@@ -7135,10 +7172,57 @@
       }
 
       // ==============================================================
-      // PRIORITY 2: PERSONAL / TARGETED PUSH NOTIFICATION (व्यक्तिगत सूचना)
-      // Checks if member is specifically targeted in any active meeting/announcement
+      // PRIORITY 2: LIVE FIRESTORE PUSH NOTIFICATION (व्यक्तिगत / ब्रॉडकास्ट पुश अलर्ट)
       // ==============================================================
       const memberId = member ? (member.id || '').trim().toLowerCase() : '';
+      const livePushNotice = (allNotifications || []).find(n => {
+        if (!n) return false;
+        const target = (n.targetMemberId || '').trim().toLowerCase();
+        return target === memberId || target === 'all';
+      });
+
+      if (livePushNotice) {
+        if (noticePanel) {
+          noticePanel.className = 'bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-lg shadow-orange-500/25 relative overflow-hidden';
+        }
+        if (noticeBadge) {
+          noticeBadge.textContent = livePushNotice.type === 'PASY_INSTALLMENT' ? '🔔 पारिवारिक योजना अलर्ट' : '🔔 लाइव पुश अलर्ट / PUSH';
+          noticeBadge.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase bg-white/25 text-white tracking-wider inline-block animate-pulse';
+        }
+
+        const dt = livePushNotice.createdAt ? new Date(livePushNotice.createdAt) : new Date();
+        const dateStr = dt.toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', weekday: 'short' });
+        const timeStr = dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
+        const venueStr = livePushNotice.venue || 'समिति कार्यालय, गुनघसा';
+
+        if (noticeDate) noticeDate.textContent = `⏰ ${timeStr}`;
+        if (noticeTitle) noticeTitle.textContent = `${livePushNotice.title || '🔔 विशेष सूचना'}`;
+        if (noticeBody) {
+          noticeBody.innerHTML = `
+            <div class="flex items-center gap-2 flex-wrap mb-1 text-[11px] font-semibold text-amber-100">
+              <span><i class="fa-solid fa-clock-rotate-left"></i> ${dateStr}</span>
+              <span>•</span>
+              <span><i class="fa-solid fa-building-shield"></i> ${venueStr}</span>
+            </div>
+            <p class="line-clamp-2 text-white/95 text-[11px] sm:text-xs font-medium">${livePushNotice.body || ''}</p>
+          `;
+        }
+
+        currentActiveMemberNotice = {
+          badge: livePushNotice.type === 'PASY_INSTALLMENT' ? '🔔 पारिवारिक योजना सूचना' : '🔔 लाइव पुश सूचना',
+          title: livePushNotice.title || 'समिति सूचना',
+          date: dateStr,
+          time: timeStr,
+          venue: venueStr,
+          description: livePushNotice.body || livePushNotice.details || ''
+        };
+        return;
+      }
+
+      // ==============================================================
+      // PRIORITY 3: PERSONAL / TARGETED EVENT MEETING NOTIFICATION (व्यक्तिगत बैठक सूचना)
+      // Checks if member is specifically targeted in any active meeting/announcement
+      // ==============================================================
       const personalNotice = (allEvents || []).find(e => {
         if (!e) return false;
         if (e.status === 'Closed' || e.status === 'Cancelled') return false;
@@ -9365,8 +9449,30 @@
     const expensesCol = db.collection('expenses');
     const fundTransfersCol = db.collection('fund_transfers');
     const settingsCol = db.collection('settings');
+    const notificationsCol = db.collection('notifications');
 
+    let allNotifications = [];
     let realtimeListenerInitialized = false;
+
+    // Trigger local push notification sound/vibration & native alert if supported
+    function triggerDevicePushAlert(title, body) {
+      try {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(title, {
+            body: body,
+            icon: 'icon.png',
+            vibrate: [200, 100, 200]
+          });
+        }
+      } catch (e) {
+        console.warn('Native notification trigger failed:', e);
+      }
+      try {
+        if ('vibrate' in navigator) {
+          navigator.vibrate([200, 100, 200]);
+        }
+      } catch (e) {}
+    }
 
     async function initFirebaseRealtime() {
       if (realtimeListenerInitialized) return;
@@ -9495,6 +9601,42 @@
         }, (err) => {
           console.warn("Firestore settings onSnapshot error:", err);
           loadSettingsFallback();
+        });
+
+        // Listen for live Firestore Push Notifications
+        let isFirstNotifLoad = true;
+        notificationsCol.onSnapshot((notifSnap) => {
+          const nList = [];
+          notifSnap.forEach(doc => {
+            nList.push(doc.data());
+          });
+          nList.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          
+          // Check for newly arrived push notification for current member
+          if (!isFirstNotifLoad && currentLoggedInMember && nList.length > (allNotifications || []).length) {
+            const latestNotif = nList[0];
+            const memberId = (currentLoggedInMember.id || '').trim().toLowerCase();
+            const target = (latestNotif.targetMemberId || '').trim().toLowerCase();
+            if (target === memberId || target === 'all') {
+              triggerDevicePushAlert(latestNotif.title || '🔔 नई सूचना', latestNotif.body || '');
+              if (typeof showFloatingToast === 'function') {
+                showFloatingToast(latestNotif.title || '🔔 नई सूचना', latestNotif.body || '');
+              }
+            }
+          }
+          isFirstNotifLoad = false;
+          allNotifications = nList;
+
+          if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+            if (typeof renderMemberNotification === 'function') {
+              renderMemberNotification(currentLoggedInMember);
+            }
+            if (typeof renderMemberAllNotifications === 'function') {
+              renderMemberAllNotifications(currentLoggedInMember);
+            }
+          }
+        }, (err) => {
+          console.warn("Firestore notifications onSnapshot error:", err);
         });
 
       } catch (err) {
@@ -14778,11 +14920,52 @@ ID: ${item.id}
       return selectedMonthKey;
     }
 
-    function sendPariwarikPushNotification(memberId, memberName, memberPhone) {
+    async function sendPariwarikPushNotification(memberId, memberName, memberPhone) {
       const activeMonthCfg = PARIWARIK_MONTHS.find(m => m.key === currentPariwarikMonth) || { label: currentPariwarikMonth };
       const selectedMonthLabel = activeMonthCfg.label || currentPariwarikMonth;
       const installmentMonthLabel = getPariwarikInstallmentMonthLabel(currentPariwarikMonth);
-      alert(`🔔 पुश नोटिफिकेशन (Push Notification):\n\nसदस्य: ${memberName || '--'} (${memberId})\nमोबाइल: ${memberPhone || '--'}\nकिस्त माह: ${installmentMonthLabel} (अग्रिम माह: ${selectedMonthLabel})\n\nनोट: यूजर डैशबोर्ड तैयार होने पर सदस्य के ऐप पर सीधा पुश अलर्ट डिलीवर होगा!`);
+      
+      const notifId = 'NOTIF-PASY-' + memberId + '-' + currentPariwarikMonth + '-' + Date.now();
+      const notifDoc = {
+        id: notifId,
+        targetMemberId: memberId,
+        targetMemberName: memberName || '',
+        targetPhone: memberPhone || '',
+        type: 'PASY_INSTALLMENT',
+        category: 'पारिवारिक अंशदान',
+        title: '🔔 पारिवारिक योजना अंशदान सूचना',
+        body: `सादर प्रणाम ${memberName || 'सदस्य'} जी! पारिवारिक आर्थिक योजना अंतर्गत ${installmentMonthLabel} माह की ₹${PARIWARIK_MONTHLY_FEE} की किस्त देय है। कृपया समय पर भुगतान सुनिश्चित करें।`,
+        details: `समिति के पारिवारिक आर्थिक सहायता योजना (PASY) अंतर्गत ${installmentMonthLabel} (अग्रिम माह: ${selectedMonthLabel}) की ₹${PARIWARIK_MONTHLY_FEE} की मासिक किस्त अभी प्राप्त नहीं हुई है। कृपया इसे शीघ्र कोषाध्यक्ष के पास या SBI बैंक खाते में जमा कराएं।`,
+        monthKey: currentPariwarikMonth,
+        amount: PARIWARIK_MONTHLY_FEE,
+        createdAt: new Date().toISOString(),
+        read: false,
+        source: 'ADMIN_PUSH'
+      };
+
+      try {
+        if (typeof notificationsCol !== 'undefined') {
+          await notificationsCol.doc(notifId).set(notifDoc);
+        } else {
+          // Local fallback
+          if (!Array.isArray(allNotifications)) allNotifications = [];
+          allNotifications.unshift(notifDoc);
+        }
+
+        // Trigger local native push alert if testing on same device
+        if (typeof triggerDevicePushAlert === 'function') {
+          triggerDevicePushAlert(notifDoc.title, notifDoc.body);
+        }
+
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('🔔 पुश नोटिफिकेशन प्रेषित!', `${memberName || memberId} को ${installmentMonthLabel} का पुश अलर्ट सफलतापूर्वक भेज दिया गया!`);
+        } else {
+          alert(`✅ पुश नोटिफिकेशन सफलतापूर्वक प्रेषित!\n\nसदस्य: ${memberName || '--'} (${memberId})\nकिस्त माह: ${installmentMonthLabel} (₹${PARIWARIK_MONTHLY_FEE})\n\nयह पुश अलर्ट संबंधित सदस्य के यूजर डैशबोर्ड एवं नोटिफिकेशन पटल पर लाइव डिलीवर हो चुका है!`);
+        }
+      } catch (err) {
+        console.error('Error sending push notification:', err);
+        alert(`❌ पुश नोटिफिकेशन भेजने में त्रुटि: ${err.message}`);
+      }
     }
 
     function sendPariwarikWhatsAppNotification(memberId, memberName, memberPhone, hasPaid) {
@@ -14884,7 +15067,7 @@ ID: ${item.id}
       currentUnpaidBulkIndex++;
     }
 
-    function sendPariwarikPushAllNotification() {
+    async function sendPariwarikPushAllNotification() {
       const pariwarikMembers = getPariwarikMemberList();
       const unpaidMembers = pariwarikMembers.filter(m => !isPariwarikPaidForMonth(m, currentPariwarikMonth));
       const installmentMonthLabel = getPariwarikInstallmentMonthLabel(currentPariwarikMonth);
@@ -14896,7 +15079,60 @@ ID: ${item.id}
         return;
       }
 
-      alert(`🔔 पुश नोटिफिकेशन ब्रॉडकास्ट (Push All):\n\nकिस्त माह: ${installmentMonthLabel} (अग्रिम माह: ${selectedMonthLabel})\nकुल बकाया सदस्य: ${unpaidMembers.length}\nप्रति सदस्य बकाया: ₹${PARIWARIK_MONTHLY_FEE}\n\nनोट: यूजर डैशबोर्ड/मोबाइल ऐप एक्टिव होते ही इन सभी ${unpaidMembers.length} सदस्यों के मोबाइल पर एक साथ पुश अलर्ट ब्रॉडकास्ट हो जाएगा!`);
+      if (!confirm(`क्या आप सभी ${unpaidMembers.length} बकाया सदस्यों को ${installmentMonthLabel} की किस्त (₹${PARIWARIK_MONTHLY_FEE}) का लाइव पुश नोटिफिकेशन भेजना चाहते हैं?`)) {
+        return;
+      }
+
+      try {
+        const timestamp = new Date().toISOString();
+        const batch = (typeof db !== 'undefined') ? db.batch() : null;
+
+        unpaidMembers.forEach(m => {
+          const notifId = 'NOTIF-PASY-' + m.id + '-' + currentPariwarikMonth + '-' + Date.now();
+          const notifDoc = {
+            id: notifId,
+            targetMemberId: m.id,
+            targetMemberName: m.name || '',
+            targetPhone: m.phone || '',
+            type: 'PASY_INSTALLMENT',
+            category: 'पारिवारिक अंशदान',
+            title: '🔔 पारिवारिक योजना अंशदान सूचना',
+            body: `सादर प्रणाम ${m.name || 'सदस्य'} जी! पारिवारिक आर्थिक योजना अंतर्गत ${installmentMonthLabel} माह की ₹${PARIWARIK_MONTHLY_FEE} की किस्त देय है। कृपया समय पर भुगतान सुनिश्चित करें।`,
+            details: `समिति के पारिवारिक आर्थिक सहायता योजना (PASY) अंतर्गत ${installmentMonthLabel} (अग्रिम माह: ${selectedMonthLabel}) की ₹${PARIWARIK_MONTHLY_FEE} की मासिक किस्त अभी प्राप्त नहीं हुई है। कृपया इसे शीघ्र कोषाध्यक्ष के पास या SBI बैंक खाते में जमा कराएं।`,
+            monthKey: currentPariwarikMonth,
+            amount: PARIWARIK_MONTHLY_FEE,
+            createdAt: timestamp,
+            read: false,
+            source: 'ADMIN_PUSH_ALL'
+          };
+
+          if (batch && typeof notificationsCol !== 'undefined') {
+            const docRef = notificationsCol.doc(notifId);
+            batch.set(docRef, notifDoc);
+          } else {
+            if (!Array.isArray(allNotifications)) allNotifications = [];
+            allNotifications.unshift(notifDoc);
+          }
+        });
+
+        if (batch) {
+          await batch.commit();
+        }
+
+        // Trigger local native push alert if supported
+        if (typeof triggerDevicePushAlert === 'function') {
+          triggerDevicePushAlert(`🔔 ${unpaidMembers.length} सदस्यों को पुश नोटिफिकेशन भेजा गया`, `${installmentMonthLabel} माह की किस्त हेतु सभी बकाया सदस्यों को सूचित किया गया।`);
+        }
+
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('🔔 ब्रॉडकास्ट पुश अलर्ट सफल!', `कुल ${unpaidMembers.length} बकाया सदस्यों को ${installmentMonthLabel} का पुश नोटिफिकेशन भेज दिया गया है।`);
+        } else {
+          alert(`✅ ब्रॉडकास्ट पुश नोटिफिकेशन सफलतापूर्वक प्रेषित!\n\nकिस्त माह: ${installmentMonthLabel}\nकुल बकाया सदस्य: ${unpaidMembers.length}\nप्रति सदस्य बकाया: ₹${PARIWARIK_MONTHLY_FEE}\n\nसभी सदस्यों के यूजर ऐप एवं डैशबोर्ड पर यह सूचना लाइव प्रदर्शित हो रही है!`);
+        }
+      } catch (err) {
+        console.error('Error broadcasting push notification:', err);
+        alert(`❌ ब्रॉडकास्ट पुश नोटिफिकेशन भेजने में त्रुटि: ${err.message}`);
+      }
     }
 
     window.isPariwarikMember = isPariwarikMember;
