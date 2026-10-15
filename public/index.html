@@ -434,94 +434,70 @@
             </h3>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
             <!-- 1. Total Fund Available -->
-            <div class="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-3xl p-5 border border-emerald-200/90 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-emerald-300 transition-all">
-              <div>
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider text-emerald-800">Total Available</span>
-                  <div class="w-8 h-8 rounded-full bg-emerald-100/80 text-emerald-700 flex items-center justify-center text-sm font-black shadow-xs">
-                    ₹
-                  </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-emerald-950 mt-1" id="dash-total-fund">₹ 0</p>
-                <p class="text-xs text-emerald-700/80 font-medium mt-1">कुल शुद्ध उपलब्ध धनराशि</p>
+            <div class="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl p-3 sm:p-4 border border-emerald-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-emerald-300 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">Total Fund</span>
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-black shadow-xs">
+                  ₹
+                </span>
               </div>
-              <div class="mt-4 pt-3 border-t border-emerald-200/60 flex items-center justify-between text-xs">
-                <span class="text-emerald-800 bg-emerald-100/70 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold">Net Balance</span>
-                <span class="text-emerald-700/70 text-[11px] font-medium">Bank + Cash</span>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-emerald-950" id="dash-total-fund">₹ 0</p>
               </div>
             </div>
 
             <!-- 2. In Bank -->
-            <div onclick="switchAdminView('bank')" class="cursor-pointer bg-gradient-to-br from-sky-50 via-blue-50/40 to-white rounded-3xl p-5 border border-sky-200/90 shadow-sm flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all group">
-              <div>
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider text-sky-800">In Bank</span>
-                  <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center text-sm group-hover:scale-110 transition-transform shadow-xs">
-                    <i class="fa-solid fa-building-columns"></i>
-                  </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-sky-950 mt-1" id="dash-bank-fund">₹ 0</p>
-                <p class="text-xs text-sky-700/80 font-medium mt-1 flex items-center gap-1">बैंक खाते में शेष राशि <i class="fa-solid fa-arrow-right text-[10px] text-sky-600"></i></p>
+            <div onclick="switchAdminView('bank')" class="cursor-pointer bg-gradient-to-br from-sky-50 via-blue-50/40 to-white rounded-2xl p-3 sm:p-4 border border-sky-200/90 shadow-xs flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-sky-900">In Bank</span>
+                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-building-columns"></i>
+                </span>
               </div>
-              <div class="mt-4 pt-3 border-t border-sky-200/60 flex items-center justify-between text-xs">
-                <span class="text-sky-800 bg-sky-100/70 border border-sky-200 px-2 py-0.5 rounded-md font-semibold">SBI Trust A/C</span>
-                <span class="text-sky-700/80 text-[11px] font-medium">बैंक विवरण देखें →</span>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-sky-950" id="dash-bank-fund">₹ 0</p>
               </div>
             </div>
 
             <!-- 3. In Hand -->
-            <div class="bg-gradient-to-br from-amber-50 via-yellow-50/30 to-white rounded-3xl p-5 border border-amber-200/90 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-amber-300 transition-all">
-              <div>
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider text-amber-800">In Hand (नगद)</span>
-                  <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm shadow-xs">
-                    <i class="fa-solid fa-hand-holding-dollar"></i>
-                  </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-amber-950 mt-1" id="dash-cash-fund">₹ 0</p>
-                <p class="text-xs text-amber-700/80 font-medium mt-1">कोषाध्यक्ष के पास नगद</p>
+            <div class="bg-gradient-to-br from-amber-50 via-yellow-50/30 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-amber-300 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">In Hand</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs shadow-xs">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                </span>
               </div>
-              <div class="mt-4 pt-3 border-t border-amber-200/60 flex items-center justify-between text-xs">
-                <span class="text-amber-800 bg-amber-100/70 border border-amber-200 px-2 py-0.5 rounded-md font-semibold">Cash in Hand</span>
-                <span class="text-amber-700/80 text-[11px] font-medium">नगद कोष</span>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-cash-fund">₹ 0</p>
               </div>
             </div>
 
             <!-- 4. Total Expenses -->
-            <div onclick="switchAdminView('expenses')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-red-50/30 to-white rounded-3xl p-5 border border-rose-200/90 shadow-sm flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
-              <div>
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider text-rose-800">Total Expenses</span>
-                  <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm group-hover:scale-110 transition-transform shadow-xs">
-                    <i class="fa-solid fa-receipt"></i>
-                  </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-rose-800 mt-1" id="dash-expenses-total">₹ 0</p>
-                <p class="text-xs text-rose-700/80 font-medium mt-1 flex items-center gap-1">कुल खर्च <i class="fa-solid fa-arrow-right text-[10px] text-rose-500"></i></p>
+            <div onclick="switchAdminView('expenses')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-red-50/30 to-white rounded-2xl p-3 sm:p-4 border border-rose-200/90 shadow-xs flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-900">Expenses</span>
+                <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-receipt"></i>
+                </span>
               </div>
-              <div class="mt-4 pt-3 border-t border-rose-200/60 flex items-center justify-between text-xs">
-                <span class="text-rose-800 bg-rose-100/70 border border-rose-200 px-2 py-0.5 rounded-md font-semibold">Expenses Out</span>
-                <span class="text-rose-700/80 text-[11px] font-medium" id="dash-expenses-split">Cash / Bank</span>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-rose-800" id="dash-expenses-total">₹ 0</p>
+                <span class="hidden" id="dash-expenses-split"></span>
               </div>
             </div>
 
             <!-- 5. Dues Amount -->
-            <div onclick="switchAdminView('dues')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-3xl p-5 border border-purple-200/90 shadow-sm flex flex-col justify-between hover:shadow-md hover:border-purple-400 transition-all group">
-              <div>
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                  <span class="text-xs font-bold uppercase tracking-wider text-purple-800">Dues Amount</span>
-                  <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm shadow-xs group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-                  </div>
-                </div>
-                <p class="text-2xl sm:text-3xl font-black text-purple-950 mt-1" id="dash-dues-fund">₹ 0</p>
-                <p class="text-xs text-purple-700/80 font-medium mt-1 flex items-center gap-1">कुल बकाया विवरण <i class="fa-solid fa-arrow-right text-[10px] text-purple-500"></i></p>
+            <div onclick="switchAdminView('dues')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-2xl p-3 sm:p-4 border border-purple-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-purple-400 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-purple-900">Dues</span>
+                <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-file-invoice-dollar"></i>
+                </span>
               </div>
-              <div class="mt-4 pt-3 border-t border-purple-200/60 flex items-center justify-between text-xs">
-                <span class="text-purple-800 bg-purple-100/70 border border-purple-200 px-2 py-0.5 rounded-md font-semibold">Pending Dues</span>
-                <span class="text-purple-700/80 text-[11px] font-medium">बकाया सूची देखें →</span>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-purple-950" id="dash-dues-fund">₹ 0</p>
               </div>
             </div>
           </div>
