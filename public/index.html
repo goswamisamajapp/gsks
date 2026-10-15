@@ -6438,9 +6438,54 @@
   <script src="donations-preloaded.js"></script>
   <script src="expenses-preloaded.js"></script>
   <script>
-    let allMembers = (typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__)) ? [...window.__INITIAL_MEMBERS__] : [];
-    let allEvents = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? [...window.__INITIAL_EVENTS__] : [];
-    let allDonations = (typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__)) ? [...window.__INITIAL_DONATIONS__] : [];
+    let allMembers = (() => {
+      try {
+        const cached = localStorage.getItem('gsks_cached_members');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch(e) {}
+      if (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS) && window.PRELOADED_MEMBERS.length > 0) {
+        return [...window.PRELOADED_MEMBERS];
+      }
+      if (typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__) && window.__INITIAL_MEMBERS__.length > 0) {
+        return [...window.__INITIAL_MEMBERS__];
+      }
+      return [];
+    })();
+    let allEvents = (() => {
+      try {
+        const cached = localStorage.getItem('gsks_cached_events');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch(e) {}
+      if (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__) && window.__INITIAL_EVENTS__.length > 0) {
+        return [...window.__INITIAL_EVENTS__];
+      }
+      if (typeof window.PRELOADED_EVENTS !== 'undefined' && Array.isArray(window.PRELOADED_EVENTS) && window.PRELOADED_EVENTS.length > 0) {
+        return [...window.PRELOADED_EVENTS];
+      }
+      return [];
+    })();
+    let allDonations = (() => {
+      try {
+        const cached = localStorage.getItem('gsks_cached_donations');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch(e) {}
+      if (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS) && window.PRELOADED_DONATIONS.length > 0) {
+        return [...window.PRELOADED_DONATIONS];
+      }
+      if (typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__) && window.__INITIAL_DONATIONS__.length > 0) {
+        return [...window.__INITIAL_DONATIONS__];
+      }
+      return [];
+    })();
     let allFundTransfers = (() => {
       try {
         const cached = localStorage.getItem('gsks_cached_fund_transfers');
@@ -6899,14 +6944,17 @@
       if (filterSt) filterSt.value = 'ALL';
 
       // Immediate memory hydration from preloaded cache if available
-      if ((!allMembers || allMembers.length === 0) && typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__) && window.__INITIAL_MEMBERS__.length > 0) {
-        allMembers = [...window.__INITIAL_MEMBERS__];
+      if (!allMembers || allMembers.length === 0) {
+        const pre = (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS)) ? window.PRELOADED_MEMBERS : window.__INITIAL_MEMBERS__;
+        if (Array.isArray(pre) && pre.length > 0) allMembers = [...pre];
       }
-      if ((!allEvents || allEvents.length === 0) && typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__) && window.__INITIAL_EVENTS__.length > 0) {
-        allEvents = [...window.__INITIAL_EVENTS__];
+      if (!allEvents || allEvents.length === 0) {
+        const pre = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? window.__INITIAL_EVENTS__ : window.PRELOADED_EVENTS;
+        if (Array.isArray(pre) && pre.length > 0) allEvents = [...pre];
       }
-      if ((!allDonations || allDonations.length === 0) && typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__) && window.__INITIAL_DONATIONS__.length > 0) {
-        allDonations = [...window.__INITIAL_DONATIONS__];
+      if (!allDonations || allDonations.length === 0) {
+        const pre = (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS)) ? window.PRELOADED_DONATIONS : window.__INITIAL_DONATIONS__;
+        if (Array.isArray(pre) && pre.length > 0) allDonations = [...pre];
       }
       if (!allExpenses || allExpenses.length === 0) {
         try {
@@ -10079,7 +10127,8 @@
 
           if (list.length > 0) {
             allMembers = list;
-          } else if ((!allMembers || allMembers.length === 0)) {
+            try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+          } else if (!allMembers || allMembers.length === 0) {
             loadMembersDataFallback();
             return;
           }
@@ -10147,6 +10196,7 @@
           liveDonationsSnap.forEach(doc => dList.push(doc.data()));
           if (dList.length > 0) {
             allDonations = dList;
+            try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
           } else if (!allDonations || allDonations.length === 0) {
             loadDonationsFallback();
             return;
@@ -10359,72 +10409,194 @@
       }
     }
 
+    // Helper to decode raw Firestore REST API documents into plain JS objects
+    function parseFirestoreValue(val) {
+      if (!val || typeof val !== 'object') return val;
+      if ('stringValue' in val) return val.stringValue;
+      if ('integerValue' in val) return parseInt(val.integerValue, 10);
+      if ('doubleValue' in val) return parseFloat(val.doubleValue);
+      if ('booleanValue' in val) return val.booleanValue;
+      if ('timestampValue' in val) return val.timestampValue;
+      if ('nullValue' in val) return null;
+      if ('mapValue' in val) {
+        const out = {};
+        const fields = (val.mapValue && val.mapValue.fields) || {};
+        for (const k in fields) {
+          out[k] = parseFirestoreValue(fields[k]);
+        }
+        return out;
+      }
+      if ('arrayValue' in val) {
+        const values = (val.arrayValue && val.arrayValue.values) || [];
+        return values.map(parseFirestoreValue);
+      }
+      return val;
+    }
+
+    function parseFirestoreDocument(doc) {
+      if (!doc || !doc.fields) return null;
+      const res = {};
+      for (const k in doc.fields) {
+        res[k] = parseFirestoreValue(doc.fields[k]);
+      }
+      if (!res.id && doc.name) {
+        res.id = doc.name.split('/').pop();
+      }
+      return res;
+    }
+
     async function loadDonationsFallback() {
+      // 1. Immediate fallback to PRELOADED if empty
+      if (!allDonations || allDonations.length === 0) {
+        const pre = (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS)) ? window.PRELOADED_DONATIONS : window.__INITIAL_DONATIONS__;
+        if (Array.isArray(pre) && pre.length > 0) {
+          allDonations = [...pre];
+          allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          updateDonationsStats();
+          updateStats();
+          renderDonationsList();
+        }
+      }
+
+      // 2. Try Local Express server if available
       try {
         const res = await fetch('/api/donations');
-        allDonations = await res.json();
-        allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-        updateDonationsStats();
-        updateStats();
-        renderDonationsList();
-        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
-        if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
-          if (currentLoggedInMember) renderMemberDonations(currentLoggedInMember);
+        if (res.ok) {
+          const list = await res.json();
+          if (Array.isArray(list) && list.length > 0) {
+            allDonations = list;
+            allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+            updateDonationsStats();
+            updateStats();
+            renderDonationsList();
+            if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+            return;
+          }
         }
-      } catch (err) {
-        console.error('Failed to load donations fallback:', err);
+      } catch (err) {}
+
+      // 3. Fallback: Fetch directly from Firestore REST API
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/donations?pageSize=500');
+        if (restRes.ok) {
+          const json = await restRes.json();
+          if (json && Array.isArray(json.documents)) {
+            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            if (list.length > 0) {
+              allDonations = list;
+              allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+              updateDonationsStats();
+              updateStats();
+              renderDonationsList();
+              if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+              try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Firestore REST donations fetch fallback warning:', e);
       }
     }
 
     async function loadEventsFallback() {
+      // 1. Immediate fallback to PRELOADED
+      if (!allEvents || allEvents.length === 0) {
+        const pre = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? window.__INITIAL_EVENTS__ : window.PRELOADED_EVENTS;
+        if (Array.isArray(pre) && pre.length > 0) {
+          allEvents = [...pre];
+          allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
+          updateEventsStats();
+          renderEventsList();
+        }
+      }
+
+      // 2. Try Local Express server if available
       try {
         const res = await fetch('/api/events');
-        const fetchedEvents = await res.json();
-        if (Array.isArray(fetchedEvents)) {
-          fetchedEvents.forEach(fe => {
-            const local = (allEvents || []).find(le => le.id === fe.id);
-            if (local && Array.isArray(local.participants) && local.participants.length > 0) {
-              const feParts = Array.isArray(fe.participants) ? fe.participants : [];
-              const merged = [...feParts];
-              local.participants.forEach(lp => {
-                if (!merged.some(rp => (rp.memberId || rp.id) === (lp.memberId || lp.id))) {
-                  merged.push(lp);
-                }
-              });
-              fe.participants = merged;
-            }
-          });
-          allEvents = fetchedEvents;
-        }
-        allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
-        updateEventsStats();
-        renderEventsList();
-        if (typeof renderEventParticipantsList === 'function' && activeParticipantsEventId) {
-          renderEventParticipantsList();
-        }
-        if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
-          renderMemberNotification(currentLoggedInMember);
-          renderMemberUpcomingEvents();
-          if (typeof renderMemberAllNotifications === 'function') {
-            renderMemberAllNotifications(currentLoggedInMember);
+        if (res.ok) {
+          const fetchedEvents = await res.json();
+          if (Array.isArray(fetchedEvents) && fetchedEvents.length > 0) {
+            allEvents = fetchedEvents;
+            allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
+            updateEventsStats();
+            renderEventsList();
+            return;
           }
         }
-      } catch (err) {
-        console.error(err);
+      } catch (err) {}
+
+      // 3. Fallback: Fetch directly from Firestore REST API
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/events?pageSize=100');
+        if (restRes.ok) {
+          const json = await restRes.json();
+          if (json && Array.isArray(json.documents)) {
+            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            if (list.length > 0) {
+              allEvents = list;
+              allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
+              updateEventsStats();
+              renderEventsList();
+              try { localStorage.setItem('gsks_cached_events', JSON.stringify(allEvents)); } catch(e) {}
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Firestore REST events fetch fallback warning:', e);
       }
     }
 
     async function loadMembersDataFallback() {
+      // 1. Immediate fallback to PRELOADED if empty
+      if (!allMembers || allMembers.length === 0) {
+        const pre = (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS)) ? window.PRELOADED_MEMBERS : window.__INITIAL_MEMBERS__;
+        if (Array.isArray(pre) && pre.length > 0) {
+          allMembers = [...pre];
+          allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
+          updateStats();
+          renderMembers();
+          if (typeof renderPariwarikView === 'function') renderPariwarikView();
+          if (typeof renderArchivedList === 'function') renderArchivedList();
+        }
+      }
+
+      // 2. Try Local Express server if available
       try {
         const res = await fetch('/api/members');
-        allMembers = await res.json();
-        updateStats();
-        renderMembers();
-        if (typeof renderPariwarikView === 'function') {
-          renderPariwarikView();
+        if (res.ok) {
+          const list = await res.json();
+          if (Array.isArray(list) && list.length > 0) {
+            allMembers = list;
+            allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
+            updateStats();
+            renderMembers();
+            if (typeof renderPariwarikView === 'function') renderPariwarikView();
+            if (typeof renderArchivedList === 'function') renderArchivedList();
+            return;
+          }
         }
-      } catch (err) {
-        console.error(err);
+      } catch (err) {}
+
+      // 3. Fallback: Fetch directly from Firestore REST API
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/members?pageSize=500');
+        if (restRes.ok) {
+          const json = await restRes.json();
+          if (json && Array.isArray(json.documents)) {
+            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            if (list.length > 0) {
+              allMembers = list;
+              allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
+              updateStats();
+              renderMembers();
+              if (typeof renderPariwarikView === 'function') renderPariwarikView();
+              if (typeof renderArchivedList === 'function') renderArchivedList();
+              try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Firestore REST members fetch fallback warning:', e);
       }
     }
 
@@ -18303,15 +18475,22 @@
         });
       }
 
+      // Initialize realtime & data hydration for all states immediately
+      try {
+        initFirebaseRealtime();
+      } catch (e) {
+        console.warn('Realtime init error on DOMContentLoaded:', e);
+      }
+
       if (localStorage.getItem('gsks_admin_auth') === 'true') {
         showDashboard();
       } else if (localStorage.getItem('gsks_member_auth')) {
         try {
           const authData = JSON.parse(localStorage.getItem('gsks_member_auth'));
           if (authData && authData.id) {
-            await loadMembersDataFallback();
-            await loadEventsFallback();
-            await loadDonationsFallback();
+            if (!allMembers || allMembers.length === 0) await loadMembersDataFallback();
+            if (!allEvents || allEvents.length === 0) await loadEventsFallback();
+            if (!allDonations || allDonations.length === 0) await loadDonationsFallback();
             const mem = (allMembers || []).find(m => m.id === authData.id);
             if (mem) {
               showMemberDashboard(mem);

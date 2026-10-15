@@ -108,3 +108,4 @@ window.PRELOADED_DONATIONS = [
     "memberId": "GSKS-005"
   }
 ];
+window.__INITIAL_DONATIONS__ = window.PRELOADED_DONATIONS;
