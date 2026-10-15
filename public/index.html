@@ -1202,10 +1202,10 @@
                 <i class="fa-solid fa-receipt"></i>
               </div>
               <div>
-                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
-                  समिति खर्च एवं व्यय प्रबंधन (Expenses Register)
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">
+                  Expenses Register
                 </h2>
-                <p class="text-xs text-slate-500">सभी योजनाओं के खर्च, वेंडर भुगतान, नकद व ऑनलाइन व्यय एवं पारदर्शी हिसाब-किताब</p>
+                <p class="text-xs text-slate-500">Expense tracking, vendor payments & accounts</p>
               </div>
             </div>
           </div>
@@ -1213,7 +1213,7 @@
           <div class="flex items-center gap-2.5 w-full sm:w-auto">
             <button onclick="openExpenseModal()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-rose-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
               <i class="fa-solid fa-plus text-xs"></i>
-              <span>+ नया खर्च दर्ज करें (Add New Expense)</span>
+              <span>Add Expense</span>
             </button>
           </div>
         </div>
@@ -1226,9 +1226,9 @@
               <i class="fa-solid fa-receipt"></i>
             </div>
             <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल खर्च (Total)</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total</p>
               <h3 class="text-base sm:text-xl font-black text-rose-700 font-mono mt-0.5">₹<span id="exp-stat-total">0</span></h3>
-              <p class="text-[10px] text-slate-400 font-medium"><span id="exp-stat-count">0</span> कुल बिल/खर्च</p>
+              <p class="text-[10px] text-slate-400 font-medium"><span id="exp-stat-count">0</span> Bills</p>
             </div>
           </div>
 
@@ -1238,9 +1238,9 @@
               <i class="fa-solid fa-money-bill-wave"></i>
             </div>
             <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">नकद खर्च (Cash)</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cash</p>
               <h3 class="text-base sm:text-xl font-black text-amber-900 font-mono mt-0.5">₹<span id="exp-stat-cash">0</span></h3>
-              <p class="text-[10px] text-amber-600 font-semibold">हाथ से भुगतान</p>
+              <p class="text-[10px] text-amber-600 font-semibold">In Hand</p>
             </div>
           </div>
 
@@ -1250,9 +1250,9 @@
               <i class="fa-solid fa-building-columns"></i>
             </div>
             <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">बैंक/ऑनलाइन (Online)</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Online</p>
               <h3 class="text-base sm:text-xl font-black text-blue-900 font-mono mt-0.5">₹<span id="exp-stat-online">0</span></h3>
-              <p class="text-[10px] text-blue-600 font-semibold">बैंक ट्रांसफर / UPI</p>
+              <p class="text-[10px] text-blue-600 font-semibold">Bank / UPI</p>
             </div>
           </div>
 
@@ -1262,7 +1262,7 @@
               <i class="fa-solid fa-calendar-days"></i>
             </div>
             <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">इस माह खर्च</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">This Month</p>
               <h3 class="text-base sm:text-xl font-black text-purple-900 font-mono mt-0.5">₹<span id="exp-stat-month">0</span></h3>
               <p class="text-[10px] text-purple-600 font-semibold">Current Month</p>
             </div>
@@ -1270,50 +1270,68 @@
         </div>
 
         <!-- 2. Controls & Search/Filter Strip -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
           <!-- Search Box -->
-          <div class="relative flex-1 min-w-[200px]">
+          <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
             <input type="text" id="expense-search-input" oninput="renderExpensesList()" placeholder="खर्च विवरण, वेंडर, मद या ID खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium">
           </div>
 
-          <!-- Filter Dropdowns -->
-          <div class="flex items-center gap-2 flex-wrap">
-            <select id="expense-method-filter" onchange="renderExpensesList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+          <!-- Mobile Filter Button (Visible on Mobile Only) -->
+          <button 
+            type="button" 
+            onclick="openMobileExpenseFilterModal()" 
+            class="sm:hidden px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 cursor-pointer flex-shrink-0"
+            title="Filter Expenses"
+          >
+            <i class="fa-solid fa-sliders text-rose-600"></i>
+            <span>Filter</span>
+            <span id="mob-expense-filter-indicator" class="hidden w-2 h-2 rounded-full bg-rose-600"></span>
+          </button>
+
+          <!-- Filter Dropdowns (Desktop view: hidden on mobile) -->
+          <div class="hidden sm:flex items-center gap-2 flex-wrap">
+            <select id="expense-method-filter" onchange="renderExpensesList(); syncExpenseFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
               <option value="ALL">सभी माध्यम (Cash + Online)</option>
               <option value="Cash">💵 केवल नकद (Cash)</option>
               <option value="Online">📱 केवल बैंक/ऑनलाइन (Online)</option>
             </select>
 
-            <select id="expense-scheme-filter" onchange="renderExpensesList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[200px]">
+            <select id="expense-scheme-filter" onchange="renderExpensesList(); syncExpenseFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[200px]">
               <option value="ALL">सभी खर्च योजनाएं/मद</option>
             </select>
 
-            <select id="expense-vendor-filter" onchange="renderExpensesList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
+            <select id="expense-vendor-filter" onchange="renderExpensesList(); syncExpenseFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
               <option value="ALL">सभी वेंडर (All Vendors)</option>
             </select>
           </div>
         </div>
 
-        <!-- 3. Expenses List Table -->
+        <!-- 3. Expenses List (Mobile 2-Line Cards & Desktop Table) -->
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid fa-receipt text-rose-600"></i> खर्च रजिस्टर (हाल के खर्च - Recent to Old)
+              <i class="fa-solid fa-receipt text-rose-600"></i> Expenses Register (Recent to Old)
             </h3>
-            <span class="text-xs text-slate-400 font-medium font-mono" id="expenses-table-count">0 प्रविष्टियां</span>
+            <span class="text-xs text-slate-400 font-medium font-mono" id="expenses-table-count">0 Entries</span>
           </div>
 
-          <div class="overflow-x-auto">
+          <!-- Mobile Cards Container (Visible on Mobile Only) -->
+          <div id="expenses-mobile-cards" class="sm:hidden p-2.5 space-y-2.5 bg-slate-50/40">
+            <!-- Populated via JS (2-line layout per expense card) -->
+          </div>
+
+          <!-- Desktop Table (Hidden on Mobile) -->
+          <div class="hidden sm:block overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
-                  <th class="p-3.5 pl-5">क्र. / दिनांक</th>
-                  <th class="p-3.5">खर्च योजना / मद (Expense Head)</th>
-                  <th class="p-3.5">वेंडर / विवरण (Vendor & Details)</th>
-                  <th class="p-3.5">माध्यम (Payment Method)</th>
-                  <th class="p-3.5 font-mono text-right">राशि (Amount)</th>
-                  <th class="p-3.5 pr-5 text-center">कार्रवाई</th>
+                  <th class="p-3.5 pl-5">Receipt / Date</th>
+                  <th class="p-3.5">Expense Head</th>
+                  <th class="p-3.5">Vendor & Details</th>
+                  <th class="p-3.5">Method</th>
+                  <th class="p-3.5 font-mono text-right">Amount</th>
+                  <th class="p-3.5 pr-5 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody id="expenses-table-body" class="divide-y divide-slate-100">
@@ -4591,6 +4609,61 @@
             Reset
           </button>
           <button type="button" onclick="applyMobileDonationFilters()" class="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5B4: MOBILE EXPENSE FILTER POPUP MODAL                     -->
+  <!-- ============================================================== -->
+  <div id="mobile-expense-filter-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-rose-600"></i>
+          <span>Expense Filters</span>
+        </h3>
+        <button onclick="closeMobileExpenseFilterModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- Payment Method -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Payment Method (माध्यम)</label>
+          <select id="mob-expense-method-filter" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 cursor-pointer">
+            <option value="ALL">All Methods (Cash + Online)</option>
+            <option value="Cash">💵 Cash Only (केवल नकद)</option>
+            <option value="Online">📱 Online / UPI (केवल ऑनलाइन)</option>
+          </select>
+        </div>
+
+        <!-- Expense Scheme / Head -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Expense Head (खर्च योजना / मद)</label>
+          <select id="mob-expense-scheme-filter" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 cursor-pointer">
+            <option value="ALL">All Schemes (सभी खर्च योजनाएं)</option>
+          </select>
+        </div>
+
+        <!-- Vendor Filter -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Vendor (वेंडर)</label>
+          <select id="mob-expense-vendor-filter" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 cursor-pointer">
+            <option value="ALL">All Vendors (सभी वेंडर)</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="pt-2 flex items-center gap-2">
+          <button type="button" onclick="resetMobileExpenseFilters()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer">
+            Reset
+          </button>
+          <button type="button" onclick="applyMobileExpenseFilters()" class="flex-1 py-2.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
             Apply Filters
           </button>
         </div>
@@ -10474,7 +10547,8 @@
         'expensescheme-master-modal',
         'bank-deposit-modal',
         'mobile-donation-filter-modal',
-        'mobile-event-filter-modal'
+        'mobile-event-filter-modal',
+        'mobile-expense-filter-modal'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);
@@ -16338,23 +16412,123 @@ ID: ${item.id}
     function populateExpenseFilterDropdowns() {
       const schemeFilter = document.getElementById('expense-scheme-filter');
       const vendorFilter = document.getElementById('expense-vendor-filter');
+      const mobSchemeFilter = document.getElementById('mob-expense-scheme-filter');
+      const mobVendorFilter = document.getElementById('mob-expense-vendor-filter');
+
+      const schemes = (masterSettings && masterSettings.expenseSchemes) ? masterSettings.expenseSchemes : [];
+      const vendors = (masterSettings && masterSettings.vendors) ? masterSettings.vendors : [];
 
       if (schemeFilter) {
-        const schemes = (masterSettings && masterSettings.expenseSchemes) ? masterSettings.expenseSchemes : [];
         const prevVal = schemeFilter.value;
         schemeFilter.innerHTML = '<option value="ALL">सभी खर्च योजनाएं/मद</option>' +
           schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
         schemeFilter.value = prevVal || 'ALL';
       }
 
+      if (mobSchemeFilter) {
+        const prevVal = mobSchemeFilter.value;
+        mobSchemeFilter.innerHTML = '<option value="ALL">All Schemes (सभी खर्च योजनाएं)</option>' +
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+        mobSchemeFilter.value = prevVal || 'ALL';
+      }
+
       if (vendorFilter) {
-        const vendors = (masterSettings && masterSettings.vendors) ? masterSettings.vendors : [];
         const prevVal = vendorFilter.value;
         vendorFilter.innerHTML = '<option value="ALL">सभी वेंडर (All Vendors)</option>' +
           vendors.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
         vendorFilter.value = prevVal || 'ALL';
       }
+
+      if (mobVendorFilter) {
+        const prevVal = mobVendorFilter.value;
+        mobVendorFilter.innerHTML = '<option value="ALL">All Vendors (सभी वेंडर)</option>' +
+          vendors.map(v => `<option value="${v.name}">${v.name}</option>`).join('');
+        mobVendorFilter.value = prevVal || 'ALL';
+      }
     }
+
+    function openMobileExpenseFilterModal() {
+      const modal = document.getElementById('mobile-expense-filter-modal');
+      const deskMethod = document.getElementById('expense-method-filter');
+      const deskScheme = document.getElementById('expense-scheme-filter');
+      const deskVendor = document.getElementById('expense-vendor-filter');
+      const mobMethod = document.getElementById('mob-expense-method-filter');
+      const mobScheme = document.getElementById('mob-expense-scheme-filter');
+      const mobVendor = document.getElementById('mob-expense-vendor-filter');
+
+      if (deskMethod && mobMethod) mobMethod.value = deskMethod.value;
+      if (deskScheme && mobScheme) mobScheme.value = deskScheme.value;
+      if (deskVendor && mobVendor) mobVendor.value = deskVendor.value;
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+    window.openMobileExpenseFilterModal = openMobileExpenseFilterModal;
+
+    function closeMobileExpenseFilterModal() {
+      const modal = document.getElementById('mobile-expense-filter-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+    window.closeMobileExpenseFilterModal = closeMobileExpenseFilterModal;
+
+    function applyMobileExpenseFilters() {
+      const deskMethod = document.getElementById('expense-method-filter');
+      const deskScheme = document.getElementById('expense-scheme-filter');
+      const deskVendor = document.getElementById('expense-vendor-filter');
+      const mobMethod = document.getElementById('mob-expense-method-filter');
+      const mobScheme = document.getElementById('mob-expense-scheme-filter');
+      const mobVendor = document.getElementById('mob-expense-vendor-filter');
+
+      if (deskMethod && mobMethod) deskMethod.value = mobMethod.value;
+      if (deskScheme && mobScheme) deskScheme.value = mobScheme.value;
+      if (deskVendor && mobVendor) deskVendor.value = mobVendor.value;
+
+      syncExpenseFilterLabels();
+      renderExpensesList();
+      closeMobileExpenseFilterModal();
+    }
+    window.applyMobileExpenseFilters = applyMobileExpenseFilters;
+
+    function resetMobileExpenseFilters() {
+      const deskMethod = document.getElementById('expense-method-filter');
+      const deskScheme = document.getElementById('expense-scheme-filter');
+      const deskVendor = document.getElementById('expense-vendor-filter');
+      const mobMethod = document.getElementById('mob-expense-method-filter');
+      const mobScheme = document.getElementById('mob-expense-scheme-filter');
+      const mobVendor = document.getElementById('mob-expense-vendor-filter');
+
+      if (deskMethod) deskMethod.value = 'ALL';
+      if (deskScheme) deskScheme.value = 'ALL';
+      if (deskVendor) deskVendor.value = 'ALL';
+      if (mobMethod) mobMethod.value = 'ALL';
+      if (mobScheme) mobScheme.value = 'ALL';
+      if (mobVendor) mobVendor.value = 'ALL';
+
+      syncExpenseFilterLabels();
+      renderExpensesList();
+      closeMobileExpenseFilterModal();
+    }
+    window.resetMobileExpenseFilters = resetMobileExpenseFilters;
+
+    function syncExpenseFilterLabels() {
+      const methodVal = document.getElementById('expense-method-filter')?.value || 'ALL';
+      const schemeVal = document.getElementById('expense-scheme-filter')?.value || 'ALL';
+      const vendorVal = document.getElementById('expense-vendor-filter')?.value || 'ALL';
+      const indicator = document.getElementById('mob-expense-filter-indicator');
+      if (indicator) {
+        if (methodVal !== 'ALL' || schemeVal !== 'ALL' || vendorVal !== 'ALL') {
+          indicator.classList.remove('hidden');
+        } else {
+          indicator.classList.add('hidden');
+        }
+      }
+    }
+    window.syncExpenseFilterLabels = syncExpenseFilterLabels;
 
     function populateExpenseModalDropdowns(selectedScheme = '', selectedVendor = '') {
       const schemeSelect = document.getElementById('expense-scheme-select');
@@ -16424,7 +16598,7 @@ ID: ${item.id}
       if (elCash) elCash.textContent = cashAmount.toLocaleString('en-IN');
       if (elOnline) elOnline.textContent = onlineAmount.toLocaleString('en-IN');
       if (elMonth) elMonth.textContent = thisMonthAmount.toLocaleString('en-IN');
-      if (elTableCount) elTableCount.textContent = `${allExpenses.length} प्रविष्टियां`;
+      if (elTableCount) elTableCount.textContent = `${allExpenses.length} Entries`;
 
       if (typeof updateStats === 'function') {
         updateStats();
@@ -16433,7 +16607,7 @@ ID: ${item.id}
 
     function renderExpensesList() {
       const tbody = document.getElementById('expenses-table-body');
-      if (!tbody) return;
+      const mobileCards = document.getElementById('expenses-mobile-cards');
 
       const searchTerm = (document.getElementById('expense-search-input')?.value || '').toLowerCase().trim();
       const methodFilter = document.getElementById('expense-method-filter')?.value || 'ALL';
@@ -16458,59 +16632,144 @@ ID: ${item.id}
         return matchesMethod && matchesScheme && matchesVendor && matchesSearch;
       });
 
+      const elTableCount = document.getElementById('expenses-table-count');
+      if (elTableCount) {
+        elTableCount.textContent = `${filtered.length} Entries`;
+      }
+
       if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" class="p-12 text-center text-slate-400">
-              <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-2">
-                <i class="fa-solid fa-receipt"></i>
-              </div>
-              <p class="font-bold text-slate-700 text-xs">कोई भी खर्च रिकॉर्ड नहीं मिला</p>
-              <p class="text-[11px] text-slate-400 mt-1">नया खर्च दर्ज करने के लिए ऊपर <b>"+ नया खर्च दर्ज करें"</b> बटन दबाएं।</p>
-            </td>
-          </tr>
+        const emptyMobileHtml = `
+          <div class="p-10 text-center text-slate-400">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl mx-auto mb-2">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <p class="font-bold text-slate-700 text-xs">कोई भी खर्च रिकॉर्ड नहीं मिला</p>
+            <p class="text-[11px] text-slate-400 mt-1">नया खर्च दर्ज करने के लिए ऊपर <b>"+ Add Expense"</b> बटन दबाएं।</p>
+          </div>
         `;
+        if (mobileCards) mobileCards.innerHTML = emptyMobileHtml;
+
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="p-12 text-center text-slate-400">
+                <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-2">
+                  <i class="fa-solid fa-receipt"></i>
+                </div>
+                <p class="font-bold text-slate-700 text-xs">कोई भी खर्च रिकॉर्ड नहीं मिला</p>
+                <p class="text-[11px] text-slate-400 mt-1">नया खर्च दर्ज करने के लिए ऊपर <b>"+ Add Expense"</b> बटन दबाएं।</p>
+              </td>
+            </tr>
+          `;
+        }
         return;
       }
 
-      tbody.innerHTML = filtered.map(e => {
-        const methodBadge = e.method === 'Cash'
-          ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 नकद (Cash)</span>`
-          : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">📱 बैंक / Online</span>`;
+      // 1. MOBILE 2-LINE CARDS VIEW
+      // Line 1: srl & date, vendor name, voucher, scheme
+      // Line 2: amount, mode, edit, delete
+      if (mobileCards) {
+        const cardThemes = [
+          { bg: 'bg-rose-50/70', border: 'border-rose-200/80', tagBg: 'bg-rose-100 text-rose-800 border-rose-200' },
+          { bg: 'bg-amber-50/70', border: 'border-amber-200/80', tagBg: 'bg-amber-100 text-amber-800 border-amber-200' },
+          { bg: 'bg-indigo-50/70', border: 'border-indigo-200/80', tagBg: 'bg-indigo-100 text-indigo-800 border-indigo-200' },
+          { bg: 'bg-teal-50/70', border: 'border-teal-200/80', tagBg: 'bg-teal-100 text-teal-800 border-teal-200' },
+          { bg: 'bg-purple-50/70', border: 'border-purple-200/80', tagBg: 'bg-purple-100 text-purple-800 border-purple-200' },
+          { bg: 'bg-sky-50/70', border: 'border-sky-200/80', tagBg: 'bg-sky-100 text-sky-800 border-sky-200' }
+        ];
 
-        return `
-          <tr class="hover:bg-slate-50/80 transition-colors">
-            <td class="p-3.5 pl-5">
-              <span class="font-mono font-bold text-slate-800 text-xs block">${e.id}</span>
-              <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(e.date)}</span>
-            </td>
-            <td class="p-3.5">
-              <div class="font-bold text-slate-900">${e.scheme || 'सामान्य व्यय'}</div>
-              ${e.billNumber ? `<span class="text-[10px] text-rose-600 font-semibold bg-rose-50 px-1.5 py-0.2 rounded border border-rose-200/60 font-mono">वाउचर: ${e.billNumber}</span>` : ''}
-            </td>
-            <td class="p-3.5">
-              <div class="font-bold text-slate-900">${e.vendorName || '--'}</div>
-              ${e.remarks ? `<p class="text-[10px] text-slate-500 truncate max-w-xs mt-0.5">${e.remarks}</p>` : ''}
-            </td>
-            <td class="p-3.5">
-              ${methodBadge}
-            </td>
-            <td class="p-3.5 text-right font-mono font-black text-rose-700 text-sm">
-              ₹${(parseFloat(e.amount) || 0).toLocaleString('en-IN')}
-            </td>
-            <td class="p-3.5 pr-5 text-center">
-              <div class="flex items-center justify-center gap-1.5">
-                <button onclick="openExpenseModal('${e.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संपादित करें (Edit)">
-                  <i class="fa-solid fa-pen"></i>
-                </button>
-                <button onclick="deleteExpenseItem('${e.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete)">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
+        mobileCards.innerHTML = filtered.map((e, index) => {
+          const theme = cardThemes[index % cardThemes.length];
+          const modeBadge = e.method === 'Cash'
+            ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/90 text-amber-800 border border-amber-300 shadow-2xs">💵 Cash</span>`
+            : `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/90 text-blue-800 border border-blue-300 shadow-2xs">📱 Online</span>`;
+
+          return `
+            <div class="${theme.bg} ${theme.border} p-3 rounded-2xl border shadow-xs transition-all text-xs space-y-2">
+              <!-- LINE 1: srl & date, vendor name, voucher, scheme -->
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap leading-tight">
+                    <span class="font-mono font-black text-slate-900 text-xs">${e.id}</span>
+                    <span class="text-[10px] text-slate-500 font-mono">• ${formatDonationDate(e.date)}</span>
+                    <span class="font-black text-slate-900 text-xs truncate">• ${e.vendorName || '--'}</span>
+                    ${e.billNumber ? `<span class="text-[10px] text-slate-600 font-mono truncate">#${e.billNumber}</span>` : ''}
+                  </div>
+                </div>
+                <!-- Scheme Tag right aligned in Line 1 -->
+                <div class="flex-shrink-0">
+                  <span class="inline-block px-2 py-0.5 rounded-lg text-[10px] font-bold ${theme.tagBg} border truncate max-w-[130px] shadow-2xs">
+                    ${e.scheme || 'General'}
+                  </span>
+                </div>
               </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+
+              <!-- LINE 2: amount, mode, edit, delete -->
+              <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-900/5">
+                <!-- Amount & Mode -->
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-black text-rose-800 text-sm">
+                    ₹${(parseFloat(e.amount) || 0).toLocaleString('en-IN')}
+                  </span>
+                  ${modeBadge}
+                </div>
+
+                <!-- Action Buttons: edit, delete -->
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <button onclick="openExpenseModal('${e.id}')" class="w-7 h-7 bg-white hover:bg-indigo-50 active:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs border border-slate-200 cursor-pointer" title="Edit">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button onclick="deleteExpenseItem('${e.id}')" class="w-7 h-7 bg-white hover:bg-rose-50 active:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs border border-slate-200 cursor-pointer" title="Delete">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 2. DESKTOP TABLE VIEW
+      if (tbody) {
+        tbody.innerHTML = filtered.map(e => {
+          const methodBadge = e.method === 'Cash'
+            ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 Cash</span>`
+            : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">📱 Online</span>`;
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="p-3.5 pl-5">
+                <span class="font-mono font-bold text-slate-800 text-xs block">${e.id}</span>
+                <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(e.date)}</span>
+              </td>
+              <td class="p-3.5">
+                <div class="font-bold text-slate-900">${e.scheme || 'General'}</div>
+                ${e.billNumber ? `<span class="text-[10px] text-rose-600 font-semibold bg-rose-50 px-1.5 py-0.2 rounded border border-rose-200/60 font-mono">Voucher: ${e.billNumber}</span>` : ''}
+              </td>
+              <td class="p-3.5">
+                <div class="font-bold text-slate-900">${e.vendorName || '--'}</div>
+                ${e.remarks ? `<p class="text-[10px] text-slate-500 truncate max-w-xs mt-0.5">${e.remarks}</p>` : ''}
+              </td>
+              <td class="p-3.5">
+                ${methodBadge}
+              </td>
+              <td class="p-3.5 text-right font-mono font-black text-rose-700 text-sm">
+                ₹${(parseFloat(e.amount) || 0).toLocaleString('en-IN')}
+              </td>
+              <td class="p-3.5 pr-5 text-center">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button onclick="openExpenseModal('${e.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="Edit">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button onclick="deleteExpenseItem('${e.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="Delete">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
     }
 
     function openExpenseModal(expenseId = null) {
