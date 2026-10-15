@@ -2374,34 +2374,22 @@
     </main>
 
     <!-- Bottom Mobile Nav Bar -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex items-center justify-between z-40 shadow-lg">
-      <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 text-orange-600">
-        <i class="fa-solid fa-chart-pie text-sm"></i>
-        <span class="text-[10px] font-bold">Dashboard</span>
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2.5 flex items-center justify-around z-40 shadow-lg">
+      <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 text-orange-600 font-bold">
+        <i class="fa-solid fa-chart-pie text-base"></i>
+        <span class="text-[11px] font-bold">Dashboard</span>
       </button>
       <button onclick="switchAdminView('members')" id="mobile-nav-members" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
-        <i class="fa-solid fa-users text-sm"></i>
-        <span class="text-[10px] font-medium">Members</span>
-      </button>
-      <button onclick="switchAdminView('prime')" id="mobile-nav-prime" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
-        <i class="fa-solid fa-crown text-sm"></i>
-        <span class="text-[10px] font-medium">Prime (<span id="mob-prime-count">0</span>)</span>
+        <i class="fa-solid fa-users text-base"></i>
+        <span class="text-[11px] font-medium">Members</span>
       </button>
       <button onclick="switchAdminView('events')" id="mobile-nav-events" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-600">
-        <i class="fa-solid fa-calendar-days text-sm"></i>
-        <span class="text-[10px] font-medium">Events</span>
+        <i class="fa-solid fa-calendar-days text-base"></i>
+        <span class="text-[11px] font-medium">Event</span>
       </button>
-      <button onclick="switchAdminView('expenses')" id="mobile-nav-expenses" class="flex flex-col items-center gap-1 text-slate-400 hover:text-rose-600">
-        <i class="fa-solid fa-receipt text-sm"></i>
-        <span class="text-[10px] font-medium">Expenses</span>
-      </button>
-      <button onclick="switchAdminView('archived')" id="mobile-nav-archived" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
-        <i class="fa-solid fa-box-archive text-sm"></i>
-        <span class="text-[10px] font-medium">Archived</span>
-      </button>
-      <button onclick="switchAdminView('settings')" id="mobile-nav-settings" class="flex flex-col items-center gap-1 text-slate-400 hover:text-orange-600">
-        <i class="fa-solid fa-gear text-sm"></i>
-        <span class="text-[10px] font-medium">Settings</span>
+      <button onclick="switchAdminView('pariwarik')" id="mobile-nav-pariwarik" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-600">
+        <i class="fa-solid fa-users-rectangle text-base"></i>
+        <span class="text-[11px] font-medium">PASY</span>
       </button>
     </div>
 
@@ -9377,6 +9365,7 @@
       const mobExpenses = document.getElementById('mobile-nav-expenses');
       const mobArchived = document.getElementById('mobile-nav-archived');
       const mobSettings = document.getElementById('mobile-nav-settings');
+      const mobPariwarik = document.getElementById('mobile-nav-pariwarik');
 
       // Reset desktop classes
       [navDash, navMembers, navPrime, navEvents, navArchived].forEach(btn => {
@@ -9385,7 +9374,7 @@
       if(navSettings) navSettings.className = 'px-3.5 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200';
 
       // Reset mobile classes
-      [mobDash, mobMembers, mobPrime, mobEvents, mobExpenses, mobArchived, mobSettings].forEach(btn => {
+      [mobDash, mobMembers, mobPrime, mobEvents, mobExpenses, mobArchived, mobSettings, mobPariwarik].forEach(btn => {
         if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
       });
 
@@ -9410,6 +9399,7 @@
         renderSettingsView();
       } else if (view === 'pariwarik') {
         if (pariwarikSection) pariwarikSection.classList.remove('hidden');
+        if (mobPariwarik) mobPariwarik.className = 'flex flex-col items-center gap-1 text-cyan-600 font-bold';
         renderPariwarikView();
       } else if (view === 'donations') {
         if (donationsSection) donationsSection.classList.remove('hidden');
