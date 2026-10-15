@@ -665,57 +665,75 @@
           </div>
         </div>
 
-        <!-- Filter Controls for Events: Category Chips + Status Dropdown -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
-          <!-- Category Filters (Left) -->
-          <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs">
-            <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap">
-              सभी श्रेणी (<span id="event-count-all">0</span>)
+        <!-- Filter Controls for Events: Category Chips + Status/Date Dropdown -->
+        <div class="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <!-- MOBILE FILTER BAR (Visible on mobile screens) -->
+          <div class="sm:hidden flex items-center gap-2">
+            <button onclick="openMobileEventFilterModal('category')" class="flex-1 py-2.5 px-3 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl font-bold text-xs flex items-center justify-between border border-slate-200 shadow-2xs">
+              <span class="flex items-center gap-1.5 truncate">
+                <i class="fa-solid fa-layer-group text-indigo-600"></i>
+                <span id="mob-active-cat-label">सभी श्रेणी</span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
             </button>
-            <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
-            </button>
-            <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
-            </button>
-            <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
-              <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
+            <button onclick="openMobileEventFilterModal('filters')" class="py-2.5 px-3.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl font-bold text-xs flex items-center gap-1.5 border border-indigo-200 shadow-2xs">
+              <i class="fa-solid fa-sliders"></i>
+              <span>फिल्टर</span>
             </button>
           </div>
 
-          <!-- Status & Date Filters (Right) -->
-          <div class="flex items-center gap-2 flex-wrap self-end sm:self-auto w-full sm:w-auto">
-            <!-- Date Filter Dropdown -->
-            <div class="relative w-full sm:w-auto min-w-[170px]">
-              <i class="fa-regular fa-calendar-days absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
-              <select id="event-date-filter-select" onchange="filterEventDate(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
-                <option value="ALL">📅 सभी दिनांक (All Dates)</option>
-                <option value="UPCOMING">⏳ आगामी दिनांक (Upcoming)</option>
-                <option value="TODAY">📍 आज की बैठक (Today)</option>
-                <option value="THIS_MONTH">🗓️ इस माह (This Month)</option>
-                <option value="PAST">⏪ पुरानी बैठकें (Past)</option>
-                <option value="CUSTOM">📆 कस्टम रेंज (Custom Range)</option>
-              </select>
-              <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+          <!-- DESKTOP FILTER BAR (Visible on tablets and desktop) -->
+          <div class="hidden sm:flex sm:flex-row sm:items-center justify-between gap-3">
+            <!-- Category Filters (Left) -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs">
+              <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap">
+                सभी श्रेणी (<span id="event-count-all">0</span>)
+              </button>
+              <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
+              </button>
+              <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
+              </button>
+              <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
+              </button>
             </div>
 
-            <!-- Custom Date Inputs (Hidden by default, shown when CUSTOM is picked) -->
-            <div id="event-custom-date-container" class="hidden items-center gap-1.5 bg-slate-50 p-1 rounded-xl border border-slate-200 text-xs">
-              <input type="date" id="event-date-from" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="शुरुआती दिनांक">
-              <span class="text-slate-400 text-[10px]">से</span>
-              <input type="date" id="event-date-to" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="अंतिम दिनांक">
-            </div>
+            <!-- Status & Date Filters (Right) -->
+            <div class="flex items-center gap-2 flex-wrap self-end sm:self-auto w-full sm:w-auto">
+              <!-- Date Filter Dropdown -->
+              <div class="relative w-full sm:w-auto min-w-[170px]">
+                <i class="fa-regular fa-calendar-days absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
+                <select id="event-date-filter-select" onchange="filterEventDate(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
+                  <option value="ALL">📅 सभी दिनांक (All Dates)</option>
+                  <option value="UPCOMING">⏳ आगामी दिनांक (Upcoming)</option>
+                  <option value="TODAY">📍 आज की बैठक (Today)</option>
+                  <option value="THIS_MONTH">🗓️ इस माह (This Month)</option>
+                  <option value="PAST">⏪ पुरानी बैठकें (Past)</option>
+                  <option value="CUSTOM">📆 कस्टम रेंज (Custom Range)</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+              </div>
 
-            <!-- Status Dropdown Filter -->
-            <div class="relative w-full sm:w-auto min-w-[170px]">
-              <i class="fa-solid fa-filter absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
-              <select id="event-status-filter-select" onchange="filterEventStatus(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
-                <option value="ALL">📋 सभी स्टेटस (All Status)</option>
-                <option value="Open">🟢 Open / जारी</option>
-                <option value="Upcoming" selected>🔵 Upcoming / आगामी</option>
-                <option value="Closed">⚫ Closed / समाप्त</option>
-              </select>
-              <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+              <!-- Custom Date Inputs -->
+              <div id="event-custom-date-container" class="hidden items-center gap-1.5 bg-slate-50 p-1 rounded-xl border border-slate-200 text-xs">
+                <input type="date" id="event-date-from" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="शुरुआती दिनांक">
+                <span class="text-slate-400 text-[10px]">से</span>
+                <input type="date" id="event-date-to" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="अंतिम दिनांक">
+              </div>
+
+              <!-- Status Dropdown Filter -->
+              <div class="relative w-full sm:w-auto min-w-[170px]">
+                <i class="fa-solid fa-filter absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
+                <select id="event-status-filter-select" onchange="filterEventStatus(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
+                  <option value="ALL">📋 सभी स्टेटस (All Status)</option>
+                  <option value="Open">🟢 Open / जारी</option>
+                  <option value="Upcoming" selected>🔵 Upcoming / आगामी</option>
+                  <option value="Closed">⚫ Closed / समाप्त</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -4543,6 +4561,87 @@
             बंद करें
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5B2: MOBILE EVENT FILTER POPUP MODAL                      -->
+  <!-- ============================================================== -->
+  <div id="mobile-event-filter-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 animate-in slide-in-from-bottom duration-200">
+      <div class="flex items-center justify-between pb-3 mb-3 border-t-0 border-b border-slate-100">
+        <h3 id="mobile-event-filter-modal-title" class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-filter text-indigo-600"></i>
+          <span>इवेंट फिल्टर (Event Filters)</span>
+        </h3>
+        <button onclick="closeMobileEventFilterModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Section A: Category selection -->
+      <div id="mob-filter-cat-section" class="space-y-2 mb-4">
+        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">इवेंट श्रेणी (Category)</label>
+        <div class="grid grid-cols-1 gap-2">
+          <button onclick="selectMobileEventCategory('ALL')" id="mob-cat-btn-all" class="w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-slate-800 text-white shadow-xs">
+            <span>सभी श्रेणी</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-white/20" id="mob-count-all">0</span>
+          </button>
+          <button onclick="selectMobileEventCategory('General Meeting')" id="mob-cat-btn-general" class="w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200" id="mob-count-general">0</span>
+          </button>
+          <button onclick="selectMobileEventCategory('Special Event')" id="mob-cat-btn-special" class="w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200" id="mob-count-special">0</span>
+          </button>
+          <button onclick="selectMobileEventCategory('Emergency meeting')" id="mob-cat-btn-emergency" class="w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span> Emergency
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200" id="mob-count-emergency">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section B: Status and Date Selection -->
+      <div id="mob-filter-other-section" class="space-y-3 pt-3 border-t border-slate-100">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">बैठक स्टेटस (Status)</label>
+          <div class="relative">
+            <select id="mob-event-status-select" onchange="filterEventStatus(this.value); updateMobileFilterLabels();" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+              <option value="ALL">📋 सभी स्टेटस (All Status)</option>
+              <option value="Open">🟢 Open / जारी</option>
+              <option value="Upcoming" selected>🔵 Upcoming / आगामी</option>
+              <option value="Closed">⚫ Closed / समाप्त</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">दिनांक (Date Range)</label>
+          <div class="relative">
+            <select id="mob-event-date-select" onchange="filterEventDate(this.value); updateMobileFilterLabels();" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+              <option value="ALL">📅 सभी दिनांक (All Dates)</option>
+              <option value="UPCOMING">⏳ आगामी दिनांक (Upcoming)</option>
+              <option value="TODAY">📍 आज की बैठक (Today)</option>
+              <option value="THIS_MONTH">🗓️ इस माह (This Month)</option>
+              <option value="PAST">⏪ पुरानी बैठकें (Past)</option>
+              <option value="CUSTOM">📆 कस्टम रेंज (Custom Range)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 mt-3 border-t border-slate-100 flex items-center gap-2">
+        <button onclick="closeMobileEventFilterModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">
+          लागू करें (Apply)
+        </button>
       </div>
     </div>
   </div>
@@ -10690,6 +10789,16 @@
       if (elSpe) elSpe.textContent = speCount;
       if (elEmg) elEmg.textContent = emgCount;
 
+      // Update Mobile Filter Modal counts
+      const mobAll = document.getElementById('mob-count-all');
+      const mobGen = document.getElementById('mob-count-general');
+      const mobSpe = document.getElementById('mob-count-special');
+      const mobEmg = document.getElementById('mob-count-emergency');
+      if (mobAll) mobAll.textContent = allCount;
+      if (mobGen) mobGen.textContent = genCount;
+      if (mobSpe) mobSpe.textContent = speCount;
+      if (mobEmg) mobEmg.textContent = emgCount;
+
       // Update Dropdown options with dynamic counts
       const statusSelect = document.getElementById('event-status-filter-select');
       if (statusSelect) {
@@ -10701,7 +10810,100 @@
           <option value="Closed" ${curVal === 'Closed' ? 'selected' : ''}>⚫ Closed / समाप्त (${stClosedCount})</option>
         `;
       }
+
+      const mobStatusSelect = document.getElementById('mob-event-status-select');
+      if (mobStatusSelect) {
+        const curVal = currentEventStatusFilter;
+        mobStatusSelect.innerHTML = `
+          <option value="ALL" ${curVal === 'ALL' ? 'selected' : ''}>📋 सभी स्टेटस (All - ${allCount})</option>
+          <option value="Open" ${curVal === 'Open' ? 'selected' : ''}>🟢 Open / जारी (${stOpenCount})</option>
+          <option value="Upcoming" ${curVal === 'Upcoming' ? 'selected' : ''}>🔵 Upcoming / आगामी (${stUpCount})</option>
+          <option value="Closed" ${curVal === 'Closed' ? 'selected' : ''}>⚫ Closed / समाप्त (${stClosedCount})</option>
+        `;
+      }
     }
+
+    function openMobileEventFilterModal(tab = 'all') {
+      const modal = document.getElementById('mobile-event-filter-modal');
+      const catSection = document.getElementById('mob-filter-cat-section');
+      const otherSection = document.getElementById('mob-filter-other-section');
+      const titleEl = document.getElementById('mobile-event-filter-modal-title');
+
+      if (!modal) return;
+      modal.classList.remove('hidden');
+
+      if (tab === 'category') {
+        if (catSection) catSection.classList.remove('hidden');
+        if (otherSection) otherSection.classList.add('hidden');
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-layer-group text-indigo-600"></i> <span>श्रेणी चुनें (Select Category)</span>`;
+      } else if (tab === 'filters') {
+        if (catSection) catSection.classList.remove('hidden');
+        if (otherSection) otherSection.classList.remove('hidden');
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-sliders text-indigo-600"></i> <span>इवेंट फिल्टर (Event Filters)</span>`;
+      } else {
+        if (catSection) catSection.classList.remove('hidden');
+        if (otherSection) otherSection.classList.remove('hidden');
+      }
+
+      // Sync current values to mobile selects
+      const mobStatusSelect = document.getElementById('mob-event-status-select');
+      const mobDateSelect = document.getElementById('mob-event-date-select');
+      if (mobStatusSelect) mobStatusSelect.value = currentEventStatusFilter;
+      if (mobDateSelect) mobDateSelect.value = currentEventDateFilter;
+      updateMobileCategoryButtons();
+    }
+    window.openMobileEventFilterModal = openMobileEventFilterModal;
+
+    function closeMobileEventFilterModal() {
+      const modal = document.getElementById('mobile-event-filter-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+    window.closeMobileEventFilterModal = closeMobileEventFilterModal;
+
+    function updateMobileCategoryButtons() {
+      const cat = currentEventFilter;
+      const btnAll = document.getElementById('mob-cat-btn-all');
+      const btnGen = document.getElementById('mob-cat-btn-general');
+      const btnSpe = document.getElementById('mob-cat-btn-special');
+      const btnEmg = document.getElementById('mob-cat-btn-emergency');
+      const label = document.getElementById('mob-active-cat-label');
+
+      [btnAll, btnGen, btnSpe, btnEmg].forEach(b => {
+        if (!b) return;
+        b.className = 'w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200';
+      });
+
+      if (cat === 'General Meeting' && btnGen) {
+        btnGen.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-blue-600 text-white shadow-xs';
+        if (label) label.textContent = 'General Meeting';
+      } else if (cat === 'Special Event' && btnSpe) {
+        btnSpe.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-purple-600 text-white shadow-xs';
+        if (label) label.textContent = 'Special Event';
+      } else if (cat === 'Emergency meeting' && btnEmg) {
+        btnEmg.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-rose-600 text-white shadow-xs';
+        if (label) label.textContent = 'Emergency';
+      } else {
+        if (btnAll) btnAll.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-slate-800 text-white shadow-xs';
+        if (label) label.textContent = 'सभी श्रेणी';
+      }
+    }
+
+    function selectMobileEventCategory(category) {
+      filterEvents(category);
+      updateMobileCategoryButtons();
+      closeMobileEventFilterModal();
+    }
+    window.selectMobileEventCategory = selectMobileEventCategory;
+
+    function updateMobileFilterLabels() {
+      const mobStatusSelect = document.getElementById('mob-event-status-select');
+      const mobDateSelect = document.getElementById('mob-event-date-select');
+      const deskStatusSelect = document.getElementById('event-status-filter-select');
+      const deskDateSelect = document.getElementById('event-date-filter-select');
+      if (mobStatusSelect && deskStatusSelect) deskStatusSelect.value = mobStatusSelect.value;
+      if (mobDateSelect && deskDateSelect) deskDateSelect.value = mobDateSelect.value;
+    }
+    window.updateMobileFilterLabels = updateMobileFilterLabels;
 
     function filterEvents(category) {
       currentEventFilter = category;
@@ -10725,21 +10927,27 @@
         btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap';
       }
 
+      updateMobileCategoryButtons();
       renderEventsList();
     }
 
     function filterEventStatus(status) {
       currentEventStatusFilter = status;
       const select = document.getElementById('event-status-filter-select');
-      if (select && select.value !== status) {
-        select.value = status;
-      }
+      const mobSelect = document.getElementById('mob-event-status-select');
+      if (select && select.value !== status) select.value = status;
+      if (mobSelect && mobSelect.value !== status) mobSelect.value = status;
       renderEventsList();
     }
     window.filterEventStatus = filterEventStatus;
 
     function filterEventDate(dateType) {
       currentEventDateFilter = dateType;
+      const select = document.getElementById('event-date-filter-select');
+      const mobSelect = document.getElementById('mob-event-date-select');
+      if (select && select.value !== dateType) select.value = dateType;
+      if (mobSelect && mobSelect.value !== dateType) mobSelect.value = dateType;
+
       const customContainer = document.getElementById('event-custom-date-container');
       if (customContainer) {
         if (dateType === 'CUSTOM') {
@@ -10762,8 +10970,6 @@
       renderEventsList();
     }
     window.applyCustomEventDateFilter = applyCustomEventDateFilter;
-
-    window.filterEventStatus = filterEventStatus;
 
     function toggleSelectedMembersList(val) {
       const container = document.getElementById('selected-users-container');
