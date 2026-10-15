@@ -1386,7 +1386,6 @@
                 <h2 class="text-base sm:text-xl font-black text-slate-900 tracking-tight">
                   Bank Transactions & Deposits
                 </h2>
-                <p class="text-xs text-slate-500 font-medium">SBI Trust Account, Direct Deposits, Online Donations & Outflows</p>
               </div>
             </div>
           </div>
@@ -1458,32 +1457,71 @@
         <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
           <!-- Filters & Search Toolbar -->
           <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-            <!-- Filter Pills -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-              <button onclick="filterBankTransactions('ALL')" id="filter-bank-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0">
-                <span>All Transactions</span>
-                <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20" id="bank-count-all">0</span>
-              </button>
-              <button onclick="filterBankTransactions('DEPOSIT')" id="filter-bank-deposit" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span>Deposits</span>
-                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-deposit">(0)</span>
-              </button>
-              <button onclick="filterBankTransactions('ONLINE_DONATION')" id="filter-bank-donations" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
-                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
-                <span>Online Donations</span>
-                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-donations">(0)</span>
-              </button>
-              <button onclick="filterBankTransactions('TRANSFER')" id="filter-bank-transfers" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
-                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                <span>Transfers</span>
-                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-transfers">(0)</span>
-              </button>
-              <button onclick="filterBankTransactions('EXPENSE')" id="filter-bank-expenses" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0">
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span>Online Expenses</span>
-                <span class="text-[10px] text-slate-400 font-mono" id="bank-count-expenses">(0)</span>
-              </button>
+            <!-- Filter Area: Mobile Dropdown Button & Desktop Pills -->
+            <div class="flex items-center gap-2">
+              <!-- Mobile Filter Popup Dropdown Button (Visible on mobile/tablet) -->
+              <div class="relative md:hidden w-full">
+                <button type="button" id="btn-bank-filter-dropdown" onclick="toggleBankFilterDropdown()" class="w-full flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition-all shadow-2xs">
+                  <div class="flex items-center gap-2 truncate">
+                    <i class="fa-solid fa-filter text-blue-600"></i>
+                    <span id="bank-filter-current-label">All Transactions</span>
+                    <span id="bank-filter-current-badge" class="px-1.5 py-0.5 rounded-full text-[10px] bg-blue-600 text-white font-mono">0</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-down text-[10px] text-blue-700 transition-transform" id="bank-filter-dropdown-chevron"></i>
+                </button>
+
+                <!-- Popup Dropdown Menu -->
+                <div id="bank-filter-dropdown-menu" class="hidden absolute left-0 right-0 top-full mt-1.5 z-40 bg-white rounded-2xl border border-slate-200 shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                  <button type="button" onclick="selectBankFilterOption('ALL')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-list-ul text-blue-600 text-[11px]"></i> All Transactions</span>
+                    <span id="bank-menu-count-all" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">0</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('DEPOSIT')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Deposits</span>
+                    <span id="bank-menu-count-deposit" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('ONLINE_DONATION')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-teal-500"></span> Online Donations</span>
+                    <span id="bank-menu-count-donations" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('TRANSFER')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> Transfers</span>
+                    <span id="bank-menu-count-transfers" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('EXPENSE')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-500"></span> Online Expenses</span>
+                    <span id="bank-menu-count-expenses" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Desktop Filter Pills (Hidden on mobile, clean pills on desktop) -->
+              <div class="hidden md:flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                <button onclick="filterBankTransactions('ALL')" id="filter-bank-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span>All Transactions</span>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20" id="bank-count-all">0</span>
+                </button>
+                <button onclick="filterBankTransactions('DEPOSIT')" id="filter-bank-deposit" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Deposits</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-deposit">(0)</span>
+                </button>
+                <button onclick="filterBankTransactions('ONLINE_DONATION')" id="filter-bank-donations" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                  <span>Online Donations</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-donations">(0)</span>
+                </button>
+                <button onclick="filterBankTransactions('TRANSFER')" id="filter-bank-transfers" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                  <span>Transfers</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-transfers">(0)</span>
+                </button>
+                <button onclick="filterBankTransactions('EXPENSE')" id="filter-bank-expenses" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  <span>Online Expenses</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-expenses">(0)</span>
+                </button>
+              </div>
             </div>
 
             <!-- Search Bar -->
@@ -6242,6 +6280,69 @@
     </div>
   </div>
 
+  <!-- ============================================================== -->
+  <!-- MODAL: VIEW BANK RECORD DETAILS                                -->
+  <!-- ============================================================== -->
+  <div id="view-bank-record-modal" class="hidden fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <button type="button" onclick="closeViewBankRecordModal()" class="absolute right-4 top-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-colors cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 pb-3 mb-4 border-b border-slate-100 pr-8">
+        <div id="view-bank-modal-icon-wrap" class="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-base flex-shrink-0 shadow-xs">
+          <i class="fa-solid fa-building-columns" id="view-bank-modal-icon"></i>
+        </div>
+        <div>
+          <h3 class="text-sm sm:text-base font-black text-slate-900 leading-tight">Bank Transaction Details</h3>
+          <p class="text-[11px] text-slate-500 font-medium">Record ID: <span id="view-bank-id" class="font-mono font-bold text-slate-700">--</span></p>
+        </div>
+      </div>
+
+      <!-- Transaction Amount Banner -->
+      <div id="view-bank-amount-banner" class="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-3.5 mb-4 text-center">
+        <span id="view-bank-type-badge" class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-emerald-800 border border-emerald-200 shadow-2xs mb-1">Cash In (Deposit)</span>
+        <h2 id="view-bank-amount" class="text-2xl font-black font-mono text-emerald-700">₹ 0</h2>
+      </div>
+
+      <!-- Details List Grid -->
+      <div class="space-y-2.5 text-xs text-slate-600 bg-slate-50/70 p-3.5 rounded-2xl border border-slate-100">
+        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-400 font-medium flex items-center gap-1.5"><i class="fa-regular fa-calendar text-[11px]"></i> Date:</span>
+          <span id="view-bank-date" class="font-mono font-bold text-slate-800">--</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-400 font-medium flex items-center gap-1.5"><i class="fa-solid fa-user text-[11px]"></i> Source / Party:</span>
+          <span id="view-bank-party" class="font-bold text-slate-800 text-right truncate max-w-[200px]">--</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-400 font-medium flex items-center gap-1.5"><i class="fa-solid fa-tag text-[11px]"></i> Purpose / Head:</span>
+          <span id="view-bank-purpose" class="font-semibold text-slate-800 text-right truncate max-w-[200px]">--</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-400 font-medium flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-[11px]"></i> Bank Account:</span>
+          <span id="view-bank-account" class="font-bold text-slate-800 font-mono">--</span>
+        </div>
+        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+          <span class="text-slate-400 font-medium flex items-center gap-1.5"><i class="fa-solid fa-receipt text-[11px]"></i> Ref / UTR / Cheque:</span>
+          <span id="view-bank-ref" class="font-mono font-bold text-slate-800">--</span>
+        </div>
+        <div class="flex items-start justify-between py-1">
+          <span class="text-slate-400 font-medium flex items-center gap-1.5 flex-shrink-0"><i class="fa-regular fa-comment-dots text-[11px]"></i> Remarks:</span>
+          <span id="view-bank-remarks" class="font-medium text-slate-700 text-right max-w-[200px] break-words">--</span>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeViewBankRecordModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
 
 
   <!-- ============================================================== -->
@@ -10803,6 +10904,7 @@
         'vendor-master-modal',
         'expensescheme-master-modal',
         'bank-deposit-modal',
+        'view-bank-record-modal',
         'mobile-donation-filter-modal',
         'mobile-event-filter-modal',
         'mobile-expense-filter-modal',
@@ -14268,20 +14370,72 @@
       if (!item) return;
 
       const isCredit = (item.type === 'Bank Deposit' || item.direction === 'CASH_IN' || item.type === 'Hand to Bank');
-      const msg = `
-📌 Bank Transaction Details
-----------------------------------------
-ID: ${item.id}
-Date: ${item.date || '-'}
-Type: ${isCredit ? '📥 Cash In (Credit / Deposit)' : '📤 Cash Out (Debit / Outflow)'}
-Amount: ₹ ${parseFloat(item.amount || 0).toLocaleString('en-IN')}
-Source / Party: ${item.party || '-'}
-Purpose / Head: ${item.purpose || '-'}
-Bank Account: ${item.bankAccount || 'SBI Gomoh'}
-Ref / UTR / Cheque: ${item.refNo || '-'}
-Remarks: ${item.remarks || '-'}
-      `.trim();
-      alert(msg);
+      const amt = parseFloat(item.amount || 0);
+
+      const modal = document.getElementById('view-bank-record-modal');
+      const elId = document.getElementById('view-bank-id');
+      const elAmt = document.getElementById('view-bank-amount');
+      const elBadge = document.getElementById('view-bank-type-badge');
+      const elBanner = document.getElementById('view-bank-amount-banner');
+      const elIconWrap = document.getElementById('view-bank-modal-icon-wrap');
+      const elIcon = document.getElementById('view-bank-modal-icon');
+      const elDate = document.getElementById('view-bank-date');
+      const elParty = document.getElementById('view-bank-party');
+      const elPurpose = document.getElementById('view-bank-purpose');
+      const elAccount = document.getElementById('view-bank-account');
+      const elRef = document.getElementById('view-bank-ref');
+      const elRemarks = document.getElementById('view-bank-remarks');
+
+      if (elId) elId.textContent = item.id || '--';
+      if (elDate) elDate.textContent = item.date || item.createdAt || '--';
+      if (elParty) elParty.textContent = item.party || '--';
+      if (elPurpose) elPurpose.textContent = item.purpose || item.type || '--';
+      if (elAccount) elAccount.textContent = item.bankAccount || 'SBI Gomoh Branch';
+      if (elRef) elRef.textContent = item.refNo || '--';
+      if (elRemarks) elRemarks.textContent = item.remarks || '--';
+
+      if (isCredit) {
+        if (elAmt) {
+          elAmt.textContent = `+ ₹ ${amt.toLocaleString('en-IN')}`;
+          elAmt.className = 'text-2xl font-black font-mono text-emerald-700';
+        }
+        if (elBadge) {
+          elBadge.textContent = '📥 Cash In / Bank Deposit';
+          elBadge.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-emerald-800 border border-emerald-200 shadow-2xs mb-1';
+        }
+        if (elBanner) {
+          elBanner.className = 'bg-emerald-50/90 border border-emerald-200 rounded-2xl p-3.5 mb-4 text-center';
+        }
+        if (elIconWrap) elIconWrap.className = 'w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base flex-shrink-0 shadow-xs';
+        if (elIcon) elIcon.className = 'fa-solid fa-arrow-down-long';
+      } else {
+        if (elAmt) {
+          elAmt.textContent = `- ₹ ${amt.toLocaleString('en-IN')}`;
+          elAmt.className = 'text-2xl font-black font-mono text-rose-700';
+        }
+        if (elBadge) {
+          elBadge.textContent = '📤 Cash Out / Bank Debit';
+          elBadge.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-rose-800 border border-rose-200 shadow-2xs mb-1';
+        }
+        if (elBanner) {
+          elBanner.className = 'bg-rose-50/90 border border-rose-200 rounded-2xl p-3.5 mb-4 text-center';
+        }
+        if (elIconWrap) elIconWrap.className = 'w-10 h-10 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-base flex-shrink-0 shadow-xs';
+        if (elIcon) elIcon.className = 'fa-solid fa-arrow-up-long';
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeViewBankRecordModal() {
+      const modal = document.getElementById('view-bank-record-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
     }
 
     async function deleteBankDepositItem(id) {
@@ -17677,7 +17831,7 @@ Remarks: ${item.remarks || '-'}
       if (statAccNo) statAccNo.textContent = primaryBank.accountNumber || '38294710293';
       if (statAccTitle) statAccTitle.textContent = `${primaryBank.bankName || 'SBI'} - ${primaryBank.branchName || 'Gomoh'}`;
 
-      // Update Filter Pill Counts
+      // Update Filter Pill Counts (Desktop)
       const elCountAll = document.getElementById('bank-count-all');
       const elCountDeposit = document.getElementById('bank-count-deposit');
       const elCountDonations = document.getElementById('bank-count-donations');
@@ -17690,11 +17844,51 @@ Remarks: ${item.remarks || '-'}
       if (elCountTransfers) elCountTransfers.textContent = `(${transferCount})`;
       if (elCountExpenses) elCountExpenses.textContent = `(${expenseCount})`;
 
+      // Update Mobile Dropdown Menu Counts
+      const mCountAll = document.getElementById('bank-menu-count-all');
+      const mCountDeposit = document.getElementById('bank-menu-count-deposit');
+      const mCountDonations = document.getElementById('bank-menu-count-donations');
+      const mCountTransfers = document.getElementById('bank-menu-count-transfers');
+      const mCountExpenses = document.getElementById('bank-menu-count-expenses');
+
+      if (mCountAll) mCountAll.textContent = allTx.length;
+      if (mCountDeposit) mCountDeposit.textContent = `(${depositCount})`;
+      if (mCountDonations) mCountDonations.textContent = `(${donationCount})`;
+      if (mCountTransfers) mCountTransfers.textContent = `(${transferCount})`;
+      if (mCountExpenses) mCountExpenses.textContent = `(${expenseCount})`;
+
+      // Update Mobile Dropdown Button Label & Badge
+      const dropLabel = document.getElementById('bank-filter-current-label');
+      const dropBadge = document.getElementById('bank-filter-current-badge');
+      if (dropLabel && dropBadge) {
+        if (currentBankFilter === 'DEPOSIT') {
+          dropLabel.textContent = 'Deposits';
+          dropBadge.textContent = depositCount;
+          dropBadge.className = 'px-1.5 py-0.5 rounded-full text-[10px] bg-emerald-600 text-white font-mono';
+        } else if (currentBankFilter === 'ONLINE_DONATION') {
+          dropLabel.textContent = 'Online Donations';
+          dropBadge.textContent = donationCount;
+          dropBadge.className = 'px-1.5 py-0.5 rounded-full text-[10px] bg-teal-600 text-white font-mono';
+        } else if (currentBankFilter === 'TRANSFER') {
+          dropLabel.textContent = 'Transfers';
+          dropBadge.textContent = transferCount;
+          dropBadge.className = 'px-1.5 py-0.5 rounded-full text-[10px] bg-indigo-600 text-white font-mono';
+        } else if (currentBankFilter === 'EXPENSE') {
+          dropLabel.textContent = 'Online Expenses';
+          dropBadge.textContent = expenseCount;
+          dropBadge.className = 'px-1.5 py-0.5 rounded-full text-[10px] bg-rose-600 text-white font-mono';
+        } else {
+          dropLabel.textContent = 'All Transactions';
+          dropBadge.textContent = allTx.length;
+          dropBadge.className = 'px-1.5 py-0.5 rounded-full text-[10px] bg-blue-600 text-white font-mono';
+        }
+      }
+
       // Update quick badge in dashboard
       const elQuickBankCount = document.getElementById('quick-bank-count');
       if (elQuickBankCount) elQuickBankCount.textContent = allTx.length;
 
-      // Update Filter Button Styles
+      // Update Desktop Filter Button Styles
       const btnAll = document.getElementById('filter-bank-all');
       const btnDeposit = document.getElementById('filter-bank-deposit');
       const btnDonations = document.getElementById('filter-bank-donations');
@@ -17702,19 +17896,19 @@ Remarks: ${item.remarks || '-'}
       const btnExpenses = document.getElementById('filter-bank-expenses');
 
       [btnAll, btnDeposit, btnDonations, btnTransfers, btnExpenses].forEach(btn => {
-        if (btn) btn.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0';
+        if (btn) btn.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       });
 
       if (currentBankFilter === 'DEPOSIT' && btnDeposit) {
-        btnDeposit.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+        btnDeposit.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       } else if (currentBankFilter === 'ONLINE_DONATION' && btnDonations) {
-        btnDonations.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+        btnDonations.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       } else if (currentBankFilter === 'TRANSFER' && btnTransfers) {
-        btnTransfers.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+        btnTransfers.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       } else if (currentBankFilter === 'EXPENSE' && btnExpenses) {
-        btnExpenses.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+        btnExpenses.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       } else if (btnAll) {
-        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0';
+        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer';
       }
 
       // Filter and Search logic
@@ -17944,6 +18138,40 @@ Remarks: ${item.remarks || '-'}
       }
     }
 
+    function toggleBankFilterDropdown() {
+      const menu = document.getElementById('bank-filter-dropdown-menu');
+      const chevron = document.getElementById('bank-filter-dropdown-chevron');
+      if (!menu) return;
+      const isClosed = menu.classList.contains('hidden');
+      if (isClosed) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.style.transform = 'rotate(180deg)';
+      } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function closeBankFilterDropdown() {
+      const menu = document.getElementById('bank-filter-dropdown-menu');
+      const chevron = document.getElementById('bank-filter-dropdown-chevron');
+      if (menu) menu.classList.add('hidden');
+      if (chevron) chevron.style.transform = 'rotate(0deg)';
+    }
+
+    document.addEventListener('click', function(e) {
+      const btn = document.getElementById('btn-bank-filter-dropdown');
+      const menu = document.getElementById('bank-filter-dropdown-menu');
+      if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+        closeBankFilterDropdown();
+      }
+    });
+
+    function selectBankFilterOption(category) {
+      closeBankFilterDropdown();
+      filterBankTransactions(category);
+    }
+
     function filterBankTransactions(category) {
       currentBankFilter = category;
       renderBankTransactionsView();
@@ -17957,6 +18185,9 @@ Remarks: ${item.remarks || '-'}
     // Window Exports
     window.renderBankTransactionsView = renderBankTransactionsView;
     window.filterBankTransactions = filterBankTransactions;
+    window.toggleBankFilterDropdown = toggleBankFilterDropdown;
+    window.closeBankFilterDropdown = closeBankFilterDropdown;
+    window.selectBankFilterOption = selectBankFilterOption;
     window.handleBankSearch = handleBankSearch;
     window.openBankRecordModal = openBankRecordModal;
     window.openBankDepositModal = openBankDepositModal;
@@ -17965,6 +18196,7 @@ Remarks: ${item.remarks || '-'}
     window.handleBankDepositedByTypeChange = handleBankDepositedByTypeChange;
     window.handleSaveBankDeposit = handleSaveBankDeposit;
     window.viewBankRecordItem = viewBankRecordItem;
+    window.closeViewBankRecordModal = closeViewBankRecordModal;
     window.deleteBankDepositItem = deleteBankDepositItem;
     window.renderExpensesView = renderExpensesView;
     window.openExpenseModal = openExpenseModal;
