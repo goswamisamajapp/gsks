@@ -4682,107 +4682,106 @@
   <!-- ============================================================== -->
   <!-- MODAL 5C: ADD / EDIT DONATION MODAL                            -->
   <!-- ============================================================== -->
-  <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
-      <button onclick="closeDonationModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all">
+  <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeDonationModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div class="flex items-center gap-2.5 mb-4">
-        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+      <!-- Modal Header -->
+      <div class="flex items-center gap-2.5 mb-4 pr-10">
+        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base flex-shrink-0 shadow-sm">
           <i class="fa-solid fa-hand-holding-dollar"></i>
         </div>
         <div>
-          <h3 id="donation-modal-title" class="text-base font-black text-slate-900">नया दान / सहयोग रसीद जोड़ें</h3>
-          <p class="text-[11px] text-slate-500">GSKS दान एवं कोष प्रबंधन</p>
+          <h3 id="donation-modal-title" class="text-base font-black text-slate-900">Add Donation</h3>
+          <p class="text-[11px] text-slate-500 font-medium">Receipt & Donation Entry</p>
         </div>
       </div>
 
-      <form onsubmit="handleSaveDonation(event)" class="space-y-3.5 text-xs">
+      <form onsubmit="handleSaveDonation(event)" class="space-y-3 text-xs">
         <input type="hidden" id="donation-id">
 
-        <!-- Member Selector / Donor Name -->
+        <!-- 1. Member Selector -->
         <div>
-          <div class="flex items-center justify-between mb-1">
-            <label class="font-bold text-slate-700">दानदाता सदस्य (Select Member) *</label>
-            <span class="text-[10px] text-slate-400">ट्रस्ट पंजीकृत सदस्य</span>
-          </div>
-          <select id="donation-member-id" onchange="handleDonationMemberSelect(this.value)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
-            <option value="">-- सदस्य चुनें (Select Member) --</option>
+          <label class="block font-bold text-slate-700 mb-1">Select Member *</label>
+          <select id="donation-member-id" onchange="handleDonationMemberSelect(this.value)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer">
+            <option value="">-- Select Member --</option>
             <!-- Dynamically populated from allMembers -->
           </select>
         </div>
 
-        <!-- Custom/Non-member Donor Name override -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- 2. Donor Name & Phone in 2 columns -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">दानदाता का नाम (Donor Name) *</label>
-            <input type="text" id="donation-donor-name" required placeholder="जैसे: अमित कुमार गोस्वामी" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            <label class="block font-bold text-slate-700 mb-1">Donor Name *</label>
+            <input type="text" id="donation-donor-name" required placeholder="Enter donor name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">मोबाइल नंबर (Phone Number)</label>
-            <input type="tel" id="donation-donor-phone" placeholder="10 अंकों का मोबाइल नंबर" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            <label class="block font-bold text-slate-700 mb-1">Phone Number</label>
+            <input type="tel" id="donation-donor-phone" placeholder="10-digit number" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-mono font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
           </div>
         </div>
 
-        <!-- Scheme Selection -->
+        <!-- 3. Scheme Selection -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">सहयोग योजना (Donation Scheme) *</label>
-          <select id="donation-scheme-name" onchange="handleDonationSchemeSelect(this.value)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+          <label class="block font-bold text-slate-700 mb-1">Donation Scheme *</label>
+          <select id="donation-scheme-name" onchange="handleDonationSchemeSelect(this.value)" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer">
             <!-- Dynamically populated from masterSettings.schemes -->
           </select>
         </div>
 
-        <!-- Amount & Date -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- 4. Amount & Date in 2 columns -->
+        <div class="grid grid-cols-2 gap-2.5">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">दान राशि (Amount in ₹) *</label>
+            <label class="block font-bold text-slate-700 mb-1">Amount (₹) *</label>
             <div class="relative">
-              <span class="absolute left-3 top-2 font-bold text-slate-400">₹</span>
-              <input type="number" id="donation-amount" required min="1" placeholder="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+              <span class="absolute left-3 top-2.5 font-bold text-slate-400 text-xs">₹</span>
+              <input type="number" id="donation-amount" required min="1" placeholder="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2.5 text-xs text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
             </div>
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">दान दिनांक (Date) *</label>
-            <input type="date" id="donation-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            <label class="block font-bold text-slate-700 mb-1">Date *</label>
+            <input type="date" id="donation-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2.5 text-xs text-slate-800 font-mono font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
           </div>
         </div>
 
-        <!-- Payment Method (Cash / Online) -->
+        <!-- 5. Payment Method (Cash / Online) -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1.5">भुगतान माध्यम (Donation Method) *</label>
-          <div class="grid grid-cols-2 gap-3">
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/70 transition-all">
+          <label class="block font-bold text-slate-700 mb-1.5">Payment Method *</label>
+          <div class="grid grid-cols-2 gap-2.5">
+            <label class="cursor-pointer border border-slate-200 rounded-2xl p-2.5 flex items-center gap-2.5 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/80 transition-all select-none">
               <input type="radio" name="donation-method" value="Cash" checked class="text-amber-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 text-xs">💵 नकद (Cash)</p>
-                <p class="text-[10px] text-slate-400">कोषाध्यक्ष के पास नगद जमा</p>
+              <div class="min-w-0">
+                <p class="font-bold text-slate-800 text-xs">💵 Cash</p>
+                <p class="text-[10px] text-slate-400 truncate">Cash payment</p>
               </div>
             </label>
 
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50/70 transition-all">
+            <label class="cursor-pointer border border-slate-200 rounded-2xl p-2.5 flex items-center gap-2.5 has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50/80 transition-all select-none">
               <input type="radio" name="donation-method" value="Online" class="text-purple-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 text-xs">📱 ऑनलाइन (Online/UPI)</p>
-                <p class="text-[10px] text-slate-400">बैंक / QR कोड भुगतान</p>
+              <div class="min-w-0">
+                <p class="font-bold text-slate-800 text-xs">📱 Online / UPI</p>
+                <p class="text-[10px] text-slate-400 truncate">Bank / QR payment</p>
               </div>
             </label>
           </div>
         </div>
 
-        <!-- Remarks / Note -->
+        <!-- 6. Remarks / Note -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">विशेष टिप्पणी / रसीद विवरण (Remarks)</label>
-          <input type="text" id="donation-remarks" placeholder="जैसे: मासिक अंशदान / रसीद क्र. / UPI Ref" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+          <label class="block font-bold text-slate-700 mb-1">Remarks (विशेष विवरण)</label>
+          <input type="text" id="donation-remarks" placeholder="Optional notes / UPI reference..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
         </div>
 
-        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-          <button type="button" onclick="closeDonationModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
-            रद्द करें
+        <!-- 7. Action Buttons: 50 / 50 clean mobile layout -->
+        <div class="pt-2 flex items-center gap-2">
+          <button type="button" onclick="closeDonationModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer">
+            Cancel
           </button>
-          <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md shadow-emerald-500/20 transition-all flex items-center gap-1.5">
+          <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
             <i class="fa-solid fa-check"></i>
-            <span id="donation-save-btn-text">रसीद सुरक्षित करें (Save Donation)</span>
+            <span id="donation-save-btn-text">Save Donation</span>
           </button>
         </div>
       </form>
@@ -13399,8 +13398,8 @@
           if (!d) return;
 
           if (document.getElementById('donation-id')) document.getElementById('donation-id').value = d.id;
-          if (titleEl) titleEl.textContent = 'दान रसीद संपादित करें (Edit Donation)';
-          if (btnTextEl) btnTextEl.textContent = 'अपडेट करें (Update Donation)';
+          if (titleEl) titleEl.textContent = 'Edit Donation';
+          if (btnTextEl) btnTextEl.textContent = 'Update Donation';
 
           if (document.getElementById('donation-member-id')) document.getElementById('donation-member-id').value = d.memberId || 'NON_MEMBER';
           if (document.getElementById('donation-donor-name')) document.getElementById('donation-donor-name').value = d.donorName || '';
@@ -13416,8 +13415,8 @@
           }
         } else {
           if (document.getElementById('donation-id')) document.getElementById('donation-id').value = '';
-          if (titleEl) titleEl.textContent = 'नया दान / सहयोग रसीद जोड़ें (Add Donation)';
-          if (btnTextEl) btnTextEl.textContent = 'रसीद सुरक्षित करें (Save Donation)';
+          if (titleEl) titleEl.textContent = 'Add Donation';
+          if (btnTextEl) btnTextEl.textContent = 'Save Donation';
 
           if (document.getElementById('donation-member-id')) document.getElementById('donation-member-id').value = '';
           if (document.getElementById('donation-donor-name')) document.getElementById('donation-donor-name').value = '';
