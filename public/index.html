@@ -6387,10 +6387,7 @@
         { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amountType: 'fixed', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Open' },
         { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amountType: 'custom', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Open' }
       ],
-      openingBalances: {
-        cash: 34025,
-        bank: 0,
-        remarks: 'वर्ष 2025 से पूर्व संचित कोष'
+      openingBalances : { cash: 500, bank: 34025, remarks: 'वर्ष 2025 से पूर्व संचित कोष'
       },
       vendors: [
         { id: 'ven_1', name: 'टेंट हाउस एवं डेकोरेशन', phone: '', category: 'Tent & Sound', address: 'गोमो' },
@@ -10011,7 +10008,7 @@
       document.getElementById('dash-archived-members').textContent = archivedCount;
 
       // Dynamic Treasury Calculations from Opening Balance, actual Donations, Fund Transfers, and Expenses
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0 };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025 };
       const openCash = parseFloat(openBalances.cash) || 0;
       const openBank = parseFloat(openBalances.bank) || 0;
 
@@ -13577,7 +13574,7 @@ ID: ${item.id}
     function openEditOpeningBalanceModal() {
       closeAllModals();
       const modal = document.getElementById('opening-balance-modal');
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
 
       const cashInput = document.getElementById('opening-bal-cash-input');
       const bankInput = document.getElementById('opening-bal-bank-input');
@@ -16260,7 +16257,7 @@ ID: ${item.id}
 
     // --- OPENING BALANCES CARD RENDERING ---
     function renderOpeningBalancesCard() {
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
       const openCash = parseFloat(openBalances.cash) || 0;
       const openBank = parseFloat(openBalances.bank) || 0;
       const openTotal = openCash + openBank;
@@ -16497,7 +16494,7 @@ ID: ${item.id}
 
     function getBankTransactionsList() {
       const list = [];
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 34025, bank: 0 };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025 };
       const openBank = parseFloat(openBalances.bank) || 0;
 
       // 1. Bank Opening Balance Entry

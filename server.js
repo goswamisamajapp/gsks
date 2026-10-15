@@ -67,8 +67,8 @@ const DEFAULT_SETTINGS = {
     { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Active' }
   ],
   openingBalances: {
-    cash: 34025,
-    bank: 0,
+    cash: 500,
+    bank: 34025,
     remarks: 'वर्ष 2025 से पूर्व संचित कोष'
   },
   vendors: [
