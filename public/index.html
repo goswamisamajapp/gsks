@@ -4266,66 +4266,48 @@
           <i class="fa-solid fa-calendar-plus"></i>
         </div>
         <div>
-          <h3 id="event-modal-title" class="text-base font-black text-slate-900">नया कार्यक्रम / बैठक जोड़ें</h3>
-          <p class="text-[11px] text-slate-500">GSKS समिति बैठक एवं सूचना प्रबंधन</p>
+          <h3 id="event-modal-title" class="text-base font-black text-slate-900">Add Event</h3>
+          <p class="text-[11px] text-slate-500">Meeting & Event Management</p>
         </div>
       </div>
 
-      <form onsubmit="handleSaveEvent(event)" class="space-y-4 text-xs">
+      <form onsubmit="handleSaveEvent(event)" class="space-y-3.5 text-xs">
         <input type="hidden" id="event-id">
 
-        <!-- 1. Category Selection (3 types) -->
+        <!-- 1. Category Selection (Clean Dropdown) -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1.5">इवेंट श्रेणी (Event Category) *</label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/60 transition-all">
-              <input type="radio" name="event-category" value="General Meeting" checked class="text-blue-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 leading-tight">General Meeting</p>
-                <p class="text-[10px] text-slate-400">सामान्य बैठक</p>
-              </div>
-            </label>
-
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50/60 transition-all">
-              <input type="radio" name="event-category" value="Special Event" class="text-purple-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 leading-tight">Special Event</p>
-                <p class="text-[10px] text-slate-400">विशेष उत्सव/समारोह</p>
-              </div>
-            </label>
-
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-rose-500 has-[:checked]:bg-rose-50/60 transition-all">
-              <input type="radio" name="event-category" value="Emergency meeting" class="text-rose-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 leading-tight">Emergency</p>
-                <p class="text-[10px] text-slate-400">आपातकालीन बैठक</p>
-              </div>
-            </label>
+          <label class="block font-bold text-slate-700 mb-1">Event Category *</label>
+          <div class="relative">
+            <select id="event-category-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer">
+              <option value="General Meeting">🔵 General Meeting</option>
+              <option value="Special Event">🟣 Special Event</option>
+              <option value="Emergency meeting">🔴 Emergency</option>
+            </select>
           </div>
         </div>
 
         <!-- 2. Event Title -->
         <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="font-bold text-slate-700">कार्यक्रम / बैठक का शीर्षक (Title) *</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold text-slate-700">Event Title *</label>
             <select onchange="if(this.value){document.getElementById('event-title').value=this.value;}" class="bg-indigo-50 text-indigo-700 font-bold text-[11px] rounded-lg px-2.5 py-1 border border-indigo-200 focus:outline-none cursor-pointer" id="event-title-presets">
-              <option value="">⚡ मास्टर से चुनें (Preset)</option>
+              <option value="">⚡ Presets</option>
               <option value="मासिक आम सभा एवं कोष समीक्षा">मासिक आम सभा एवं कोष समीक्षा</option>
               <option value="वार्षिक महाधिवेशन एवं सम्मान समारोह">वार्षिक महाधिवेशन एवं सम्मान समारोह</option>
               <option value="आपातकालीन कार्यकारिणी बैठक">आपातकालीन कार्यकारिणी बैठक</option>
               <option value="शिव चर्चा एवं सामाजिक विचार-विमर्श">शिव चर्चा एवं सामाजिक विचार-विमर्श</option>
             </select>
           </div>
-          <input type="text" id="event-title" required placeholder="जैसे: समिति की मासिक आम सभा एवं कोष समीक्षा" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+          <input type="text" id="event-title" required placeholder="Enter event title..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-bold">
         </div>
 
         <!-- 3. Event Venue & Date/Time Picker -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-1.5 min-h-[26px]">
-              <label class="font-bold text-slate-700">स्थान / वेन्यू (Venue) *</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <div class="flex items-center justify-between mb-1 min-h-[24px]">
+              <label class="font-bold text-slate-700">Venue *</label>
               <select onchange="onEventVenuePresetChange(this.value)" class="bg-rose-50 text-rose-700 font-bold text-[11px] rounded-lg px-2.5 py-1 border border-rose-200 focus:outline-none cursor-pointer" id="event-venue-presets">
-                <option value="">⚡ मास्टर से चुनें (Preset)</option>
+                <option value="">⚡ Presets</option>
                 <option value="शिव मंदिर परिसर, गुनघसा">शिव मंदिर परिसर, गुनघसा</option>
                 <option value="सामुदायिक भवन, गोमो">सामुदायिक भवन, गोमो</option>
                 <option value="केंद्रीय ट्रस्ट कार्यालय, धनबाद">केंद्रीय ट्रस्ट कार्यालय, धनबाद</option>
@@ -4337,7 +4319,7 @@
               <div class="relative flex items-center gap-1.5">
                 <div class="relative flex-1">
                   <i class="fa-solid fa-location-dot absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                  <input type="text" id="event-venue" required placeholder="जैसे: शिव मंदिर परिसर, गुनघसा" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
+                  <input type="text" id="event-venue" required placeholder="Enter event venue..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium">
                 </div>
 
                 <!-- Live Location Fetch Button -->
@@ -4346,10 +4328,10 @@
                   onclick="detectEventCurrentLocation()" 
                   id="btn-detect-event-gps" 
                   class="px-3 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-emerald-600/20 active:scale-95 transition-all flex-shrink-0 cursor-pointer"
-                  title="वर्तमान जीपीएस लोकेशन फेच करें और पता भरें"
+                  title="Detect GPS location"
                 >
                   <i class="fa-solid fa-location-crosshairs text-xs"></i>
-                  <span class="hidden sm:inline">लोकेशन लें</span>
+                  <span class="hidden sm:inline">GPS</span>
                 </button>
               </div>
 
@@ -4363,7 +4345,7 @@
                     id="event-latitude" 
                     placeholder="23.868850" 
                     class="w-full bg-white border border-slate-200 rounded-lg px-2 py-0.5 font-mono text-[11px] text-slate-800 font-semibold focus:outline-none focus:border-indigo-500"
-                    title="बैठक स्थल का Latitude (अक्षांश)"
+                    title="Latitude"
                   >
                 </div>
                 <div class="flex items-center gap-1.5">
@@ -4374,18 +4356,18 @@
                     id="event-longitude" 
                     placeholder="86.155400" 
                     class="w-full bg-white border border-slate-200 rounded-lg px-2 py-0.5 font-mono text-[11px] text-slate-800 font-semibold focus:outline-none focus:border-indigo-500"
-                    title="बैठक स्थल का Longitude (देशांतर)"
+                    title="Longitude"
                   >
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-1.5 min-h-[26px]">
-              <label class="font-bold text-slate-700">दिनांक एवं समय (Date & Time) *</label>
+          <div>
+            <div class="flex items-center justify-between mb-1 min-h-[24px]">
+              <label class="font-bold text-slate-700">Date & Time *</label>
               <span id="event-datetime-auto-hint" class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200">
-                ⚡ ऑटो स्टेटस
+                ⚡ Auto Status
               </span>
             </div>
             <div>
@@ -4395,7 +4377,7 @@
                 required 
                 onchange="autoSetEventStatusFromDatetime(this.value)"
                 oninput="autoSetEventStatusFromDatetime(this.value)"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-mono font-medium"
               >
             </div>
           </div>
@@ -4403,54 +4385,34 @@
 
         <!-- 4. Description -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">विवरण / एजेंडा (Description / Agenda) *</label>
-          <textarea id="event-description" rows="3" required placeholder="बैठक के मुख्य बिंदु, विचारणीय विषय और निर्देश यहाँ दर्ज करें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium resize-none"></textarea>
+          <label class="block font-bold text-slate-700 mb-1">Description / Agenda *</label>
+          <textarea id="event-description" rows="3" required placeholder="Enter meeting agenda, details and instructions..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium resize-none"></textarea>
         </div>
 
-        <!-- 4B. Event Status Selection (Upcoming, Open, Closed) -->
+        <!-- 4B. Event Status Selection (Dropdown for clean mobile UX) -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1.5">इवेंट स्थिति (Event Status) *</label>
-          <div class="grid grid-cols-3 gap-2">
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/70 transition-all">
-              <input type="radio" name="event-status" value="Upcoming" checked class="text-blue-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 text-xs leading-tight">Upcoming</p>
-                <p class="text-[10px] text-slate-400">आगामी बैठक</p>
-              </div>
-            </label>
-
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/70 transition-all">
-              <input type="radio" name="event-status" value="Open" class="text-emerald-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 text-xs leading-tight">Open</p>
-                <p class="text-[10px] text-slate-400">वर्तमान जारी</p>
-              </div>
-            </label>
-
-            <label class="cursor-pointer border border-slate-200 rounded-xl p-2 flex items-center gap-2 has-[:checked]:border-slate-500 has-[:checked]:bg-slate-100 transition-all">
-              <input type="radio" name="event-status" value="Closed" class="text-slate-600 focus:ring-0">
-              <div>
-                <p class="font-bold text-slate-800 text-xs leading-tight">Closed</p>
-                <p class="text-[10px] text-slate-400">समाप्त/संपन्न</p>
-              </div>
-            </label>
-          </div>
+          <label class="block font-bold text-slate-700 mb-1">Event Status *</label>
+          <select id="event-status-select" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer">
+            <option value="Upcoming" selected>🔵 Upcoming</option>
+            <option value="Open">🟢 Open / Ongoing</option>
+            <option value="Closed">⚫ Closed / Completed</option>
+          </select>
         </div>
 
         <!-- 5. Targeted Audience Notification Selection -->
-        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-          <label class="block font-bold text-slate-700">सूचना / नोटिफिकेशन किसे प्राप्त होगी? (Audience Target) *</label>
-          <select id="event-audience" onchange="toggleSelectedMembersList(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
-            <option value="All User" selected>📢 All User (समस्त सदस्य गण - All Members)</option>
-            <option value="Active User">✅ Active User (केवल सक्रिय सदस्य)</option>
-            <option value="Prime User">👑 Prime User (केवल विशिष्ट VIP सदस्य)</option>
-            <option value="Inactive User">⚠️ Inactive User (केवल निष्क्रिय सदस्य)</option>
-            <option value="Selected User">🎯 Selected User (चुनिंदा सदस्यों को चुनें)</option>
+        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+          <label class="block font-bold text-slate-700">Target Audience *</label>
+          <select id="event-audience" onchange="toggleSelectedMembersList(this.value)" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+            <option value="All User" selected>📢 All Members (समस्त सदस्य)</option>
+            <option value="Active User">✅ Active Members (सक्रिय सदस्य)</option>
+            <option value="Prime User">👑 Prime Members (विशिष्ट VIP)</option>
+            <option value="Inactive User">⚠️ Inactive Members (निष्क्रिय)</option>
+            <option value="Selected User">🎯 Selected Members (चुनिंदा सदस्य)</option>
           </select>
 
           <!-- Dynamic Member Checkboxes for 'Selected User' -->
           <div id="selected-users-container" class="hidden mt-2 pt-2 border-t border-slate-200">
-            <p class="text-[11px] font-bold text-slate-600 mb-1.5">सदस्यों को चुनें (Select Members):</p>
+            <p class="text-[11px] font-bold text-slate-600 mb-1.5">Select Members:</p>
             <div id="selected-users-checklist" class="max-h-36 overflow-y-auto space-y-1 bg-white p-2 rounded-xl border border-slate-200">
               <!-- Checkboxes dynamically populated -->
             </div>
@@ -4458,13 +4420,13 @@
         </div>
 
         <!-- Submit Buttons -->
-        <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="closeEventModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
-            रद्द करें
+        <div class="pt-2 flex items-center gap-2">
+          <button type="button" onclick="closeEventModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
+            Cancel
           </button>
-          <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5">
+          <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-check"></i>
-            <span id="event-save-btn-text">सुरक्षित करें (Save Event)</span>
+            <span id="event-save-btn-text">Save Event</span>
           </button>
         </div>
       </form>
@@ -11091,13 +11053,13 @@
         // Populate preset dropdowns from Event Master
         const titlePresets = document.getElementById('event-title-presets');
         if (titlePresets && masterSettings.eventTitles) {
-          titlePresets.innerHTML = `<option value="">⚡ मास्टर से चुनें (Preset)</option>` +
+          titlePresets.innerHTML = `<option value="">⚡ Presets</option>` +
             masterSettings.eventTitles.map(t => `<option value="${t.title}">${t.title}</option>`).join('');
           titlePresets.value = '';
         }
         const venuePresets = document.getElementById('event-venue-presets');
         if (venuePresets && masterSettings.eventVenues) {
-          venuePresets.innerHTML = `<option value="">⚡ मास्टर से चुनें (Preset)</option>` +
+          venuePresets.innerHTML = `<option value="">⚡ Presets</option>` +
             masterSettings.eventVenues.map(v => `<option value="${v.venue}">${v.venue}</option>`).join('');
           venuePresets.value = '';
         }
@@ -11106,19 +11068,14 @@
           const ev = allEvents.find(e => e.id === eventId);
           if (!ev) return;
           if (document.getElementById('event-id')) document.getElementById('event-id').value = ev.id;
-          if (modalTitle) modalTitle.textContent = 'इवेंट / बैठक संपादित करें (Edit Event)';
-          if (btnText) btnText.textContent = 'अपडेट करें (Update Event)';
+          if (modalTitle) modalTitle.textContent = 'Edit Event';
+          if (btnText) btnText.textContent = 'Update Event';
 
-          const catRadios = document.getElementsByName('event-category');
-          for (const r of catRadios) {
-            r.checked = (r.value === ev.category);
-          }
+          const catSelect = document.getElementById('event-category-select');
+          if (catSelect) catSelect.value = ev.category || 'General Meeting';
 
-          const stRadios = document.getElementsByName('event-status');
-          const targetStatus = ev.status || 'Upcoming';
-          for (const r of stRadios) {
-            r.checked = (r.value === targetStatus);
-          }
+          const stSelect = document.getElementById('event-status-select');
+          if (stSelect) stSelect.value = ev.status || 'Upcoming';
 
           if (document.getElementById('event-title')) document.getElementById('event-title').value = ev.title || '';
           if (document.getElementById('event-venue')) document.getElementById('event-venue').value = ev.venue || '';
@@ -11134,14 +11091,14 @@
           }
         } else {
           if (document.getElementById('event-id')) document.getElementById('event-id').value = '';
-          if (modalTitle) modalTitle.textContent = 'नया कार्यक्रम / बैठक जोड़ें (Add Event)';
-          if (btnText) btnText.textContent = 'सुरक्षित करें (Save Event)';
+          if (modalTitle) modalTitle.textContent = 'Add Event';
+          if (btnText) btnText.textContent = 'Save Event';
 
-          const catRadios = document.getElementsByName('event-category');
-          if (catRadios.length > 0) catRadios[0].checked = true;
+          const catSelect = document.getElementById('event-category-select');
+          if (catSelect) catSelect.value = 'General Meeting';
 
-          const stRadios = document.getElementsByName('event-status');
-          if (stRadios.length > 0) stRadios[0].checked = true;
+          const stSelect = document.getElementById('event-status-select');
+          if (stSelect) stSelect.value = 'Upcoming';
 
           if (document.getElementById('event-title')) document.getElementById('event-title').value = '';
           if (document.getElementById('event-venue')) document.getElementById('event-venue').value = '';
@@ -11191,22 +11148,22 @@
         targetStatus = 'Upcoming';
       }
 
-      const stRadios = document.getElementsByName('event-status');
-      for (const r of stRadios) {
-        r.checked = (r.value === targetStatus);
+      const stSelect = document.getElementById('event-status-select');
+      if (stSelect) {
+        stSelect.value = targetStatus;
       }
 
       const hintEl = document.getElementById('event-datetime-auto-hint');
       if (hintEl) {
         if (targetStatus === 'Closed') {
           hintEl.className = 'text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-300';
-          hintEl.textContent = '⚡ बैक डेट: Closed सेट हुआ';
+          hintEl.textContent = '⚡ Closed';
         } else if (targetStatus === 'Open') {
           hintEl.className = 'text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-300';
-          hintEl.textContent = '⚡ वर्तमान: Open सेट हुआ';
+          hintEl.textContent = '⚡ Open';
         } else {
           hintEl.className = 'text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-300';
-          hintEl.textContent = '⚡ भविष्य: Upcoming सेट हुआ';
+          hintEl.textContent = '⚡ Upcoming';
         }
       }
     }
@@ -11229,15 +11186,15 @@
       const id = existingId || `EVT-${Date.now()}`;
 
       let selectedCat = 'General Meeting';
-      const catRadios = document.getElementsByName('event-category');
-      for (const r of catRadios) {
-        if (r.checked) { selectedCat = r.value; break; }
+      const catSelect = document.getElementById('event-category-select');
+      if (catSelect) {
+        selectedCat = catSelect.value;
       }
 
       let selectedStatus = 'Upcoming';
-      const stRadios = document.getElementsByName('event-status');
-      for (const r of stRadios) {
-        if (r.checked) { selectedStatus = r.value; break; }
+      const stSelect = document.getElementById('event-status-select');
+      if (stSelect) {
+        selectedStatus = stSelect.value;
       }
 
       const audienceVal = document.getElementById('event-audience').value;
