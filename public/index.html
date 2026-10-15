@@ -6288,12 +6288,25 @@
   <script src="members-preloaded.js"></script>
   <script src="events-preloaded.js"></script>
   <script src="donations-preloaded.js"></script>
+  <script src="expenses-preloaded.js"></script>
   <script>
     let allMembers = (typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__)) ? [...window.__INITIAL_MEMBERS__] : [];
     let allEvents = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? [...window.__INITIAL_EVENTS__] : [];
     let allDonations = (typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__)) ? [...window.__INITIAL_DONATIONS__] : [];
     let allFundTransfers = [];
-    let allExpenses = [];
+    let allExpenses = (() => {
+      try {
+        const cached = localStorage.getItem('gsks_cached_expenses');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+      if (typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES)) {
+        return [...window.PRELOADED_EXPENSES];
+      }
+      return [];
+    })();
     let currentExpenseMethodFilter = 'ALL';
     let currentExpenseSchemeFilter = 'ALL';
     let currentExpenseVendorFilter = 'ALL';
@@ -6736,6 +6749,18 @@
       }
       if ((!allDonations || allDonations.length === 0) && typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__) && window.__INITIAL_DONATIONS__.length > 0) {
         allDonations = [...window.__INITIAL_DONATIONS__];
+      }
+      if (!allExpenses || allExpenses.length === 0) {
+        try {
+          const cached = localStorage.getItem('gsks_cached_expenses');
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) allExpenses = parsed;
+          }
+        } catch(e) {}
+        if ((!allExpenses || allExpenses.length === 0) && typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES) && window.PRELOADED_EXPENSES.length > 0) {
+          allExpenses = [...window.PRELOADED_EXPENSES];
+        }
       }
 
       updateDate();
@@ -9908,6 +9933,7 @@
           liveExpensesSnap.forEach(doc => expList.push(doc.data()));
           if (expList.length > 0) {
             allExpenses = expList;
+            try { localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses)); } catch(e) {}
           } else if (!allExpenses || allExpenses.length === 0) {
             loadExpensesFallback();
             return;
@@ -10046,7 +10072,19 @@
     async function loadExpensesFallback() {
       try {
         const res = await fetch('/api/expenses');
-        allExpenses = await res.json();
+        const fetched = await res.json();
+        if (Array.isArray(fetched) && fetched.length > 0) {
+          allExpenses = fetched;
+          try { localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses)); } catch(e) {}
+        } else if (!allExpenses || allExpenses.length === 0) {
+          try {
+            const cached = localStorage.getItem('gsks_cached_expenses');
+            if (cached) {
+              const parsed = JSON.parse(cached);
+              if (Array.isArray(parsed) && parsed.length > 0) allExpenses = parsed;
+            }
+          } catch(e) {}
+        }
         allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
         updateStats();
         updateExpensesStats();
@@ -17013,13 +17051,16 @@ ID: ${item.id}
         createdAt: new Date().toISOString()
       };
 
-      // 1. Instant local array update
+      // 1. Instant local array & localStorage cache update
       const existingIdx = allExpenses.findIndex(item => item.id === id);
       if (existingIdx !== -1) {
         allExpenses[existingIdx] = expenseData;
       } else {
         allExpenses.unshift(expenseData);
       }
+      try {
+        localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses));
+      } catch (err) {}
 
       closeExpenseModal();
       updateExpensesStats();
@@ -17053,6 +17094,10 @@ ID: ${item.id}
       if (!confirm(`क्या आप इस खर्च (${id}) को हटाना चाहते हैं?`)) return;
 
       allExpenses = allExpenses.filter(item => item.id !== id);
+      try {
+        localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses));
+      } catch (err) {}
+
       updateExpensesStats();
       updateStats();
       renderExpensesList();
