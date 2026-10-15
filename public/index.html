@@ -6466,10 +6466,23 @@
     }
 
     function showDashboard() {
-      document.getElementById('login-screen').classList.add('hidden');
-      document.getElementById('admin-dashboard').classList.remove('hidden');
+      document.documentElement.classList.remove('member-logged-in');
+      document.documentElement.classList.add('admin-logged-in');
+      const loginScr = document.getElementById('login-screen');
+      const adminDash = document.getElementById('admin-dashboard');
+      const memberDash = document.getElementById('member-dashboard');
+
+      if (loginScr) loginScr.classList.add('hidden');
+      if (memberDash) memberDash.classList.add('hidden');
+      if (adminDash) {
+        adminDash.classList.remove('hidden');
+        adminDash.style.display = 'flex';
+      }
       updateDate();
       initFirebaseRealtime();
+      if (typeof updateStats === 'function') updateStats();
+      if (typeof renderMembers === 'function') renderMembers();
+      if (typeof renderPariwarikView === 'function') renderPariwarikView();
     }
 
     function logoutAdmin() {
