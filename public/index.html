@@ -2426,23 +2426,38 @@
 
     </main>
 
-    <!-- Bottom Mobile Nav Bar -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-2.5 flex items-center justify-around z-40 shadow-lg">
-      <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 text-orange-600 font-bold">
-        <i class="fa-solid fa-chart-pie text-base"></i>
-        <span class="text-[11px] font-bold">Dashboard</span>
+    <!-- Bottom Mobile Nav Bar (Modern & Colourful) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-xl">
+      <!-- 1. Dashboard (Orange/Amber) -->
+      <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <span class="text-[10px] font-extrabold tracking-tight">Dashboard</span>
       </button>
-      <button onclick="switchAdminView('members')" id="mobile-nav-members" class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
-        <i class="fa-solid fa-users text-base"></i>
-        <span class="text-[11px] font-medium">Members</span>
+
+      <!-- 2. Members (Emerald/Teal) -->
+      <button onclick="switchAdminView('members')" id="mobile-nav-members" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-emerald-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">Members</span>
       </button>
-      <button onclick="switchAdminView('events')" id="mobile-nav-events" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-600">
-        <i class="fa-solid fa-calendar-days text-base"></i>
-        <span class="text-[11px] font-medium">Event</span>
+
+      <!-- 3. Event (Indigo/Purple) -->
+      <button onclick="switchAdminView('events')" id="mobile-nav-events" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-indigo-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">Event</span>
       </button>
-      <button onclick="switchAdminView('pariwarik')" id="mobile-nav-pariwarik" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-600">
-        <i class="fa-solid fa-users-rectangle text-base"></i>
-        <span class="text-[11px] font-medium">PASY</span>
+
+      <!-- 4. PASY (Cyan/Sky) -->
+      <button onclick="switchAdminView('pariwarik')" id="mobile-nav-pariwarik" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-cyan-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-users-rectangle"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">PASY</span>
       </button>
     </div>
 
@@ -9681,10 +9696,30 @@
       });
       if(navSettings) navSettings.className = 'px-3.5 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200';
 
-      // Reset mobile classes
-      [mobDash, mobMembers, mobPrime, mobEvents, mobExpenses, mobArchived, mobSettings, mobPariwarik].forEach(btn => {
-        if(btn) btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600';
-      });
+      // Reset mobile classes (inactive colourful icons & text)
+      const resetMobileNavClasses = () => {
+        if (mobDash) {
+          mobDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-orange-600 active:scale-95 cursor-pointer';
+          const icon = mobDash.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs transition-colors';
+        }
+        if (mobMembers) {
+          mobMembers.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-emerald-600 active:scale-95 cursor-pointer';
+          const icon = mobMembers.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs transition-colors';
+        }
+        if (mobEvents) {
+          mobEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-indigo-600 active:scale-95 cursor-pointer';
+          const icon = mobEvents.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs transition-colors';
+        }
+        if (mobPariwarik) {
+          mobPariwarik.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-cyan-600 active:scale-95 cursor-pointer';
+          const icon = mobPariwarik.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xs transition-colors';
+        }
+      };
+      resetMobileNavClasses();
 
       dashSection.classList.add('hidden');
       membersSection.classList.add('hidden');
@@ -9707,7 +9742,11 @@
         renderSettingsView();
       } else if (view === 'pariwarik') {
         if (pariwarikSection) pariwarikSection.classList.remove('hidden');
-        if (mobPariwarik) mobPariwarik.className = 'flex flex-col items-center gap-1 text-cyan-600 font-bold';
+        if (mobPariwarik) {
+          mobPariwarik.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-cyan-700 bg-cyan-50 font-bold active:scale-95 cursor-pointer';
+          const icon = mobPariwarik.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-600 to-teal-500 text-white flex items-center justify-center text-xs shadow-sm shadow-cyan-600/30';
+        }
         renderPariwarikView();
       } else if (view === 'donations') {
         if (donationsSection) donationsSection.classList.remove('hidden');
@@ -9722,7 +9761,11 @@
       } else if (view === 'prime' || statusFilter === 'Prime Member') {
         membersSection.classList.remove('hidden');
         if(navPrime) navPrime.className = 'px-3.5 py-2 rounded-xl text-amber-900 bg-amber-100 font-bold flex items-center gap-1.5 transition-all border border-amber-300';
-        if(mobPrime) mobPrime.className = 'flex flex-col items-center gap-1 text-amber-700 font-bold';
+        if (mobMembers) {
+          mobMembers.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-700 bg-amber-50 font-bold active:scale-95 cursor-pointer';
+          const icon = mobMembers.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-500 text-white flex items-center justify-center text-xs shadow-sm shadow-amber-500/30';
+        }
         
         document.getElementById('member-status-filter').value = 'Prime Member';
         currentFilterStatus = 'Prime Member';
@@ -9730,12 +9773,20 @@
       } else if (view === 'events') {
         if (eventsSection) eventsSection.classList.remove('hidden');
         if(navEvents) navEvents.className = 'px-3.5 py-2 rounded-xl text-indigo-700 bg-indigo-50 font-bold flex items-center gap-1.5 transition-all border border-indigo-200';
-        if(mobEvents) mobEvents.className = 'flex flex-col items-center gap-1 text-indigo-600 font-bold';
+        if (mobEvents) {
+          mobEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-700 bg-indigo-50 font-bold active:scale-95 cursor-pointer';
+          const icon = mobEvents.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-xs shadow-sm shadow-indigo-600/30';
+        }
         renderEventsList();
       } else if (view === 'members') {
         membersSection.classList.remove('hidden');
         if(navMembers) navMembers.className = 'px-3.5 py-2 rounded-xl text-orange-700 bg-orange-50 font-bold flex items-center gap-1.5 transition-all';
-        if(mobMembers) mobMembers.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+        if (mobMembers) {
+          mobMembers.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-emerald-700 bg-emerald-50 font-bold active:scale-95 cursor-pointer';
+          const icon = mobMembers.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center text-xs shadow-sm shadow-emerald-600/30';
+        }
         
         const filterVal = statusFilter || 'ALL';
         document.getElementById('member-status-filter').value = filterVal;
@@ -9749,7 +9800,11 @@
       } else {
         dashSection.classList.remove('hidden');
         if(navDash) navDash.className = 'px-3.5 py-1.5 rounded-xl text-orange-700 bg-orange-50 hover:bg-orange-100 font-bold text-xs flex items-center gap-1.5 transition-all border border-orange-200 shadow-sm';
-        if(mobDash) mobDash.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
+        if (mobDash) {
+          mobDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-700 bg-orange-50 font-bold active:scale-95 cursor-pointer';
+          const icon = mobDash.querySelector('div');
+          if (icon) icon.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/30';
+        }
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
