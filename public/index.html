@@ -748,102 +748,114 @@
       <!-- ============================================== -->
       <!-- TAB 4B: DONATIONS & SEWA MANAGEMENT SECTION    -->
       <!-- ============================================== -->
-      <div id="view-donations-section" class="hidden space-y-6 animate-in fade-in duration-200">
+      <div id="view-donations-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
         
         <!-- Header & Action Bar -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
           <div>
             <div class="flex items-center gap-2.5">
-              <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg shadow-sm">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg shadow-sm flex-shrink-0">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
               </div>
               <div>
-                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
-                  दान एवं सहयोग प्रबंधन (Donations & Funds)
+                <h2 class="text-base sm:text-xl font-extrabold text-slate-900">
+                  Donations & Funds
                 </h2>
-                <p class="text-xs text-slate-500">दान रसीद, नकद/ऑनलाइन सहयोग, योजना-वार दान सूची एवं पारदर्शी लेखा-जोखा</p>
+                <p class="text-[11px] sm:text-xs text-slate-500">Donation receipts, online/cash collections & records</p>
               </div>
             </div>
           </div>
 
           <div class="flex items-center gap-2.5 w-full sm:w-auto">
-            <button onclick="openDonationModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
+            <button onclick="openDonationModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
               <i class="fa-solid fa-plus text-xs"></i>
-              <span>+ नया दान / सहयोग जोड़ें (Add Donation)</span>
+              <span>Add Donation</span>
             </button>
           </div>
         </div>
 
-        <!-- 1. Donations Summary 4-Cards Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <!-- 1. Donations Summary 4-Cards Grid (Clean English: Total, Today, Cash, UPI) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
           <!-- Total Donation -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-emerald-100 shadow-sm flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-emerald-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
               <i class="fa-solid fa-sack-dollar"></i>
             </div>
-            <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">कुल प्राप्त दान</p>
-              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-total">0</span></h3>
-              <p class="text-[10px] text-emerald-600 font-semibold"><span id="don-stat-count">0</span> रसीदें</p>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-total">0</span></h3>
+              <p class="text-[10px] text-emerald-600 font-semibold truncate"><span id="don-stat-count">0</span> Receipts</p>
             </div>
           </div>
 
           <!-- Today's Donation -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-blue-100 shadow-sm flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl flex-shrink-0">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-blue-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
               <i class="fa-solid fa-calendar-day"></i>
             </div>
-            <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">आज का दान</p>
-              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-today">0</span></h3>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Today</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-today">0</span></h3>
               <p class="text-[10px] text-blue-600 font-semibold">Today's Total</p>
             </div>
           </div>
 
           <!-- Cash Donation -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-100 shadow-sm flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl flex-shrink-0">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-amber-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
               <i class="fa-solid fa-money-bill-wave"></i>
             </div>
-            <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">नकद दान (Cash)</p>
-              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-cash">0</span></h3>
-              <p class="text-[10px] text-amber-600 font-semibold">Cash in Hand</p>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cash</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-cash">0</span></h3>
+              <p class="text-[10px] text-amber-600 font-semibold">In Hand</p>
             </div>
           </div>
 
-          <!-- Online Donation -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-purple-100 shadow-sm flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl flex-shrink-0">
+          <!-- Online Donation (UPI) -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-purple-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
               <i class="fa-solid fa-qrcode"></i>
             </div>
-            <div>
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ऑनलाइन दान (UPI/Bank)</p>
-              <h3 class="text-base sm:text-xl font-black text-slate-900 font-mono mt-0.5">₹<span id="don-stat-online">0</span></h3>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">UPI</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-online">0</span></h3>
               <p class="text-[10px] text-purple-600 font-semibold">Bank / QR</p>
             </div>
           </div>
         </div>
 
         <!-- 2. Controls & Search/Filter Strip -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
           <!-- Left: Search Box -->
-          <div class="relative flex-1 min-w-[200px]">
+          <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="donation-search-input" oninput="renderDonationsList()" placeholder="दानदाता का नाम, सदस्य ID या योजना खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium">
+            <input type="text" id="donation-search-input" oninput="renderDonationsList()" placeholder="दानदाता का नाम, ID या योजना..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium">
           </div>
 
-          <!-- Right: Method & Scheme Filters -->
-          <div class="flex items-center gap-2 flex-wrap">
+          <!-- Mobile Filter Button (Visible on Mobile Only) -->
+          <button 
+            type="button" 
+            onclick="openMobileDonationFilterModal()" 
+            class="sm:hidden px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 cursor-pointer flex-shrink-0"
+            title="Filter Donations"
+          >
+            <i class="fa-solid fa-sliders text-emerald-600"></i>
+            <span>Filter</span>
+            <span id="mob-donation-filter-indicator" class="hidden w-2 h-2 rounded-full bg-emerald-600"></span>
+          </button>
+
+          <!-- Right: Method & Scheme Filters (Desktop view: hidden on mobile) -->
+          <div class="hidden sm:flex items-center gap-2 flex-wrap">
             <!-- Method Filter -->
-            <select id="donation-method-filter" onchange="renderDonationsList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+            <select id="donation-method-filter" onchange="renderDonationsList(); syncDonationFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
               <option value="ALL">सभी माध्यम (Cash + Online)</option>
               <option value="Cash">💵 केवल नकद (Cash)</option>
               <option value="Online">📱 केवल ऑनलाइन (Online)</option>
             </select>
 
             <!-- Scheme Filter -->
-            <select id="donation-scheme-filter" onchange="renderDonationsList()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
+            <select id="donation-scheme-filter" onchange="renderDonationsList(); syncDonationFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
               <option value="ALL">सभी योजनाएं</option>
             </select>
           </div>
@@ -853,21 +865,21 @@
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid fa-receipt text-emerald-600"></i> दानदाता सूची (हाल ही के दान - Recent to Old)
+              <i class="fa-solid fa-receipt text-emerald-600"></i> Donation Receipts (Recent to Old)
             </h3>
-            <span class="text-xs text-slate-400 font-medium font-mono" id="donations-table-count">0 रसीदें</span>
+            <span class="text-xs text-slate-400 font-medium font-mono" id="donations-table-count">0 Receipts</span>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
-                  <th class="p-3.5 pl-5">रसीद क्र. / दिनांक</th>
-                  <th class="p-3.5">दानदाता (Donor)</th>
-                  <th class="p-3.5">सहयोग योजना (Scheme)</th>
-                  <th class="p-3.5">माध्यम (Method)</th>
-                  <th class="p-3.5 font-mono text-right">राशि (Amount)</th>
-                  <th class="p-3.5 pr-5 text-center">कार्रवाई (Actions)</th>
+                  <th class="p-3.5 pl-5">Receipt / Date</th>
+                  <th class="p-3.5">Donor</th>
+                  <th class="p-3.5">Scheme</th>
+                  <th class="p-3.5">Method</th>
+                  <th class="p-3.5 font-mono text-right">Amount</th>
+                  <th class="p-3.5 pr-5 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody id="donations-table-body" class="divide-y divide-slate-100">
@@ -4527,6 +4539,53 @@
           <button id="view-event-delete-btn" class="flex-1 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 border border-rose-200/80 shadow-2xs">
             <i class="fa-solid fa-trash-can text-xs"></i>
             <span>Delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5B3: MOBILE DONATION FILTER POPUP MODAL                    -->
+  <!-- ============================================================== -->
+  <div id="mobile-donation-filter-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-emerald-600"></i>
+          <span>Donation Filters</span>
+        </h3>
+        <button onclick="closeMobileDonationFilterModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- Payment Method -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Payment Method (माध्यम)</label>
+          <select id="mob-donation-method-filter" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer">
+            <option value="ALL">All Methods (Cash + Online)</option>
+            <option value="Cash">💵 Cash Only (केवल नकद)</option>
+            <option value="Online">📱 Online / UPI (केवल ऑनलाइन)</option>
+          </select>
+        </div>
+
+        <!-- Scheme -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Scheme (योजना)</label>
+          <select id="mob-donation-scheme-filter" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer">
+            <option value="ALL">All Schemes (सभी योजनाएं)</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="pt-2 flex items-center gap-2">
+          <button type="button" onclick="resetMobileDonationFilters()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer">
+            Reset
+          </button>
+          <button type="button" onclick="applyMobileDonationFilters()" class="flex-1 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
+            Apply Filters
           </button>
         </div>
       </div>
@@ -10408,7 +10467,9 @@
         'opening-balance-modal',
         'vendor-master-modal',
         'expensescheme-master-modal',
-        'bank-deposit-modal'
+        'bank-deposit-modal',
+        'mobile-donation-filter-modal',
+        'mobile-event-filter-modal'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);
@@ -12926,6 +12987,7 @@
     function populateDonationSchemeDropdowns() {
       const modalSelect = document.getElementById('donation-scheme-name');
       const filterSelect = document.getElementById('donation-scheme-filter');
+      const mobFilterSelect = document.getElementById('mob-donation-scheme-filter');
 
       const schemes = (masterSettings && masterSettings.schemes) ? masterSettings.schemes : [];
       if (modalSelect) {
@@ -12944,7 +13006,87 @@
           `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
         filterSelect.value = cur;
       }
+
+      if (mobFilterSelect) {
+        const cur = mobFilterSelect.value || 'ALL';
+        mobFilterSelect.innerHTML = `<option value="ALL">All Schemes (सभी योजनाएं)</option>` +
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('') +
+          `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
+        mobFilterSelect.value = cur;
+      }
     }
+
+    function openMobileDonationFilterModal() {
+      const modal = document.getElementById('mobile-donation-filter-modal');
+      const deskMethod = document.getElementById('donation-method-filter');
+      const deskScheme = document.getElementById('donation-scheme-filter');
+      const mobMethod = document.getElementById('mob-donation-method-filter');
+      const mobScheme = document.getElementById('mob-donation-scheme-filter');
+
+      if (deskMethod && mobMethod) mobMethod.value = deskMethod.value;
+      if (deskScheme && mobScheme) mobScheme.value = deskScheme.value;
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+    window.openMobileDonationFilterModal = openMobileDonationFilterModal;
+
+    function closeMobileDonationFilterModal() {
+      const modal = document.getElementById('mobile-donation-filter-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+    window.closeMobileDonationFilterModal = closeMobileDonationFilterModal;
+
+    function applyMobileDonationFilters() {
+      const deskMethod = document.getElementById('donation-method-filter');
+      const deskScheme = document.getElementById('donation-scheme-filter');
+      const mobMethod = document.getElementById('mob-donation-method-filter');
+      const mobScheme = document.getElementById('mob-donation-scheme-filter');
+
+      if (deskMethod && mobMethod) deskMethod.value = mobMethod.value;
+      if (deskScheme && mobScheme) deskScheme.value = mobScheme.value;
+
+      syncDonationFilterLabels();
+      renderDonationsList();
+      closeMobileDonationFilterModal();
+    }
+    window.applyMobileDonationFilters = applyMobileDonationFilters;
+
+    function resetMobileDonationFilters() {
+      const deskMethod = document.getElementById('donation-method-filter');
+      const deskScheme = document.getElementById('donation-scheme-filter');
+      const mobMethod = document.getElementById('mob-donation-method-filter');
+      const mobScheme = document.getElementById('mob-donation-scheme-filter');
+
+      if (deskMethod) deskMethod.value = 'ALL';
+      if (deskScheme) deskScheme.value = 'ALL';
+      if (mobMethod) mobMethod.value = 'ALL';
+      if (mobScheme) mobScheme.value = 'ALL';
+
+      syncDonationFilterLabels();
+      renderDonationsList();
+      closeMobileDonationFilterModal();
+    }
+    window.resetMobileDonationFilters = resetMobileDonationFilters;
+
+    function syncDonationFilterLabels() {
+      const methodVal = document.getElementById('donation-method-filter')?.value || 'ALL';
+      const schemeVal = document.getElementById('donation-scheme-filter')?.value || 'ALL';
+      const indicator = document.getElementById('mob-donation-filter-indicator');
+      if (indicator) {
+        if (methodVal !== 'ALL' || schemeVal !== 'ALL') {
+          indicator.classList.remove('hidden');
+        } else {
+          indicator.classList.add('hidden');
+        }
+      }
+    }
+    window.syncDonationFilterLabels = syncDonationFilterLabels;
 
     function populateDonationMemberSelect() {
       const select = document.getElementById('donation-member-id');
@@ -13076,8 +13218,8 @@
 
       tbody.innerHTML = filtered.map(d => {
         const methodBadge = d.method === 'Cash'
-          ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 नकद (Cash)</span>`
-          : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">📱 Online / UPI</span>`;
+          ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">💵 Cash</span>`
+          : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">📱 UPI / Online</span>`;
 
         return `
           <tr class="hover:bg-slate-50/80 transition-colors">
@@ -13088,12 +13230,12 @@
             <td class="p-3.5">
               <div class="font-bold text-slate-900">${d.donorName || '--'}</div>
               <div class="text-[10px] text-slate-500 font-mono">
-                ${d.memberId && d.memberId !== 'NON_MEMBER' ? `<span class="text-indigo-600 font-semibold">ID: ${d.memberId}</span>` : '<span class="text-slate-400">गैर-सदस्य दान</span>'}
+                ${d.memberId && d.memberId !== 'NON_MEMBER' ? `<span class="text-indigo-600 font-semibold">ID: ${d.memberId}</span>` : '<span class="text-slate-400">Non-Member</span>'}
                 ${d.phone ? ` • ${d.phone}` : ''}
               </div>
             </td>
             <td class="p-3.5">
-              <span class="font-semibold text-slate-800">${d.scheme || 'सामान्य सहयोग'}</span>
+              <span class="font-semibold text-slate-800">${d.scheme || 'General Fund'}</span>
               ${d.remarks ? `<p class="text-[10px] text-slate-400 truncate max-w-xs">${d.remarks}</p>` : ''}
             </td>
             <td class="p-3.5">
