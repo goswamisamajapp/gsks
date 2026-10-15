@@ -10669,12 +10669,40 @@
               <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father} • ${m.address}</p>
             </div>
           </div>
-          <button onclick="restoreMember('${m.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-emerald-200">
+          <button onclick="restoreMember('${m.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-emerald-200 cursor-pointer">
             <i class="fa-solid fa-rotate-left"></i> Restore Member
           </button>
         </div>
       `).join('');
     }
+
+    async function restoreMember(memberId) {
+      try {
+        const member = allMembers.find(m => m.id === memberId);
+        if (!member) {
+          alert('सदस्य नहीं मिला!');
+          return;
+        }
+
+        const confirmRestore = confirm(`क्या आप "${member.name}" को वापस सक्रिय सूची में रिस्टोर (Restore) करना चाहते हैं?`);
+        if (!confirmRestore) return;
+
+        // Restore member: set status back to Active (or Prime Member if previously was prime)
+        const newStatus = (member.pariwarikMember || member.isPrime) ? 'Prime Member' : 'Active';
+        
+        await syncMemberToBackend({
+          id: member.id,
+          status: newStatus
+        });
+
+        alert(`✅ सदस्य "${member.name}" को सफलतापूर्वक पुनः सक्रिय (Restore) कर दिया गया है!`);
+      } catch (err) {
+        console.error('Error restoring member:', err);
+        alert('रिस्टोर करने में त्रुटि आई। कृपया पुनः प्रयास करें।');
+      }
+    }
+    window.restoreMember = restoreMember;
+    window.renderArchivedList = renderArchivedList;
 
     // ==============================================
     // 5. EVENTS & MEETINGS LOGIC
@@ -16905,6 +16933,8 @@ ID: ${item.id}
     window.renderMemberPasyPage = renderMemberPasyPage;
     window.openMemberEventParticipantsModal = openMemberEventParticipantsModal;
     window.closeMemberEventParticipantsModal = closeMemberEventParticipantsModal;
+    window.restoreMember = restoreMember;
+    window.renderArchivedList = renderArchivedList;
 
     window.addEventListener('DOMContentLoaded', async () => {
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
