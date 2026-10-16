@@ -6318,35 +6318,24 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <!-- Modal Header -->
+      <!-- Modal Header (Clean, Minimal & Optimized) -->
       <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100 pr-8">
-        <div class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl shadow-xs">
+        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-lg shadow-xs flex-shrink-0">
           <i class="fa-solid fa-user-pen"></i>
         </div>
         <div>
-          <h3 class="text-base font-black text-slate-900 font-devanagari">
-            व्यक्तिगत विवरण संशोधित करें (Edit Profile)
+          <h3 class="text-base font-black text-slate-900 tracking-tight leading-none">
+            Edit Profile
           </h3>
-          <p class="text-xs text-slate-400 mt-0.5">अपनी आधिकारिक संपर्क एवं व्यक्तिगत जानकारी अद्यतन करें</p>
         </div>
       </div>
 
+      <!-- Hidden hooks to preserve JS integrity without errors -->
+      <span id="m-edit-prof-id-disp" class="hidden"></span>
+      <span id="m-edit-prof-famid-disp" class="hidden"></span>
+      <span id="m-edit-prof-status-disp" class="hidden"></span>
+
       <form onsubmit="handleSaveMemberOwnProfile(event)" class="space-y-3.5 text-xs">
-        <!-- Read-only Member ID & Family ID Pill -->
-        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between text-slate-600">
-          <div>
-            <span class="text-[10px] text-slate-400 block font-medium">सदस्य पहचान (Member ID)</span>
-            <span class="font-mono font-bold text-slate-800 text-xs" id="m-edit-prof-id-disp">GSKS-000</span>
-          </div>
-          <div>
-            <span class="text-[10px] text-slate-400 block font-medium">परिवार ID (Family ID)</span>
-            <span class="font-mono font-bold text-slate-800 text-xs" id="m-edit-prof-famid-disp">FAM-000</span>
-          </div>
-          <div>
-            <span class="text-[10px] text-slate-400 block font-medium">सदस्यता श्रेणी</span>
-            <span class="font-bold text-amber-700 text-xs" id="m-edit-prof-status-disp">Active</span>
-          </div>
-        </div>
 
         <!-- 1. Full Name -->
         <div>
