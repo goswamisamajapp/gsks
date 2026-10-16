@@ -3388,22 +3388,22 @@
         </div>
 
         <!-- 30 Months Installments Status Grid -->
-        <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <div class="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs">
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-slate-200/90 shadow-2xs space-y-2.5">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-[10px] sm:text-xs">
                 <i class="fa-regular fa-calendar-check"></i>
               </div>
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 font-devanagari">
                 मासिक किश्त विवरण (Sep 2025 - Feb 2028)
               </h3>
             </div>
-            <span class="text-[10px] sm:text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+            <span class="text-[9px] sm:text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
               30 माह
             </span>
           </div>
 
-          <div id="m-pasy-months-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-2.5">
+          <div id="m-pasy-months-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-1.5 sm:gap-2">
             <!-- Populated dynamically via JS -->
           </div>
         </div>
@@ -9767,31 +9767,34 @@
         }
       }
 
-      // Render 30 Months Grid (Refined for Mobile Touch & Quick Glance)
+      // Render 30 Months Grid (Ultra-compact & Space-optimized for Mobile)
       if (gridEl) {
         gridEl.innerHTML = PARIWARIK_MONTHS.map((mCfg, idx) => {
           const isPaid = isPariwarikPaidForMonth(member, mCfg.key);
           const badgeBg = isPaid 
-            ? 'bg-emerald-50 text-emerald-900 border-emerald-200 shadow-2xs' 
-            : 'bg-rose-50/90 text-rose-900 border-rose-200 shadow-2xs';
+            ? 'bg-emerald-50/90 text-emerald-900 border-emerald-200' 
+            : 'bg-rose-50/90 text-rose-900 border-rose-200';
           const icon = isPaid 
-            ? '<i class="fa-solid fa-check text-emerald-600 text-xs"></i>' 
-            : '<i class="fa-solid fa-clock text-rose-500 text-xs"></i>';
-          const statusText = isPaid ? 'जमा (Paid)' : 'बकाया (Due)';
-          const statusColor = isPaid ? 'text-emerald-700' : 'text-rose-600';
+            ? '<i class="fa-solid fa-circle-check text-emerald-600 text-[11px]"></i>' 
+            : '<i class="fa-solid fa-clock text-rose-500 text-[11px]"></i>';
+          const statusText = isPaid ? 'जमा' : 'बकाया';
+          const statusColor = isPaid ? 'text-emerald-700 bg-emerald-100/80 border-emerald-200' : 'text-rose-700 bg-rose-100/80 border-rose-200';
 
           return `
-            <div class="p-2.5 rounded-xl border ${badgeBg} flex flex-col justify-between transition-all">
-              <div class="flex items-center justify-between gap-1 mb-1">
+            <div class="px-2 py-1.5 rounded-lg sm:rounded-xl border ${badgeBg} flex flex-col justify-between transition-all">
+              <div class="flex items-center justify-between gap-1 leading-none mb-1">
                 <span class="font-mono text-[9px] font-bold text-slate-400">#${idx + 1}</span>
                 <span>${icon}</span>
               </div>
-              <div>
-                <strong class="text-[11px] font-extrabold block font-mono text-slate-800">${mCfg.label}</strong>
-                <span class="text-[10px] font-bold block ${statusColor} mt-0.5">${statusText}</span>
+              <div class="flex items-center justify-between gap-1 leading-tight">
+                <strong class="text-[11px] font-extrabold font-mono text-slate-800 truncate">${mCfg.label}</strong>
+                <span class="text-[9px] font-bold font-mono text-slate-600 flex-shrink-0">₹${PARIWARIK_MONTHLY_FEE}</span>
               </div>
-              <div class="mt-1.5 pt-1 border-t border-slate-200/50 text-[10px] font-mono font-bold text-right text-slate-600">
-                ₹${PARIWARIK_MONTHLY_FEE}
+              <div class="mt-1 pt-0.5 border-t border-slate-200/50 flex items-center justify-between">
+                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded border ${statusColor}">
+                  ${statusText}
+                </span>
+                <span class="text-[8px] font-mono text-slate-400 font-semibold">${isPaid ? 'Paid' : 'Due'}</span>
               </div>
             </div>
           `;
