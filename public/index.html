@@ -3529,25 +3529,35 @@
           </div>
 
           <div class="relative z-10 space-y-3.5">
-            <!-- Top Section: Avatar + Name + Prime/Status Badge -->
-            <div class="flex items-center gap-3 sm:gap-4">
-              <!-- Avatar Initial Circle -->
-              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/20 backdrop-blur-md border-2 border-white/40 flex items-center justify-center text-white text-2xl sm:text-3xl font-black font-devanagari shadow-inner flex-shrink-0" id="user-profile-avatar-big">
-                ग
+            <!-- Top Section: Avatar + Name + Prime Badge + Active/Inactive Status Badge -->
+            <div class="flex items-start justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
+                <!-- Avatar Initial Circle -->
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/20 backdrop-blur-md border-2 border-white/40 flex items-center justify-center text-white text-2xl sm:text-3xl font-black font-devanagari shadow-inner flex-shrink-0" id="user-profile-avatar-big">
+                  ग
+                </div>
+
+                <!-- Name & Prime Badge -->
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap mb-1">
+                    <!-- Prime Status Badge (Prime Logo) -->
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black bg-amber-200 text-amber-950 shadow-xs border border-amber-300" id="user-profile-main-status">
+                      <i class="fa-solid fa-crown text-amber-600 text-[10px]"></i>
+                      <span>विशिष्ट सदस्य (Prime Member)</span>
+                    </span>
+                  </div>
+                  <h3 class="text-base sm:text-xl font-black text-white font-devanagari tracking-tight truncate leading-snug" id="user-profile-main-name">
+                    सदस्य का नाम
+                  </h3>
+                </div>
               </div>
 
-              <!-- Name & Prime Badge -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap mb-1">
-                  <!-- Prime Status Badge (Prime Logo) -->
-                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black bg-amber-200 text-amber-950 shadow-xs border border-amber-300" id="user-profile-main-status">
-                    <i class="fa-solid fa-crown text-amber-600 text-[10px]"></i>
-                    <span>विशिष्ट सदस्य (Prime Member)</span>
-                  </span>
-                </div>
-                <h3 class="text-base sm:text-xl font-black text-white font-devanagari tracking-tight truncate leading-snug" id="user-profile-main-name">
-                  सदस्य का नाम
-                </h3>
+              <!-- Top-Right: Active / Inactive Status Badge -->
+              <div class="flex-shrink-0">
+                <span id="user-profile-active-state-badge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-500/90 text-white shadow-sm border border-white/40 backdrop-blur-md">
+                  <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                  <span id="user-profile-active-state-text">Active</span>
+                </span>
               </div>
             </div>
 
@@ -3618,7 +3628,7 @@
               </div>
             </div>
 
-            <!-- Profile Action Buttons: Profile Update & Password Update -->
+            <!-- Profile Action Buttons: Profile Update & Password Update (with vibrant colored background) -->
             <div class="flex items-center gap-2 w-full sm:w-auto">
               <button 
                 type="button" 
@@ -3632,10 +3642,10 @@
               <button 
                 type="button" 
                 onclick="openMemberChangePasswordModal()" 
-                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 hover:text-slate-900 transition-all border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 active:scale-95 text-white transition-all shadow-xs shadow-indigo-500/25 flex items-center justify-center gap-1.5 cursor-pointer"
                 title="Password Update"
               >
-                <i class="fa-solid fa-key text-[11px] text-amber-600"></i>
+                <i class="fa-solid fa-key text-[11px] text-amber-300"></i>
                 <span>Password Update</span>
               </button>
             </div>
@@ -10456,6 +10466,19 @@
         } else {
           heroStatus.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i> <span>सक्रिय सदस्य (Active)</span>';
           heroStatus.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-900 shadow-xs border border-emerald-300';
+        }
+      }
+
+      // Hero Card Top-Right Active / Inactive Badge
+      const heroActiveBadge = document.getElementById('user-profile-active-state-badge');
+      const heroActiveText = document.getElementById('user-profile-active-state-text');
+      if (heroActiveBadge && heroActiveText) {
+        if (isInactive) {
+          heroActiveBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-rose-600/90 text-white shadow-sm border border-white/40 backdrop-blur-md';
+          heroActiveBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-white/80"></span><span id="user-profile-active-state-text">Inactive</span>';
+        } else {
+          heroActiveBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-500/90 text-white shadow-sm border border-white/40 backdrop-blur-md';
+          heroActiveBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span><span id="user-profile-active-state-text">Active</span>';
         }
       }
       if (heroFather) heroFather.textContent = member.father || '--';
