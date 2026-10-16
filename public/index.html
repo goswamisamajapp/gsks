@@ -2644,36 +2644,55 @@
           </div>
         </section>
 
-        <!-- 2. LATEST NOTIFICATION PANEL (Clean Light Background) -->
-        <section id="user-notification-panel" class="bg-gradient-to-br from-amber-50 via-orange-50/50 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-amber-200/80 shadow-xs relative overflow-hidden text-slate-800 space-y-2.5">
+        <!-- 2. LATEST NOTIFICATION PANEL (Clean Light Background & Exact 3-Line Structure) -->
+        <section id="user-notification-panel" class="bg-gradient-to-br from-amber-50 via-orange-50/50 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-amber-200/80 shadow-xs relative overflow-hidden text-slate-800 space-y-2">
           <!-- Background Subtle Decorative Blurs -->
           <div class="absolute -right-8 -bottom-8 w-28 h-28 bg-orange-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-          <!-- Top Row: Animated Bell Icon + Full Date Badge (No Notification text) -->
-          <div class="relative z-10 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-100 border border-orange-200/80 flex items-center justify-center text-orange-600 shadow-2xs flex-shrink-0">
-                <i class="fa-solid fa-bell animate-bounce text-sm sm:text-base"></i>
-              </div>
-              <span id="user-notice-badge" class="hidden" style="display: none !important;"></span>
+          <!-- Hidden hook for JS badge text compatibility -->
+          <span id="user-notice-badge" class="hidden" style="display: none !important;"></span>
+
+          <!-- LINE 1: Notification icon and title, ek line me -->
+          <div class="relative z-10 flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-xl bg-orange-100 border border-orange-200/90 flex items-center justify-center text-orange-600 shadow-2xs flex-shrink-0">
+              <i class="fa-solid fa-bell animate-bounce text-xs sm:text-sm"></i>
             </div>
-            
-            <span class="text-xs bg-orange-100/90 text-orange-900 border border-orange-200 px-3 py-1 rounded-full font-bold inline-flex items-center gap-1.5 shadow-2xs font-devanagari" id="user-notice-date">
-              📅 आज की सूचना
+            <h2 class="text-sm sm:text-base font-black font-devanagari tracking-tight text-slate-900 leading-snug truncate min-w-0 flex-1" id="user-notice-title">
+              समिति की आगामी बैठक एवं सूचना
+            </h2>
+          </div>
+
+          <!-- LINE 2: Date aur time ek line me -->
+          <div class="relative z-10 flex items-center gap-2 flex-wrap text-xs" id="user-notice-datetime-row">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-200/80 text-slate-800 font-semibold shadow-2xs" id="user-notice-date-wrap">
+              <i class="fa-regular fa-calendar-check text-orange-600 text-xs"></i>
+              <span class="text-slate-400 font-medium text-[10px]">दिनांक:</span>
+              <strong class="text-slate-900 font-bold" id="user-notice-date">रवि, 25 अक्टू॰ 2026</strong>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-200/80 text-slate-800 font-semibold shadow-2xs" id="user-notice-time-wrap">
+              <i class="fa-regular fa-clock text-orange-600 text-xs"></i>
+              <span class="text-slate-400 font-medium text-[10px]">समय:</span>
+              <strong class="text-slate-900 font-bold" id="user-notice-time">05:00 PM</strong>
             </span>
           </div>
 
-          <!-- Notice Title -->
-          <h2 class="relative z-10 text-base sm:text-lg font-black font-devanagari tracking-tight text-slate-900 leading-snug" id="user-notice-title">
-            समिति की आगामी बैठक एवं सूचना
-          </h2>
-
-          <!-- Notice Body (Time, Venue & 1-2 Line Message) -->
-          <div id="user-notice-body" class="relative z-10 space-y-2 text-xs text-slate-600">
-            <!-- Populated via JS -->
+          <!-- LINE 3: Address pura dikhna chahiye (Full Width, No Truncation) -->
+          <div class="relative z-10 w-full" id="user-notice-venue-wrap">
+            <div class="w-full flex items-start gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-amber-200/80 text-slate-800 shadow-2xs text-xs">
+              <i class="fa-solid fa-location-dot text-rose-500 mt-0.5 flex-shrink-0"></i>
+              <div class="min-w-0 flex-1">
+                <span class="text-slate-400 font-medium text-[10px] mr-1">स्थान:</span>
+                <strong class="text-slate-900 font-bold leading-relaxed break-words" id="user-notice-venue">काली मंदिर प्रांगण, नीचे टोला, गुनघसा</strong>
+              </div>
+            </div>
           </div>
 
-          <!-- Action Button: Only View Details (Bottom Right) -->
+          <!-- LINE 4: Notice Body / Details (Sirf 1-2 lines) -->
+          <div id="user-notice-body" class="relative z-10 text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-0.5">
+            समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि मासिक बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।
+          </div>
+
+          <!-- LINE 5: Action Button: View Details -->
           <div class="relative z-10 pt-0.5 flex items-center justify-end">
             <button 
               type="button" 
@@ -7814,6 +7833,10 @@
       const noticeBadge = document.getElementById('user-notice-badge');
       const noticeTitle = document.getElementById('user-notice-title');
       const noticeDate = document.getElementById('user-notice-date');
+      const noticeTime = document.getElementById('user-notice-time');
+      const noticeTimeWrap = document.getElementById('user-notice-time-wrap');
+      const noticeVenue = document.getElementById('user-notice-venue');
+      const noticeVenueWrap = document.getElementById('user-notice-venue-wrap');
       const noticeBody = document.getElementById('user-notice-body');
 
       if (!member) member = currentLoggedInMember;
@@ -7824,35 +7847,24 @@
       // ==============================================================
       if (duesAmt > 0) {
         if (noticePanel) {
-          noticePanel.className = 'bg-gradient-to-br from-rose-50 via-orange-50/40 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-rose-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2.5';
+          noticePanel.className = 'bg-gradient-to-br from-rose-50 via-orange-50/40 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-rose-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2';
         }
         if (noticeBadge) {
           noticeBadge.classList.add('hidden');
           noticeBadge.style.display = 'none';
         }
+
+        const duesMsg = `सादर प्रणाम ${member.name || 'सदस्य'} जी! आपके खाते में वर्तमान सदस्यता अंशदान कुल ₹${duesAmt.toLocaleString('en-IN')} बकाया है। कृपया समय पर अंशदान जमा कर सहयोग करें।`;
+
+        if (noticeTitle) noticeTitle.textContent = 'सदस्यता अंशदान बकाया सूचना';
         if (noticeDate) noticeDate.textContent = 'तत्काल देय';
-        if (noticeTitle) noticeTitle.textContent = '⚠️ सदस्यता अंशदान एवं सहयोग बकाया सूचना';
-
-        const duesMsg = `सादर प्रणाम ${member.name || 'सदस्य'} जी! आपके खाते में वर्तमान सदस्यता अंशदान कुल ₹${duesAmt.toLocaleString('en-IN')} बकाया है। कृपया समय पर अंशदान जमा कर समिति के सामाजिक व कल्याणकारी कार्यों को सुचारु बनाने में सहयोग करें।`;
-
+        if (noticeTime) noticeTime.textContent = `₹${duesAmt.toLocaleString('en-IN')}`;
+        if (noticeTimeWrap) noticeTimeWrap.classList.remove('hidden');
+        if (noticeVenue) noticeVenue.textContent = 'कोषाध्यक्ष कार्यालय, गुनघसा • SBI खाता';
+        if (noticeVenueWrap) noticeVenueWrap.classList.remove('hidden');
         if (noticeBody) {
-          noticeBody.innerHTML = `
-            <div class="flex items-center gap-2 flex-wrap text-xs font-semibold">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-rose-700 shadow-2xs">
-                <i class="fa-solid fa-clock-rotate-left text-rose-500"></i>
-                <span class="text-slate-400 font-medium text-[10px]">कुल बकाया:</span>
-                <strong class="text-rose-700">₹${duesAmt.toLocaleString('en-IN')}</strong>
-              </span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-rose-200 text-slate-700 shadow-2xs">
-                <i class="fa-solid fa-building-columns text-rose-500"></i>
-                <span class="text-slate-400 font-medium text-[10px]">कार्यालय:</span>
-                <strong class="text-slate-900">कोषाध्यक्ष / समिति</strong>
-              </span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-1 border-t border-rose-100">
-              ${duesMsg}
-            </p>
-          `;
+          noticeBody.textContent = duesMsg;
+          noticeBody.className = 'relative z-10 text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-0.5';
         }
 
         currentActiveMemberNotice = {
@@ -7878,7 +7890,7 @@
 
       if (livePushNotice) {
         if (noticePanel) {
-          noticePanel.className = 'bg-gradient-to-br from-amber-50 via-orange-50/50 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-amber-200/80 shadow-xs relative overflow-hidden text-slate-800 space-y-2.5';
+          noticePanel.className = 'bg-gradient-to-br from-amber-50 via-orange-50/50 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-amber-200/80 shadow-xs relative overflow-hidden text-slate-800 space-y-2';
         }
         if (noticeBadge) {
           noticeBadge.classList.add('hidden');
@@ -7890,26 +7902,15 @@
         const timeStr = dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
         const venueStr = livePushNotice.venue || 'समिति कार्यालय, गुनघसा';
 
-        if (noticeDate) noticeDate.textContent = `⏰ ${timeStr}`;
-        if (noticeTitle) noticeTitle.textContent = `${livePushNotice.title || 'विशेष सूचना'}`;
+        if (noticeTitle) noticeTitle.textContent = livePushNotice.title || 'विशेष सूचना';
+        if (noticeDate) noticeDate.textContent = dateStr;
+        if (noticeTime) noticeTime.textContent = timeStr;
+        if (noticeTimeWrap) noticeTimeWrap.classList.remove('hidden');
+        if (noticeVenue) noticeVenue.textContent = venueStr;
+        if (noticeVenueWrap) noticeVenueWrap.classList.remove('hidden');
         if (noticeBody) {
-          noticeBody.innerHTML = `
-            <div class="flex items-center gap-2 flex-wrap text-xs">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-200/80 text-slate-700 font-semibold shadow-2xs">
-                <i class="fa-solid fa-clock-rotate-left text-orange-600"></i>
-                <span class="text-slate-400 font-medium text-[10px]">दिनांक:</span>
-                <strong class="text-slate-900">${dateStr}</strong>
-              </span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-200/80 text-slate-700 font-semibold shadow-2xs min-w-0">
-                <i class="fa-solid fa-building-shield text-amber-600"></i>
-                <span class="text-slate-400 font-medium text-[10px]">स्थान:</span>
-                <strong class="text-slate-900 truncate max-w-[180px] sm:max-w-none">${venueStr}</strong>
-              </span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-1 border-t border-amber-100">
-              ${livePushNotice.body || ''}
-            </p>
-          `;
+          noticeBody.textContent = livePushNotice.body || '';
+          noticeBody.className = 'relative z-10 text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-0.5';
         }
 
         currentActiveMemberNotice = {
@@ -7938,7 +7939,7 @@
 
       if (personalNotice) {
         if (noticePanel) {
-          noticePanel.className = 'bg-gradient-to-br from-indigo-50 via-purple-50/40 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-indigo-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2.5';
+          noticePanel.className = 'bg-gradient-to-br from-indigo-50 via-purple-50/40 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-indigo-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2';
         }
         if (noticeBadge) {
           noticeBadge.classList.add('hidden');
@@ -7950,26 +7951,15 @@
         const timeStr = dt && !isNaN(dt) ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : (personalNotice.time || '05:00 PM');
         const venueStr = personalNotice.venue || 'शिव मंदिर, गुनघसा';
 
-        if (noticeDate) noticeDate.textContent = `📅 ${dateStr}`;
-        if (noticeTitle) noticeTitle.textContent = `${personalNotice.title || 'आपके लिए विशेष बैठक / सूचना'}`;
+        if (noticeTitle) noticeTitle.textContent = personalNotice.title || 'आपके लिए विशेष बैठक / सूचना';
+        if (noticeDate) noticeDate.textContent = dateStr;
+        if (noticeTime) noticeTime.textContent = timeStr;
+        if (noticeTimeWrap) noticeTimeWrap.classList.remove('hidden');
+        if (noticeVenue) noticeVenue.textContent = venueStr;
+        if (noticeVenueWrap) noticeVenueWrap.classList.remove('hidden');
         if (noticeBody) {
-          noticeBody.innerHTML = `
-            <div class="flex items-center gap-2 flex-wrap text-xs">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-indigo-200/80 text-slate-700 font-semibold shadow-2xs">
-                <i class="fa-regular fa-clock text-indigo-600"></i>
-                <span class="text-slate-400 font-medium text-[10px]">समय:</span>
-                <strong class="text-slate-900">${timeStr}</strong>
-              </span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-indigo-200/80 text-slate-700 font-semibold shadow-2xs min-w-0">
-                <i class="fa-solid fa-location-dot text-rose-500"></i>
-                <span class="text-slate-400 font-medium text-[10px]">स्थान:</span>
-                <strong class="text-slate-900 truncate max-w-[180px] sm:max-w-none">${venueStr}</strong>
-              </span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-1 border-t border-indigo-100">
-              ${personalNotice.description || 'आपको इस विशेष बैठक / कार्यक्रम में सादर आमंत्रित किया गया है।'}
-            </p>
-          `;
+          noticeBody.textContent = personalNotice.description || 'आपको इस विशेष बैठक / कार्यक्रम में सादर आमंत्रित किया गया है।';
+          noticeBody.className = 'relative z-10 text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-0.5';
         }
 
         currentActiveMemberNotice = {
@@ -7984,7 +7974,7 @@
       }
 
       // ==============================================================
-      // PRIORITY 3: LATEST ACTIVE MEETING / GENERAL NOTIFICATION (नवीनतम नोटिस)
+      // PRIORITY 4: LATEST ACTIVE MEETING / GENERAL NOTIFICATION (नवीनतम नोटिस)
       // Sort all active events to pick the most relevant/latest one
       // ==============================================================
       const activeEvents = (allEvents || []).filter(e => {
@@ -8004,7 +7994,7 @@
 
       if (latestEvent) {
         if (noticePanel) {
-          noticePanel.className = 'bg-gradient-to-br from-amber-50 via-orange-50/50 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-amber-200/80 shadow-xs relative overflow-hidden text-slate-800 space-y-2.5';
+          noticePanel.className = 'bg-gradient-to-br from-amber-50 via-orange-50/50 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-amber-200/80 shadow-xs relative overflow-hidden text-slate-800 space-y-2';
         }
         if (noticeBadge) {
           noticeBadge.classList.add('hidden');
@@ -8016,26 +8006,22 @@
         const timeStr = dt && !isNaN(dt) ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' }) : (latestEvent.time || '05:00 PM');
         const venueStr = latestEvent.venue || 'काली मंदिर प्रांगण, गुनघसा';
 
-        if (noticeDate) noticeDate.textContent = `📅 ${dateStr}`;
-        if (noticeTitle) noticeTitle.textContent = `${latestEvent.title || 'समिति की आगामी बैठक'}`;
+        // 1. Notification icon and title, ek line me (handled by user-notice-title)
+        if (noticeTitle) noticeTitle.textContent = latestEvent.title || 'समिति की आगामी बैठक';
+
+        // 2. Date aur time ek line me
+        if (noticeDate) noticeDate.textContent = dateStr;
+        if (noticeTime) noticeTime.textContent = timeStr;
+        if (noticeTimeWrap) noticeTimeWrap.classList.remove('hidden');
+
+        // 3. Address pura dikhna chahiye (full width, break-words)
+        if (noticeVenue) noticeVenue.textContent = venueStr;
+        if (noticeVenueWrap) noticeVenueWrap.classList.remove('hidden');
+
+        // 4. Details 1-2 line clamp
         if (noticeBody) {
-          noticeBody.innerHTML = `
-            <div class="flex items-center gap-2 flex-wrap text-xs">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-200/80 text-slate-700 font-semibold shadow-2xs">
-                <i class="fa-regular fa-clock text-orange-600"></i>
-                <span class="text-slate-400 font-medium text-[10px]">समय:</span>
-                <strong class="text-slate-900">${timeStr}</strong>
-              </span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-amber-200/80 text-slate-700 font-semibold shadow-2xs min-w-0">
-                <i class="fa-solid fa-location-dot text-rose-500"></i>
-                <span class="text-slate-400 font-medium text-[10px]">स्थान:</span>
-                <strong class="text-slate-900 truncate max-w-[180px] sm:max-w-none">${venueStr}</strong>
-              </span>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-1 border-t border-amber-100/90">
-              ${latestEvent.description || 'समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।'}
-            </p>
-          `;
+          noticeBody.textContent = latestEvent.description || 'समिति के समस्त सम्मानित सदस्यों को सूचित किया जाता है कि बैठक में समय पर उपस्थित होकर अपने विचार साझा करें।';
+          noticeBody.className = 'relative z-10 text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-0.5';
         }
 
         currentActiveMemberNotice = {
@@ -8049,19 +8035,22 @@
       } else {
         // Fallback: If no dues, no personal message, and no active events
         if (noticePanel) {
-          noticePanel.className = 'bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-emerald-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2.5';
+          noticePanel.className = 'bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-emerald-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2';
         }
         if (noticeBadge) {
           noticeBadge.classList.add('hidden');
           noticeBadge.style.display = 'none';
         }
+        if (noticeTitle) noticeTitle.textContent = 'समिति कल्याण एवं आभार संदेश';
         if (noticeDate) noticeDate.textContent = 'अद्यतन';
-        if (noticeTitle) noticeTitle.textContent = '✨ समिति कल्याण एवं आभार संदेश';
+        if (noticeTimeWrap) noticeTimeWrap.classList.add('hidden');
+        if (noticeVenueWrap) noticeVenueWrap.classList.add('hidden');
 
         const clearMsg = `सादर प्रणाम ${member ? member.name : 'सदस्य'} जी! समिति में आपकी नियमित सहभागिता और निष्ठा सराहनीय है। आपका समस्त अंशदान अद्यतन है एवं वर्तमान में कोई नई बैठक निर्धारित नहीं है।`;
 
         if (noticeBody) {
-          noticeBody.innerHTML = `<p class="line-clamp-2 text-slate-600 text-xs font-medium leading-relaxed">${clearMsg}</p>`;
+          noticeBody.textContent = clearMsg;
+          noticeBody.className = 'relative z-10 text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 pt-0.5';
         }
 
         currentActiveMemberNotice = {
