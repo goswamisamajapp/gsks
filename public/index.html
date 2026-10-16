@@ -2864,28 +2864,25 @@
         </div>
       </section>
 
-      <!-- 3. MY DONATIONS (मेरे दान एवं सहयोग की रसीदें - Full Width) -->
-      <section class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base">
+      <!-- 3. MY DONATIONS (मेरे भुगतान एवं रसीदें - Mobile Optimized) -->
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs sm:shadow-sm space-y-3.5">
+        <div class="flex items-center justify-between pb-2.5 border-b border-slate-100 gap-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs sm:text-sm flex-shrink-0">
               <i class="fa-solid fa-receipt"></i>
             </div>
-            <div>
-              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
-                My Payments (मेरे भुगतान एवं रसीदें)
-              </h3>
-              <p class="text-xs text-slate-400">समिति कोष में आपके द्वारा किए गए भुगतान एवं दान</p>
-            </div>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari tracking-tight">
+              मेरे भुगतान एवं रसीदें
+            </h3>
           </div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" id="user-donations-total-badge">
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <span class="text-[11px] sm:text-xs font-mono font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200" id="user-donations-total-badge">
               ₹ 0
             </span>
             <button 
               type="button" 
               onclick="switchMemberView('donations')" 
-              class="px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer"
+              class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-xl text-xs font-bold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer"
             >
               <span>सभी देखें</span>
               <i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -2893,8 +2890,13 @@
           </div>
         </div>
 
-        <!-- Donations Table Container -->
-        <div class="overflow-x-auto rounded-2xl border border-slate-100">
+        <!-- Mobile View: Clean modern card list (Visible on screens < md) -->
+        <div id="user-donations-mobile-list" class="space-y-2 md:hidden">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Desktop View: Clean Table (Visible on md and up) -->
+        <div class="hidden md:block overflow-x-auto rounded-2xl border border-slate-100">
           <table class="w-full text-left text-xs">
             <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
               <tr>
@@ -9049,10 +9051,11 @@
 
     function renderMemberDonations(member) {
       const tbody = document.getElementById('user-donations-tbody');
+      const mobileList = document.getElementById('user-donations-mobile-list');
       const badgeEl = document.getElementById('user-donations-total-badge');
       const statTotalEl = document.getElementById('user-stat-donations');
       const statCountEl = document.getElementById('user-stat-donations-count');
-      if (!tbody) return;
+      if (!tbody && !mobileList) return;
 
       const mId = (member.id || '').trim().toLowerCase();
       const mName = (member.name || '').trim().toLowerCase();
@@ -9079,53 +9082,104 @@
       if (statCountEl) statCountEl.textContent = `${myDonations.length} रसीदें`;
 
       if (myDonations.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" class="p-6 text-center text-slate-400">
-              <i class="fa-solid fa-receipt text-2xl text-slate-300 mb-1.5 block"></i>
-              <p class="text-xs font-semibold text-slate-600">अभी तक कोई दान रसीद दर्ज नहीं है</p>
-              ${member.donation > 0 ? `<p class="text-[11px] text-emerald-600 mt-1">आरंभिक सहयोग: ₹${Number(member.donation).toLocaleString('en-IN')}</p>` : ''}
-            </td>
-          </tr>
+        const emptyHtml = `
+          <div class="p-5 text-center text-slate-400 bg-slate-50/70 rounded-xl border border-dashed border-slate-200">
+            <i class="fa-solid fa-receipt text-2xl text-slate-300 mb-1.5 block"></i>
+            <p class="text-xs font-semibold text-slate-600">अभी तक कोई भुगतान / रसीद दर्ज नहीं है</p>
+            ${member.donation > 0 ? `<p class="text-[11px] text-emerald-600 mt-1 font-medium">आरंभिक सहयोग: ₹${Number(member.donation).toLocaleString('en-IN')}</p>` : ''}
+          </div>
         `;
+        if (mobileList) mobileList.innerHTML = emptyHtml;
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="p-6 text-center text-slate-400">
+                <i class="fa-solid fa-receipt text-2xl text-slate-300 mb-1.5 block"></i>
+                <p class="text-xs font-semibold text-slate-600">अभी तक कोई भुगतान / रसीद दर्ज नहीं है</p>
+                ${member.donation > 0 ? `<p class="text-[11px] text-emerald-600 mt-1">आरंभिक सहयोग: ₹${Number(member.donation).toLocaleString('en-IN')}</p>` : ''}
+              </td>
+            </tr>
+          `;
+        }
         return;
       }
 
-      tbody.innerHTML = myDonations.map(d => {
-        const amt = parseFloat(d.amount) || 0;
-        const dt = d.date || (d.createdAt ? d.createdAt.split('T')[0] : '--');
-        const methodBadge = d.method === 'Cash' 
-          ? '<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">💵 नकद</span>'
-          : `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200">📱 ${d.method || 'Online'}</span>`;
+      // Render Mobile Card List (Top 5 most recent)
+      if (mobileList) {
+        mobileList.innerHTML = myDonations.slice(0, 5).map(d => {
+          const amt = parseFloat(d.amount) || 0;
+          const dt = d.date || (d.createdAt ? d.createdAt.split('T')[0] : '--');
+          const isCash = (d.method === 'Cash');
+          const methodBadge = isCash 
+            ? '<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-money-bill-wave text-[9px]"></i> नकद</span>'
+            : `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200"><i class="fa-solid fa-mobile-screen text-[9px]"></i> ${d.method || 'Online'}</span>`;
 
-        return `
-          <tr class="hover:bg-slate-50/80 transition-colors">
-            <td class="p-3 pl-4">
-              <span class="font-mono font-bold text-slate-900 block">${d.id || '--'}</span>
-              <span class="text-[10px] text-slate-400 font-mono">${dt}</span>
-            </td>
-            <td class="p-3">
-              <span class="font-bold text-slate-800 block">${d.scheme || 'सामान्य सहयोग'}</span>
-              ${d.remarks ? `<span class="text-[10px] text-slate-400 truncate block max-w-xs">${d.remarks}</span>` : ''}
-            </td>
-            <td class="p-3">${methodBadge}</td>
-            <td class="p-3 font-mono font-bold text-emerald-600 text-right">
-              + ₹${amt.toLocaleString('en-IN')}
-            </td>
-            <td class="p-3 text-center pr-4">
-              <button 
-                type="button" 
-                onclick="openMemberDonationDetailModal('${d.id}')" 
-                class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 transition-all flex items-center gap-1 mx-auto cursor-pointer"
-                title="रसीद का पूर्ण विवरण देखें"
-              >
-                <i class="fa-solid fa-eye text-emerald-600 text-[10px]"></i>
-                <span>देखें</span>
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
+          return `
+            <div class="bg-slate-50/70 hover:bg-slate-100/60 p-3 rounded-xl border border-slate-200/80 transition-all flex items-center justify-between gap-2.5 shadow-2xs">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                  <span class="font-mono text-[11px] font-extrabold text-slate-800 tracking-tight">${d.id || '--'}</span>
+                  ${methodBadge}
+                </div>
+                <div class="font-devanagari font-bold text-xs text-slate-800 truncate">${d.scheme || 'सामान्य सहयोग'}</div>
+                <div class="text-[10px] text-slate-400 font-mono mt-0.5">${dt}</div>
+              </div>
+
+              <div class="text-right flex-shrink-0 flex flex-col items-end gap-1.5">
+                <span class="font-mono font-black text-emerald-600 text-sm leading-none">+ ₹${amt.toLocaleString('en-IN')}</span>
+                <button 
+                  type="button" 
+                  onclick="openMemberDonationDetailModal('${d.id}')" 
+                  class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white hover:bg-emerald-50 text-emerald-700 border border-slate-200 shadow-2xs transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                  title="रसीद का पूर्ण विवरण देखें"
+                >
+                  <i class="fa-solid fa-eye text-emerald-600 text-[10px]"></i>
+                  <span>देखें</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Desktop Table
+      if (tbody) {
+        tbody.innerHTML = myDonations.map(d => {
+          const amt = parseFloat(d.amount) || 0;
+          const dt = d.date || (d.createdAt ? d.createdAt.split('T')[0] : '--');
+          const methodBadge = d.method === 'Cash' 
+            ? '<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">💵 नकद</span>'
+            : `<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200">📱 ${d.method || 'Online'}</span>`;
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="p-3 pl-4">
+                <span class="font-mono font-bold text-slate-900 block">${d.id || '--'}</span>
+                <span class="text-[10px] text-slate-400 font-mono">${dt}</span>
+              </td>
+              <td class="p-3">
+                <span class="font-bold text-slate-800 block">${d.scheme || 'सामान्य सहयोग'}</span>
+                ${d.remarks ? `<span class="text-[10px] text-slate-400 truncate block max-w-xs">${d.remarks}</span>` : ''}
+              </td>
+              <td class="p-3">${methodBadge}</td>
+              <td class="p-3 font-mono font-bold text-emerald-600 text-right">
+                + ₹${amt.toLocaleString('en-IN')}
+              </td>
+              <td class="p-3 text-center pr-4">
+                <button 
+                  type="button" 
+                  onclick="openMemberDonationDetailModal('${d.id}')" 
+                  class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 transition-all flex items-center gap-1 mx-auto cursor-pointer"
+                  title="रसीद का पूर्ण विवरण देखें"
+                >
+                  <i class="fa-solid fa-eye text-emerald-600 text-[10px]"></i>
+                  <span>देखें</span>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
     }
 
     // ==============================================
