@@ -2016,33 +2016,21 @@
         <!-- ========================================== -->
         <div id="settings-page-scheme" class="hidden space-y-4">
           <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
-            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div class="flex items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
                 <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> Schemes Master
               </h3>
-              <button onclick="openAddSchemeModal()" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
-                <i class="fa-solid fa-plus text-xs"></i>
-                <span>Add Scheme</span>
-              </button>
-            </div>
-
-            <!-- Schemes Status Filter Bar (ALL, Open, Upcoming, Closed) -->
-            <div class="mt-3.5 flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-              <button onclick="filterSchemes('ALL')" id="filter-scheme-all" class="px-3 py-1.5 rounded-xl font-bold bg-amber-600 text-white shadow-2xs transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-                <span>All Schemes</span> (<span id="scheme-count-all">0</span>)
-              </button>
-              <button onclick="filterSchemes('Open')" id="filter-scheme-open" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Open</span> (<span id="scheme-count-open">0</span>)
-              </button>
-              <button onclick="filterSchemes('Upcoming')" id="filter-scheme-upcoming" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                <span>Upcoming</span> (<span id="scheme-count-upcoming">0</span>)
-              </button>
-              <button onclick="filterSchemes('Closed')" id="filter-scheme-closed" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
-                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                <span>Closed</span> (<span id="scheme-count-closed">0</span>)
-              </button>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="openSchemeFilterModal()" id="btn-scheme-filter-popup" class="px-2.5 sm:px-3 py-1.5 bg-slate-50 hover:bg-amber-50 active:scale-95 text-slate-700 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                  <i class="fa-solid fa-filter text-amber-600 text-xs"></i>
+                  <span id="scheme-active-filter-label">All</span>
+                  <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
+                </button>
+                <button onclick="openAddSchemeModal()" class="px-2.5 sm:px-3 py-1.5 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                  <span>Add Scheme</span>
+                </button>
+              </div>
             </div>
 
             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3" id="schemes-cards-grid">
@@ -4814,6 +4802,57 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL 5B3: SCHEME STATUS FILTER POPUP MODAL                     -->
+  <!-- ============================================================== -->
+  <div id="scheme-filter-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xs w-full p-4 sm:p-5 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-filter text-amber-600"></i>
+          <span>Filter Schemes</span>
+        </h3>
+        <button onclick="closeSchemeFilterModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-colors cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2">
+        <button type="button" onclick="selectSchemeFilter('ALL')" id="scheme-filter-opt-all" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-slate-400"></i>
+            <span>All Schemes</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="scheme-count-all">0</span>
+        </button>
+
+        <button type="button" onclick="selectSchemeFilter('Open')" id="scheme-filter-opt-open" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Open</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="scheme-count-open">0</span>
+        </button>
+
+        <button type="button" onclick="selectSchemeFilter('Upcoming')" id="scheme-filter-opt-upcoming" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+            <span>Upcoming</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="scheme-count-upcoming">0</span>
+        </button>
+
+        <button type="button" onclick="selectSchemeFilter('Closed')" id="scheme-filter-opt-closed" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            <span>Closed</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="scheme-count-closed">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL 5C: ADD / EDIT DONATION MODAL                            -->
   <!-- ============================================================== -->
   <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -5376,35 +5415,35 @@
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
         <h3 id="scheme-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> कल्याणकारी योजना जोड़ें
+          <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> Add Welfare Scheme
         </h3>
-        <button onclick="closeSchemeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+        <button onclick="closeSchemeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <form onsubmit="handleSaveScheme(event)" class="space-y-3 text-xs">
         <input type="hidden" id="scheme-item-id">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">योजना का नाम (Scheme Name) *</label>
-          <input type="text" id="scheme-item-name" required placeholder="जैसे: मासिक सहयोग कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          <label class="block font-bold text-slate-700 mb-1">Scheme Name *</label>
+          <input type="text" id="scheme-item-name" required placeholder="e.g. Monthly Welfare Fund" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
         </div>
         <!-- Amount Type: Fixed vs Custom -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">राशि का प्रकार (Amount Type) *</label>
+          <label class="block font-bold text-slate-700 mb-1">Amount Type *</label>
           <div class="grid grid-cols-2 gap-2">
             <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/60 transition-all">
               <input type="radio" name="scheme-amount-type" id="scheme-type-fixed" value="fixed" checked onchange="toggleSchemeAmountType('fixed')" class="text-amber-600 focus:ring-0">
               <div>
-                <p class="font-bold text-slate-800 leading-tight">1. Fixed (निश्चित)</p>
-                <p class="text-[10px] text-slate-400">तयशुदा राशि (जैसे ₹100, ₹500)</p>
+                <p class="font-bold text-slate-800 leading-tight">1. Fixed</p>
+                <p class="text-[10px] text-slate-400">Fixed (e.g. ₹100, ₹500)</p>
               </div>
             </label>
 
             <label class="cursor-pointer border border-slate-200 rounded-xl p-2.5 flex items-center gap-2 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/60 transition-all">
               <input type="radio" name="scheme-amount-type" id="scheme-type-custom" value="custom" onchange="toggleSchemeAmountType('custom')" class="text-amber-600 focus:ring-0">
               <div>
-                <p class="font-bold text-slate-800 leading-tight">2. Custom (स्वैच्छिक)</p>
-                <p class="text-[10px] text-slate-400">जितनी मर्ज़ी उतना दान</p>
+                <p class="font-bold text-slate-800 leading-tight">2. Custom</p>
+                <p class="text-[10px] text-slate-400">Donor decides amount</p>
               </div>
             </label>
           </div>
@@ -5413,49 +5452,49 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <!-- Fixed Amount Box -->
           <div id="scheme-fixed-amount-box">
-            <label class="block font-bold text-slate-700 mb-1">निर्धारित राशि (₹ Amount) *</label>
-            <input type="number" id="scheme-item-amount" required value="100" placeholder="राशि दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+            <label class="block font-bold text-slate-700 mb-1">Fixed Amount (₹) *</label>
+            <input type="number" id="scheme-item-amount" required value="100" placeholder="Enter amount" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
           </div>
 
           <!-- Custom Donation Placeholder Info (shown when custom is selected) -->
           <div id="scheme-custom-amount-box" class="hidden">
-            <label class="block font-bold text-slate-700 mb-1">राशि का नियम</label>
+            <label class="block font-bold text-slate-700 mb-1">Amount Rule</label>
             <div class="w-full bg-purple-50 border border-purple-200/80 rounded-xl px-3 py-2 text-purple-900 font-bold text-[11px] flex items-center gap-1.5 h-[38px]">
               <i class="fa-solid fa-hand-holding-dollar text-purple-600"></i>
-              <span>स्वैच्छिक (Open Donation)</span>
+              <span>Open Donation</span>
             </div>
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1">आवृति (Frequency) *</label>
+            <label class="block font-bold text-slate-700 mb-1">Frequency *</label>
             <select id="scheme-item-freq" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
-              <option value="One-Time">One-Time (एकमुश्त)</option>
-              <option value="Monthly">Monthly (मासिक)</option>
-              <option value="Yearly">Yearly (वार्षिक)</option>
-              <option value="Open">Open (खुला/कभी भी)</option>
+              <option value="One-Time">One-Time</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+              <option value="Open">Open</option>
             </select>
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">योजना स्थिति (Scheme Status) *</label>
+          <label class="block font-bold text-slate-700 mb-1">Scheme Status *</label>
           <select id="scheme-item-status" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
-            <option value="Open">🟢 Open (चालू / एक्टिव)</option>
-            <option value="Upcoming">🔵 Upcoming (आगामी - जल्द शुरू होगी)</option>
-            <option value="Closed">🔴 Closed (समाप्त / बंद)</option>
+            <option value="Open">🟢 Open</option>
+            <option value="Upcoming">🔵 Upcoming</option>
+            <option value="Closed">🔴 Closed</option>
           </select>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">योजना विवरण (Description)</label>
-          <textarea id="scheme-item-desc" rows="2" placeholder="योजना का उद्देश्य एवं विवरण..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-none"></textarea>
+          <label class="block font-bold text-slate-700 mb-1">Description</label>
+          <textarea id="scheme-item-desc" rows="2" placeholder="Scheme purpose and details..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-none"></textarea>
         </div>
         <div class="flex items-center gap-2 pt-2">
-          <button type="button" onclick="closeSchemeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
-            रद्द करें
+          <button type="button" onclick="closeSchemeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs cursor-pointer">
+            Cancel
           </button>
-          <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-amber-500/20">
-            सुरक्षित करें
+          <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-amber-500/20 cursor-pointer">
+            Save Scheme
           </button>
         </div>
       </form>
@@ -11135,6 +11174,7 @@
         'mobile-donation-filter-modal',
         'mobile-event-filter-modal',
         'mobile-expense-filter-modal',
+        'scheme-filter-modal',
         'view-expense-modal'
       ];
       modalIds.forEach(id => {
@@ -12765,24 +12805,40 @@
       if (elCUpcoming) elCUpcoming.textContent = countUpcoming;
       if (elCClosed) elCClosed.textContent = countClosed;
 
-      // Update active filter button styling
-      const btnAll = document.getElementById('filter-scheme-all');
-      const btnOpen = document.getElementById('filter-scheme-open');
-      const btnUpcoming = document.getElementById('filter-scheme-upcoming');
-      const btnClosed = document.getElementById('filter-scheme-closed');
-      
-      [btnAll, btnOpen, btnUpcoming, btnClosed].forEach(b => {
-        if (b) b.className = 'px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0';
-      });
+      // Update active filter trigger label
+      const filterLabel = document.getElementById('scheme-active-filter-label');
+      if (filterLabel) {
+        if (currentSchemeFilter === 'Open') {
+          filterLabel.textContent = `Open (${countOpen})`;
+        } else if (currentSchemeFilter === 'Upcoming') {
+          filterLabel.textContent = `Upcoming (${countUpcoming})`;
+        } else if (currentSchemeFilter === 'Closed') {
+          filterLabel.textContent = `Closed (${countClosed})`;
+        } else {
+          filterLabel.textContent = `All (${countAll})`;
+        }
+      }
 
-      if (currentSchemeFilter === 'Open' && btnOpen) {
-        btnOpen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-emerald-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
-      } else if (currentSchemeFilter === 'Upcoming' && btnUpcoming) {
-        btnUpcoming.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
-      } else if (currentSchemeFilter === 'Closed' && btnClosed) {
-        btnClosed.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-700 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
-      } else if (btnAll) {
-        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-amber-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0';
+      // Update popup modal options styling
+      const optAll = document.getElementById('scheme-filter-opt-all');
+      const optOpen = document.getElementById('scheme-filter-opt-open');
+      const optUpcoming = document.getElementById('scheme-filter-opt-upcoming');
+      const optClosed = document.getElementById('scheme-filter-opt-closed');
+
+      const defaultOptClass = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200';
+      if (optAll) optAll.className = defaultOptClass;
+      if (optOpen) optOpen.className = defaultOptClass;
+      if (optUpcoming) optUpcoming.className = defaultOptClass;
+      if (optClosed) optClosed.className = defaultOptClass;
+
+      if (currentSchemeFilter === 'Open' && optOpen) {
+        optOpen.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-emerald-600 text-white shadow-xs';
+      } else if (currentSchemeFilter === 'Upcoming' && optUpcoming) {
+        optUpcoming.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-blue-600 text-white shadow-xs';
+      } else if (currentSchemeFilter === 'Closed' && optClosed) {
+        optClosed.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-slate-700 text-white shadow-xs';
+      } else if (optAll) {
+        optAll.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-amber-500 text-white shadow-xs';
       }
 
       // Filtered list
@@ -12796,7 +12852,7 @@
           schemesGrid.innerHTML = `
             <div class="col-span-full py-12 text-center text-slate-400">
               <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300"></i>
-              <p class="text-xs font-semibold">इस फ़िल्टर में कोई योजना उपलब्ध नहीं है।</p>
+              <p class="text-xs font-semibold">No schemes available for this filter.</p>
             </div>
           `;
         } else {
@@ -12804,11 +12860,11 @@
             const isCustom = sc.amountType === 'custom' || (!sc.amount && sc.amount !== 0) || sc.amount === 0;
             const statusVal = sc.status || 'Open';
             
-            let statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Open (चालू)</span>`;
+            let statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Open</span>`;
             if (statusVal === 'Upcoming') {
-              statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Upcoming (आगामी)</span>`;
+              statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Upcoming</span>`;
             } else if (statusVal === 'Closed') {
-              statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 border border-slate-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Closed (समाप्त)</span>`;
+              statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 border border-slate-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Closed</span>`;
             }
 
             return `
@@ -12835,7 +12891,7 @@
                 <div class="text-right">
                   ${isCustom ? `
                     <p class="text-xs font-black text-purple-700 font-sans bg-purple-50 px-2 py-1 rounded-lg border border-purple-200 whitespace-nowrap">
-                      स्वैच्छिक दान
+                      Open Donation
                     </p>
                   ` : `
                     <p class="text-base font-black text-amber-600 font-mono">₹${sc.amount}</p>
@@ -13163,6 +13219,27 @@
       }
     }
 
+    function openSchemeFilterModal() {
+      const modal = document.getElementById('scheme-filter-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeSchemeFilterModal() {
+      const modal = document.getElementById('scheme-filter-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    function selectSchemeFilter(status) {
+      filterSchemes(status);
+      closeSchemeFilterModal();
+    }
+
     function filterSchemes(status) {
       currentSchemeFilter = status || 'ALL';
       renderSettingsView();
@@ -13172,7 +13249,7 @@
       closeAllModals();
       const modal = document.getElementById('scheme-master-modal');
       const heading = document.getElementById('scheme-modal-heading');
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-hand-holding-heart text-amber-600"></i> कल्याणकारी योजना जोड़ें';
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-hand-holding-heart text-amber-600"></i> Add Welfare Scheme';
       document.getElementById('scheme-item-id').value = '';
       document.getElementById('scheme-item-name').value = '';
       document.getElementById('scheme-item-amount').value = '100';
@@ -13189,7 +13266,7 @@
       closeAllModals();
       const modal = document.getElementById('scheme-master-modal');
       const heading = document.getElementById('scheme-modal-heading');
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-amber-600"></i> योजना संपादित करें';
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-amber-600"></i> Edit Welfare Scheme';
       document.getElementById('scheme-item-id').value = item.id;
       document.getElementById('scheme-item-name').value = item.name;
       document.getElementById('scheme-item-freq').value = item.frequency || 'One-Time';
