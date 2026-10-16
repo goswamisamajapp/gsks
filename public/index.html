@@ -3302,115 +3302,113 @@
       </div><!-- End member-view-donations -->
 
       <!-- ============================================== -->
+      <!-- ============================================== -->
       <!-- SUB-VIEW 5: PASY (पारिवारिक आर्थिक सहायता योजना) -->
       <!-- ============================================== -->
-      <div id="member-view-pasy" class="hidden space-y-6 animate-in fade-in duration-200">
+      <div id="member-view-pasy" class="hidden space-y-3 sm:space-y-4 animate-in fade-in duration-200">
         
-        <!-- PASY Header Bar with Rich Gradient Background -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gradient-to-r from-sky-50 via-cyan-50 to-teal-50 p-5 rounded-3xl border border-cyan-200/80 shadow-sm relative overflow-hidden">
-          <div class="absolute -right-8 -top-8 w-32 h-32 bg-cyan-200/40 rounded-full blur-2xl pointer-events-none"></div>
-          <div class="flex items-center gap-3.5 relative z-10">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-600 to-teal-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-md shadow-cyan-500/20">
+        <!-- PASY Header Bar (Compact & Mobile-First) -->
+        <div class="bg-gradient-to-r from-sky-50 via-cyan-50 to-teal-50 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-cyan-200/80 shadow-2xs relative overflow-hidden">
+          <div class="absolute -right-8 -top-8 w-28 h-28 bg-cyan-200/40 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="flex items-center gap-3 relative z-10">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-cyan-600 to-teal-500 text-white flex items-center justify-center text-lg sm:text-xl flex-shrink-0 shadow-xs shadow-cyan-500/20">
               <i class="fa-solid fa-hands-holding-child"></i>
             </div>
-            <div>
-              <div class="flex items-center gap-2 flex-wrap">
-                <h2 class="text-lg sm:text-xl font-black text-slate-900 font-devanagari tracking-tight">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <h2 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari tracking-tight">
                   पारिवारिक आर्थिक सहायता योजना (PASY)
                 </h2>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white text-cyan-800 border border-cyan-300 shadow-2xs" id="m-pasy-member-badge">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white text-cyan-800 border border-cyan-300 shadow-2xs" id="m-pasy-member-badge">
                   सदस्य स्थिति
                 </span>
               </div>
-              <p class="text-xs text-slate-600 font-medium mt-0.5">मासिक अंशदान ₹150 • 30 माह का सामूहिक सुरक्षा कोष</p>
+              <p class="text-[11px] text-slate-600 font-medium mt-0.5 truncate">मासिक अंशदान ₹150 • 30 माह का सामूहिक सुरक्षा कोष</p>
             </div>
           </div>
-
-          <button 
-            type="button" 
-            onclick="switchMemberView('dashboard')" 
-            class="px-4 py-2.5 rounded-xl text-xs font-bold bg-white/90 hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-2 cursor-pointer relative z-10"
-          >
-            <i class="fa-solid fa-arrow-left text-[11px]"></i>
-            <span>वापस डैशबोर्ड</span>
-          </button>
         </div>
 
-        <!-- PASY 4 Quick Summary Cards (Paid, Dues, Target, Fine) with Premium Tinted Backgrounds -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- PASY 4 Quick Summary Cards (2-column on mobile for perfect screen fit, 4-col on desktop) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
           <!-- Card 1: कुल जमा अंशदान (Cyan/Teal Gradient) -->
-          <div class="bg-gradient-to-br from-cyan-50/90 via-sky-50/60 to-white rounded-3xl p-5 border border-cyan-200 shadow-xs hover:shadow-md transition-all flex items-center gap-4 relative overflow-hidden group">
-            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-cyan-200/30 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
-            <div class="w-13 h-13 rounded-2xl bg-gradient-to-tr from-cyan-600 to-sky-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-md shadow-cyan-500/20">
-              <i class="fa-solid fa-sack-dollar"></i>
+          <div class="bg-gradient-to-br from-cyan-50/95 via-sky-50/70 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-cyan-200/90 shadow-2xs hover:shadow-xs transition-all relative overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <span class="text-[10px] sm:text-[11px] font-bold text-cyan-900/80 uppercase tracking-wider block">कुल जमा</span>
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-cyan-600 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                <i class="fa-solid fa-sack-dollar text-[11px]"></i>
+              </div>
             </div>
-            <div class="relative z-10">
-              <span class="text-[11px] font-bold text-cyan-900/70 uppercase tracking-wider block">कुल जमा अंशदान</span>
-              <h3 class="text-xl sm:text-2xl font-black text-cyan-800 font-mono mt-0.5" id="m-pasy-stat-paid">₹ 0</h3>
-              <p class="text-[10px] text-cyan-700/80 font-semibold" id="m-pasy-stat-paid-months">0 माह जमा</p>
-            </div>
-          </div>
-
-          <!-- Card 2: बकाया अंशदान (Rose/Amber Gradient) -->
-          <div class="bg-gradient-to-br from-rose-50/90 via-orange-50/50 to-white rounded-3xl p-5 border border-rose-200 shadow-xs hover:shadow-md transition-all flex items-center gap-4 relative overflow-hidden group">
-            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-rose-200/30 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
-            <div class="w-13 h-13 rounded-2xl bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-md shadow-rose-500/20">
-              <i class="fa-solid fa-hourglass-half"></i>
-            </div>
-            <div class="relative z-10">
-              <span class="text-[11px] font-bold text-rose-900/70 uppercase tracking-wider block">बकाया अंशदान</span>
-              <h3 class="text-xl sm:text-2xl font-black text-rose-700 font-mono mt-0.5" id="m-pasy-stat-dues">₹ 0</h3>
-              <p class="text-[10px] text-rose-700/80 font-semibold" id="m-pasy-stat-dues-months">0 माह शेष</p>
+            <div>
+              <h3 class="text-lg sm:text-xl font-black text-cyan-800 font-mono" id="m-pasy-stat-paid">₹ 0</h3>
+              <p class="text-[10px] text-cyan-700 font-semibold mt-0.5" id="m-pasy-stat-paid-months">0 माह जमा</p>
             </div>
           </div>
 
-          <!-- Card 3: सुरक्षा योजना लक्ष्य (Emerald/Green Gradient) -->
-          <div class="bg-gradient-to-br from-emerald-50/90 via-teal-50/50 to-white rounded-3xl p-5 border border-emerald-200 shadow-xs hover:shadow-md transition-all flex items-center gap-4 relative overflow-hidden group">
-            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-emerald-200/30 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
-            <div class="w-13 h-13 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-md shadow-emerald-500/20">
-              <i class="fa-solid fa-shield-halved"></i>
+          <!-- Card 2: बकाया अंशदान (Rose/Pink Gradient) -->
+          <div class="bg-gradient-to-br from-rose-50/95 via-orange-50/60 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-rose-200/90 shadow-2xs hover:shadow-xs transition-all relative overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <span class="text-[10px] sm:text-[11px] font-bold text-rose-900/80 uppercase tracking-wider block">बकाया अंशदान</span>
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-rose-600 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                <i class="fa-solid fa-hourglass-half text-[11px]"></i>
+              </div>
             </div>
-            <div class="relative z-10">
-              <span class="text-[11px] font-bold text-emerald-900/70 uppercase tracking-wider block">सुरक्षा योजना लक्ष्य</span>
-              <h3 class="text-xl sm:text-2xl font-black text-emerald-800 font-mono mt-0.5">₹ 4,500</h3>
-              <p class="text-[10px] text-emerald-700/80 font-semibold">30 माह x ₹150 प्रति सदस्य</p>
+            <div>
+              <h3 class="text-lg sm:text-xl font-black text-rose-700 font-mono" id="m-pasy-stat-dues">₹ 0</h3>
+              <p class="text-[10px] text-rose-700 font-semibold mt-0.5" id="m-pasy-stat-dues-months">0 माह शेष</p>
             </div>
           </div>
 
-          <!-- Card 4: विलंब शुल्क / जुर्माना (Amber/Gold Gradient) -->
-          <div class="bg-gradient-to-br from-amber-50/95 via-yellow-50/50 to-white rounded-3xl p-5 border border-amber-300/80 shadow-xs hover:shadow-md transition-all flex items-center gap-4 relative overflow-hidden group">
-            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-amber-200/35 rounded-full blur-xl group-hover:scale-110 transition-transform"></div>
-            <div class="w-13 h-13 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xl flex-shrink-0 shadow-md shadow-amber-500/20">
-              <i class="fa-solid fa-triangle-exclamation"></i>
+          <!-- Card 3: सुरक्षा योजना लक्ष्य (Emerald Gradient) -->
+          <div class="bg-gradient-to-br from-emerald-50/95 via-teal-50/60 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-emerald-200/90 shadow-2xs hover:shadow-xs transition-all relative overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <span class="text-[10px] sm:text-[11px] font-bold text-emerald-900/80 uppercase tracking-wider block">योजना लक्ष्य</span>
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                <i class="fa-solid fa-shield-halved text-[11px]"></i>
+              </div>
             </div>
-            <div class="relative z-10">
-              <span class="text-[11px] font-bold text-amber-900/70 uppercase tracking-wider block">विलंब शुल्क / जुर्माना (Fine)</span>
-              <h3 class="text-xl sm:text-2xl font-black text-amber-800 font-mono mt-0.5" id="m-pasy-stat-fine">₹ 0</h3>
-              <p class="text-[10px] text-amber-700/90 font-semibold" id="m-pasy-stat-fine-desc">कोई जुर्माना नहीं</p>
+            <div>
+              <h3 class="text-lg sm:text-xl font-black text-emerald-800 font-mono">₹ 4,500</h3>
+              <p class="text-[10px] text-emerald-700 font-semibold mt-0.5">30 माह x ₹150</p>
+            </div>
+          </div>
+
+          <!-- Card 4: विलंब शुल्क / जुर्माना (Amber Gradient) -->
+          <div class="bg-gradient-to-br from-amber-50/95 via-yellow-50/60 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-amber-300/80 shadow-2xs hover:shadow-xs transition-all relative overflow-hidden flex flex-col justify-between">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <span class="text-[10px] sm:text-[11px] font-bold text-amber-900/80 uppercase tracking-wider block">विलंब शुल्क (Fine)</span>
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                <i class="fa-solid fa-triangle-exclamation text-[11px]"></i>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg sm:text-xl font-black text-amber-800 font-mono" id="m-pasy-stat-fine">₹ 0</h3>
+              <p class="text-[10px] text-amber-700 font-semibold mt-0.5" id="m-pasy-stat-fine-desc">कोई जुर्माना नहीं</p>
             </div>
           </div>
         </div>
 
         <!-- PASY Member Status / Info Banner -->
-        <div id="m-pasy-membership-banner" class="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-4">
+        <div id="m-pasy-membership-banner" class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <!-- Populated by JS -->
         </div>
 
         <!-- 30 Months Installments Status Grid -->
-        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+          <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <i class="fa-regular fa-calendar-check text-cyan-600 text-sm"></i>
-              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+              <div class="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs">
+                <i class="fa-regular fa-calendar-check"></i>
+              </div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 font-devanagari">
                 मासिक किश्त विवरण (Sep 2025 - Feb 2028)
               </h3>
             </div>
-            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
-              कुल 30 माह
+            <span class="text-[10px] sm:text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+              30 माह
             </span>
           </div>
 
-          <div id="m-pasy-months-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
+          <div id="m-pasy-months-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-2.5">
             <!-- Populated dynamically via JS -->
           </div>
         </div>
@@ -9777,77 +9775,78 @@
       // Membership Banner
       if (bannerEl) {
         if (isEnrolled) {
-          bannerEl.className = 'bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-5 border border-emerald-200/90 shadow-xs relative overflow-hidden space-y-4';
+          bannerEl.className = 'bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-emerald-200/90 shadow-2xs relative overflow-hidden space-y-3';
           bannerEl.innerHTML = `
             <div class="absolute -right-6 -top-6 w-28 h-28 bg-emerald-200/30 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
-              <div class="flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-md shadow-emerald-500/20">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 relative z-10">
+              <div class="flex items-center gap-2.5 sm:gap-3.5">
+                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-base sm:text-lg flex-shrink-0 shadow-xs shadow-emerald-500/20">
                   <i class="fa-solid fa-circle-check"></i>
                 </div>
                 <div>
-                  <h4 class="text-sm font-black text-slate-900 font-devanagari">
-                    आप पारिवारिक आर्थिक सहायता योजना (PASY) में सक्रिय रूप से नामांकित हैं
+                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 font-devanagari">
+                    आप PASY योजना में सक्रिय रूप से नामांकित हैं
                   </h4>
-                  <p class="text-xs text-slate-600 font-medium mt-0.5">
-                    सदस्य पहचान: <strong class="text-emerald-800 font-mono">${member.id}</strong> • कुल योजना अवधि: सितंबर 2025 से फरवरी 2028 (30 महीने)
+                  <p class="text-[11px] text-slate-600 font-medium mt-0.5">
+                    सदस्य ID: <strong class="text-emerald-800 font-mono">${member.id}</strong> • अवधि: 30 महीने (Sep 2025 - Feb 2028)
                   </p>
                 </div>
               </div>
-              <span class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-white text-emerald-800 border border-emerald-300 shadow-2xs flex-shrink-0">
-                अंशदान: ₹150 / माह
+              <span class="px-2.5 py-1 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-white text-emerald-800 border border-emerald-300 shadow-2xs flex-shrink-0">
+                ₹150 / माह
               </span>
             </div>
           `;
         } else {
-          bannerEl.className = 'bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 rounded-3xl p-5 border border-amber-200/90 shadow-xs relative overflow-hidden space-y-4';
+          bannerEl.className = 'bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-amber-200/90 shadow-2xs relative overflow-hidden space-y-3';
           bannerEl.innerHTML = `
             <div class="absolute -right-6 -top-6 w-28 h-28 bg-amber-200/30 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
-              <div class="flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-md shadow-amber-500/20">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 relative z-10">
+              <div class="flex items-center gap-2.5 sm:gap-3.5">
+                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-base sm:text-lg flex-shrink-0 shadow-xs shadow-amber-500/20">
                   <i class="fa-solid fa-circle-info"></i>
                 </div>
                 <div>
-                  <h4 class="text-sm font-black text-slate-900 font-devanagari">
-                    पारिवारिक आर्थिक सहायता योजना (PASY) सदस्यता
+                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 font-devanagari">
+                    PASY पारिवारिक सुरक्षा योजना
                   </h4>
-                  <p class="text-xs text-slate-600 font-medium mt-0.5">
-                    इस सुरक्षा योजना में भाग लेने अथवा अद्यतन हेतु समिति व्यवस्थापक से संपर्क करें।
+                  <p class="text-[11px] text-slate-600 font-medium mt-0.5">
+                    योजना में भाग लेने अथवा अद्यतन हेतु समिति व्यवस्थापक से संपर्क करें।
                   </p>
                 </div>
               </div>
-              <span class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white text-amber-800 border border-amber-300 shadow-2xs flex-shrink-0">
-                नियमित अंशदान: ₹150 / माह
+              <span class="px-2.5 py-1 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-white text-amber-800 border border-amber-300 shadow-2xs flex-shrink-0">
+                ₹150 / माह
               </span>
             </div>
           `;
         }
       }
 
-      // Render 30 Months Grid
+      // Render 30 Months Grid (Refined for Mobile Touch & Quick Glance)
       if (gridEl) {
         gridEl.innerHTML = PARIWARIK_MONTHS.map((mCfg, idx) => {
           const isPaid = isPariwarikPaidForMonth(member, mCfg.key);
           const badgeBg = isPaid 
-            ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
-            : 'bg-rose-50 text-rose-700 border-rose-200';
+            ? 'bg-emerald-50 text-emerald-900 border-emerald-200 shadow-2xs' 
+            : 'bg-rose-50/90 text-rose-900 border-rose-200 shadow-2xs';
           const icon = isPaid 
-            ? '<i class="fa-solid fa-check text-emerald-600"></i>' 
-            : '<i class="fa-solid fa-clock text-rose-500"></i>';
+            ? '<i class="fa-solid fa-check text-emerald-600 text-xs"></i>' 
+            : '<i class="fa-solid fa-clock text-rose-500 text-xs"></i>';
           const statusText = isPaid ? 'जमा (Paid)' : 'बकाया (Due)';
+          const statusColor = isPaid ? 'text-emerald-700' : 'text-rose-600';
 
           return `
-            <div class="p-3 rounded-2xl border ${badgeBg} flex flex-col justify-between transition-all">
-              <div class="flex items-center justify-between gap-1 mb-1.5">
-                <span class="font-mono text-[10px] font-bold text-slate-500">#${idx + 1}</span>
-                <span class="text-xs">${icon}</span>
+            <div class="p-2.5 rounded-xl border ${badgeBg} flex flex-col justify-between transition-all">
+              <div class="flex items-center justify-between gap-1 mb-1">
+                <span class="font-mono text-[9px] font-bold text-slate-400">#${idx + 1}</span>
+                <span>${icon}</span>
               </div>
               <div>
-                <strong class="text-xs font-black block font-mono">${mCfg.label}</strong>
-                <span class="text-[10px] font-bold block mt-0.5">${statusText}</span>
+                <strong class="text-[11px] font-extrabold block font-mono text-slate-800">${mCfg.label}</strong>
+                <span class="text-[10px] font-bold block ${statusColor} mt-0.5">${statusText}</span>
               </div>
-              <div class="mt-2 pt-1.5 border-t border-slate-200/40 text-[10px] font-mono font-semibold text-right">
+              <div class="mt-1.5 pt-1 border-t border-slate-200/50 text-[10px] font-mono font-bold text-right text-slate-600">
                 ₹${PARIWARIK_MONTHLY_FEE}
               </div>
             </div>
