@@ -2953,59 +2953,178 @@
           </div>
         </div>
 
-        <!-- Smart Filter & Search Bar for Notifications -->
-        <div class="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs">
-          <!-- Horizontal Scrollable Smart Filter Pills -->
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none no-scrollbar">
-            <button 
-              type="button" 
-              id="filter-notice-all" 
-              onclick="filterMemberNotices('ALL')" 
-              class="px-3 py-1.5 rounded-full font-bold bg-amber-500 text-white shadow-xs flex-shrink-0 cursor-pointer flex items-center gap-1.5 transition-all text-[11px] sm:text-xs"
-            >
-              <i class="fa-solid fa-layer-group text-[10px]"></i>
-              <span>सभी</span>
-              <span id="notice-filter-count-all" class="px-1.5 py-0.2 bg-white/20 rounded-full text-[10px] font-mono">0</span>
-            </button>
-            <button 
-              type="button" 
-              id="filter-notice-open" 
-              onclick="filterMemberNotices('OPEN')" 
-              class="px-3 py-1.5 rounded-full font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs"
-            >
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>सक्रिय (Open)</span>
-            </button>
-            <button 
-              type="button" 
-              id="filter-notice-upcoming" 
-              onclick="filterMemberNotices('UPCOMING')" 
-              class="px-3 py-1.5 rounded-full font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs"
-            >
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              <span>आगामी (Upcoming)</span>
-            </button>
-            <button 
-              type="button" 
-              id="filter-notice-closed" 
-              onclick="filterMemberNotices('CLOSED')" 
-              class="px-3 py-1.5 rounded-full font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs"
-            >
-              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-              <span>संपन्न (Closed)</span>
-            </button>
-          </div>
-
+        <!-- Compact Search & Popup Filter Bar for Notifications -->
+        <div class="bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-2xs flex items-center gap-2">
           <!-- Search Input -->
-          <div class="relative w-full sm:w-60">
+          <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
             <input 
               type="text" 
               id="member-notice-search" 
               oninput="handleMemberNoticeSearch(this.value)" 
-              placeholder="खोजें (Search notice)..." 
-              class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+              placeholder="सूचना या विषय खोजें (Search)..." 
+              class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
             >
+          </div>
+
+          <!-- Popup Filter Trigger Button -->
+          <button 
+            type="button" 
+            id="member-notice-filter-btn"
+            onclick="openNoticeFilterModal()" 
+            class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 hover:bg-amber-50 hover:text-amber-700 text-slate-700 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-xs active:scale-95 shadow-2xs"
+            title="फ़िल्टर बदलें (Filter options)"
+          >
+            <i class="fa-solid fa-sliders text-amber-600 text-xs"></i>
+            <span id="member-notice-filter-current-label">सभी</span>
+            <span id="member-notice-filter-current-count" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-amber-500 text-white">0</span>
+          </button>
+        </div>
+
+        <!-- NOTIFICATION FILTER POPUP MODAL (Clean Bottom Sheet on Mobile, Centered on Desktop) -->
+        <div 
+          id="notice-filter-modal" 
+          class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/60 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-150"
+        >
+          <!-- Backdrop click to close -->
+          <div class="fixed inset-0" onclick="closeNoticeFilterModal()"></div>
+
+          <!-- Modal Box -->
+          <div class="relative z-10 w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-amber-50/70 via-orange-50/40 to-white">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs shadow-2xs">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-extrabold text-slate-800 font-devanagari">
+                    सूचना फ़िल्टर (Filter Notices)
+                  </h3>
+                  <p class="text-[11px] text-slate-500">
+                    स्थिति अनुसार सूचनाएं देखें
+                  </p>
+                </div>
+              </div>
+              <button 
+                type="button" 
+                onclick="closeNoticeFilterModal()" 
+                class="w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs cursor-pointer transition-colors"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <!-- Filter Options List -->
+            <div class="p-4 space-y-2">
+              <!-- Option 1: ALL -->
+              <button 
+                type="button" 
+                onclick="applyMemberNoticeFilter('ALL')" 
+                id="filter-opt-all"
+                class="w-full flex items-center justify-between p-3 rounded-2xl border border-amber-300 bg-amber-50/60 text-slate-800 hover:bg-amber-100/70 transition-all text-left cursor-pointer group"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                    <i class="fa-solid fa-layer-group"></i>
+                  </div>
+                  <div>
+                    <div class="font-extrabold text-xs text-slate-900 font-devanagari">सभी सूचनाएं (All Notices)</div>
+                    <div class="text-[11px] text-slate-500">चालू, आगामी और पूर्व की सभी सूचनाएं</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="modal-filter-count-all" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-200 text-amber-900">0</span>
+                  <i id="filter-check-all" class="fa-solid fa-circle-check text-amber-600 text-sm"></i>
+                </div>
+              </button>
+
+              <!-- Option 2: OPEN -->
+              <button 
+                type="button" 
+                onclick="applyMemberNoticeFilter('OPEN')" 
+                id="filter-opt-open"
+                class="w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-emerald-50/50 text-slate-800 transition-all text-left cursor-pointer group"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                    <i class="fa-solid fa-bullhorn animate-pulse"></i>
+                  </div>
+                  <div>
+                    <div class="font-extrabold text-xs text-slate-900 font-devanagari flex items-center gap-1.5">
+                      <span>सक्रिय / चालू (Open Notices)</span>
+                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    </div>
+                    <div class="text-[11px] text-slate-500">वर्तमान में सक्रिय बैठक व सूचनाएं</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="modal-filter-count-open" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800">0</span>
+                  <i id="filter-check-open" class="fa-solid fa-circle-check text-emerald-600 text-sm hidden"></i>
+                </div>
+              </button>
+
+              <!-- Option 3: UPCOMING -->
+              <button 
+                type="button" 
+                onclick="applyMemberNoticeFilter('UPCOMING')" 
+                id="filter-opt-upcoming"
+                class="w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-blue-50/50 text-slate-800 transition-all text-left cursor-pointer group"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                    <i class="fa-solid fa-calendar-days"></i>
+                  </div>
+                  <div>
+                    <div class="font-extrabold text-xs text-slate-900 font-devanagari flex items-center gap-1.5">
+                      <span>आगामी कार्यक्रम (Upcoming Events)</span>
+                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    </div>
+                    <div class="text-[11px] text-slate-500">भविष्य में आयोजित होने वाले कार्यक्रम</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="modal-filter-count-upcoming" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-100 text-blue-800">0</span>
+                  <i id="filter-check-upcoming" class="fa-solid fa-circle-check text-blue-600 text-sm hidden"></i>
+                </div>
+              </button>
+
+              <!-- Option 4: CLOSED -->
+              <button 
+                type="button" 
+                onclick="applyMemberNoticeFilter('CLOSED')" 
+                id="filter-opt-closed"
+                class="w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-800 transition-all text-left cursor-pointer group"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-slate-600 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                  </div>
+                  <div>
+                    <div class="font-extrabold text-xs text-slate-900 font-devanagari flex items-center gap-1.5">
+                      <span>पूर्व / संपन्न (Closed Archive)</span>
+                      <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    </div>
+                    <div class="text-[11px] text-slate-500">पूर्व में संपन्न बैठकें और पुरानी सूचनाएं</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="modal-filter-count-closed" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-100 text-slate-700">0</span>
+                  <i id="filter-check-closed" class="fa-solid fa-circle-check text-slate-700 text-sm hidden"></i>
+                </div>
+              </button>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="p-4 pt-2 border-t border-slate-100 bg-slate-50 flex items-center justify-end">
+              <button 
+                type="button" 
+                onclick="closeNoticeFilterModal()" 
+                class="w-full sm:w-auto px-5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-900 text-white shadow-xs cursor-pointer text-center"
+              >
+                पूर्ण (Done)
+              </button>
+            </div>
           </div>
         </div>
 
@@ -7408,25 +7527,60 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function openNoticeFilterModal() {
+      const modal = document.getElementById('notice-filter-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeNoticeFilterModal() {
+      const modal = document.getElementById('notice-filter-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function applyMemberNoticeFilter(filter) {
+      filterMemberNotices(filter);
+      closeNoticeFilterModal();
+    }
+
     function filterMemberNotices(filter) {
       currentMemberNoticeFilter = filter || 'ALL';
-      const btnAll = document.getElementById('filter-notice-all');
-      const btnOpen = document.getElementById('filter-notice-open');
-      const btnUpcoming = document.getElementById('filter-notice-upcoming');
-      const btnClosed = document.getElementById('filter-notice-closed');
 
-      [btnAll, btnOpen, btnUpcoming, btnClosed].forEach(b => {
-        if (b) b.className = 'px-3 py-1.5 rounded-full font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs';
+      // Update current filter button text & styling
+      const labelEl = document.getElementById('member-notice-filter-current-label');
+      const triggerBtn = document.getElementById('member-notice-filter-btn');
+
+      // Update modal options styling and checkmarks
+      const options = ['all', 'open', 'upcoming', 'closed'];
+      options.forEach(opt => {
+        const btn = document.getElementById(`filter-opt-${opt}`);
+        const chk = document.getElementById(`filter-check-${opt}`);
+        if (btn) {
+          btn.className = 'w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 transition-all text-left cursor-pointer group';
+        }
+        if (chk) chk.classList.add('hidden');
       });
 
-      if (filter === 'OPEN' && btnOpen) {
-        btnOpen.className = 'px-3.5 py-1.5 rounded-full font-bold bg-emerald-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs';
-      } else if (filter === 'UPCOMING' && btnUpcoming) {
-        btnUpcoming.className = 'px-3.5 py-1.5 rounded-full font-bold bg-blue-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs';
-      } else if (filter === 'CLOSED' && btnClosed) {
-        btnClosed.className = 'px-3.5 py-1.5 rounded-full font-bold bg-slate-700 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-[11px] sm:text-xs';
-      } else if (btnAll) {
-        btnAll.className = 'px-3.5 py-1.5 rounded-full font-bold bg-amber-500 text-white shadow-xs flex-shrink-0 cursor-pointer flex items-center gap-1.5 transition-all text-[11px] sm:text-xs';
+      const selectedOpt = (currentMemberNoticeFilter || 'ALL').toLowerCase();
+      const activeBtn = document.getElementById(`filter-opt-${selectedOpt}`);
+      const activeChk = document.getElementById(`filter-check-${selectedOpt}`);
+      if (activeChk) activeChk.classList.remove('hidden');
+
+      if (currentMemberNoticeFilter === 'OPEN') {
+        if (labelEl) labelEl.textContent = 'सक्रिय';
+        if (activeBtn) activeBtn.className = 'w-full flex items-center justify-between p-3 rounded-2xl border-2 border-emerald-400 bg-emerald-50/70 text-slate-900 transition-all text-left cursor-pointer';
+        if (triggerBtn) triggerBtn.className = 'px-3 py-1.5 rounded-xl font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-xs active:scale-95 shadow-2xs';
+      } else if (currentMemberNoticeFilter === 'UPCOMING') {
+        if (labelEl) labelEl.textContent = 'आगामी';
+        if (activeBtn) activeBtn.className = 'w-full flex items-center justify-between p-3 rounded-2xl border-2 border-blue-400 bg-blue-50/70 text-slate-900 transition-all text-left cursor-pointer';
+        if (triggerBtn) triggerBtn.className = 'px-3 py-1.5 rounded-xl font-bold bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-xs active:scale-95 shadow-2xs';
+      } else if (currentMemberNoticeFilter === 'CLOSED') {
+        if (labelEl) labelEl.textContent = 'संपन्न';
+        if (activeBtn) activeBtn.className = 'w-full flex items-center justify-between p-3 rounded-2xl border-2 border-slate-400 bg-slate-100 text-slate-900 transition-all text-left cursor-pointer';
+        if (triggerBtn) triggerBtn.className = 'px-3 py-1.5 rounded-xl font-bold bg-slate-100 text-slate-800 border border-slate-300 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-xs active:scale-95 shadow-2xs';
+      } else {
+        if (labelEl) labelEl.textContent = 'सभी';
+        if (activeBtn) activeBtn.className = 'w-full flex items-center justify-between p-3 rounded-2xl border-2 border-amber-400 bg-amber-50/80 text-slate-900 transition-all text-left cursor-pointer';
+        if (triggerBtn) triggerBtn.className = 'px-3 py-1.5 rounded-xl font-bold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-xs active:scale-95 shadow-2xs';
       }
 
       renderMemberAllNotifications(currentLoggedInMember);
@@ -7632,6 +7786,30 @@
       if (headerBadge) headerBadge.textContent = rawNotices.filter(n => n.isOpen || n.isUpcoming).length;
       if (openBadge) openBadge.textContent = `${openNotices.length} सक्रिय/आगामी`;
       if (pastBadge) pastBadge.textContent = `${pastNotices.length} संपन्न/पूर्व`;
+
+      // Update popup filter modal counts
+      const modalCountAll = document.getElementById('modal-filter-count-all');
+      const modalCountOpen = document.getElementById('modal-filter-count-open');
+      const modalCountUpcoming = document.getElementById('modal-filter-count-upcoming');
+      const modalCountClosed = document.getElementById('modal-filter-count-closed');
+      const currentFilterCount = document.getElementById('member-notice-filter-current-count');
+
+      const countAll = rawNotices.length;
+      const countOpen = rawNotices.filter(n => n.isOpen).length;
+      const countUpcoming = rawNotices.filter(n => n.isUpcoming).length;
+      const countClosed = rawNotices.filter(n => n.isClosed).length;
+
+      if (modalCountAll) modalCountAll.textContent = countAll;
+      if (modalCountOpen) modalCountOpen.textContent = countOpen;
+      if (modalCountUpcoming) modalCountUpcoming.textContent = countUpcoming;
+      if (modalCountClosed) modalCountClosed.textContent = countClosed;
+
+      if (currentFilterCount) {
+        if (currentMemberNoticeFilter === 'OPEN') currentFilterCount.textContent = countOpen;
+        else if (currentMemberNoticeFilter === 'UPCOMING') currentFilterCount.textContent = countUpcoming;
+        else if (currentMemberNoticeFilter === 'CLOSED') currentFilterCount.textContent = countClosed;
+        else currentFilterCount.textContent = countAll;
+      }
 
       // Render Open/Upcoming Notices (Top Highlighted Cards - Compact & Optimized)
       if (openContainer) {
