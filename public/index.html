@@ -7876,29 +7876,29 @@
               </div>
 
               <!-- 5. DETAIL (Tab Detail) -->
-              <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <div class="text-xs text-slate-700 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 shadow-2xs">
                 <p class="line-clamp-2">
                   ${n.summary || n.details || ''}
                 </p>
               </div>
 
-              <!-- 6. ACTION BUTTONS (Tab Wiwran and Upasthiti Button) -->
-              <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2.5">
-                <!-- Vivran Button -->
+              <!-- 6. ACTION BUTTONS (Width badha diya & Center me rakha) -->
+              <div class="pt-2.5 border-t border-slate-100 flex items-center justify-center gap-3">
+                <!-- Vivran Button with Solid Background Color -->
                 <button 
                   type="button" 
                   onclick="openNoticeDetailModal('${n.id}')"
-                  class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs"
+                  class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-xs"
                   title="पूरी सूचना का विवरण देखें"
                 >
-                  <i class="fa-solid fa-eye text-slate-500 text-xs"></i>
+                  <i class="fa-solid fa-eye text-blue-600 text-xs"></i>
                   <span>विवरण देखें</span>
                 </button>
 
-                <!-- Upasthiti Button -->
+                <!-- Upasthiti Button with Full/Equal Width -->
                 ${(n.rawItem && n.rawItem.id) ? `
                   ${(isMemberAlreadyParticipated(n.rawItem, member ? member.id : null)) ? `
-                    <span class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1.5 shadow-2xs">
+                    <span class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-center gap-2 shadow-xs">
                       <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
                       <span>उपस्थिति दर्ज</span>
                     </span>
@@ -7906,7 +7906,7 @@
                     <button 
                       type="button" 
                       onclick="handleEventParticipation('${n.rawItem.id}')" 
-                      class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                      class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
                       title="लाइव 20 मीटर जीपीएस लोकेशन से बैठक में उपस्थिति दर्ज करें"
                     >
                       <i class="fa-solid fa-hand-holding-hand text-xs"></i>
@@ -7979,27 +7979,27 @@
               </div>
 
               <!-- 5. Detail -->
-              <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+              <div class="text-xs text-slate-700 leading-relaxed bg-slate-100/80 p-3 rounded-xl border border-slate-200/60">
                 <p class="line-clamp-2">${n.summary || ''}</p>
               </div>
 
-              <!-- 6. Action Buttons -->
-              <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2.5">
+              <!-- 6. Action Buttons (Centered and Expanded) -->
+              <div class="pt-2.5 border-t border-slate-100 flex items-center justify-center gap-3">
                 <button 
                   type="button" 
                   onclick="openNoticeDetailModal('${n.id}')"
-                  class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs"
+                  class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-xs"
                   title="पूरी सूचना का विवरण देखें"
                 >
-                  <i class="fa-solid fa-eye text-slate-500 text-xs"></i>
-                  <span>विवरण</span>
+                  <i class="fa-solid fa-eye text-blue-600 text-xs"></i>
+                  <span>विवरण देखें</span>
                 </button>
 
                 ${(n.rawItem && n.rawItem.id) ? `
                   <button 
                     type="button" 
                     onclick="openMemberEventParticipantsModal('${n.rawItem.id}')" 
-                    class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                     title="इस बैठक में उपस्थित रहे सदस्यों की सूची देखें"
                   >
                     <i class="fa-solid fa-users text-xs"></i>
