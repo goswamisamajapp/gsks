@@ -927,284 +927,297 @@
       <!-- ======================================================== -->
       <!-- TAB 4C: PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) -->
       <!-- ======================================================== -->
-      <div id="view-pariwarik-section" class="hidden space-y-6 animate-in fade-in duration-200">
+      <div id="view-pariwarik-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
         
         <!-- Header & Action Bar -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
           <div>
             <div class="flex items-center gap-2.5">
-              <div class="w-10 h-10 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg shadow-sm">
+              <div class="w-10 h-10 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg shadow-sm shrink-0">
                 <i class="fa-solid fa-users-rectangle"></i>
               </div>
               <div>
-                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
-                  पारिवारिक आर्थिक योजना (Pariwarik Arthik Yojna)
+                <h2 class="text-base sm:text-xl font-extrabold text-slate-900">
+                  Pariwarik Arthik Yojna (PASY)
                 </h2>
-                <p class="text-xs text-slate-500">पारिवारिक कल्याण एवं आर्थिक सहयोग - कुल देय, भुगतान एवं बकाया विवरण</p>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium">पारिवारिक आर्थिक सहयोग योजना • 30 सदस्य x 30 माह</p>
               </div>
             </div>
           </div>
 
-          <div class="flex items-center gap-2.5 w-full sm:w-auto">
-            <button onclick="switchAdminView('dashboard')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5">
-              <i class="fa-solid fa-arrow-left"></i> वापस डैशबोर्ड
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button onclick="switchAdminView('dashboard')" class="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left"></i> Dashboard
             </button>
           </div>
         </div>
 
-        <!-- 1. Top Monthly Dynamic Summary Cards (For Selected Month) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 1. Top Monthly Dynamic Summary Cards (For Selected Month) - 2 cols on mobile, 4 cols on lg -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
           <!-- Card 1: Total Members -->
-          <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs font-bold text-indigo-100 uppercase tracking-wider">कुल सदस्य (Total Members)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-members">0</h3>
-              <p class="text-[11px] text-indigo-100 mt-1">योजना में जुड़े कुल सदस्य</p>
+          <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-indigo-100 uppercase tracking-wider truncate">Total Members</p>
+              <h3 class="text-xl sm:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-members">0</h3>
+              <p class="text-[9px] sm:text-[11px] text-indigo-100 mt-0.5 truncate">Scheme Members</p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-users"></i>
             </div>
           </div>
 
           <!-- Card 2: Selected Month Total Amount -->
-          <div class="bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs font-bold text-cyan-100 uppercase tracking-wider">माह कुल राशि (<span id="pariwarik-selected-month-lbl">महीना</span>)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-total">₹ 0</h3>
-              <p class="text-[11px] text-cyan-100 mt-1">मासिक निर्धारित राशि (30 x 150)</p>
+          <div class="bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-cyan-100 uppercase tracking-wider truncate">Target (<span id="pariwarik-selected-month-lbl">Month</span>)</p>
+              <h3 class="text-lg sm:text-2xl lg:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-total">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-cyan-100 mt-0.5 truncate">₹150 × 30 members</p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-hand-holding-dollar"></i>
             </div>
           </div>
 
           <!-- Card 3: Selected Month Paid Amount -->
-          <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs font-bold text-emerald-100 uppercase tracking-wider">माह भुगतान राशि (Paid)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-paid">₹ 0</h3>
-              <p class="text-[11px] text-emerald-100 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-paid-count">0 सदस्य Paid</span>
-                <span>• जमा सहयोग</span>
+          <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-emerald-100 uppercase tracking-wider truncate">Month Paid</p>
+              <h3 class="text-lg sm:text-2xl lg:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-paid">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-emerald-100 mt-0.5 truncate font-medium">
+                <span class="bg-white/20 px-1.5 py-0.2 rounded-full font-bold text-white text-[9px] sm:text-[10px]" id="pariwarik-paid-count">0 Paid</span>
               </p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-circle-check"></i>
             </div>
           </div>
 
           <!-- Card 4: Selected Month Dues Amount -->
-          <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
-            <div>
-              <p class="text-xs font-bold text-rose-100 uppercase tracking-wider">माह बकाया राशि (Dues)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1" id="pariwarik-stat-dues">₹ 0</h3>
-              <p class="text-[11px] text-rose-100 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-unpaid-count">0 सदस्य Unpaid</span>
-                <span>• शेष लंबित राशि</span>
+          <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-rose-100 uppercase tracking-wider truncate">Month Dues</p>
+              <h3 class="text-lg sm:text-2xl lg:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-dues">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-rose-100 mt-0.5 truncate font-medium">
+                <span class="bg-white/20 px-1.5 py-0.2 rounded-full font-bold text-white text-[9px] sm:text-[10px]" id="pariwarik-unpaid-count">0 Unpaid</span>
               </p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-file-invoice-dollar"></i>
             </div>
           </div>
         </div>
 
-        <!-- 2. Row 2: 30 Months Overall Scheme Grand Summary Cards (4 Cards) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 2. Row 2: 30 Months Overall Scheme Grand Summary Cards (4 Cards) - 2 cols on mobile, 4 cols on lg -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
           <!-- Overall Card 1: Grand Total -->
-          <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-slate-700/50">
-            <div>
-              <p class="text-xs font-bold text-slate-300">योजना महायोग (Grand Total)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-white" id="pariwarik-grand-total">₹ 1,35,000</h3>
-              <p class="text-[11px] text-slate-300 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/10 px-2 py-0.5 rounded-full text-indigo-300 font-bold text-[10px]" id="pariwarik-grand-months-count">30 Months Count</span>
+          <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-slate-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-slate-300 truncate">Grand Total (30 Mo)</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-white truncate" id="pariwarik-grand-total">₹ 1,35,000</h3>
+              <p class="text-[9px] sm:text-[11px] text-slate-300 mt-0.5 truncate">
+                <span class="bg-white/10 px-1.5 py-0.2 rounded-full text-indigo-300 font-bold text-[9px]" id="pariwarik-grand-months-count">30 Months</span>
               </p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-sack-dollar"></i>
             </div>
           </div>
 
           <!-- Overall Card 2: Overall Total Paid -->
-          <div class="bg-gradient-to-br from-teal-900 via-emerald-900 to-emerald-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-emerald-700/50">
-            <div>
-              <p class="text-xs font-bold text-emerald-200">कुल जमा (Total Paid)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-emerald-300" id="pariwarik-overall-paid">₹ 0</h3>
-              <p class="text-[11px] text-emerald-100 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/15 px-2 py-0.5 rounded-full text-emerald-200 font-bold text-[10px]" id="pariwarik-completed-months-count">0 Completed Months</span>
+          <div class="bg-gradient-to-br from-teal-900 via-emerald-900 to-emerald-950 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-emerald-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-emerald-200 truncate">Total Collected</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-emerald-300 truncate" id="pariwarik-overall-paid">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-emerald-100 mt-0.5 truncate">
+                <span class="bg-white/15 px-1.5 py-0.2 rounded-full text-emerald-200 font-bold text-[9px]" id="pariwarik-completed-months-count">0 Completed</span>
               </p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/25 text-emerald-300 border border-emerald-400/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-emerald-500/25 text-emerald-300 border border-emerald-400/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-circle-check"></i>
             </div>
           </div>
 
           <!-- Overall Card 3: Overall Total Dues -->
-          <div class="bg-gradient-to-br from-rose-950 via-red-900 to-rose-900 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-rose-700/50">
-            <div>
-              <p class="text-xs font-bold text-rose-200">कुल बकाया (Total Dues)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-rose-200" id="pariwarik-overall-dues">₹ 0</h3>
-              <p class="text-[11px] text-rose-100 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/15 px-2 py-0.5 rounded-full text-rose-200 font-bold text-[10px]" id="pariwarik-remaining-months-count">0 Rest Months</span>
+          <div class="bg-gradient-to-br from-rose-950 via-red-900 to-rose-900 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-rose-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-rose-200 truncate">Total Outstanding</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-rose-200 truncate" id="pariwarik-overall-dues">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-rose-100 mt-0.5 truncate">
+                <span class="bg-white/15 px-1.5 py-0.2 rounded-full text-rose-200 font-bold text-[9px]" id="pariwarik-remaining-months-count">0 Remaining</span>
               </p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-rose-500/25 text-rose-300 border border-rose-400/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-rose-500/25 text-rose-300 border border-rose-400/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-receipt"></i>
             </div>
           </div>
 
           <!-- Overall Card 4: In Fund Deposit (All Paid Months x 500) -->
-          <div class="bg-gradient-to-br from-amber-950 via-amber-900 to-orange-950 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-amber-700/50">
-            <div>
-              <p class="text-xs font-bold text-amber-200">कोष में जमा (In Fund Deposit)</p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-amber-300" id="pariwarik-fund-deposit">₹ 0</h3>
-              <p class="text-[11px] text-amber-100 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/15 px-2 py-0.5 rounded-full text-amber-200 font-bold text-[10px]" id="pariwarik-fund-deposit-calc">0 माह × ₹500</span>
+          <div class="bg-gradient-to-br from-amber-950 via-amber-900 to-orange-950 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-amber-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-amber-200 truncate">Fund Deposit</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-amber-300 truncate" id="pariwarik-fund-deposit">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-amber-100 mt-0.5 truncate">
+                <span class="bg-white/15 px-1.5 py-0.2 rounded-full text-amber-200 font-bold text-[9px]" id="pariwarik-fund-deposit-calc">0 Mo × ₹500</span>
               </p>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/25 text-amber-300 border border-amber-400/20 flex items-center justify-center text-xl shadow-inner">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-amber-500/25 text-amber-300 border border-amber-400/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-vault"></i>
             </div>
           </div>
         </div>
 
         <!-- 3. Row 3: Month Winner & Total Distributed Amount (2 Cards) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
           <!-- Row 3 Card 1: Month Winner Name -->
-          <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-amber-400/30">
-            <div>
-              <p class="text-xs font-bold text-amber-100 flex items-center gap-1.5 uppercase tracking-wider">
+          <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-white shadow-sm flex items-center justify-between border border-amber-400/30">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-amber-100 flex items-center gap-1.5 uppercase tracking-wider truncate">
                 <i class="fa-solid fa-trophy text-yellow-200"></i>
-                <span>माह विजेता सदस्य (Month Winner)</span>
+                <span>Month Winner (विजेता)</span>
               </p>
-              <h3 class="text-xl sm:text-2xl font-black mt-1.5 text-white truncate max-w-md" id="pariwarik-stat-winner-name">Winner not declared yet</h3>
-              <p class="text-[11px] text-amber-100 mt-1 flex items-center gap-1.5 font-medium" id="pariwarik-stat-winner-sub">
-                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[10px]" id="pariwarik-stat-winner-badge">राशि: ₹4,000</span>
-                <span id="pariwarik-stat-winner-month-lbl">• चयनित माह</span>
+              <h3 class="text-base sm:text-xl font-black mt-1 text-white truncate max-w-xs sm:max-w-md" id="pariwarik-stat-winner-name">Winner not declared yet</h3>
+              <p class="text-[10px] sm:text-[11px] text-amber-100 mt-1 flex items-center gap-1.5 font-medium truncate" id="pariwarik-stat-winner-sub">
+                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[9px] sm:text-[10px]" id="pariwarik-stat-winner-badge">Prize: ₹4,000</span>
+                <span id="pariwarik-stat-winner-month-lbl">• Selected Month</span>
               </p>
             </div>
-            <div class="w-13 h-13 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shadow-inner shrink-0 text-yellow-100 border border-white/25">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner shrink-0 text-yellow-100 border border-white/25 ml-2">
               <i class="fa-solid fa-crown"></i>
             </div>
           </div>
 
           <!-- Row 3 Card 2: Total Distributed Amount -->
-          <div class="bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 rounded-3xl p-5 text-white shadow-md flex items-center justify-between border border-purple-500/30">
-            <div>
-              <p class="text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider">
+          <div class="bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-white shadow-sm flex items-center justify-between border border-purple-500/30">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider truncate">
                 <i class="fa-solid fa-hand-holding-dollar text-purple-300"></i>
-                <span>कुल वितरित राशि (Total Distributed)</span>
+                <span>Total Distributed (वितरित)</span>
               </p>
-              <h3 class="text-2xl sm:text-3xl font-black mt-1.5 text-purple-200" id="pariwarik-total-distributed">₹ 0</h3>
-              <p class="text-[11px] text-purple-100 mt-1 flex items-center gap-1.5 font-medium">
-                <span class="bg-white/15 px-2 py-0.5 rounded-full text-purple-200 font-bold text-[10px]" id="pariwarik-distributed-calc">0 माह × ₹4,000</span>
-                <span>• विजेता सहयोग वितरण</span>
+              <h3 class="text-base sm:text-2xl font-black mt-1 text-purple-200 truncate" id="pariwarik-total-distributed">₹ 0</h3>
+              <p class="text-[10px] sm:text-[11px] text-purple-100 mt-1 flex items-center gap-1.5 font-medium truncate">
+                <span class="bg-white/15 px-2 py-0.5 rounded-full text-purple-200 font-bold text-[9px] sm:text-[10px]" id="pariwarik-distributed-calc">0 Mo × ₹4,000</span>
+                <span>• Winner Payout</span>
               </p>
             </div>
-            <div class="w-13 h-13 rounded-2xl bg-purple-500/25 text-purple-300 border border-purple-400/20 flex items-center justify-center text-2xl shadow-inner shrink-0">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-500/25 text-purple-300 border border-purple-400/20 flex items-center justify-center text-xl shadow-inner shrink-0 ml-2">
               <i class="fa-solid fa-gift"></i>
             </div>
           </div>
         </div>
 
-        <!-- 4. Monthly Tabs Grid (Sep 2025 to Feb 2028 - Total 30 Months in 3 Rows of 10) -->
-        <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-xs space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+        <!-- 4. Monthly Tabs Grid (Sep 2025 to Feb 2028 - Total 30 Months) -->
+        <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-3 sm:p-4 shadow-2xs space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
+              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs shrink-0">
                 <i class="fa-solid fa-calendar-days"></i>
               </div>
               <div>
-                <span class="text-xs font-bold text-slate-800">मासिक विवरण चुनें (Select Month):</span>
-                <span class="text-[10px] text-slate-400 font-semibold ml-1">(30 माह • 3 पंक्तियों में 10-10 माह)</span>
+                <span class="text-xs font-bold text-slate-800">Select Month:</span>
+                <span class="text-[10px] text-slate-400 font-medium ml-1">(30 Months)</span>
               </div>
             </div>
             
-            <!-- Legend Indicators -->
-            <div class="flex items-center gap-3 text-[11px] font-bold">
-              <div class="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-200"></span>
-                <span>All Paid (पूर्ण जमा)</span>
+            <!-- Legend Indicators & Active Month Badge -->
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap text-[10px] sm:text-[11px] font-bold">
+              <div class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Paid</span>
               </div>
-              <div class="flex items-center gap-1.5 text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
-                <span class="w-2.5 h-2.5 rounded-full bg-blue-600 ring-2 ring-blue-200"></span>
-                <span>Current / Selected (सक्रिय)</span>
+              <div class="flex items-center gap-1 text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                <span>Active</span>
               </div>
-              <div class="flex items-center gap-1.5 text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-lg border border-rose-200">
-                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-rose-200"></span>
-                <span>Unpaid / Dues (लंबित)</span>
+              <div class="flex items-center gap-1 text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span>Dues</span>
               </div>
-              <span class="text-[11px] font-mono font-black text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-200 ml-1" id="pariwarik-active-month-badge">महीना: --</span>
+              <span class="font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-200" id="pariwarik-active-month-badge">Month: --</span>
             </div>
           </div>
           
-          <!-- 3 Rows x 10 Columns Grid for 30 Months -->
-          <div class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2" id="pariwarik-months-tabs-bar">
+          <!-- Responsive Grid for 30 Months: 3 cols on mobile, 5 cols on sm, 10 cols on lg -->
+          <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-1.5 sm:gap-2" id="pariwarik-months-tabs-bar">
             <!-- Dynamically populated via JS -->
           </div>
         </div>
 
-        <!-- 2. Members Scheme Breakdown / Status Register -->
-        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3.5">
+        <!-- 5. Members Scheme Breakdown / Status Register -->
+        <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-3.5 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             <div>
               <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-list-check text-cyan-600"></i> पारिवारिक आर्थिक योजना सदस्य विवरण (Members Scheme Register)
+                <i class="fa-solid fa-list-check text-cyan-600"></i> Members Scheme Register
               </h3>
-              <p class="text-[11px] text-slate-400 mt-0.5">सदस्यों का अंशदान, जमा एवं शेष स्थिति</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">मासिक अंशदान (₹150), जमा, बकाया एवं विजेता स्थिति</p>
             </div>
 
-            <!-- Search Bar: Name, Mobile, ID & Address -->
-            <div class="flex items-center gap-3 w-full md:w-auto">
-              <div class="relative w-full md:w-80">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <!-- Search Bar & Action Buttons -->
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+              <div class="relative flex-1 md:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input type="text" 
                        id="pariwarik-search-input" 
                        oninput="handlePariwarikSearch(this.value)" 
-                       placeholder="नाम, मोबाइल या सदस्य ID से खोजें..." 
-                       class="w-full pl-9 pr-8 py-2 bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all shadow-2xs">
+                       placeholder="नाम, मोबाइल, ID से खोजें..." 
+                       class="w-full pl-8 pr-7 py-2 bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all">
                 <button type="button" 
                         onclick="clearPariwarikSearch()" 
                         id="pariwarik-search-clear" 
                         class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-[9px] transition-colors" 
-                        title="हटाएं">
+                        title="Clear">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
-              <div class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-200/80">
-                <i class="fa-solid fa-users text-slate-400 text-[11px]"></i>
-                <span class="text-xs text-slate-700 font-bold font-mono" id="pariwarik-members-count">0 सदस्य</span>
+
+              <!-- Quick Status Filter Toggle (All / Paid / Unpaid) -->
+              <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xl text-[11px] font-bold">
+                <button type="button" onclick="setPariwarikStatusFilter('ALL')" id="pariwarik-filter-all" class="px-2.5 py-1.5 rounded-lg bg-white text-slate-800 shadow-2xs">All</button>
+                <button type="button" onclick="setPariwarikStatusFilter('PAID')" id="pariwarik-filter-paid" class="px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Paid</button>
+                <button type="button" onclick="setPariwarikStatusFilter('UNPAID')" id="pariwarik-filter-unpaid" class="px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Dues</button>
               </div>
+
+              <div class="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/80">
+                <i class="fa-solid fa-users text-slate-400 text-[11px]"></i>
+                <span class="text-xs text-slate-700 font-bold font-mono" id="pariwarik-members-count">0</span>
+              </div>
+
               <button type="button" 
                       onclick="sendPariwarikPushAllNotification()" 
-                      class="shrink-0 flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer" 
-                      title="सभी बकाया सदस्यों को पुश नोटिफिकेशन भेजें (Push All Unpaid)">
+                      class="shrink-0 flex items-center gap-1 px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer" 
+                      title="Send Push to all unpaid members">
                 <i class="fa-solid fa-bell text-xs"></i>
                 <span>Push All</span>
               </button>
               <button type="button" 
                       onclick="openPariwarikBulkWhatsAppModal()" 
-                      class="shrink-0 flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer" 
-                      title="सभी बकाया सदस्यों को WhatsApp रिमाइंडर भेजें (All Dues WhatsApp)">
+                      class="shrink-0 flex items-center gap-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer" 
+                      title="Send WhatsApp reminder to all dues members">
                 <i class="fa-brands fa-whatsapp text-sm"></i>
                 <span>All Dues</span>
               </button>
             </div>
           </div>
 
-          <div class="overflow-x-auto">
+          <!-- 1. MOBILE 2-LINE CARDS CONTAINER (Visible on mobile only) -->
+          <div id="pariwarik-mobile-cards" class="md:hidden p-3 space-y-2.5 bg-slate-50/50">
+            <!-- Dynamically populated via renderPariwarikView() -->
+          </div>
+
+          <!-- 2. DESKTOP TABLE VIEW (Visible on tablet/desktop) -->
+          <div class="hidden md:block overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
               <thead>
                 <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
-                  <th class="p-3.5 pl-5">सदस्य / पिता का नाम</th>
-                  <th class="p-3.5">मोबाइल / पता</th>
-                  <th class="p-3.5 text-center">भुगतान स्थिति (Paid Yes/No)</th>
-                  <th class="p-3.5 text-center">माह विजेता (Winner)</th>
-                  <th class="p-3.5 font-mono text-right text-emerald-700">जमा / Paid (₹)</th>
-                  <th class="p-3.5 font-mono text-right text-rose-700">बकाया / Dues (₹)</th>
-                  <th class="p-3.5 font-mono text-right text-amber-700">जुर्माना / Fine (₹)</th>
-                  <th class="p-3.5 font-mono text-right">कुल / Total (₹)</th>
-                  <th class="p-3.5 text-center pr-5">नोटिफिकेशन / Alert</th>
+                  <th class="p-3.5 pl-5">Member / Father</th>
+                  <th class="p-3.5">Mobile & Address</th>
+                  <th class="p-3.5 text-center">Paid (Yes/No)</th>
+                  <th class="p-3.5 text-center">Month Winner</th>
+                  <th class="p-3.5 font-mono text-right text-emerald-700">Paid (₹)</th>
+                  <th class="p-3.5 font-mono text-right text-rose-700">Dues (₹)</th>
+                  <th class="p-3.5 font-mono text-right text-amber-700">Fine (₹)</th>
+                  <th class="p-3.5 font-mono text-right">Total (₹)</th>
+                  <th class="p-3.5 text-center pr-5">Alert / Action</th>
                 </tr>
               </thead>
               <tbody id="pariwarik-table-body" class="divide-y divide-slate-100">
@@ -15575,33 +15588,29 @@
         }
         const isAllPaid = (totalMembers > 0 && paidCount === totalMembers);
 
-        // Color coding rules:
-        // 1. Current / Selected month = Blue
-        // 2. All paid month = Light Green (emerald/green)
-        // 3. Unpaid / Dues month = Light Red (rose/red)
         let themeClass = '';
         let dotColor = '';
 
         if (isCurrentSelected) {
-          themeClass = 'bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/30 ring-2 ring-blue-400 ring-offset-1 border-blue-600';
+          themeClass = 'bg-blue-600 text-white font-extrabold shadow-sm ring-2 ring-blue-400 ring-offset-1 border-blue-600';
           dotColor = 'bg-white';
         } else if (isAllPaid) {
-          themeClass = 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold border border-emerald-300/80 shadow-xs';
+          themeClass = 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold border border-emerald-300/80 shadow-2xs';
           dotColor = 'bg-emerald-500';
         } else {
-          themeClass = 'bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold border border-rose-200/80 shadow-xs';
+          themeClass = 'bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold border border-rose-200/80 shadow-2xs';
           dotColor = 'bg-rose-500';
         }
 
         return `
           <button type="button" onclick="selectPariwarikMonth('${m.key}')" 
-                  class="p-2 sm:p-2.5 rounded-xl text-center transition-all flex flex-col items-center justify-center relative cursor-pointer ${themeClass}"
+                  class="p-1.5 sm:p-2.5 rounded-xl text-center transition-all flex flex-col items-center justify-center relative cursor-pointer ${themeClass}"
                   title="${m.label} (${idx + 1}/30) - ${paidCount}/${totalMembers} Paid">
-            <div class="flex items-center gap-1.5 leading-none">
-              <span class="w-2 h-2 rounded-full shrink-0 ${dotColor}"></span>
-              <span class="text-[11px] sm:text-xs truncate">${m.label}</span>
+            <div class="flex items-center gap-1 leading-none">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${dotColor}"></span>
+              <span class="text-[10px] sm:text-xs font-bold truncate">${m.label}</span>
             </div>
-            <div class="text-[9px] mt-1 opacity-80 font-mono flex items-center justify-between w-full px-1">
+            <div class="text-[8px] sm:text-[9px] mt-0.5 sm:mt-1 opacity-80 font-mono flex items-center justify-between w-full px-0.5">
               <span>#${idx + 1}</span>
               <span>${isAllPaid ? 'Paid' : (paidCount > 0 ? `${paidCount}P` : 'Dues')}</span>
             </div>
@@ -15832,6 +15841,33 @@
       }
     }
 
+    let currentPariwarikStatusFilter = 'ALL'; // 'ALL', 'PAID', 'UNPAID'
+
+    function setPariwarikStatusFilter(filterType) {
+      currentPariwarikStatusFilter = filterType;
+      const btnAll = document.getElementById('pariwarik-filter-all');
+      const btnPaid = document.getElementById('pariwarik-filter-paid');
+      const btnUnpaid = document.getElementById('pariwarik-filter-unpaid');
+
+      if (btnAll) {
+        btnAll.className = filterType === 'ALL'
+          ? 'px-2.5 py-1.5 rounded-lg bg-white text-slate-800 shadow-2xs font-bold'
+          : 'px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900';
+      }
+      if (btnPaid) {
+        btnPaid.className = filterType === 'PAID'
+          ? 'px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white shadow-2xs font-bold'
+          : 'px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900';
+      }
+      if (btnUnpaid) {
+        btnUnpaid.className = filterType === 'UNPAID'
+          ? 'px-2.5 py-1.5 rounded-lg bg-rose-600 text-white shadow-2xs font-bold'
+          : 'px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900';
+      }
+      renderPariwarikView();
+    }
+    window.setPariwarikStatusFilter = setPariwarikStatusFilter;
+
     function renderPariwarikView() {
       // 0. Render Monthly Tabs
       renderPariwarikMonthsTabs();
@@ -15847,7 +15883,7 @@
       // Update Month Badge & Selected Month Label
       const elMonthBadge = document.getElementById('pariwarik-active-month-badge');
       const elSelectedMonthLbl = document.getElementById('pariwarik-selected-month-lbl');
-      if (elMonthBadge) elMonthBadge.textContent = `चयनित माह: ${activeMonthCfg.label} (माह ${monthNumber}/30)`;
+      if (elMonthBadge) elMonthBadge.textContent = `${activeMonthCfg.label} (${monthNumber}/30)`;
       if (elSelectedMonthLbl) elSelectedMonthLbl.textContent = activeMonthCfg.label;
 
       // ==========================================
@@ -15871,14 +15907,12 @@
       if (elTotal) elTotal.textContent = `₹ ${selectedMonthTotal.toLocaleString('en-IN')}`;
       if (elPaid) elPaid.textContent = `₹ ${selectedMonthPaidSum.toLocaleString('en-IN')}`;
       if (elDues) elDues.textContent = `₹ ${selectedMonthDuesSum.toLocaleString('en-IN')}`;
-      if (elCount) elCount.textContent = `${memberCount} सदस्य`;
-      if (elPaidCount) elPaidCount.textContent = `${selectedMonthPaidCount} सदस्य Paid`;
-      if (elUnpaidCount) elUnpaidCount.textContent = `${selectedMonthUnpaidCount} सदस्य Unpaid`;
+      if (elCount) elCount.textContent = `${memberCount}`;
+      if (elPaidCount) elPaidCount.textContent = `${selectedMonthPaidCount} Paid`;
+      if (elUnpaidCount) elUnpaidCount.textContent = `${selectedMonthUnpaidCount} Unpaid`;
 
       // ==========================================
       // ROW 2: OVERALL SCHEME SUMMARY (4 Cards)
-      // Grand Total = 30 members * 30 months * 150 = 1,35,000
-      // NOTE: Fund Deposit (₹500/mo) and Distributed (₹4,000/mo) are completed ONLY when month winner is declared!
       // ==========================================
       const totalMonthsInScheme = PARIWARIK_MONTHS.length; // 30
       const overallGrandTotal = memberCount * totalMonthsInScheme * PARIWARIK_MONTHLY_FEE;
@@ -15901,8 +15935,6 @@
           allPaidMonthsCount++;
         }
 
-        // Scheme rule: A month is considered formally COMPLETED (Fund deposited & prize distributed)
-        // ONLY when that month's winner has been chosen/declared!
         const hasWinner = Boolean(winnersMap[mCfg.key]);
         if (hasWinner) {
           completedMonthsCount++;
@@ -15919,13 +15951,11 @@
       const elOverallDues = document.getElementById('pariwarik-overall-dues');
       const elRemainingMonths = document.getElementById('pariwarik-remaining-months-count');
 
-      // Fund Deposit: completedMonthsCount * 500 (Counts only declared winner months, e.g. 13 x 500 = 6,500)
       const fundDepositPerMonth = 500;
       const totalFundDeposit = completedMonthsCount * fundDepositPerMonth;
       const elFundDeposit = document.getElementById('pariwarik-fund-deposit');
       const elFundDepositCalc = document.getElementById('pariwarik-fund-deposit-calc');
 
-      // Total Distributed: completedMonthsCount * 4,000 (Counts only declared winner months, e.g. 13 x 4,000 = 52,000)
       const prizePerMonth = 4000;
       const totalDistributed = completedMonthsCount * prizePerMonth;
       const elTotalDistributed = document.getElementById('pariwarik-total-distributed');
@@ -15943,46 +15973,48 @@
       if (elWinnerMonthLbl) elWinnerMonthLbl.textContent = `• ${activeMonthCfg.label}`;
 
       if (currentWinnerMember) {
-        if (elWinnerName) elWinnerName.innerHTML = `<span class="text-yellow-100 flex items-center gap-2"><i class="fa-solid fa-trophy text-amber-200 text-lg"></i> ${currentWinnerMember.name} <span class="text-xs font-mono opacity-90">(${currentWinnerMember.id})</span></span>`;
-        if (elWinnerBadge) elWinnerBadge.textContent = `विजेता राशि: ₹4,000`;
+        if (elWinnerName) elWinnerName.innerHTML = `<span class="text-yellow-100 flex items-center gap-1.5"><i class="fa-solid fa-trophy text-amber-200 text-sm"></i> ${currentWinnerMember.name} <span class="text-xs font-mono opacity-80">(${currentWinnerMember.id})</span></span>`;
+        if (elWinnerBadge) elWinnerBadge.textContent = `Prize: ₹4,000`;
       } else {
         if (elWinnerName) elWinnerName.textContent = 'Winner not declared yet';
-        if (elWinnerBadge) elWinnerBadge.textContent = 'राशि: ₹4,000';
+        if (elWinnerBadge) elWinnerBadge.textContent = 'Prize: ₹4,000';
       }
 
       if (elGrandTotal) elGrandTotal.textContent = `₹ ${overallGrandTotal.toLocaleString('en-IN')}`;
-      if (elGrandMonthsCount) elGrandMonthsCount.textContent = `${totalMonthsInScheme} Months Total`;
+      if (elGrandMonthsCount) elGrandMonthsCount.textContent = `${totalMonthsInScheme} Months`;
       if (elOverallPaid) elOverallPaid.textContent = `₹ ${overallTotalPaid.toLocaleString('en-IN')}`;
-      if (elCompletedMonths) elCompletedMonths.textContent = `${completedMonthsCount} Completed Months`;
+      if (elCompletedMonths) elCompletedMonths.textContent = `${completedMonthsCount} Completed`;
       if (elOverallDues) elOverallDues.textContent = `₹ ${overallTotalDues.toLocaleString('en-IN')}`;
-      if (elRemainingMonths) elRemainingMonths.textContent = `${remainingMonthsCount} Rest Months`;
+      if (elRemainingMonths) elRemainingMonths.textContent = `${remainingMonthsCount} Remaining`;
       if (elFundDeposit) elFundDeposit.textContent = `₹ ${totalFundDeposit.toLocaleString('en-IN')}`;
-      if (elFundDepositCalc) elFundDepositCalc.textContent = `${completedMonthsCount} माह × ₹500`;
+      if (elFundDepositCalc) elFundDepositCalc.textContent = `${completedMonthsCount} Mo × ₹500`;
       if (elTotalDistributed) elTotalDistributed.textContent = `₹ ${totalDistributed.toLocaleString('en-IN')}`;
-      if (elDistributedCalc) elDistributedCalc.textContent = `${completedMonthsCount} माह × ₹4,000`;
+      if (elDistributedCalc) elDistributedCalc.textContent = `${completedMonthsCount} Mo × ₹4,000`;
 
       // ==========================================
-      // TABLE BREAKDOWN (Filter by Search Term)
-      // Cumulative Total for Month N = N * 150 (e.g. Sep 2025 = 150, Oct 2025 = 300, ... Feb 2028 = 4500)
+      // BREAKDOWN CONTAINERS (Mobile Cards & Desktop Table)
       // ==========================================
       const tbody = document.getElementById('pariwarik-table-body');
-      if (!tbody) return;
+      const mobileCards = document.getElementById('pariwarik-mobile-cards');
 
       if (pariwarikMembers.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="9" class="p-10 text-center text-slate-400">
-              <i class="fa-solid fa-spinner fa-spin text-3xl mb-2 text-cyan-600"></i>
-              <p class="text-xs font-bold text-slate-600">सदस्य सूची लोड हो रही है...</p>
-              <p class="text-[11px] text-slate-400 mt-1">कृपया एक क्षण प्रतीक्षा करें।</p>
-            </td>
-          </tr>
+        const emptyHtml = `
+          <div class="p-8 text-center text-slate-400">
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-cyan-600"></i>
+            <p class="text-xs font-bold text-slate-600">Loading members list...</p>
+          </div>
         `;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="9">${emptyHtml}</td></tr>`;
+        if (mobileCards) mobileCards.innerHTML = emptyHtml;
         return;
       }
 
-      // Filter members by search term (Name, Phone, ID, Address)
+      // Filter members by search term and status filter
       const filteredMembers = pariwarikMembers.filter(m => {
+        const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
+        if (currentPariwarikStatusFilter === 'PAID' && !hasPaid) return false;
+        if (currentPariwarikStatusFilter === 'UNPAID' && hasPaid) return false;
+
         if (!currentPariwarikSearchTerm) return true;
         const name = (m.name || '').toLowerCase();
         const phone = (m.phone || '').toLowerCase();
@@ -15994,161 +16026,277 @@
                addr.includes(currentPariwarikSearchTerm);
       });
 
-      // Update members count badge in register header to show search results count if filtering
+      // Update count badge
       if (elCount) {
-        if (currentPariwarikSearchTerm) {
-          elCount.textContent = `${filteredMembers.length} / ${memberCount} सदस्य`;
+        if (currentPariwarikSearchTerm || currentPariwarikStatusFilter !== 'ALL') {
+          elCount.textContent = `${filteredMembers.length} / ${memberCount}`;
         } else {
-          elCount.textContent = `${memberCount} सदस्य`;
+          elCount.textContent = `${memberCount}`;
         }
       }
 
       if (filteredMembers.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="9" class="p-10 text-center text-slate-400">
-              <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-300"></i>
-              <p class="text-xs font-bold text-slate-600">"${currentPariwarikSearchTerm}" के लिए कोई सदस्य नहीं मिला।</p>
-              <p class="text-[11px] text-slate-400 mt-1">कृपया सही नाम, मोबाइल नंबर या सदस्य ID दर्ज करें।</p>
-            </td>
-          </tr>
+        const noMatchHtml = `
+          <div class="p-8 text-center text-slate-400">
+            <i class="fa-solid fa-magnifying-glass text-2xl mb-2 text-slate-300"></i>
+            <p class="text-xs font-bold text-slate-600">No members found</p>
+            <p class="text-[11px] text-slate-400 mt-1">Try another search term or filter.</p>
+          </div>
         `;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="9">${noMatchHtml}</td></tr>`;
+        if (mobileCards) mobileCards.innerHTML = noMatchHtml;
         return;
       }
 
       const cumulativeTotalForMonth = monthNumber * PARIWARIK_MONTHLY_FEE;
 
-      tbody.innerHTML = filteredMembers.map(m => {
-        const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
-        const isWinner = (currentWinnerMemberId === m.id);
-        const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
-        const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
-        const fineInfo = calculateMemberPasyFine(m, currentPariwarikMonth);
-        // Check if member already won in any other month
-        let otherWonMonthKey = null;
-        for (const [mKey, winId] of Object.entries(winnersMap)) {
-          if (mKey !== currentPariwarikMonth && winId === m.id) {
-            otherWonMonthKey = mKey;
-            break;
-          }
-        }
+      // Color themes for mobile cards
+      const cardThemes = [
+        { bg: 'bg-white', border: 'border-slate-200/90' },
+        { bg: 'bg-slate-50/80', border: 'border-slate-200' },
+        { bg: 'bg-cyan-50/40', border: 'border-cyan-200/80' }
+      ];
 
-        let winnerCellHtml = '';
-        if (otherWonMonthKey) {
-          // Member already won in a different month: Hide toggle switch, show clean badge
-          const otherCfg = PARIWARIK_MONTHS.find(pm => pm.key === otherWonMonthKey);
-          const otherLabel = otherCfg ? otherCfg.label : otherWonMonthKey;
-          winnerCellHtml = `
-            <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/80 text-[10px] font-bold" title="${otherLabel} के विजेता">
-              <i class="fa-solid fa-trophy text-[9px] text-amber-500"></i>
-              <span>${otherLabel}</span>
+      // 1. RENDER MOBILE 2-LINE COMPACT CARDS
+      if (mobileCards) {
+        mobileCards.innerHTML = filteredMembers.map((m, index) => {
+          const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
+          const isWinner = (currentWinnerMemberId === m.id);
+          const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
+          const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+          const fineInfo = calculateMemberPasyFine(m, currentPariwarikMonth);
+
+          // Other won month check
+          let otherWonMonthKey = null;
+          for (const [mKey, winId] of Object.entries(winnersMap)) {
+            if (mKey !== currentPariwarikMonth && winId === m.id) {
+              otherWonMonthKey = mKey;
+              break;
+            }
+          }
+
+          let winnerTagHtml = '';
+          if (otherWonMonthKey) {
+            const otherCfg = PARIWARIK_MONTHS.find(pm => pm.key === otherWonMonthKey);
+            const otherLabel = otherCfg ? otherCfg.label : otherWonMonthKey;
+            winnerTagHtml = `<span class="px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold shrink-0"><i class="fa-solid fa-trophy text-[8px] text-amber-500"></i> ${otherLabel}</span>`;
+          } else if (isWinner) {
+            winnerTagHtml = `
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500 text-white text-[9px] font-bold shrink-0 shadow-2xs">
+                <i class="fa-solid fa-crown text-[8px]"></i> Winner
+              </span>
+            `;
+          }
+
+          const cardTheme = isWinner 
+            ? 'bg-amber-50/60 border-amber-300 shadow-2xs' 
+            : hasPaid 
+              ? 'bg-white border-slate-200/90 shadow-2xs' 
+              : 'bg-rose-50/30 border-rose-200 shadow-2xs';
+
+          return `
+            <div class="${cardTheme} rounded-2xl p-3 border transition-all text-xs space-y-2">
+              <!-- LINE 1: Name, ID/Phone, Winner badge & iOS Paid Switch -->
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5 flex-wrap leading-tight">
+                    <span class="font-bold text-slate-900 text-xs">${m.name || '--'}</span>
+                    ${isWinner ? '<i class="fa-solid fa-crown text-amber-500 text-[10px]"></i>' : ''}
+                    <span class="text-[10px] text-slate-500 font-mono">(${m.id})</span>
+                    ${winnerTagHtml}
+                  </div>
+                  <div class="text-[10px] text-slate-400 truncate mt-0.5">
+                    ${m.phone ? `<span class="font-mono text-slate-500">${m.phone}</span>` : ''}
+                    ${m.address ? ` • ${m.address}` : ''}
+                  </div>
+                </div>
+
+                <!-- Right Side: Paid Status Toggle Switch -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="text-[10px] font-bold ${hasPaid ? 'text-emerald-700' : 'text-rose-600'}">
+                    ${hasPaid ? 'Paid' : 'Dues'}
+                  </span>
+                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${hasPaid ? 'Paid - Click to Mark Unpaid' : 'Unpaid - Click to Mark Paid'}">
+                    <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="sr-only peer">
+                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- LINE 2: Amounts (Paid/Dues/Fine), Fine Waiver & Quick Action Buttons -->
+              <div class="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-900/5">
+                <div class="flex items-center gap-2 min-w-0 font-mono text-[11px] flex-wrap">
+                  <span class="font-black ${hasPaid ? 'text-emerald-700' : 'text-slate-400'}">₹${mPaid}</span>
+                  ${mDues > 0 ? `<span class="font-bold text-rose-600">Dues: ₹${mDues}</span>` : ''}
+                  ${fineInfo.netFine > 0 ? `<span class="font-bold text-amber-600">Fine: ₹${fineInfo.netFine}</span>` : ''}
+                  ${fineInfo.waiver > 0 ? `<span class="text-[9px] text-emerald-600 font-sans font-bold">(-₹${fineInfo.waiver})</span>` : ''}
+                </div>
+
+                <!-- Action Buttons: Fine Waiver, Push, WhatsApp -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" 
+                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
+                          class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80" 
+                          title="Set Fine Waiver">
+                    <i class="fa-solid fa-tags text-[10px]"></i>
+                  </button>
+
+                  ${!otherWonMonthKey ? `
+                    <label class="relative inline-flex items-center cursor-pointer select-none" title="${isWinner ? 'Winner (Click to remove)' : 'Mark Month Winner'}">
+                      <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" ${isWinner ? 'checked' : ''} ${(!isWinner && currentWinnerMemberId) ? 'disabled' : ''} class="sr-only peer">
+                      <div class="w-8 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-amber-500 shadow-inner ${(!isWinner && currentWinnerMemberId) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
+                    </label>
+                  ` : ''}
+
+                  <button type="button" 
+                          onclick="sendPariwarikPushNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}')" 
+                          class="w-7 h-7 rounded-lg bg-amber-500 hover:bg-amber-600 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer shadow-2xs" 
+                          title="Push Notification">
+                    <i class="fa-solid fa-bell text-[10px]"></i>
+                  </button>
+                  <button type="button" 
+                          onclick="sendPariwarikWhatsAppNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}', ${hasPaid})" 
+                          class="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer shadow-2xs" 
+                          title="WhatsApp Reminder">
+                    <i class="fa-brands fa-whatsapp text-xs"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           `;
-        } else if (isWinner) {
-          // Current Month Winner: Active ON Toggle
-          winnerCellHtml = `
-            <label class="relative inline-flex items-center cursor-pointer select-none" title="माह विजेता (Winner) - बंद करने के लिए क्लिक करें">
-              <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" checked class="sr-only peer">
-              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
-            </label>
-          `;
-        } else if (currentWinnerMemberId) {
-          // Another member is already marked winner in current month: Disabled toggle
-          winnerCellHtml = `
-            <label class="relative inline-flex items-center cursor-not-allowed opacity-40 select-none" title="इस माह के विजेता पहले से चयनित हैं। पहले उन्हें OFF करें।">
-              <input type="checkbox" disabled class="sr-only peer">
-              <div class="w-11 h-6 bg-slate-200 rounded-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 shadow-inner"></div>
-            </label>
-          `;
-        } else {
-          // Normal Available: Can be toggled ON
-          winnerCellHtml = `
-            <label class="relative inline-flex items-center cursor-pointer select-none" title="माह विजेता बनाएं (Mark Winner)">
-              <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" class="sr-only peer">
-              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
-            </label>
-          `;
-        }
+        }).join('');
+      }
 
-        return `
-          <tr class="hover:bg-slate-50/80 transition-colors ${isWinner ? 'bg-amber-50/50' : ''}">
-            <td class="p-3.5 pl-5">
-              <div class="font-bold text-slate-900 flex items-center gap-1.5">
-                <span>${m.name || '--'}</span>
-                ${isWinner ? '<span class="text-amber-500 text-xs" title="माह विजेता (Winner)"><i class="fa-solid fa-crown"></i></span>' : ''}
+      // 2. RENDER DESKTOP TABLE VIEW
+      if (tbody) {
+        tbody.innerHTML = filteredMembers.map(m => {
+          const hasPaid = isPariwarikPaidForMonth(m, currentPariwarikMonth);
+          const isWinner = (currentWinnerMemberId === m.id);
+          const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
+          const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+          const fineInfo = calculateMemberPasyFine(m, currentPariwarikMonth);
+
+          let otherWonMonthKey = null;
+          for (const [mKey, winId] of Object.entries(winnersMap)) {
+            if (mKey !== currentPariwarikMonth && winId === m.id) {
+              otherWonMonthKey = mKey;
+              break;
+            }
+          }
+
+          let winnerCellHtml = '';
+          if (otherWonMonthKey) {
+            const otherCfg = PARIWARIK_MONTHS.find(pm => pm.key === otherWonMonthKey);
+            const otherLabel = otherCfg ? otherCfg.label : otherWonMonthKey;
+            winnerCellHtml = `
+              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/80 text-[10px] font-bold" title="${otherLabel} Winner">
+                <i class="fa-solid fa-trophy text-[9px] text-amber-500"></i>
+                <span>${otherLabel}</span>
               </div>
-              <div class="text-[10px] text-slate-500 font-medium">${m.father ? `पिता: ${m.father}` : '--'}</div>
-            </td>
-            <td class="p-3.5 text-slate-600">
-              <div>${m.phone || '--'}</div>
-              <div class="text-[10px] text-slate-400">${m.address || '--'}</div>
-            </td>
-            <!-- Pure iOS Style Yes/No Toggle Switch (Yes = Paid, No = Dues) -->
-            <td class="p-3.5 text-center">
-              <label class="relative inline-flex items-center cursor-pointer select-none" title="${hasPaid ? 'Paid (Yes)' : 'Unpaid (No)'}">
-                <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="sr-only peer">
-                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+            `;
+          } else if (isWinner) {
+            winnerCellHtml = `
+              <label class="relative inline-flex items-center cursor-pointer select-none" title="Month Winner - Click to toggle OFF">
+                <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
               </label>
-            </td>
-            <!-- Pure iOS Style Month Winner Toggle Switch (Golden Yellow) -->
-            <td class="p-3.5 text-center">
-              ${winnerCellHtml}
-            </td>
-            <!-- Paid (₹) -->
-            <td class="p-3.5 text-right font-mono font-bold ${hasPaid ? 'text-emerald-600 font-black' : 'text-slate-400'}">
-              ₹${mPaid.toLocaleString('en-IN')}
-            </td>
-            <!-- Dues (₹) -->
-            <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
-              ₹${mDues.toLocaleString('en-IN')}
-            </td>
-            <!-- Fine (₹) + Waiver Edit Button + iOS Style Paid Toggle Switch -->
-            <td class="p-3.5 text-right">
-              <div class="inline-flex items-center justify-end gap-2">
-                <div class="text-right">
-                  <div class="font-mono font-black text-xs ${fineInfo.isPaid ? 'text-emerald-600 line-through' : (fineInfo.netFine > 0 ? 'text-amber-600' : 'text-slate-300')}">
-                    ₹${fineInfo.netFine.toLocaleString('en-IN')}
-                  </div>
-                  ${fineInfo.waiver > 0 ? `<div class="text-[9px] text-emerald-600 font-bold" title="छूट: ₹${fineInfo.waiver}">-₹${fineInfo.waiver} छूट</div>` : ''}
+            `;
+          } else if (currentWinnerMemberId) {
+            winnerCellHtml = `
+              <label class="relative inline-flex items-center cursor-not-allowed opacity-40 select-none" title="Winner already selected for this month. Turn that OFF first.">
+                <input type="checkbox" disabled class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 rounded-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 shadow-inner"></div>
+              </label>
+            `;
+          } else {
+            winnerCellHtml = `
+              <label class="relative inline-flex items-center cursor-pointer select-none" title="Mark Month Winner">
+                <input type="checkbox" onchange="togglePariwarikWinnerStatus('${m.id}', this.checked)" class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+              </label>
+            `;
+          }
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition-colors ${isWinner ? 'bg-amber-50/50' : ''}">
+              <td class="p-3.5 pl-5">
+                <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <span>${m.name || '--'}</span>
+                  ${isWinner ? '<span class="text-amber-500 text-xs" title="Month Winner"><i class="fa-solid fa-crown"></i></span>' : ''}
                 </div>
-                <button type="button" 
-                        onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
-                        class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer" 
-                        title="विलंब शुल्क छूट / माफ़ी दर्ज करें (Set Fine Waiver)">
-                  <i class="fa-solid fa-tags text-[10px]"></i>
-                </button>
-                <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'जुर्माना जमा (Paid)' : (fineInfo.netFine > 0 ? 'जुर्माना बकाया (Unpaid) - जमा करने के लिए स्विच चालू करें' : 'कोई जुर्माना नहीं')}">
-                  <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
-                  <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-40 cursor-not-allowed' : ''}"></div>
+                <div class="text-[10px] text-slate-500 font-medium">${m.father ? `Father: ${m.father}` : '--'}</div>
+              </td>
+              <td class="p-3.5 text-slate-600">
+                <div>${m.phone || '--'}</div>
+                <div class="text-[10px] text-slate-400">${m.address || '--'}</div>
+              </td>
+              <!-- iOS Style Yes/No Toggle Switch -->
+              <td class="p-3.5 text-center">
+                <label class="relative inline-flex items-center cursor-pointer select-none" title="${hasPaid ? 'Paid' : 'Unpaid'}">
+                  <input type="checkbox" onchange="togglePariwarikPaidStatus('${m.id}', this.checked)" ${hasPaid ? 'checked' : ''} class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
                 </label>
-              </div>
-            </td>
-            <!-- Cumulative Total (₹) up to this month -->
-            <td class="p-3.5 text-right font-mono font-black text-slate-900">
-              ₹${cumulativeTotalForMonth.toLocaleString('en-IN')}
-            </td>
-            <!-- Notification & WhatsApp Action Column -->
-            <td class="p-3.5 text-center pr-5">
-              <div class="inline-flex items-center gap-1.5 justify-center">
-                <button type="button" 
-                        onclick="sendPariwarikPushNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}')" 
-                        class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
-                        title="पुश नोटिफिकेशन भेजें (Push Notification)">
-                  <i class="fa-solid fa-bell text-[11px]"></i>
-                  <span class="hidden sm:inline">पुश</span>
-                </button>
-                <button type="button" 
-                        onclick="sendPariwarikWhatsAppNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}', ${hasPaid})" 
-                        class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
-                        title="व्हाट्सएप पर भुगतान रिमाइंडर भेजें (WhatsApp Notification)">
-                  <i class="fa-brands fa-whatsapp text-xs"></i>
-                  <span class="hidden sm:inline">WhatsApp</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+              </td>
+              <!-- iOS Style Winner Toggle Switch -->
+              <td class="p-3.5 text-center">
+                ${winnerCellHtml}
+              </td>
+              <!-- Paid (₹) -->
+              <td class="p-3.5 text-right font-mono font-bold ${hasPaid ? 'text-emerald-600 font-black' : 'text-slate-400'}">
+                ₹${mPaid.toLocaleString('en-IN')}
+              </td>
+              <!-- Dues (₹) -->
+              <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
+                ₹${mDues.toLocaleString('en-IN')}
+              </td>
+              <!-- Fine (₹) + Waiver Edit Button + iOS Style Paid Toggle Switch -->
+              <td class="p-3.5 text-right">
+                <div class="inline-flex items-center justify-end gap-2">
+                  <div class="text-right">
+                    <div class="font-mono font-black text-xs ${fineInfo.isPaid ? 'text-emerald-600 line-through' : (fineInfo.netFine > 0 ? 'text-amber-600' : 'text-slate-300')}">
+                      ₹${fineInfo.netFine.toLocaleString('en-IN')}
+                    </div>
+                    ${fineInfo.waiver > 0 ? `<div class="text-[9px] text-emerald-600 font-bold" title="Waiver: ₹${fineInfo.waiver}">-₹${fineInfo.waiver}</div>` : ''}
+                  </div>
+                  <button type="button" 
+                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
+                          class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer" 
+                          title="Set Fine Waiver">
+                    <i class="fa-solid fa-tags text-[10px]"></i>
+                  </button>
+                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'Fine Paid' : (fineInfo.netFine > 0 ? 'Fine Unpaid - Click to mark paid' : 'No Fine')}">
+                    <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
+                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-40 cursor-not-allowed' : ''}"></div>
+                  </label>
+                </div>
+              </td>
+              <!-- Cumulative Total (₹) up to this month -->
+              <td class="p-3.5 text-right font-mono font-black text-slate-900">
+                ₹${cumulativeTotalForMonth.toLocaleString('en-IN')}
+              </td>
+              <!-- Notification & WhatsApp Action Column -->
+              <td class="p-3.5 text-center pr-5">
+                <div class="inline-flex items-center gap-1.5 justify-center">
+                  <button type="button" 
+                          onclick="sendPariwarikPushNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}')" 
+                          class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
+                          title="Push Notification">
+                    <i class="fa-solid fa-bell text-[11px]"></i>
+                    <span class="hidden sm:inline">Push</span>
+                  </button>
+                  <button type="button" 
+                          onclick="sendPariwarikWhatsAppNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}', ${hasPaid})" 
+                          class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-[11px] font-bold rounded-xl shadow-xs transition-all cursor-pointer" 
+                          title="WhatsApp Reminder">
+                    <i class="fa-brands fa-whatsapp text-xs"></i>
+                    <span class="hidden sm:inline">WhatsApp</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
     }
 
     function getPariwarikInstallmentMonthLabel(selectedMonthKey) {
