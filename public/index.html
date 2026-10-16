@@ -2543,6 +2543,53 @@
           </div>
         </div>
 
+        <!-- Center: Desktop Top Navigation Bar (PC Mode me Uper) -->
+        <nav class="hidden md:flex items-center gap-1.5 lg:gap-2">
+          <!-- 1. Dashboard -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('dashboard')" 
+            id="member-desktop-nav-dashboard" 
+            class="px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs"
+          >
+            <i class="fa-solid fa-chart-pie text-amber-600"></i>
+            <span>डैशबोर्ड (Dashboard)</span>
+          </button>
+
+          <!-- 2. Events / Notifications -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('events')" 
+            id="member-desktop-nav-events" 
+            class="px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200"
+          >
+            <i class="fa-solid fa-bell text-indigo-500"></i>
+            <span>सूचनाएं (Events)</span>
+          </button>
+
+          <!-- 3. PASY -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('pasy')" 
+            id="member-desktop-nav-pasy" 
+            class="px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-teal-50 text-slate-700 hover:text-teal-700 border border-slate-200"
+          >
+            <i class="fa-solid fa-users-rectangle text-teal-600"></i>
+            <span>PASY योजना</span>
+          </button>
+
+          <!-- 4. Profile -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('profile')" 
+            id="member-desktop-nav-profile" 
+            class="px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-200"
+          >
+            <i class="fa-solid fa-user-gear text-purple-600"></i>
+            <span>प्रोफ़ाइल (Profile)</span>
+          </button>
+        </nav>
+
         <!-- Right: Settings & Logout -->
         <div class="flex items-center gap-2">
           <!-- Notification Bell Button with Unread Badge -->
@@ -2585,7 +2632,7 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-5 lg:p-8 pb-24 sm:pb-28 space-y-4 sm:space-y-6">
+    <main class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-5 lg:p-8 pb-24 md:pb-8 space-y-4 sm:space-y-6">
       
       <!-- SUB-VIEW 1: MEMBER MAIN DASHBOARD -->
       <div id="member-view-dashboard" class="space-y-4 sm:space-y-6 animate-in fade-in duration-200">
@@ -3677,8 +3724,8 @@
       </div><!-- End member-view-profile -->
     </main>
 
-    <!-- Bottom Mobile Nav Bar for Member Portal (Dashboard, Events, PASY, Profile) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-50/90 via-indigo-50/80 to-purple-50/90 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+    <!-- Bottom Mobile Nav Bar for Member Portal (Dashboard, Events, PASY, Profile) - Mobile only (md:hidden) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-50/90 via-indigo-50/80 to-purple-50/90 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
       <!-- 1. Dashboard -->
       <button onclick="switchMemberView('dashboard')" id="member-bottom-nav-dashboard" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-700 bg-amber-100/70 font-bold active:scale-95 cursor-pointer">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/30">
@@ -7731,6 +7778,12 @@
       const bNavPasy = document.getElementById('member-bottom-nav-pasy');
       const bNavProfile = document.getElementById('member-bottom-nav-profile');
 
+      // Desktop Top Navigation Buttons (PC Mode)
+      const dNavDash = document.getElementById('member-desktop-nav-dashboard');
+      const dNavEvents = document.getElementById('member-desktop-nav-events');
+      const dNavPasy = document.getElementById('member-desktop-nav-pasy');
+      const dNavProfile = document.getElementById('member-desktop-nav-profile');
+
       // Reset all views
       if (viewDash) viewDash.classList.add('hidden');
       if (viewNotices) viewNotices.classList.add('hidden');
@@ -7760,6 +7813,12 @@
           const iconDiv = bNavProfile.querySelector('div');
           if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center text-xs transition-colors';
         }
+
+        // Reset Desktop Nav Buttons
+        if (dNavDash) dNavDash.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-amber-50 text-slate-700 hover:text-amber-700 border border-slate-200';
+        if (dNavEvents) dNavEvents.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200';
+        if (dNavPasy) dNavPasy.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-teal-50 text-slate-700 hover:text-teal-700 border border-slate-200';
+        if (dNavProfile) dNavProfile.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-slate-100/80 hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-200';
       };
 
       resetBottomNav();
@@ -7771,6 +7830,9 @@
           const iconDiv = bNavProfile.querySelector('div');
           if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xs shadow-md shadow-purple-500/30';
         }
+        if (dNavProfile) {
+          dNavProfile.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-purple-100 text-purple-900 border border-purple-300 shadow-2xs';
+        }
         renderMemberProfile(currentLoggedInMember);
       } else if (view === 'events' || view === 'notifications') {
         if (viewNotices) viewNotices.classList.remove('hidden');
@@ -7778,6 +7840,9 @@
           bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-800 bg-indigo-100/80 font-bold active:scale-95 cursor-pointer';
           const iconDiv = bNavEvents.querySelector('div');
           if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xs shadow-md shadow-indigo-500/30';
+        }
+        if (dNavEvents) {
+          dNavEvents.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-indigo-100 text-indigo-900 border border-indigo-300 shadow-2xs';
         }
         renderMemberAllNotifications(currentLoggedInMember);
       } else if (view === 'donations') {
@@ -7793,6 +7858,9 @@
             const iconDiv = bNavDash.querySelector('div');
             if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-md shadow-orange-500/30';
           }
+          if (dNavDash) {
+            dNavDash.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs';
+          }
           return;
         }
         if (viewPasy) viewPasy.classList.remove('hidden');
@@ -7801,6 +7869,9 @@
           const iconDiv = bNavPasy.querySelector('div');
           if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-600 text-white flex items-center justify-center text-xs shadow-md shadow-teal-500/30';
         }
+        if (dNavPasy) {
+          dNavPasy.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-teal-100 text-teal-900 border border-teal-300 shadow-2xs';
+        }
         renderMemberPasyPage(currentLoggedInMember);
       } else {
         if (viewDash) viewDash.classList.remove('hidden');
@@ -7808,6 +7879,9 @@
           bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-800 bg-amber-100/80 font-bold active:scale-95 cursor-pointer';
           const iconDiv = bNavDash.querySelector('div');
           if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-md shadow-orange-500/30';
+        }
+        if (dNavDash) {
+          dNavDash.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs';
         }
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
