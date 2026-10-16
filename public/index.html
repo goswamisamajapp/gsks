@@ -3640,81 +3640,86 @@
   <!-- ============================================================== -->
   <!-- MODAL: MEMBER DONATION / RECEIPT FULL DETAIL POPUP             -->
   <!-- ============================================================== -->
-  <div id="member-donation-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+  <div id="member-donation-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-5 shadow-2xl border border-slate-200 relative my-4 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
       
       <!-- Close Button -->
-      <button onclick="closeMemberDonationDetailModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+      <button onclick="closeMemberDonationDetailModal()" class="absolute right-3.5 top-3.5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer z-10">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <!-- Trust Header in Receipt -->
-      <div class="text-center pb-4 border-b border-dashed border-slate-200">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mx-auto mb-2 shadow-xs">
-          <i class="fa-solid fa-receipt"></i>
+      <div class="overflow-y-auto pr-0.5 space-y-3 flex-1">
+        <!-- Trust Header in Receipt -->
+        <div class="text-center pt-1 pb-2.5 border-b border-slate-100">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mx-auto mb-1.5 shadow-2xs">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+          <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block mb-1">
+            आधिकारिक दान रसीद
+          </span>
+          <h3 class="text-base sm:text-lg font-black text-slate-900 font-devanagari leading-tight">
+            गोस्वामी समाज कल्याण समिति
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5 font-devanagari">गुनघसा, गोमो • अखिल भारतीय शैव समाज सेवा ट्रस्ट</p>
         </div>
-        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block mb-1">
-          आधिकारिक दान रसीद विवरण
-        </span>
-        <h3 class="text-base font-black text-slate-900 font-devanagari">
-          गोस्वामी समाज कल्याण समिति
-        </h3>
-        <p class="text-[11px] text-slate-400">गुनघसा, गोमो, धनबाद • अखिल भारतीय शैव समाज सेवा ट्रस्ट</p>
-      </div>
 
-      <!-- Receipt Amount Highlight -->
-      <div class="my-4 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-center">
-        <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">दान / सहयोग राशि</span>
-        <div class="text-3xl font-black font-mono text-emerald-700 mt-1" id="m-modal-don-amount">
-          ₹ 0
+        <!-- Receipt Amount Highlight Banner -->
+        <div class="p-3 rounded-2xl bg-gradient-to-br from-emerald-50 via-teal-50/40 to-slate-50 border border-emerald-200/90 text-center shadow-2xs">
+          <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">सहयोग राशि</span>
+          <div class="text-2xl sm:text-3xl font-black font-mono text-emerald-700 my-0.5" id="m-modal-don-amount">
+            ₹ 0
+          </div>
+          <div id="m-modal-don-method">
+            <!-- Injected dynamically -->
+          </div>
         </div>
-        <span class="inline-block mt-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold border" id="m-modal-don-method">
-          💵 नकद (Cash)
-        </span>
-      </div>
 
-      <!-- Receipt Data Table -->
-      <div class="space-y-2.5 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200/80 mb-5">
-        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-          <span class="text-slate-500">रसीद संख्या (Receipt No.):</span>
-          <strong class="font-mono text-slate-900 text-xs" id="m-modal-don-id">--</strong>
-        </div>
-        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-          <span class="text-slate-500">दिनांक (Payment Date):</span>
-          <strong class="font-mono text-slate-900 text-xs" id="m-modal-don-date">--</strong>
-        </div>
-        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-          <span class="text-slate-500">दानकर्ता सदस्य (Donor):</span>
-          <strong class="text-slate-900 font-bold" id="m-modal-don-donor">--</strong>
-        </div>
-        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-          <span class="text-slate-500">सदस्य ID (Member ID):</span>
-          <strong class="font-mono text-slate-900 font-bold" id="m-modal-don-memid">--</strong>
-        </div>
-        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-          <span class="text-slate-500">योजना / मद (Scheme/Purpose):</span>
-          <strong class="text-slate-900 font-bold" id="m-modal-don-scheme">--</strong>
-        </div>
-        <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
-          <span class="text-slate-500">भुगतान माध्यम (Mode):</span>
-          <strong class="text-slate-800" id="m-modal-don-mode">--</strong>
-        </div>
-        <div class="flex flex-col gap-1 py-1">
-          <span class="text-slate-500">विवरण / टिप्पणी (Remarks):</span>
-          <p class="text-slate-700 bg-white p-2 rounded-xl border border-slate-200/60 font-medium text-[11px]" id="m-modal-don-remarks">
-            --
-          </p>
+        <!-- Receipt Key Data Card -->
+        <div class="bg-slate-50/90 p-3 rounded-2xl border border-slate-200/80 space-y-2 text-xs">
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+            <span class="text-slate-500 font-medium">रसीद संख्या:</span>
+            <strong class="font-mono text-slate-900 text-xs font-extrabold" id="m-modal-don-id">--</strong>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+            <span class="text-slate-500 font-medium">दिनांक:</span>
+            <strong class="font-mono text-slate-900 text-xs" id="m-modal-don-date">--</strong>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+            <span class="text-slate-500 font-medium">दानकर्ता सदस्य:</span>
+            <strong class="text-slate-900 font-bold" id="m-modal-don-donor">--</strong>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+            <span class="text-slate-500 font-medium">सदस्य कोड (ID):</span>
+            <strong class="font-mono text-slate-900 font-bold" id="m-modal-don-memid">--</strong>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+            <span class="text-slate-500 font-medium">योजना / मद:</span>
+            <strong class="text-slate-900 font-bold text-right truncate max-w-[55%]" id="m-modal-don-scheme">--</strong>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+            <span class="text-slate-500 font-medium">भुगतान माध्यम:</span>
+            <strong class="text-slate-800 font-semibold" id="m-modal-don-mode">--</strong>
+          </div>
+          <div class="flex flex-col gap-1 pt-0.5">
+            <span class="text-slate-500 font-medium text-[11px]">विवरण / टिप्पणी:</span>
+            <p class="text-slate-700 bg-white p-2.5 rounded-xl border border-slate-200/70 font-medium text-[11px] leading-relaxed" id="m-modal-don-remarks">
+              --
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- Action Button -->
-      <button 
-        type="button"
-        onclick="closeMemberDonationDetailModal()" 
-        class="w-full py-2.5 rounded-xl text-xs font-black bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-md"
-      >
-        <span>ठीक है (Close)</span>
-      </button>
+      <div class="pt-3 border-t border-slate-100 flex-shrink-0 mt-1">
+        <button 
+          type="button"
+          onclick="closeMemberDonationDetailModal()" 
+          class="w-full py-2.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs hover:shadow-md transition-all text-center cursor-pointer active:scale-98 flex items-center justify-center gap-2"
+        >
+          <i class="fa-solid fa-xmark text-xs"></i>
+          <span>बंद करें</span>
+        </button>
+      </div>
 
     </div>
   </div>
@@ -9357,11 +9362,9 @@
       if (amtEl) amtEl.textContent = `₹ ${amt.toLocaleString('en-IN')}`;
       if (methEl) {
         if (don.method === 'Cash') {
-          methEl.className = 'inline-block mt-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300';
-          methEl.textContent = '💵 नकद भुगतान (Cash)';
+          methEl.innerHTML = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs"><i class="fa-solid fa-money-bill-wave text-[10px]"></i> नकद भुगतान</span>';
         } else {
-          methEl.className = 'inline-block mt-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-300';
-          methEl.textContent = `📱 ऑनलाइन / बैंक (${don.method || 'Online'})`;
+          methEl.innerHTML = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-300 shadow-2xs"><i class="fa-solid fa-mobile-screen text-[10px]"></i> ऑनलाइन / बैंक</span>`;
         }
       }
 
@@ -9369,8 +9372,8 @@
       if (dtEl) dtEl.textContent = dt;
       if (donorEl) donorEl.textContent = don.donorName || (currentLoggedInMember ? currentLoggedInMember.name : '--');
       if (memidEl) memidEl.textContent = don.memberId || (currentLoggedInMember ? currentLoggedInMember.id : '--');
-      if (schemeEl) schemeEl.textContent = don.scheme || 'सामान्य जनकल्याण सहयोग';
-      if (modeEl) modeEl.textContent = don.method || 'Online';
+      if (schemeEl) schemeEl.textContent = don.scheme || 'सामान्य सहयोग कोष';
+      if (modeEl) modeEl.textContent = don.method === 'Cash' ? 'नकद' : (don.method || 'ऑनलाइन');
       if (remarksEl) remarksEl.textContent = don.remarks ? don.remarks : 'कोई विशेष टिप्पणी दर्ज नहीं है।';
 
       if (modal) modal.classList.remove('hidden');
