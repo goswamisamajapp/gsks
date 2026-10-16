@@ -6847,8 +6847,8 @@
         <i id="app-alert-icon" class="fa-solid fa-bell"></i>
       </div>
 
-      <!-- Title -->
-      <h3 id="app-alert-title" class="text-base font-extrabold text-slate-900 mb-1.5 tracking-tight">
+      <!-- Title (Single-line, Clean English, No Awkward Breaks) -->
+      <h3 id="app-alert-title" class="text-sm sm:text-base font-extrabold text-slate-900 mb-2 tracking-tight truncate px-2">
         Notification
       </h3>
 
@@ -7067,25 +7067,25 @@
       const modal = document.getElementById('app-alert-modal');
       const msgStr = (message !== undefined && message !== null) ? String(message) : '';
 
-      // Auto-detect title and type from content if not explicitly provided
+      // Auto-detect title and type from content if not explicitly provided (Concise English, Never breaks)
       if (!title) {
         if (msgStr.includes('सफलतापूर्वक') || msgStr.includes('सफल') || msgStr.includes('Success') || msgStr.includes('संपन्न') || msgStr.includes('✅')) {
-          title = 'सफलता (Success)';
+          title = 'Success';
           type = 'success';
         } else if (msgStr.includes('त्रुटि') || msgStr.includes('गलत') || msgStr.includes('Error') || msgStr.includes('अमान्य') || msgStr.includes('❌') || msgStr.includes('विफल')) {
-          title = 'त्रुटि (Error)';
+          title = 'Error';
           type = 'error';
         } else if (msgStr.includes('चेतावनी') || msgStr.includes('Warning') || msgStr.includes('आवश्यक') || msgStr.includes('⚠️')) {
-          title = 'आवश्यक सूचना (Notice)';
+          title = 'Notice';
           type = 'warning';
         } else if (msgStr.includes('नवीनीकरण') || msgStr.includes('Renewal')) {
-          title = 'सदस्यता नवीनीकरण (Renewal)';
+          title = 'Membership Renewal';
           type = 'info';
         } else if (msgStr.includes('अपग्रेड') || msgStr.includes('Upgrade') || msgStr.includes('Prime')) {
-          title = 'सदस्यता अपग्रेड (Upgrade)';
+          title = 'Upgrade Plan';
           type = 'warning';
         } else {
-          title = 'सूचना (Notification)';
+          title = 'Notification';
         }
       }
 
@@ -10890,7 +10890,7 @@
         console.warn('Password sync warning:', err);
       }
 
-      showAppAlert('आपका पासवर्ड सफलतापूर्वक बदल दिया गया है! अगली बार लॉगिन करने के लिए नए पासवर्ड का उपयोग करें।', 'पासवर्ड अपडेट संपन्न', 'success');
+      showAppAlert('आपका पासवर्ड सफलतापूर्वक बदल दिया गया है! अगली बार लॉगिन करने के लिए नए पासवर्ड का उपयोग करें।', 'Password Updated', 'success');
     }
 
     function handleMemberUpgradePlan() {
@@ -10902,7 +10902,7 @@
 
 📞 फोन / व्हाट्सएप: +91 7781931880 / +91 9934149950
 📍 कार्यालय: गुनघसा, गोमो`;
-      showAppAlert(upgradeMsg, '⭐ सदस्यता प्लान अपग्रेड', 'warning');
+      showAppAlert(upgradeMsg, 'Upgrade Plan', 'warning');
     }
 
     function handleMemberRenewPlan() {
@@ -10912,7 +10912,7 @@
 वार्षिक शुल्क: ₹1,200
 
 आप वार्षिक शुल्क ऑनलाइन (UPI / QR) अथवा समिति कार्यालय में नकद जमा कर सकते हैं। अधिक सहायता हेतु व्यवस्थापक से संपर्क करें।`;
-      showAppAlert(renewMsg, '🔄 सदस्यता नवीनीकरण (Membership Renewal)', 'info');
+      showAppAlert(renewMsg, 'Membership Renewal', 'info');
     }
 
     window.openMemberEditProfileModal = openMemberEditProfileModal;
