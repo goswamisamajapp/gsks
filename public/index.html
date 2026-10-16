@@ -3720,85 +3720,91 @@
   <!-- ============================================================== -->
   <!-- MODAL: MEMBER EVENT / MEETING FULL DETAIL POPUP                  -->
   <!-- ============================================================== -->
-  <div id="member-event-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+  <div id="member-event-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-5 shadow-2xl border border-slate-200 relative my-4 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
       
-      <!-- Close Button -->
-      <button onclick="closeMemberEventDetailModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+      <!-- Close Icon Button -->
+      <button onclick="closeMemberEventDetailModal()" class="absolute right-3.5 top-3.5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer z-10">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <!-- Trust Header in Event Popup -->
-      <div class="text-center pb-4 border-b border-dashed border-slate-200">
-        <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mx-auto mb-2 shadow-xs">
-          <i class="fa-solid fa-calendar-check"></i>
+      <div class="overflow-y-auto pr-0.5 space-y-3.5 flex-1">
+        <!-- Event Header -->
+        <div class="text-center pt-1 pb-3 border-b border-slate-100">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg mx-auto mb-2 shadow-2xs">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div class="flex items-center justify-center gap-1.5 mb-1.5 flex-wrap" id="m-modal-event-badges">
+            <!-- Dynamic badges (Category & Status) -->
+          </div>
+          <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari leading-snug px-3" id="m-modal-event-title">
+            बैठक / कार्यक्रम शीर्षक
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5 font-devanagari">गोस्वामी समाज कल्याण समिति • अधिकृत बैठक</p>
         </div>
-        <div class="flex items-center justify-center gap-2 mb-1.5 flex-wrap" id="m-modal-event-badges">
-          <!-- Dynamic badges (Category & Status) -->
+
+        <!-- Date, Time & Venue Info Cards -->
+        <div class="space-y-2 text-xs">
+          <!-- Date & Time Grid -->
+          <div class="grid grid-cols-2 gap-2">
+            <div class="bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs flex-shrink-0">
+                <i class="fa-regular fa-calendar-days"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">तारीख व दिन</span>
+                <strong class="text-slate-800 font-devanagari text-[11px] leading-tight block truncate" id="m-modal-event-date">--</strong>
+              </div>
+            </div>
+
+            <div class="bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs flex-shrink-0">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">समय</span>
+                <strong class="text-slate-800 font-mono text-[11px] leading-tight block truncate" id="m-modal-event-time">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Venue Card -->
+          <div class="bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">स्थान / वेन्यू</span>
+              <strong class="text-slate-900 text-xs font-semibold leading-snug block" id="m-modal-event-venue">शिव मंदिर, गुनघसा</strong>
+            </div>
+          </div>
         </div>
-        <h3 class="text-base sm:text-lg font-black text-slate-900 font-devanagari leading-snug px-4" id="m-modal-event-title">
-          बैठक / कार्यक्रम शीर्षक
-        </h3>
-        <p class="text-[11px] text-slate-400 mt-1">गोस्वामी समाज कल्याण समिति • अधिकृत बैठक विवरण</p>
+
+        <!-- Detailed Agenda / Description -->
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+            <i class="fa-solid fa-file-lines text-indigo-600 text-xs"></i>
+            <span>बैठक का एजेंडा एवं सम्पूर्ण विवरण:</span>
+          </div>
+          <div class="p-3 rounded-xl bg-indigo-50/30 border border-indigo-100/80 text-xs text-slate-700 leading-relaxed max-h-48 overflow-y-auto whitespace-pre-wrap font-medium" id="m-modal-event-description">
+            --
+          </div>
+        </div>
+
+        <!-- Participation Status Card & Button Area -->
+        <div id="m-modal-event-participation-box">
+          <!-- Rendered dynamically by renderEventParticipationUI(eventId) -->
+        </div>
       </div>
 
-      <!-- Date, Time & Venue Key Info Bar -->
-      <div class="my-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm flex-shrink-0">
-            <i class="fa-regular fa-calendar-days"></i>
-          </div>
-          <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">तारीख व दिन</span>
-            <strong class="text-slate-800 font-mono text-xs" id="m-modal-event-date">--</strong>
-          </div>
-        </div>
-
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm flex-shrink-0">
-            <i class="fa-regular fa-clock"></i>
-          </div>
-          <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">समय</span>
-            <strong class="text-slate-800 font-mono text-xs" id="m-modal-event-time">--</strong>
-          </div>
-        </div>
-
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 flex items-start gap-3 sm:col-span-2">
-          <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
-            <i class="fa-solid fa-location-dot"></i>
-          </div>
-          <div>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">स्थान / वेन्यू (Venue)</span>
-            <strong class="text-slate-900 text-xs leading-snug" id="m-modal-event-venue">शिव मंदिर, गुनघसा</strong>
-          </div>
-        </div>
-      </div>
-
-      <!-- Detailed Agenda / Description -->
-      <div class="space-y-1.5 mb-5">
-        <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-          <i class="fa-solid fa-file-lines text-indigo-600"></i>
-          <span>बैठक का एजेंडा एवं सम्पूर्ण विवरण:</span>
-        </div>
-        <div class="p-4 rounded-2xl bg-indigo-50/40 border border-indigo-100 text-xs text-slate-700 leading-relaxed max-h-56 overflow-y-auto whitespace-pre-wrap font-medium" id="m-modal-event-description">
-          --
-        </div>
-      </div>
-
-      <!-- Participation Status Card & Button Area -->
-      <div id="m-modal-event-participation-box" class="mb-4">
-        <!-- Rendered dynamically by renderEventParticipationUI(eventId) -->
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2.5">
+      <!-- Action Button -->
+      <div class="pt-3 border-t border-slate-100 flex-shrink-0 mt-1">
         <button 
           type="button" 
           onclick="closeMemberEventDetailModal()" 
-          class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-center cursor-pointer"
+          class="w-full py-2 sm:py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-center cursor-pointer active:scale-98"
         >
-          <span>बंद करें (Close)</span>
+          <span>बंद करें</span>
         </button>
       </div>
 
@@ -8284,18 +8290,18 @@
         : (ev.category === 'Special Event' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200');
 
       const effStatus = getEffectiveEventStatus(ev);
-      let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300">🔵 आगामी (Upcoming)</span>';
+      let statusBadge = '<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">आगामी</span>';
       if (effStatus === 'Open') {
-        statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> 🟢 चालू (Open)</span>';
+        statusBadge = '<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span> चालू</span>';
       } else if (effStatus === 'Closed') {
-        statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">🔴 संपन्न (Closed)</span>';
+        statusBadge = '<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-700 border border-slate-300">संपन्न</span>';
       } else if (effStatus === 'Cancelled') {
-        statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">🔴 रद्द (Cancelled)</span>';
+        statusBadge = '<span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">रद्द</span>';
       }
 
       if (badgesContainer) {
         badgesContainer.innerHTML = `
-          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badgeColor}">
+          <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold border ${badgeColor}">
             ${ev.category || 'बैठक'}
           </span>
           ${statusBadge}
@@ -8465,16 +8471,16 @@
                 <i class="fa-solid fa-circle-check"></i>
               </div>
               <div class="flex-1">
-                <span class="text-xs font-black uppercase tracking-wider block text-emerald-800">उपस्थिति दर्ज (Participated)</span>
+                <span class="text-xs font-black uppercase tracking-wider block text-emerald-800">उपस्थिति दर्ज</span>
                 <p class="text-[11px] text-emerald-700 font-medium mt-0.5">
-                  आप इस बैठक में सफलतापूर्वक भाग ले चुके हैं। ${pTime ? `(समय: ${pTime})` : ''}
+                  आप इस बैठक में भाग ले चुके हैं। ${pTime ? `(${pTime})` : ''}
                 </p>
               </div>
             </div>
             <div class="pt-2 border-t border-emerald-200/60 flex items-center justify-between">
               <span class="text-[11px] font-bold text-emerald-800 flex items-center gap-1.5">
                 <i class="fa-solid fa-users text-emerald-600 text-xs"></i>
-                कुल उपस्थित सदस्य: <strong class="text-emerald-900 font-mono">${allPartsCount}</strong>
+                कुल उपस्थित: <strong class="text-emerald-900 font-mono">${allPartsCount}</strong>
               </span>
               <button 
                 type="button" 
@@ -8492,15 +8498,15 @@
       if (!activeCheck.active) {
         const pCount = (ev.participants || []).length;
         box.innerHTML = `
-          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-700 space-y-2.5">
+          <div class="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 space-y-2">
             <div class="flex items-start gap-2.5">
-              <i class="fa-solid fa-lock text-slate-400 text-sm mt-0.5"></i>
-              <div class="flex-1 text-xs">
-                <span class="font-bold text-slate-800 block">भागीदारी / उपस्थिति (Participate)</span>
-                <p class="text-[11px] text-slate-500 mt-0.5">${activeCheck.reason}</p>
+              <i class="fa-solid fa-lock text-slate-400 text-xs mt-0.5 flex-shrink-0"></i>
+              <div class="flex-1 text-xs min-w-0">
+                <span class="font-bold text-slate-800 block text-[11px]">भागीदारी / उपस्थिति</span>
+                <p class="text-[11px] text-slate-500 mt-0.5 leading-snug">${activeCheck.reason}</p>
               </div>
               <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-600 flex-shrink-0">
-                ${ev.status === 'Closed' ? 'संपन्न (Closed)' : 'निष्क्रिय'}
+                ${ev.status === 'Closed' ? 'संपन्न' : 'निष्क्रिय'}
               </span>
             </div>
             ${pCount > 0 ? `
@@ -8525,19 +8531,19 @@
 
       // Active Meeting - Show Geolocation Participate Button
       box.innerHTML = `
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 border border-emerald-200 text-slate-800 space-y-3 shadow-xs">
+        <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 border border-emerald-200 text-slate-800 space-y-2.5 shadow-2xs">
           <div class="flex items-start justify-between gap-2">
             <div>
-              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-emerald-500 text-white shadow-xs">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-600 text-white">
                 <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                बैठक जारी है (Active Now)
+                बैठक जारी है
               </span>
               <h5 class="text-xs font-extrabold text-slate-900 mt-1">अपनी लाइव उपस्थिति दर्ज करें</h5>
-              <p class="text-[11px] text-slate-500 mt-0.5">
+              <p class="text-[11px] text-slate-500 mt-0.5 leading-snug">
                 नियम: भागीदारी के लिए आपका बैठक स्थल के <strong>20 मीटर</strong> के दायरे में होना अनिवार्य है।
               </p>
             </div>
-            <i class="fa-solid fa-location-crosshairs text-xl text-emerald-600 mt-1"></i>
+            <i class="fa-solid fa-location-crosshairs text-lg text-emerald-600 mt-0.5"></i>
           </div>
 
           <div id="m-participate-feedback" class="hidden text-xs p-2.5 rounded-xl font-medium"></div>
@@ -8546,10 +8552,10 @@
             type="button" 
             id="btn-participate-action"
             onclick="handleEventParticipation('${ev.id}')"
-            class="w-full py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full py-2.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <i class="fa-solid fa-hand-holding-hand"></i>
-            <span>उपस्थिति दर्ज करें (Participate Now)</span>
+            <span>उपस्थिति दर्ज करें</span>
           </button>
         </div>
       `;
