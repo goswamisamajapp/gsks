@@ -539,29 +539,29 @@
         
         <!-- Header & Action Bar -->
         <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3.5">
-          <!-- Top Row: Title, Count Badge and Add Member Button -->
-          <div class="flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center text-base sm:text-lg shadow-sm shrink-0">
+          <!-- Top Row: Title & Count Badge (Takes full space so title never wraps in 2 lines) -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-10 h-10 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center text-lg shadow-sm shrink-0">
                 <i class="fa-solid fa-users"></i>
               </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <h2 class="text-base sm:text-xl font-extrabold text-slate-900 leading-tight">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                  <h2 class="text-base sm:text-xl font-extrabold text-slate-900 whitespace-nowrap">
                     Members Directory
                   </h2>
-                  <span id="badge-total-members" class="px-2 py-0.5 bg-orange-100 text-orange-800 text-[10px] sm:text-xs font-bold rounded-full">
-                    0
+                  <span id="badge-total-members" class="px-2 py-0.5 bg-orange-100 text-orange-800 text-[10px] sm:text-xs font-bold rounded-full whitespace-nowrap">
+                    0 सदस्य
                   </span>
                 </div>
-                <p class="text-[11px] sm:text-xs text-slate-500 font-medium">गोस्वामी समाज सदस्य सूची व प्रबंधन</p>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium truncate mt-0.5">गोस्वामी समाज सदस्य सूची व प्रबंधन</p>
               </div>
             </div>
 
-            <!-- Add Member Button -->
-            <button onclick="openAddMemberModal()" class="shrink-0 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-95 text-white font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-xs shadow-sm flex items-center gap-1.5 transition-all cursor-pointer">
+            <!-- Add Member Button: Full width on mobile, inline on desktop -->
+            <button onclick="openAddMemberModal()" class="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-[0.98] text-white font-bold px-4 py-2.5 sm:py-2 rounded-xl text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer">
               <i class="fa-solid fa-user-plus text-xs"></i>
-              <span class="text-xs">+ Add Member</span>
+              <span>+ Add Member (नया सदस्य जोड़ें)</span>
             </button>
           </div>
 
