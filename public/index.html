@@ -3387,11 +3387,6 @@
           </div>
         </div>
 
-        <!-- PASY Member Status / Info Banner -->
-        <div id="m-pasy-membership-banner" class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <!-- Populated by JS -->
-        </div>
-
         <!-- 30 Months Installments Status Grid -->
         <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
           <div class="flex items-center justify-between pb-2.5 border-b border-slate-100">
@@ -9769,57 +9764,6 @@
           statFine.className = 'text-xl sm:text-2xl font-black text-amber-800/90 font-mono mt-0.5';
           statFineDesc.textContent = 'कोई जुर्माना नहीं';
           statFineDesc.className = 'text-[10px] text-amber-700/80 font-semibold';
-        }
-      }
-
-      // Membership Banner
-      if (bannerEl) {
-        if (isEnrolled) {
-          bannerEl.className = 'bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-emerald-200/90 shadow-2xs relative overflow-hidden space-y-3';
-          bannerEl.innerHTML = `
-            <div class="absolute -right-6 -top-6 w-28 h-28 bg-emerald-200/30 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 relative z-10">
-              <div class="flex items-center gap-2.5 sm:gap-3.5">
-                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-base sm:text-lg flex-shrink-0 shadow-xs shadow-emerald-500/20">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 font-devanagari">
-                    आप PASY योजना में सक्रिय रूप से नामांकित हैं
-                  </h4>
-                  <p class="text-[11px] text-slate-600 font-medium mt-0.5">
-                    सदस्य ID: <strong class="text-emerald-800 font-mono">${member.id}</strong> • अवधि: 30 महीने (Sep 2025 - Feb 2028)
-                  </p>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-white text-emerald-800 border border-emerald-300 shadow-2xs flex-shrink-0">
-                ₹150 / माह
-              </span>
-            </div>
-          `;
-        } else {
-          bannerEl.className = 'bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-amber-200/90 shadow-2xs relative overflow-hidden space-y-3';
-          bannerEl.innerHTML = `
-            <div class="absolute -right-6 -top-6 w-28 h-28 bg-amber-200/30 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 relative z-10">
-              <div class="flex items-center gap-2.5 sm:gap-3.5">
-                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-base sm:text-lg flex-shrink-0 shadow-xs shadow-amber-500/20">
-                  <i class="fa-solid fa-circle-info"></i>
-                </div>
-                <div>
-                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 font-devanagari">
-                    PASY पारिवारिक सुरक्षा योजना
-                  </h4>
-                  <p class="text-[11px] text-slate-600 font-medium mt-0.5">
-                    योजना में भाग लेने अथवा अद्यतन हेतु समिति व्यवस्थापक से संपर्क करें।
-                  </p>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-white text-amber-800 border border-amber-300 shadow-2xs flex-shrink-0">
-                ₹150 / माह
-              </span>
-            </div>
-          `;
         }
       }
 
