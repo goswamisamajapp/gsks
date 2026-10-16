@@ -6834,33 +6834,48 @@
   <!-- ============================================================== -->
   <!-- MODAL: APP NOTIFICATION / ALERT POPUP (आधुनिक सुंदर पॉपअप अलर्ट)   -->
   <!-- ============================================================== -->
-  <div id="app-alert-modal" class="hidden fixed inset-0 z-[999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div id="app-alert-modal" class="hidden fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200 text-center">
       
+      <!-- Top Close X Button -->
+      <button type="button" onclick="closeAppAlertModal(false)" class="absolute right-3.5 top-3.5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center text-xs transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
       <!-- Icon with dynamic color ring -->
-      <div id="app-alert-icon-container" class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-xs mb-3.5 bg-amber-100 text-amber-600">
+      <div id="app-alert-icon-container" class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-xs mb-3.5 bg-indigo-50 text-indigo-600 border border-indigo-100">
         <i id="app-alert-icon" class="fa-solid fa-bell"></i>
       </div>
 
       <!-- Title -->
-      <h3 id="app-alert-title" class="text-base font-extrabold text-slate-900 font-devanagari mb-1.5">
-        सूचना
+      <h3 id="app-alert-title" class="text-base font-extrabold text-slate-900 mb-1.5 tracking-tight">
+        Notification
       </h3>
 
       <!-- Message Text -->
-      <p id="app-alert-message" class="text-xs text-slate-600 leading-relaxed font-medium whitespace-pre-line mb-5">
+      <div id="app-alert-message" class="text-xs text-slate-600 leading-relaxed font-medium whitespace-pre-line text-left bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100 mb-4 max-h-60 overflow-y-auto break-words">
         --
-      </p>
+      </div>
 
-      <!-- Action Button (OK / ठीक है) -->
-      <button 
-        type="button" 
-        id="app-alert-btn"
-        onclick="closeAppAlertModal()" 
-        class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-md active:scale-95 flex items-center justify-center gap-1.5"
-      >
-        <span>ठीक है (OK)</span>
-      </button>
+      <!-- Action Buttons Row -->
+      <div class="flex items-center gap-2">
+        <button 
+          type="button" 
+          id="app-alert-cancel-btn"
+          onclick="closeAppAlertModal(false)" 
+          class="hidden flex-1 py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-center cursor-pointer active:scale-95"
+        >
+          <span>रद्द करें (Cancel)</span>
+        </button>
+        <button 
+          type="button" 
+          id="app-alert-btn"
+          onclick="closeAppAlertModal(true)" 
+          class="flex-1 py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white transition-all text-center cursor-pointer shadow-md shadow-indigo-600/25 active:scale-95 flex items-center justify-center gap-1.5"
+        >
+          <span>ठीक है (OK)</span>
+        </button>
+      </div>
 
     </div>
   </div>
@@ -7048,10 +7063,34 @@
     // ==============================================================
     let appAlertCallback = null;
 
-    function showAppAlert(message, title = 'सूचना', type = 'info', callback = null) {
+    function showAppAlert(message, title = null, type = 'info', callback = null) {
       const modal = document.getElementById('app-alert-modal');
+      const msgStr = (message !== undefined && message !== null) ? String(message) : '';
+
+      // Auto-detect title and type from content if not explicitly provided
+      if (!title) {
+        if (msgStr.includes('सफलतापूर्वक') || msgStr.includes('सफल') || msgStr.includes('Success') || msgStr.includes('संपन्न') || msgStr.includes('✅')) {
+          title = 'सफलता (Success)';
+          type = 'success';
+        } else if (msgStr.includes('त्रुटि') || msgStr.includes('गलत') || msgStr.includes('Error') || msgStr.includes('अमान्य') || msgStr.includes('❌') || msgStr.includes('विफल')) {
+          title = 'त्रुटि (Error)';
+          type = 'error';
+        } else if (msgStr.includes('चेतावनी') || msgStr.includes('Warning') || msgStr.includes('आवश्यक') || msgStr.includes('⚠️')) {
+          title = 'आवश्यक सूचना (Notice)';
+          type = 'warning';
+        } else if (msgStr.includes('नवीनीकरण') || msgStr.includes('Renewal')) {
+          title = 'सदस्यता नवीनीकरण (Renewal)';
+          type = 'info';
+        } else if (msgStr.includes('अपग्रेड') || msgStr.includes('Upgrade') || msgStr.includes('Prime')) {
+          title = 'सदस्यता अपग्रेड (Upgrade)';
+          type = 'warning';
+        } else {
+          title = 'सूचना (Notification)';
+        }
+      }
+
       if (!modal) {
-        alert(message);
+        console.log('[Notification]', title, msgStr);
         if (typeof callback === 'function') callback();
         return;
       }
@@ -7063,24 +7102,30 @@
       const iconWrap = document.getElementById('app-alert-icon-container');
       const iconEl = document.getElementById('app-alert-icon');
       const btnEl = document.getElementById('app-alert-btn');
+      const cancelBtn = document.getElementById('app-alert-cancel-btn');
 
       if (titleEl) titleEl.textContent = title;
-      if (msgEl) msgEl.textContent = message;
+      if (msgEl) msgEl.textContent = msgStr;
+      if (cancelBtn) cancelBtn.classList.add('hidden');
 
       if (iconWrap && iconEl) {
         iconWrap.className = 'w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-xs mb-3.5 transition-all';
         if (type === 'error') {
-          iconWrap.classList.add('bg-rose-100', 'text-rose-600');
-          iconEl.className = 'fa-solid fa-triangle-exclamation';
+          iconWrap.className += ' bg-rose-50 text-rose-600 border border-rose-200 shadow-rose-500/10';
+          iconEl.className = 'fa-solid fa-circle-exclamation';
+          if (btnEl) btnEl.className = 'flex-1 py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white transition-all text-center cursor-pointer shadow-md shadow-rose-600/25 active:scale-95 flex items-center justify-center gap-1.5';
         } else if (type === 'success') {
-          iconWrap.classList.add('bg-emerald-100', 'text-emerald-600');
+          iconWrap.className += ' bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-emerald-500/10';
           iconEl.className = 'fa-solid fa-circle-check';
+          if (btnEl) btnEl.className = 'flex-1 py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white transition-all text-center cursor-pointer shadow-md shadow-emerald-600/25 active:scale-95 flex items-center justify-center gap-1.5';
         } else if (type === 'warning' || type === 'notice') {
-          iconWrap.classList.add('bg-amber-100', 'text-amber-600');
-          iconEl.className = 'fa-solid fa-clock-rotate-left';
+          iconWrap.className += ' bg-amber-50 text-amber-600 border border-amber-200 shadow-amber-500/10';
+          iconEl.className = 'fa-solid fa-crown';
+          if (btnEl) btnEl.className = 'flex-1 py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white transition-all text-center cursor-pointer shadow-md shadow-orange-500/25 active:scale-95 flex items-center justify-center gap-1.5';
         } else {
-          iconWrap.classList.add('bg-blue-100', 'text-blue-600');
+          iconWrap.className += ' bg-indigo-50 text-indigo-600 border border-indigo-200 shadow-indigo-500/10';
           iconEl.className = 'fa-solid fa-bell';
+          if (btnEl) btnEl.className = 'flex-1 py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white transition-all text-center cursor-pointer shadow-md shadow-indigo-600/25 active:scale-95 flex items-center justify-center gap-1.5';
         }
       }
 
@@ -7088,13 +7133,18 @@
     }
     window.showAppAlert = showAppAlert;
 
-    function closeAppAlertModal() {
+    // Standardize all native alerts throughout entire software to beautiful popup
+    window.alert = function(msg) {
+      showAppAlert(msg);
+    };
+
+    function closeAppAlertModal(confirmed = true) {
       const modal = document.getElementById('app-alert-modal');
       if (modal) modal.classList.add('hidden');
       if (typeof appAlertCallback === 'function') {
         const cb = appAlertCallback;
         appAlertCallback = null;
-        try { cb(); } catch(e) {}
+        try { cb(confirmed); } catch(e) { console.warn(e); }
       }
     }
     window.closeAppAlertModal = closeAppAlertModal;
@@ -10840,19 +10890,29 @@
         console.warn('Password sync warning:', err);
       }
 
-      alert('🔐 आपका पासवर्ड सफलतापूर्वक बदल दिया गया है! अगली बार लॉगिन करने के लिए नए पासवर्ड का उपयोग करें।');
+      showAppAlert('आपका पासवर्ड सफलतापूर्वक बदल दिया गया है! अगली बार लॉगिन करने के लिए नए पासवर्ड का उपयोग करें।', 'पासवर्ड अपडेट संपन्न', 'success');
     }
 
     function handleMemberUpgradePlan() {
       const member = currentLoggedInMember;
       if (!member) return;
-      alert(`⭐ सदस्यता प्लान अपग्रेड:\n\nप्रिय ${member.name || 'सदस्य'} जी,\nअपने खाते को "विशिष्ट सदस्य (Prime Member)" में अपग्रेड करने हेतु कृपया समिति व्यवस्थापक या कोषाध्यक्ष से संपर्क करें।\n\nफोन / व्हाट्सएप: +91 7781931880 / +91 9934149950\nकार्यालय: गुनघसा, गोमो`);
+      const upgradeMsg = `प्रिय ${member.name || 'सदस्य'} जी,
+
+अपने खाते को "विशिष्ट सदस्य (Prime Member)" में अपग्रेड करने हेतु कृपया समिति व्यवस्थापक या कोषाध्यक्ष से संपर्क करें:
+
+📞 फोन / व्हाट्सएप: +91 7781931880 / +91 9934149950
+📍 कार्यालय: गुनघसा, गोमो`;
+      showAppAlert(upgradeMsg, '⭐ सदस्यता प्लान अपग्रेड', 'warning');
     }
 
     function handleMemberRenewPlan() {
       const member = currentLoggedInMember;
       if (!member) return;
-      alert(`🔄 सदस्यता नवीनीकरण (Membership Renewal):\n\nसदस्य: ${member.name || '--'} (${member.id})\nवार्षिक शुल्क: ₹1,200\n\nआप वार्षिक शुल्क ऑनलाइन अथवा समिति कार्यालय में नकद जमा कर सकते हैं। अधिक सहायता हेतु व्यवस्थापक से संपर्क करें।`);
+      const renewMsg = `सदस्य: ${member.name || '--'} (${member.id})
+वार्षिक शुल्क: ₹1,200
+
+आप वार्षिक शुल्क ऑनलाइन (UPI / QR) अथवा समिति कार्यालय में नकद जमा कर सकते हैं। अधिक सहायता हेतु व्यवस्थापक से संपर्क करें।`;
+      showAppAlert(renewMsg, '🔄 सदस्यता नवीनीकरण (Membership Renewal)', 'info');
     }
 
     window.openMemberEditProfileModal = openMemberEditProfileModal;
