@@ -2186,144 +2186,155 @@
         <div id="settings-page-fund" class="hidden space-y-4 sm:space-y-6">
           
           <!-- Opening Balances Card -->
-          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs">
-            <div class="flex items-center justify-between gap-3 pb-3 border-b border-white/20">
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-2xl sm:rounded-3xl p-3 sm:p-5 text-white shadow-2xs">
+            <div class="flex items-center justify-between gap-2 pb-2.5 sm:pb-3 border-b border-white/20">
               <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
-                <h3 class="text-sm sm:text-base font-black tracking-wide">Opening Balance</h3>
+                <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                <h3 class="text-xs sm:text-base font-black tracking-wide">Opening Balance</h3>
               </div>
-              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-3 py-1.5 bg-white text-orange-800 hover:bg-orange-50 active:scale-95 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white text-orange-800 hover:bg-orange-50 active:scale-95 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-pen-to-square"></i>
-                <span>Edit Opening Balance</span>
+                <span class="hidden sm:inline">Edit Opening Balance</span>
+                <span class="sm:hidden">Edit</span>
               </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 mt-3.5">
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20">
-                <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">Cash Opening Balance</p>
-                <h4 class="text-xl sm:text-2xl font-black mt-1 font-mono" id="disp-opening-cash">₹ 34,025</h4>
-                <p class="text-[10px] text-amber-100 mt-0.5">Self Fund Cash</p>
+            <!-- Compact 3-Column Grid on Mobile and Desktop -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-3.5 mt-2.5 sm:mt-3.5">
+              <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20">
+                <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Cash</p>
+                <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-cash">₹ 34,025</h4>
+                <p class="text-[9px] text-amber-100 mt-0.5 hidden sm:block">Self Fund Cash</p>
               </div>
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20">
-                <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">Bank Opening Balance</p>
-                <h4 class="text-xl sm:text-2xl font-black mt-1 font-mono" id="disp-opening-bank">₹ 0</h4>
-                <p class="text-[10px] text-amber-100 mt-0.5">SBI / Bank Account Balance</p>
+              <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20">
+                <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Bank</p>
+                <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-bank">₹ 0</h4>
+                <p class="text-[9px] text-amber-100 mt-0.5 hidden sm:block">Bank Account</p>
               </div>
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20 flex flex-col justify-between">
+              <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20 flex flex-col justify-between">
                 <div>
-                  <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">Total Opening Balance</p>
-                  <h4 class="text-xl sm:text-2xl font-black mt-1 font-mono" id="disp-opening-total">₹ 34,025</h4>
+                  <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Total</p>
+                  <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-total">₹ 34,025</h4>
                 </div>
-                <p class="text-[10px] text-emerald-200 font-bold mt-1">✓ Included in Central Treasury</p>
+                <p class="text-[9px] text-emerald-200 font-bold mt-0.5 hidden sm:block truncate">✓ Treasury</p>
               </div>
             </div>
           </div>
 
           <!-- Treasury Summary Live Counters -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
-            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs flex items-center justify-between">
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 text-white shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between justify-between">
               <div>
-                <p class="text-[10px] sm:text-[11px] font-bold text-emerald-100 uppercase tracking-wider">Total Fund</p>
-                <h3 class="text-xl sm:text-2xl font-black mt-1" id="fund-stat-total">₹ 0</h3>
-                <p class="text-[10px] text-emerald-100 mt-0.5">Donations + All Funds</p>
+                <div class="flex items-center gap-1 sm:hidden mb-1">
+                  <div class="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-[9px]">
+                    <i class="fa-solid fa-vault"></i>
+                  </div>
+                  <p class="text-[9px] font-bold text-emerald-100 uppercase tracking-wider truncate">Total</p>
+                </div>
+                <p class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider hidden sm:block">Total Fund</p>
+                <h3 class="text-xs sm:text-2xl font-black font-mono mt-0.5 sm:mt-1 truncate" id="fund-stat-total">₹ 0</h3>
+                <p class="text-[10px] text-emerald-100 mt-0.5 hidden sm:block">Donations + All Funds</p>
               </div>
-              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 flex items-center justify-center text-lg sm:text-xl">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 hidden sm:flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
                 <i class="fa-solid fa-vault"></i>
               </div>
             </div>
 
-            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs flex items-center justify-between">
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 text-white shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between justify-between">
               <div>
-                <p class="text-[10px] sm:text-[11px] font-bold text-blue-100 uppercase tracking-wider">Bank Fund</p>
-                <h3 class="text-xl sm:text-2xl font-black mt-1" id="fund-stat-bank">₹ 0</h3>
-                <p class="text-[10px] text-blue-100 mt-0.5">SBI Trust Account</p>
+                <div class="flex items-center gap-1 sm:hidden mb-1">
+                  <div class="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-[9px]">
+                    <i class="fa-solid fa-building-columns"></i>
+                  </div>
+                  <p class="text-[9px] font-bold text-blue-100 uppercase tracking-wider truncate">Bank</p>
+                </div>
+                <p class="text-[11px] font-bold text-blue-100 uppercase tracking-wider hidden sm:block">Bank Fund</p>
+                <h3 class="text-xs sm:text-2xl font-black font-mono mt-0.5 sm:mt-1 truncate" id="fund-stat-bank">₹ 0</h3>
+                <p class="text-[10px] text-blue-100 mt-0.5 hidden sm:block">SBI Trust Account</p>
               </div>
-              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 flex items-center justify-center text-lg sm:text-xl">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 hidden sm:flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
                 <i class="fa-solid fa-building-columns"></i>
               </div>
             </div>
 
-            <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs flex items-center justify-between">
+            <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 text-white shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between justify-between">
               <div>
-                <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">In Hand Cash</p>
-                <h3 class="text-xl sm:text-2xl font-black mt-1" id="fund-stat-cash">₹ 0</h3>
-                <p class="text-[10px] text-amber-100 mt-0.5">Cash with Treasurer</p>
+                <div class="flex items-center gap-1 sm:hidden mb-1">
+                  <div class="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-[9px]">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                  </div>
+                  <p class="text-[9px] font-bold text-amber-100 uppercase tracking-wider truncate">Cash</p>
+                </div>
+                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider hidden sm:block">In Hand Cash</p>
+                <h3 class="text-xs sm:text-2xl font-black font-mono mt-0.5 sm:mt-1 truncate" id="fund-stat-cash">₹ 0</h3>
+                <p class="text-[10px] text-amber-100 mt-0.5 hidden sm:block">Cash with Treasurer</p>
               </div>
-              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 flex items-center justify-center text-lg sm:text-xl">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 hidden sm:flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
               </div>
             </div>
           </div>
 
           <!-- Section 1: Fund Types Master -->
-          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
             <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
                 <i class="fa-solid fa-layer-group text-teal-600"></i> Fund Types Master
               </h3>
-              <button onclick="openAddFundTypeModal()" class="px-3 py-1.5 bg-teal-50 hover:bg-teal-100 active:scale-95 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+              <button onclick="openAddFundTypeModal()" class="px-2.5 sm:px-3 py-1.5 bg-teal-50 hover:bg-teal-100 active:scale-95 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
                 <span>Add Fund Type</span>
               </button>
             </div>
 
-            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="fund-types-cards-grid">
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2" id="fund-types-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
           <!-- Section 1B: Bank Accounts -->
-          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
             <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
                 <i class="fa-solid fa-building-columns text-blue-600"></i> Bank Accounts
               </h3>
-              <button onclick="openAddBankAccountModal()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+              <button onclick="openAddBankAccountModal()" class="px-2.5 sm:px-3 py-1.5 bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
                 <span>Add Bank Account</span>
               </button>
             </div>
 
-            <div class="mt-3.5 flex flex-col space-y-2.5 w-full" id="bank-accounts-cards-grid">
+            <div class="mt-3 flex flex-col space-y-2.5 w-full" id="bank-accounts-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
           <!-- Section 2: Fund Transfers Register -->
-          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
-            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> Fund Transfers & Transactions
+                <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> Fund Transfers
               </h3>
-              <button onclick="openFundTransferModal()" class="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
-                <i class="fa-solid fa-plus text-xs"></i>
-                <span>New Transfer</span>
-              </button>
-            </div>
-
-            <!-- Transfer Type Filters & Search -->
-            <div class="mt-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs">
-              <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
-                <button onclick="filterFundTransfers('ALL')" id="filter-ft-all" class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-2xs flex items-center gap-1 flex-shrink-0 cursor-pointer">
-                  <span>All</span> (<span id="ft-count-all">0</span>)
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="openFundTransferFilterModal()" id="btn-ft-filter-popup" class="px-2.5 sm:px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 active:scale-95 text-slate-700 hover:text-indigo-800 border border-slate-200 hover:border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                  <i class="fa-solid fa-filter text-indigo-600 text-xs"></i>
+                  <span id="ft-active-filter-label">All</span>
+                  <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
                 </button>
-                <button onclick="filterFundTransfers('Bank to Hand')" id="filter-ft-b2h" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
-                  <span>Bank to Hand</span>
-                </button>
-                <button onclick="filterFundTransfers('Hand to Bank')" id="filter-ft-h2b" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
-                  <span>Hand to Bank</span>
-                </button>
-                <button onclick="filterFundTransfers('Bank to Party')" id="filter-ft-b2p" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
-                  <span>Bank to Party</span>
-                </button>
-                <button onclick="filterFundTransfers('Cash to Party')" id="filter-ft-c2p" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
-                  <span>Cash to Party</span>
+                <button onclick="openFundTransferModal()" class="px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                  <span>New Transfer</span>
                 </button>
               </div>
             </div>
 
-            <!-- Fund Transfers List Table -->
-            <div class="mt-3.5 overflow-x-auto rounded-xl border border-slate-100">
+            <!-- Mobile List View (Fintech Cards) -->
+            <div class="block sm:hidden mt-3 space-y-2.5" id="fund-transfers-mobile-list">
+              <!-- Populated via JS -->
+            </div>
+
+            <!-- Desktop Table View -->
+            <div class="hidden sm:block mt-3.5 overflow-x-auto rounded-xl border border-slate-100">
               <table class="w-full text-left text-xs">
                 <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
                   <tr>
@@ -4853,6 +4864,65 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL 5B4: FUND TRANSFER FILTER POPUP MODAL                     -->
+  <!-- ============================================================== -->
+  <div id="fund-transfer-filter-popup-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xs w-full p-4 sm:p-5 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <h3 class="text-sm font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-filter text-indigo-600"></i>
+          <span>Filter Transfers</span>
+        </h3>
+        <button onclick="closeFundTransferFilterModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-colors cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2">
+        <button type="button" onclick="selectFundTransferFilter('ALL')" id="ft-filter-opt-all" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-slate-400"></i>
+            <span>All Transfers</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="ft-count-all">0</span>
+        </button>
+
+        <button type="button" onclick="selectFundTransferFilter('Bank to Hand')" id="ft-filter-opt-b2h" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="text-xs">🏦 ➡️ 💵</span>
+            <span>Bank to Hand</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="ft-count-b2h">0</span>
+        </button>
+
+        <button type="button" onclick="selectFundTransferFilter('Hand to Bank')" id="ft-filter-opt-h2b" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="text-xs">💵 ➡️ 🏦</span>
+            <span>Hand to Bank</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="ft-count-h2b">0</span>
+        </button>
+
+        <button type="button" onclick="selectFundTransferFilter('Bank to Party')" id="ft-filter-opt-b2p" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="text-xs">🏦 ➡️ 👤</span>
+            <span>Bank to Party</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="ft-count-b2p">0</span>
+        </button>
+
+        <button type="button" onclick="selectFundTransferFilter('Cash to Party')" id="ft-filter-opt-c2p" class="w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer">
+          <span class="flex items-center gap-2">
+            <span class="text-xs">💵 ➡️ 👤</span>
+            <span>Cash to Party</span>
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="ft-count-c2p">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL 5C: ADD / EDIT DONATION MODAL                            -->
   <!-- ============================================================== -->
   <div id="donation-form-modal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -5543,16 +5613,16 @@
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
         <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-vault text-amber-600"></i> प्रारंभिक कोष संशोधित करें (Opening Balance)
+          <i class="fa-solid fa-vault text-amber-600"></i> Edit Opening Balance
         </h3>
-        <button type="button" onclick="closeEditOpeningBalanceModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+        <button type="button" onclick="closeEditOpeningBalanceModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
       <form onsubmit="handleSaveOpeningBalance(event)" class="space-y-3.5 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">नगद प्रारंभिक राशि (Cash Opening Balance) *</label>
+          <label class="block font-bold text-slate-700 mb-1">Cash Opening Balance *</label>
           <div class="relative">
             <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
             <input type="number" id="opening-bal-cash-input" required min="0" step="any" placeholder="34025" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
@@ -5560,7 +5630,7 @@
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">बैंक प्रारंभिक राशि (Bank Opening Balance) *</label>
+          <label class="block font-bold text-slate-700 mb-1">Bank Opening Balance *</label>
           <div class="relative">
             <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
             <input type="number" id="opening-bal-bank-input" required min="0" step="any" placeholder="0" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
@@ -5568,16 +5638,16 @@
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">विवरण / नोट (Remarks)</label>
-          <input type="text" id="opening-bal-remarks-input" placeholder="जैसे: वर्ष 2025 से पूर्व संचित कोष" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+          <label class="block font-bold text-slate-700 mb-1">Remarks / Note</label>
+          <input type="text" id="opening-bal-remarks-input" placeholder="e.g. Treasury balance prior to 2025" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
         </div>
 
         <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeEditOpeningBalanceModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
-            रद्द करें
+          <button type="button" onclick="closeEditOpeningBalanceModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+            Cancel
           </button>
-          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all">
-            सुरक्षित करें (Save Balance)
+          <button type="submit" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all cursor-pointer">
+            Save Balance
           </button>
         </div>
       </form>
@@ -5591,9 +5661,9 @@
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
         <h3 id="bankaccount-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-building-columns text-blue-600"></i> नया बैंक खाता जोड़ें (Add Bank Account)
+          <i class="fa-solid fa-building-columns text-blue-600"></i> Add Bank Account
         </h3>
-        <button onclick="closeBankAccountModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+        <button onclick="closeBankAccountModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -5604,27 +5674,27 @@
         <!-- Bank Name & Account Number -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">बैंक का नाम (Bank Name) *</label>
-            <input type="text" id="bankaccount-bankname" required placeholder="जैसे: State Bank of India, HDFC" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+            <label class="block font-bold text-slate-700 mb-1">Bank Name *</label>
+            <input type="text" id="bankaccount-bankname" required placeholder="e.g. State Bank of India, HDFC" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">खाता संख्या (Account Number) *</label>
-            <input type="text" id="bankaccount-accnumber" required placeholder="जैसे: 38294710293" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+            <label class="block font-bold text-slate-700 mb-1">Account Number *</label>
+            <input type="text" id="bankaccount-accnumber" required placeholder="e.g. 38294710293" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
           </div>
         </div>
 
         <!-- Account Type (Single / Joint) & Branch / IFSC -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">खाता प्रकार (Account Type) *</label>
+            <label class="block font-bold text-slate-700 mb-1">Account Type *</label>
             <select id="bankaccount-acctype" onchange="handleAccountTypeChange(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
-              <option value="Single">👤 एकल खाता (Single Account)</option>
-              <option value="Joint" selected>👥 संयुक्त खाता (Joint Account)</option>
+              <option value="Single">👤 Single Account</option>
+              <option value="Joint" selected>👥 Joint Account</option>
             </select>
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">शाखा / IFSC कोड (Branch / IFSC)</label>
-            <input type="text" id="bankaccount-branch" placeholder="जैसे: Gomoh Branch (SBIN0001234)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+            <label class="block font-bold text-slate-700 mb-1">Branch / IFSC Code</label>
+            <input type="text" id="bankaccount-branch" placeholder="e.g. Gomoh Branch (SBIN0001234)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
           </div>
         </div>
 
@@ -5632,12 +5702,12 @@
         <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200 space-y-2">
           <div class="flex items-center justify-between">
             <div>
-              <label class="block font-bold text-slate-700">खाताधारक सदस्य का नाम (Account Member Names) *</label>
-              <p class="text-[10px] text-slate-400">एक से अधिक नाम जोड़ने के लिए '+' बटन दबाएं</p>
+              <label class="block font-bold text-slate-700">Account Holders (Members) *</label>
+              <p class="text-[10px] text-slate-400">Click '+' to add more member names</p>
             </div>
-            <button type="button" onclick="addBankMemberNameRow()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-xs">
+            <button type="button" onclick="addBankMemberNameRow()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-xs cursor-pointer">
               <i class="fa-solid fa-plus text-[10px]"></i>
-              <span>+ नाम जोड़ें</span>
+              <span>+ Add Name</span>
             </button>
           </div>
 
@@ -5649,16 +5719,16 @@
 
         <!-- Optional Remarks -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">विवरण / टिप्पणी (Remarks / Purpose)</label>
-          <input type="text" id="bankaccount-remarks" placeholder="जैसे: समिति मुख्य संचालन खाता, चंदा संग्रह" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+          <label class="block font-bold text-slate-700 mb-1">Remarks / Note</label>
+          <input type="text" id="bankaccount-remarks" placeholder="e.g. Main committee operating account" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
         </div>
 
         <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeBankAccountModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
-            रद्द करें
+          <button type="button" onclick="closeBankAccountModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+            Cancel
           </button>
-          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 transition-all">
-            खाता सुरक्षित करें
+          <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 transition-all cursor-pointer">
+            Save Account
           </button>
         </div>
       </form>
@@ -5672,9 +5742,9 @@
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
         <h3 id="fundtransfer-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> नया फंड ट्रांसफर / खर्च दर्ज करें
+          <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> New Fund Transfer
         </h3>
-        <button onclick="closeFundTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+        <button onclick="closeFundTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -5684,33 +5754,33 @@
 
         <!-- Transaction Type -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">हस्तांतरण प्रकार (Transfer Type) *</label>
+          <label class="block font-bold text-slate-700 mb-1">Transfer Type *</label>
           <select id="fundtransfer-type" required onchange="handleTransferTypeChange(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
-            <option value="Bank to Hand">🏦 ➡️ 💵 Bank to Hand (बैंक से नगद निकासी)</option>
-            <option value="Hand to Bank">💵 ➡️ 🏦 Hand to Bank (नगद बैंक में जमा)</option>
-            <option value="Bank to Party">🏦 ➡️ 👤 Bank to Party (बैंक से पार्टी/खर्च भुगतान)</option>
-            <option value="Cash to Party">💵 ➡️ 👤 Cash to Party (नगद से पार्टी/खर्च भुगतान)</option>
+            <option value="Bank to Hand">🏦 ➡️ 💵 Bank to Hand (Bank withdrawal to cash)</option>
+            <option value="Hand to Bank">💵 ➡️ 🏦 Hand to Bank (Cash deposited to bank)</option>
+            <option value="Bank to Party">🏦 ➡️ 👤 Bank to Party (Direct bank payment)</option>
+            <option value="Cash to Party">💵 ➡️ 👤 Cash to Party (Cash payment)</option>
           </select>
         </div>
 
         <!-- Amount & Date -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">राशि (Amount in ₹) *</label>
+            <label class="block font-bold text-slate-700 mb-1">Amount (₹) *</label>
             <div class="relative">
               <span class="absolute left-3 top-2 font-bold text-slate-400">₹</span>
               <input type="number" id="fundtransfer-amount" required min="1" placeholder="500" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
             </div>
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">दिनांक (Date) *</label>
+            <label class="block font-bold text-slate-700 mb-1">Date *</label>
             <input type="date" id="fundtransfer-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
           </div>
         </div>
 
         <!-- Party Name / Receiver / Bank Selector -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1" id="fundtransfer-party-label">पार्टी / प्राप्तकर्ता का नाम (Party Name / Receiver)</label>
+          <label class="block font-bold text-slate-700 mb-1" id="fundtransfer-party-label">Party / Receiver Name</label>
           
           <!-- Dynamic Bank Account Dropdown (Visible when transfer involves a Bank) -->
           <div id="fundtransfer-bank-select-wrapper" class="hidden mb-2">
@@ -5720,28 +5790,28 @@
           </div>
 
           <!-- Free text input for party name or custom bank name -->
-          <input type="text" id="fundtransfer-party" placeholder="जैसे: वेंडर / टेंट वाले / कोषाध्यक्ष / स्वैच्छिक" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+          <input type="text" id="fundtransfer-party" placeholder="e.g. Vendor / Tent House / Cashier / Other" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
         </div>
 
         <!-- Purpose / Fund Type Selection & Remarks -->
         <div>
-          <label class="block font-bold text-slate-700 mb-1">उद्देश्य / कोष प्रकार (Purpose / Fund Type) *</label>
+          <label class="block font-bold text-slate-700 mb-1">Purpose / Fund Type *</label>
           <select id="fundtransfer-remarks-select" onchange="handleFundTransferRemarksSelect(this.value)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
             <!-- Dynamically populated from masterSettings.fundTypes -->
           </select>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">अतिरिक्त विवरण / टिप्पणी (Optional Remarks)</label>
-          <input type="text" id="fundtransfer-remarks" placeholder="जैसे: मासिक सभा व्यय, टेंट किराया, लाउडस्पीकर आदि" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+          <label class="block font-bold text-slate-700 mb-1">Optional Remarks</label>
+          <input type="text" id="fundtransfer-remarks" placeholder="e.g. Monthly meeting expense, tent rent, sound..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
         </div>
 
         <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeFundTransferModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
-            रद्द करें
+          <button type="button" onclick="closeFundTransferModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+            Cancel
           </button>
-          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-indigo-500/20 transition-all">
-            ट्रांसफर सुरक्षित करें
+          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-indigo-500/20 transition-all cursor-pointer">
+            Save Transfer
           </button>
         </div>
       </form>
@@ -11175,6 +11245,7 @@
         'mobile-event-filter-modal',
         'mobile-expense-filter-modal',
         'scheme-filter-modal',
+        'fund-transfer-filter-popup-modal',
         'view-expense-modal'
       ];
       modalIds.forEach(id => {
@@ -15110,7 +15181,7 @@
       closeAllModals();
       const modal = document.getElementById('bankaccount-modal');
       const heading = document.getElementById('bankaccount-modal-heading');
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> नया बैंक खाता जोड़ें (Add Bank Account)';
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-building-columns text-blue-600"></i> Add Bank Account';
 
       document.getElementById('bankaccount-id').value = '';
       document.getElementById('bankaccount-bankname').value = '';
@@ -15136,7 +15207,7 @@
       closeAllModals();
       const modal = document.getElementById('bankaccount-modal');
       const heading = document.getElementById('bankaccount-modal-heading');
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> बैंक खाता संपादित करें (Edit Bank Account)';
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Bank Account';
 
       document.getElementById('bankaccount-id').value = item.id;
       document.getElementById('bankaccount-bankname').value = item.bankName || '';
@@ -15227,8 +15298,8 @@
         grid.innerHTML = `
           <div class="col-span-full py-8 text-center text-slate-400 text-xs">
             <i class="fa-solid fa-building-columns text-2xl mb-2 text-slate-300"></i>
-            <p class="font-bold text-slate-600">कोई बैंक खाता दर्ज नहीं है।</p>
-            <p class="text-[11px] text-slate-400 mt-1">खाता जोड़ने के लिए ऊपर <b>"+ नया बैंक खाता जोड़ें"</b> पर क्लिक करें।</p>
+            <p class="font-bold text-slate-600">No bank accounts registered.</p>
+            <p class="text-[11px] text-slate-400 mt-1">Click <b>"+ Add Bank Account"</b> above to add an account.</p>
           </div>
         `;
         return;
@@ -15239,55 +15310,54 @@
         const membersList = Array.isArray(b.members) && b.members.length > 0 ? b.members : (b.member ? [b.member] : []);
 
         const membersBadges = membersList.map(m => `
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50 text-blue-900 border border-blue-200/80 text-[11px] font-semibold flex-shrink-0">
-            <i class="fa-solid fa-user text-[9px] text-blue-600"></i>
+          <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-blue-50 text-blue-900 border border-blue-200/70 text-[10px] font-semibold flex-shrink-0">
+            <i class="fa-solid fa-user text-[8px] text-blue-600"></i>
             <span>${m}</span>
           </div>
         `).join('');
 
         return `
-          <div class="p-4 rounded-2xl border border-slate-200 bg-white shadow-xs hover:shadow-md transition-all flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 w-full">
+          <div class="p-3 sm:p-4 rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50/40 to-blue-50/20 shadow-2xs hover:shadow-xs transition-all space-y-2.5 w-full">
             
-            <!-- Left: Bank Info & Account Number -->
-            <div class="flex items-center gap-3.5 min-w-[260px] flex-shrink-0">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">
-                <i class="fa-solid fa-building-columns"></i>
+            <!-- Top Row: Bank Info + Badges + Top-Right Action Buttons -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
+                  <i class="fa-solid fa-building-columns"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <h4 class="font-bold text-slate-900 text-xs sm:text-sm truncate">${b.bankName}</h4>
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md ${isJoint ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'}">
+                      ${isJoint ? '👥 Joint' : '👤 Single'}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-1.5 mt-0.5 text-[11px] text-slate-500 font-mono">
+                    <span class="text-[9px] font-bold text-slate-400 font-sans uppercase">A/C:</span>
+                    <span class="font-black text-slate-900 tracking-wider">${b.accountNumber}</span>
+                    ${b.branchName ? `<span class="text-slate-400 font-sans truncate">• ${b.branchName}</span>` : ''}
+                  </div>
+                </div>
               </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <h4 class="font-bold text-slate-900 text-sm truncate">${b.bankName}</h4>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isJoint ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'} flex-shrink-0">
-                    ${isJoint ? '👥 Joint' : '👤 Single'}
-                  </span>
-                </div>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">A/C:</span>
-                  <span class="font-mono font-black text-slate-900 text-xs tracking-wider bg-slate-100 px-2 py-0.5 rounded-lg border border-slate-200/60">${b.accountNumber}</span>
-                  ${b.branchName ? `<span class="text-[11px] text-slate-400 truncate max-w-[140px]">• ${b.branchName}</span>` : ''}
-                </div>
+
+              <!-- Compact Action Buttons (Always on Right) -->
+              <div class="flex items-center gap-1 flex-shrink-0">
+                <button onclick="editBankAccountItem('${b.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs flex items-center justify-center transition-colors cursor-pointer" title="Edit">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button onclick="deleteBankAccountItem('${b.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs flex items-center justify-center transition-colors cursor-pointer" title="Delete">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
               </div>
             </div>
 
-            <!-- Middle: Account Members (Horizontal wrapped flow) -->
-            <div class="flex-1 min-w-0 md:px-4 md:border-x md:border-slate-100">
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">खाताधारक सदस्य (Account Members):</p>
-              <div class="flex flex-wrap items-center gap-1.5">
-                ${membersBadges || '<span class="text-xs text-slate-400">सदस्य नाम उपलब्ध नहीं</span>'}
-              </div>
-              ${b.remarks ? `<p class="text-[11px] text-slate-500 mt-1.5 italic"><i class="fa-solid fa-circle-info text-[9px] text-slate-400 mr-1"></i>${b.remarks}</p>` : ''}
+            <!-- Holders Section: Compact Chips -->
+            <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
+              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mr-0.5">Holders:</span>
+              ${membersBadges || '<span class="text-[10px] text-slate-400">None specified</span>'}
             </div>
 
-            <!-- Right: Action Buttons -->
-            <div class="flex items-center justify-end gap-1.5 flex-shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
-              <button onclick="editBankAccountItem('${b.id}')" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition-colors flex items-center gap-1.5" title="संपादित करें (Edit)">
-                <i class="fa-solid fa-pen-to-square"></i>
-                <span>Edit</span>
-              </button>
-              <button onclick="deleteBankAccountItem('${b.id}')" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition-colors flex items-center gap-1.5" title="हटाएं (Delete)">
-                <i class="fa-solid fa-trash-can"></i>
-                <span>Delete</span>
-              </button>
-            </div>
+            ${b.remarks ? `<p class="text-[10px] text-slate-500 italic"><i class="fa-solid fa-circle-info text-[9px] text-slate-400 mr-1"></i>${b.remarks}</p>` : ''}
 
           </div>
         `;
@@ -15383,7 +15453,7 @@
       if (transferId) {
         const item = allFundTransfers.find(t => t.id === transferId);
         if (!item) return;
-        if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-indigo-600"></i> ट्रांसफर संपादित करें';
+        if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-indigo-600"></i> Edit Fund Transfer';
         document.getElementById('fundtransfer-id').value = item.id;
         document.getElementById('fundtransfer-type').value = item.type;
         document.getElementById('fundtransfer-amount').value = item.amount;
@@ -15399,7 +15469,7 @@
         }
         document.getElementById('fundtransfer-remarks').value = item.remarks || '';
       } else {
-        if (heading) heading.innerHTML = '<i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> नया फंड ट्रांसफर / खर्च दर्ज करें';
+        if (heading) heading.innerHTML = '<i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> New Fund Transfer';
         document.getElementById('fundtransfer-id').value = '';
         document.getElementById('fundtransfer-type').value = 'Bank to Hand';
         document.getElementById('fundtransfer-amount').value = '';
@@ -15546,6 +15616,27 @@
       }
     }
 
+    function openFundTransferFilterModal() {
+      const modal = document.getElementById('fund-transfer-filter-popup-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeFundTransferFilterModal() {
+      const modal = document.getElementById('fund-transfer-filter-popup-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    function selectFundTransferFilter(type) {
+      filterFundTransfers(type);
+      closeFundTransferFilterModal();
+    }
+
     function filterFundTransfers(type) {
       currentFundTransferFilter = type || 'ALL';
       renderFundTransfersList();
@@ -15553,34 +15644,64 @@
 
     function renderFundTransfersList() {
       const tbody = document.getElementById('fund-transfers-tbody');
-      if (!tbody) return;
+      const mobileList = document.getElementById('fund-transfers-mobile-list');
 
-      // Update counters
+      // Update counts
       const countAll = allFundTransfers.length;
+      const countB2H = allFundTransfers.filter(t => t.type === 'Bank to Hand').length;
+      const countH2B = allFundTransfers.filter(t => t.type === 'Hand to Bank').length;
+      const countB2P = allFundTransfers.filter(t => t.type === 'Bank to Party').length;
+      const countC2P = allFundTransfers.filter(t => t.type === 'Cash to Party').length;
+
       const elCountAll = document.getElementById('ft-count-all');
+      const elCountB2H = document.getElementById('ft-count-b2h');
+      const elCountH2B = document.getElementById('ft-count-h2b');
+      const elCountB2P = document.getElementById('ft-count-b2p');
+      const elCountC2P = document.getElementById('ft-count-c2p');
       if (elCountAll) elCountAll.textContent = countAll;
+      if (elCountB2H) elCountB2H.textContent = countB2H;
+      if (elCountH2B) elCountH2B.textContent = countH2B;
+      if (elCountB2P) elCountB2P.textContent = countB2P;
+      if (elCountC2P) elCountC2P.textContent = countC2P;
 
-      // Update Filter Button States
-      const btnAll = document.getElementById('filter-ft-all');
-      const btnB2H = document.getElementById('filter-ft-b2h');
-      const btnH2B = document.getElementById('filter-ft-h2b');
-      const btnB2P = document.getElementById('filter-ft-b2p');
-      const btnC2P = document.getElementById('filter-ft-c2p');
+      // Update popup filter trigger button label
+      const activeFilterLabel = document.getElementById('ft-active-filter-label');
+      if (activeFilterLabel) {
+        if (currentFundTransferFilter === 'Bank to Hand') {
+          activeFilterLabel.textContent = `Bank to Hand (${countB2H})`;
+        } else if (currentFundTransferFilter === 'Hand to Bank') {
+          activeFilterLabel.textContent = `Hand to Bank (${countH2B})`;
+        } else if (currentFundTransferFilter === 'Bank to Party') {
+          activeFilterLabel.textContent = `Bank to Party (${countB2P})`;
+        } else if (currentFundTransferFilter === 'Cash to Party') {
+          activeFilterLabel.textContent = `Cash to Party (${countC2P})`;
+        } else {
+          activeFilterLabel.textContent = `All (${countAll})`;
+        }
+      }
 
-      [btnAll, btnB2H, btnH2B, btnB2P, btnC2P].forEach(btn => {
-        if (btn) btn.className = 'px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0';
+      // Update popup modal options styling
+      const optAll = document.getElementById('ft-filter-opt-all');
+      const optB2H = document.getElementById('ft-filter-opt-b2h');
+      const optH2B = document.getElementById('ft-filter-opt-h2b');
+      const optB2P = document.getElementById('ft-filter-opt-b2p');
+      const optC2P = document.getElementById('ft-filter-opt-c2p');
+
+      const defaultOptClass = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200';
+      [optAll, optB2H, optH2B, optB2P, optC2P].forEach(opt => {
+        if (opt) opt.className = defaultOptClass;
       });
 
-      if (currentFundTransferFilter === 'Bank to Hand' && btnB2H) {
-        btnB2H.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm flex items-center gap-1 flex-shrink-0';
-      } else if (currentFundTransferFilter === 'Hand to Bank' && btnH2B) {
-        btnH2B.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm flex items-center gap-1 flex-shrink-0';
-      } else if (currentFundTransferFilter === 'Bank to Party' && btnB2P) {
-        btnB2P.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm flex items-center gap-1 flex-shrink-0';
-      } else if (currentFundTransferFilter === 'Cash to Party' && btnC2P) {
-        btnC2P.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm flex items-center gap-1 flex-shrink-0';
-      } else if (btnAll) {
-        btnAll.className = 'px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm flex items-center gap-1 flex-shrink-0';
+      if (currentFundTransferFilter === 'Bank to Hand' && optB2H) {
+        optB2H.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-blue-600 text-white shadow-xs';
+      } else if (currentFundTransferFilter === 'Hand to Bank' && optH2B) {
+        optH2B.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-teal-600 text-white shadow-xs';
+      } else if (currentFundTransferFilter === 'Bank to Party' && optB2P) {
+        optB2P.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-purple-600 text-white shadow-xs';
+      } else if (currentFundTransferFilter === 'Cash to Party' && optC2P) {
+        optC2P.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-rose-600 text-white shadow-xs';
+      } else if (optAll) {
+        optAll.className = 'w-full py-2.5 px-3.5 rounded-xl font-bold text-xs text-left flex items-center justify-between transition-all cursor-pointer bg-indigo-600 text-white shadow-xs';
       }
 
       const filtered = allFundTransfers.filter(ft => {
@@ -15588,62 +15709,135 @@
         return ft.type === currentFundTransferFilter;
       });
 
-      if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" class="p-12 text-center text-slate-400">
-              <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-xl mx-auto mb-2">
-                <i class="fa-solid fa-money-bill-transfer"></i>
+      // Render Mobile Card List
+      if (mobileList) {
+        if (filtered.length === 0) {
+          mobileList.innerHTML = `
+            <div class="py-8 text-center text-slate-400">
+              <i class="fa-solid fa-money-bill-transfer text-2xl text-slate-300 mb-1.5"></i>
+              <p class="text-xs font-bold text-slate-600">No transfers found</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">Click "+ New Transfer" to add a transfer.</p>
+            </div>
+          `;
+        } else {
+          mobileList.innerHTML = filtered.map(t => {
+            let typeBadge = '';
+            let iconBg = 'bg-slate-100 text-slate-700';
+            let icon = 'fa-money-bill-transfer';
+            if (t.type === 'Bank to Hand') {
+              typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">🏦 ➡️ 💵 Bank to Hand</span>';
+              iconBg = 'bg-blue-100 text-blue-700';
+              icon = 'fa-building-columns';
+            } else if (t.type === 'Hand to Bank') {
+              typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">💵 ➡️ 🏦 Hand to Bank</span>';
+              iconBg = 'bg-teal-100 text-teal-700';
+              icon = 'fa-hand-holding-dollar';
+            } else if (t.type === 'Bank to Party') {
+              typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">🏦 ➡️ 👤 Bank to Party</span>';
+              iconBg = 'bg-purple-100 text-purple-700';
+              icon = 'fa-arrow-up-right-from-square';
+            } else if (t.type === 'Cash to Party') {
+              typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">💵 ➡️ 👤 Cash to Party</span>';
+              iconBg = 'bg-rose-100 text-rose-700';
+              icon = 'fa-hand-holding-dollar';
+            }
+
+            return `
+              <div class="p-3 rounded-2xl border border-slate-200 bg-white shadow-2xs hover:shadow-xs transition-all space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 rounded-xl ${iconBg} flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
+                      <i class="fa-solid ${icon}"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <h4 class="font-bold text-slate-900 text-xs truncate">${t.party || 'Fund Transfer'}</h4>
+                      <p class="text-[10px] text-slate-400 font-mono">${formatDonationDate(t.date)} • ${t.id}</p>
+                    </div>
+                  </div>
+                  <div class="text-right flex-shrink-0">
+                    <span class="font-mono font-black text-slate-900 text-sm">₹${(parseFloat(t.amount) || 0).toLocaleString('en-IN')}</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+                  <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
+                    ${typeBadge}
+                    ${t.remarks ? `<span class="text-[10px] text-slate-500 truncate max-w-[130px]">• ${t.remarks}</span>` : ''}
+                  </div>
+                  <div class="flex items-center gap-1 flex-shrink-0">
+                    <button onclick="openFundTransferModal('${t.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors cursor-pointer" title="Edit">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button onclick="deleteFundTransferItem('${t.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors cursor-pointer" title="Delete">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <p class="font-bold text-slate-700 text-xs">कोई ट्रांसफर या लेनदेन रिकॉर्ड नहीं मिला</p>
-              <p class="text-[11px] text-slate-400 mt-1">नया हस्तांतरण जोड़ने के लिए ऊपर <b>"+ नया Fund Transfer"</b> बटन दबाएं।</p>
-            </td>
-          </tr>
-        `;
-        return;
+            `;
+          }).join('');
+        }
       }
 
-      tbody.innerHTML = filtered.map(t => {
-        let typeBadge = '';
-        if (t.type === 'Bank to Hand') {
-          typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">🏦 ➡️ 💵 Bank to Hand</span>';
-        } else if (t.type === 'Hand to Bank') {
-          typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">💵 ➡️ 🏦 Hand to Bank</span>';
-        } else if (t.type === 'Bank to Party') {
-          typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">🏦 ➡️ 👤 Bank to Party</span>';
-        } else if (t.type === 'Cash to Party') {
-          typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">💵 ➡️ 👤 Cash to Party</span>';
+      // Render Desktop Table
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="p-12 text-center text-slate-400">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-xl mx-auto mb-2">
+                  <i class="fa-solid fa-money-bill-transfer"></i>
+                </div>
+                <p class="font-bold text-slate-700 text-xs">No transfers found</p>
+                <p class="text-[11px] text-slate-400 mt-1">Click <b>"+ New Transfer"</b> above to add a transfer.</p>
+              </td>
+            </tr>
+          `;
+          return;
         }
 
-        return `
-          <tr class="hover:bg-slate-50/80 transition-colors">
-            <td class="p-3 pl-4">
-              <span class="font-mono font-bold text-slate-800 text-xs block">${t.id}</span>
-              <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(t.date)}</span>
-            </td>
-            <td class="p-3">
-              ${typeBadge}
-            </td>
-            <td class="p-3">
-              <div class="font-bold text-slate-900">${t.party || '--'}</div>
-              ${t.remarks ? `<div class="text-[10px] text-slate-500">${t.remarks}</div>` : ''}
-            </td>
-            <td class="p-3 text-right font-mono font-black text-slate-900 text-sm">
-              ₹${(parseFloat(t.amount) || 0).toLocaleString('en-IN')}
-            </td>
-            <td class="p-3 pr-4 text-center">
-              <div class="flex items-center justify-center gap-1.5">
-                <button onclick="openFundTransferModal('${t.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="संपादित करें (Edit)">
-                  <i class="fa-solid fa-pen"></i>
-                </button>
-                <button onclick="deleteFundTransferItem('${t.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs" title="हटाएं (Delete)">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+        tbody.innerHTML = filtered.map(t => {
+          let typeBadge = '';
+          if (t.type === 'Bank to Hand') {
+            typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">🏦 ➡️ 💵 Bank to Hand</span>';
+          } else if (t.type === 'Hand to Bank') {
+            typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">💵 ➡️ 🏦 Hand to Bank</span>';
+          } else if (t.type === 'Bank to Party') {
+            typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200">🏦 ➡️ 👤 Bank to Party</span>';
+          } else if (t.type === 'Cash to Party') {
+            typeBadge = '<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-200">💵 ➡️ 👤 Cash to Party</span>';
+          }
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="p-3 pl-4">
+                <span class="font-mono font-bold text-slate-800 text-xs block">${t.id}</span>
+                <span class="text-[10px] text-slate-400 font-mono">${formatDonationDate(t.date)}</span>
+              </td>
+              <td class="p-3">
+                ${typeBadge}
+              </td>
+              <td class="p-3">
+                <div class="font-bold text-slate-900">${t.party || '--'}</div>
+                ${t.remarks ? `<div class="text-[10px] text-slate-500">${t.remarks}</div>` : ''}
+              </td>
+              <td class="p-3 text-right font-mono font-black text-slate-900 text-sm">
+                ₹${(parseFloat(t.amount) || 0).toLocaleString('en-IN')}
+              </td>
+              <td class="p-3 pr-4 text-center">
+                <div class="flex items-center justify-center gap-1.5">
+                  <button onclick="openFundTransferModal('${t.id}')" class="w-7 h-7 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Edit">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button onclick="deleteFundTransferItem('${t.id}')" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Delete">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
     }
 
     // Master Settings window exports
@@ -15654,6 +15848,9 @@
     window.handleSaveScheme = handleSaveScheme;
     window.deleteSchemeItem = deleteSchemeItem;
     window.filterSchemes = filterSchemes;
+    window.openSchemeFilterModal = openSchemeFilterModal;
+    window.closeSchemeFilterModal = closeSchemeFilterModal;
+    window.selectSchemeFilter = selectSchemeFilter;
     window.toggleSchemeAmountType = toggleSchemeAmountType;
     window.handleSaveMembershipPlanRates = handleSaveMembershipPlanRates;
     window.populateMembershipPlanRatesInputs = populateMembershipPlanRatesInputs;
@@ -15682,6 +15879,9 @@
 
     window.openFundTransferModal = openFundTransferModal;
     window.closeFundTransferModal = closeFundTransferModal;
+    window.openFundTransferFilterModal = openFundTransferFilterModal;
+    window.closeFundTransferFilterModal = closeFundTransferFilterModal;
+    window.selectFundTransferFilter = selectFundTransferFilter;
     window.handleTransferTypeChange = handleTransferTypeChange;
     window.handleFundTransferRemarksSelect = handleFundTransferRemarksSelect;
     window.populateFundTransferPurposeDropdown = populateFundTransferPurposeDropdown;
