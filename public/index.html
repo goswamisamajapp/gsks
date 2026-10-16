@@ -3939,54 +3939,55 @@
   <!-- ============================================================== -->
   <!-- MODAL: EVENT PARTICIPANTS LIST POPUP (प्रतिभागी सदस्य सूची)      -->
   <!-- ============================================================== -->
-  <!-- MODAL: EVENT PARTICIPANTS LIST POPUP (प्रतिभागी सदस्य सूची व प्रबंधन) -->
   <!-- ============================================================== -->
-  <div id="member-event-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 relative my-4 sm:my-6 animate-in fade-in zoom-in-95 duration-200 h-[88vh] max-h-[820px] flex flex-col">
+  <!-- MODAL: EVENT PARTICIPANTS LIST POPUP (उपस्थित प्रतिभागी)        -->
+  <!-- ============================================================== -->
+  <div id="member-event-participants-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-5 overflow-y-auto">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full p-3.5 sm:p-6 shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200 h-[88vh] max-h-[780px] flex flex-col">
       
       <!-- Close Button -->
-      <button onclick="closeMemberEventParticipantsModal()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
+      <button onclick="closeMemberEventParticipantsModal()" class="absolute right-3 top-3 sm:right-4 sm:top-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
       <!-- Header -->
-      <div class="flex items-center gap-3.5 pb-4 border-b border-slate-100 flex-shrink-0">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl flex-shrink-0 shadow-xs">
+      <div class="flex items-center gap-2.5 sm:gap-3.5 pb-3 border-b border-slate-100 flex-shrink-0 pr-8">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base sm:text-lg flex-shrink-0 shadow-xs">
           <i class="fa-solid fa-user-check"></i>
         </div>
-        <div class="min-w-0 pr-10">
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <h3 class="text-base sm:text-lg font-black text-slate-900 font-devanagari truncate">
-              उपस्थित प्रतिभागी सूची एवं प्रबंधन (Participants)
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
+              उपस्थित प्रतिभागी
             </h3>
-            <span class="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex-shrink-0" id="m-modal-parts-count">
+            <span class="px-2 sm:px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex-shrink-0" id="m-modal-parts-count">
               0 उपस्थित
             </span>
           </div>
-          <p class="text-xs text-slate-500 truncate mt-0.5" id="m-modal-parts-event-title">बैठक शीर्षक</p>
+          <p class="text-[11px] sm:text-xs text-slate-500 truncate mt-0.5 font-medium" id="m-modal-parts-event-title">बैठक शीर्षक</p>
         </div>
       </div>
 
       <!-- Quick Stats / Meeting Info & Add Button -->
-      <div class="my-3.5 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600 flex-shrink-0">
-        <div class="flex items-center gap-2 truncate">
-          <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-[11px] flex-shrink-0">
+      <div class="my-2.5 sm:my-3 bg-slate-50 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600 flex-shrink-0">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] flex-shrink-0">
             <i class="fa-solid fa-location-dot"></i>
           </span>
-          <span class="truncate font-semibold text-slate-800" id="m-modal-parts-venue">--</span>
+          <span class="truncate font-semibold text-slate-800 text-[11px] sm:text-xs" id="m-modal-parts-venue">--</span>
         </div>
-        <div class="flex items-center gap-3 justify-between sm:justify-end flex-wrap">
-          <span class="font-mono text-xs text-slate-600 font-bold bg-white px-2.5 py-1 rounded-xl border border-slate-200" id="m-modal-parts-date">--</span>
+        <div class="flex items-center gap-2 justify-between sm:justify-end flex-wrap">
+          <span class="font-mono text-[10px] sm:text-xs text-slate-600 font-bold bg-white px-2 py-0.5 sm:py-1 rounded-lg sm:rounded-xl border border-slate-200" id="m-modal-parts-date">--</span>
           
           <!-- Admin Manual Add Toggle Button -->
           <button 
             type="button" 
             id="btn-toggle-manual-add-participant"
             onclick="toggleManualAddParticipantForm()" 
-            class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+            class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
           >
-            <i class="fa-solid fa-user-plus text-[11px]"></i>
-            <span>+ सदस्य जोड़ें (Add Participants)</span>
+            <i class="fa-solid fa-user-plus text-[10px]"></i>
+            <span>+ सदस्य जोड़ें</span>
           </button>
         </div>
       </div>
@@ -3995,25 +3996,25 @@
       <input type="hidden" id="parts-modal-active-event-id">
 
       <!-- Collapsible Manual Add Participants Form (Admin Feature) -->
-      <div id="manual-add-participant-section" class="hidden mb-3.5 p-4 bg-gradient-to-br from-emerald-50/80 via-teal-50/50 to-slate-50 rounded-2xl border-2 border-emerald-300 shadow-sm flex-shrink-0 animate-in fade-in duration-200">
-        <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-emerald-200/60">
+      <div id="manual-add-participant-section" class="hidden mb-3 p-3 sm:p-4 bg-gradient-to-br from-emerald-50/80 via-teal-50/50 to-slate-50 rounded-2xl border-2 border-emerald-300 shadow-sm flex-shrink-0 animate-in fade-in duration-200">
+        <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-emerald-200/60">
           <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-950 font-devanagari">
-            <span class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">
+            <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-[10px] sm:text-xs">
               <i class="fa-solid fa-user-plus"></i>
             </span>
-            <span>मैन्युअल रूप से प्रतिभागी उपस्थिति दर्ज करें</span>
+            <span>मैन्युअल उपस्थिति दर्ज करें</span>
           </div>
           <button type="button" onclick="toggleManualAddParticipantForm(false)" class="w-6 h-6 rounded-lg bg-white hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center text-xs cursor-pointer border border-slate-200">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
-        <div class="space-y-3 text-xs">
+        <div class="space-y-2.5 text-xs">
           <!-- Member Selection Dropdown / Multi-Select Checklist -->
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="font-bold text-slate-800 text-xs">सदस्य चुनें (Select Members - Multiple टिक करें):</label>
-              <div class="flex items-center gap-2 text-xs">
+            <div class="flex items-center justify-between mb-1">
+              <label class="font-bold text-slate-800 text-[11px] sm:text-xs">सदस्य चुनें:</label>
+              <div class="flex items-center gap-2 text-[11px]">
                 <button type="button" onclick="selectAllManualParticipants(true)" class="text-emerald-700 hover:underline font-bold">✓ सभी चुनें</button>
                 <span class="text-slate-300">|</span>
                 <button type="button" onclick="selectAllManualParticipants(false)" class="text-slate-500 hover:underline">हटाएं</button>
@@ -4027,25 +4028,25 @@
                 type="text" 
                 id="manual-part-search" 
                 oninput="filterManualParticipantsList(this.value)" 
-                placeholder="सदस्य का नाम, ID या फोन से तुरंत खोजें..." 
-                class="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 shadow-2xs"
+                placeholder="सदस्य का नाम, ID या फोन से खोजें..." 
+                class="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 sm:py-2 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 shadow-2xs"
               >
             </div>
 
-            <!-- Scrollable Checklist of Members (Enlarged) -->
-            <div id="manual-parts-checklist-container" class="max-h-48 overflow-y-auto bg-white border border-slate-200 rounded-2xl p-2.5 space-y-1.5 divide-y divide-slate-50 shadow-inner">
+            <!-- Scrollable Checklist of Members -->
+            <div id="manual-parts-checklist-container" class="max-h-40 sm:max-h-48 overflow-y-auto bg-white border border-slate-200 rounded-xl sm:rounded-2xl p-2 space-y-1 divide-y divide-slate-50 shadow-inner">
               <!-- Populated dynamically via JS -->
             </div>
           </div>
 
           <!-- Time Input & Add Button Row -->
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-emerald-200/60">
-            <div class="flex items-center gap-2.5">
-              <label class="font-bold text-slate-700 text-xs whitespace-nowrap">उपस्थिति का समय (Time):</label>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2 border-t border-emerald-200/60">
+            <div class="flex items-center gap-2">
+              <label class="font-bold text-slate-700 text-[11px] sm:text-xs whitespace-nowrap">समय (Time):</label>
               <input 
                 type="time" 
                 id="manual-part-time-input" 
-                class="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-mono text-slate-800 font-bold focus:outline-none focus:border-emerald-500 shadow-2xs"
+                class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-mono text-slate-800 font-bold focus:outline-none focus:border-emerald-500 shadow-2xs"
               >
             </div>
 
@@ -4053,35 +4054,35 @@
               type="button" 
               onclick="saveManualParticipantsToEvent()" 
               id="btn-confirm-add-participants"
-              class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+              class="px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/30 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all"
             >
-              <i class="fa-solid fa-check"></i>
-              <span>प्रतिभागी जोड़ें (Add Selected Members)</span>
+              <i class="fa-solid fa-check text-xs"></i>
+              <span>प्रतिभागी जोड़ें</span>
             </button>
           </div>
         </div>
       </div>
 
       <!-- Participants List Table / Container (Flexible Scrollable Area) -->
-      <div class="flex-1 overflow-hidden flex flex-col mb-3">
-        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center justify-between px-1">
-          <span>उपस्थित सदस्य विवरण (Participants List):</span>
-          <span class="text-[11px] text-slate-400 font-normal">नाम • संपर्क • समय</span>
+      <div class="flex-1 overflow-hidden flex flex-col mb-2.5">
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center justify-between px-1">
+          <span>उपस्थित सदस्य सूची</span>
+          <span class="text-[10px] text-slate-400 font-normal">नाम • फोन • समय</span>
         </div>
-        <div class="flex-1 overflow-y-auto rounded-2xl border border-slate-200 divide-y divide-slate-100 bg-slate-50/50 shadow-inner" id="m-modal-parts-list-body">
+        <div class="flex-1 overflow-y-auto rounded-xl sm:rounded-2xl border border-slate-200 divide-y divide-slate-100 bg-slate-50/50 shadow-inner" id="m-modal-parts-list-body">
           <!-- Populated dynamically via JS -->
         </div>
       </div>
 
       <!-- Bottom Action Row -->
-      <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 flex-shrink-0">
-        <span class="text-xs text-slate-500 font-medium">कुल उपस्थिति: <strong id="m-modal-parts-bottom-count" class="text-emerald-700 font-bold text-sm font-mono">0</strong> सदस्य</span>
+      <div class="pt-2.5 sm:pt-3 border-t border-slate-100 flex items-center justify-between gap-2 flex-shrink-0">
+        <span class="text-[11px] sm:text-xs text-slate-500 font-medium">कुल उपस्थिति: <strong id="m-modal-parts-bottom-count" class="text-emerald-700 font-bold text-xs sm:text-sm font-mono">0</strong> सदस्य</span>
         <button 
           type="button" 
           onclick="closeMemberEventParticipantsModal()" 
-          class="px-7 py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-sm"
+          class="px-5 sm:px-6 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-xs active:scale-95"
         >
-          <span>बंद करें (Close)</span>
+          <span>बंद करें</span>
         </button>
       </div>
 
