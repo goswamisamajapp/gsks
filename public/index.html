@@ -7811,7 +7811,7 @@
         else currentFilterCount.textContent = countAll;
       }
 
-      // Render Open/Upcoming Notices (Top Highlighted Cards - Clean & Mobile Friendly)
+      // Render Open/Upcoming Notices (Top Highlighted Cards - Structured Layout)
       if (openContainer) {
         if (openNotices.length === 0) {
           if (currentMemberNoticeFilter === 'CLOSED') {
@@ -7830,81 +7830,90 @@
           if (openSection) openSection.classList.remove('hidden');
           openContainer.innerHTML = openNotices.map((n, idx) => {
             const isActuallyOpen = n.isOpen;
-            const borderColor = isActuallyOpen ? 'border-emerald-200' : 'border-blue-200';
+            const borderColor = isActuallyOpen ? 'border-emerald-300' : 'border-blue-200';
             const iconBg = isActuallyOpen ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white';
 
             return `
-            <div class="bg-white rounded-2xl p-3.5 sm:p-4 border ${borderColor} shadow-xs space-y-2.5 transition-all">
-              <!-- Top Badges & Date Bar -->
-              <div class="flex items-center justify-between gap-2 flex-wrap text-[10px] sm:text-xs">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="px-2 py-0.5 rounded-md font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full ${n.statusDotColor || 'bg-emerald-600'}"></span>
-                    <span>${n.statusLabel}</span>
-                  </span>
-                  <span class="px-2 py-0.5 rounded-md font-semibold border ${n.badgeColor}">
-                    ${n.category}
-                  </span>
-                </div>
-                <div class="flex items-center gap-1.5 text-slate-500 font-mono font-semibold ml-auto">
-                  <span>📅 ${n.dateFormatted || n.date}</span>
-                  <span>•</span>
-                  <span>⏰ ${n.timeFormatted || n.time || '05:00 PM'}</span>
-                </div>
-              </div>
-
-              <!-- Main Title & Icon -->
+            <div class="bg-white rounded-2xl p-4 border ${borderColor} shadow-xs space-y-3 transition-all">
+              <!-- 1. MEETING TITLE (Sabse Upar) -->
               <div class="flex items-start gap-2.5">
                 <div class="w-8 h-8 rounded-xl ${iconBg} flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
                   <i class="fa-solid fa-bullhorn"></i>
                 </div>
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari leading-snug">
+                <h3 class="text-base font-black text-slate-900 font-devanagari leading-snug">
                   ${n.title}
                 </h3>
               </div>
 
-              <!-- Snippet Summary (Clamped for cleanliness) -->
-              <p class="text-xs text-slate-600 leading-relaxed line-clamp-2 pl-0.5">
-                ${n.summary || n.details || ''}
-              </p>
+              <!-- 2. MEETING TYPES & BADGES (Niche Meeting Types: Agami, General Meeting, etc.) -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full ${n.statusDotColor || 'bg-emerald-600'}"></span>
+                  <span>${n.statusLabel}</span>
+                </span>
+                <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold border ${n.badgeColor}">
+                  ${n.category}
+                </span>
+              </div>
 
-              <!-- Location & Action Row -->
-              <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                <div class="flex items-center gap-1.5 text-slate-600 text-[11px] truncate min-w-0">
-                  <i class="fa-solid fa-location-dot text-rose-500 text-xs flex-shrink-0"></i>
-                  <span class="truncate font-medium">${n.venue}</span>
-                </div>
+              <!-- 3. DATE & TIME (Fir Date Time) -->
+              <div class="flex items-center gap-3 text-xs text-slate-700 font-medium">
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-calendar text-blue-600"></i>
+                  <span>${n.dateFormatted || n.date}</span>
+                </span>
+                <span class="text-slate-300">•</span>
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-clock text-amber-600"></i>
+                  <span>${n.timeFormatted || n.time || '05:00 PM'}</span>
+                </span>
+              </div>
 
-                <div class="flex items-center gap-2 flex-shrink-0">
-                  <button 
-                    type="button" 
-                    onclick="openNoticeDetailModal('${n.id}')"
-                    class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
-                    title="पूरी सूचना का विवरण देखें"
-                  >
-                    <i class="fa-solid fa-eye text-slate-500 text-[10px]"></i>
-                    <span>विवरण</span>
-                  </button>
+              <!-- 4. VENUE (Fir Venue) -->
+              <div class="flex items-start gap-1.5 text-xs text-slate-700 font-medium">
+                <i class="fa-solid fa-location-dot text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+                <span>स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
+              </div>
 
-                  ${(n.rawItem && n.rawItem.id) ? `
-                    ${(isMemberAlreadyParticipated(n.rawItem, member ? member.id : null)) ? `
-                      <span class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
-                        <i class="fa-solid fa-circle-check text-emerald-600 text-[11px]"></i>
-                        <span>उपस्थित</span>
-                      </span>
-                    ` : `
-                      <button 
-                        type="button" 
-                        onclick="handleEventParticipation('${n.rawItem.id}')" 
-                        class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
-                        title="लाइव 20 मीटर जीपीएस लोकेशन से बैठक में उपस्थिति दर्ज करें"
-                      >
-                        <i class="fa-solid fa-hand-holding-hand text-[10px]"></i>
-                        <span>उपस्थिति दें</span>
-                      </button>
-                    `}
-                  ` : ''}
-                </div>
+              <!-- 5. DETAIL (Tab Detail) -->
+              <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <p class="line-clamp-2">
+                  ${n.summary || n.details || ''}
+                </p>
+              </div>
+
+              <!-- 6. ACTION BUTTONS (Tab Wiwran and Upasthiti Button) -->
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                <!-- Vivran Button -->
+                <button 
+                  type="button" 
+                  onclick="openNoticeDetailModal('${n.id}')"
+                  class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs"
+                  title="पूरी सूचना का विवरण देखें"
+                >
+                  <i class="fa-solid fa-eye text-slate-500 text-xs"></i>
+                  <span>विवरण देखें</span>
+                </button>
+
+                <!-- Upasthiti Button -->
+                ${(n.rawItem && n.rawItem.id) ? `
+                  ${(isMemberAlreadyParticipated(n.rawItem, member ? member.id : null)) ? `
+                    <span class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1.5 shadow-2xs">
+                      <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
+                      <span>उपस्थिति दर्ज</span>
+                    </span>
+                  ` : `
+                    <button 
+                      type="button" 
+                      onclick="handleEventParticipation('${n.rawItem.id}')" 
+                      class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                      title="लाइव 20 मीटर जीपीएस लोकेशन से बैठक में उपस्थिति दर्ज करें"
+                    >
+                      <i class="fa-solid fa-hand-holding-hand text-xs"></i>
+                      <span>उपस्थिति दें</span>
+                    </button>
+                  `}
+                ` : ''}
               </div>
             </div>
             `;
@@ -7912,7 +7921,7 @@
         }
       }
 
-      // Render Past Notices (Archive Cards - Clean & Mobile Friendly)
+      // Render Past Notices (Archive Cards - Structured Layout)
       if (pastContainer) {
         if (pastNotices.length === 0) {
           if (currentMemberNoticeFilter === 'OPEN' || currentMemberNoticeFilter === 'UPCOMING') {
@@ -7928,71 +7937,80 @@
         } else {
           if (pastSection) pastSection.classList.remove('hidden');
           pastContainer.innerHTML = pastNotices.map(n => `
-            <div class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-2xs space-y-2 hover:border-slate-300 transition-all">
-              <!-- Top Badges & Date -->
-              <div class="flex items-center justify-between gap-2 flex-wrap text-[10px] sm:text-xs">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="px-2 py-0.5 rounded-md font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full ${n.statusDotColor || 'bg-slate-500'}"></span>
-                    <span>${n.statusLabel}</span>
-                  </span>
-                  <span class="px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                    ${n.category}
-                  </span>
-                </div>
-                <div class="text-[10px] font-mono text-slate-500 ml-auto">
-                  ${n.dateFormatted || n.date}
-                </div>
-              </div>
-
-              <!-- Title -->
-              <div class="flex items-start gap-2">
-                <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
-                  <i class="fa-solid fa-file-lines text-[10px]"></i>
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-3 hover:border-slate-300 transition-all">
+              <!-- 1. Meeting Title -->
+              <div class="flex items-start gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
+                  <i class="fa-solid fa-file-lines text-xs"></i>
                 </span>
-                <h4 class="text-xs sm:text-sm font-extrabold text-slate-800 font-devanagari leading-snug">
+                <h4 class="text-base font-extrabold text-slate-800 font-devanagari leading-snug">
                   ${n.title}
                 </h4>
               </div>
 
-              <!-- Compact Snippet -->
-              <p class="line-clamp-2 text-[11px] text-slate-600 leading-snug pl-0.5">${n.summary || ''}</p>
+              <!-- 2. Badges & Category -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full ${n.statusDotColor || 'bg-slate-500'}"></span>
+                  <span>${n.statusLabel}</span>
+                </span>
+                <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                  ${n.category}
+                </span>
+              </div>
 
-              <!-- Footer with Venue, Participants, and View Details Button -->
-              <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-[11px] text-slate-500 font-medium">
-                <div class="flex items-center gap-1 text-slate-600 truncate min-w-0">
-                  <i class="fa-solid fa-location-dot text-rose-500 text-[10px] flex-shrink-0"></i>
-                  <span class="truncate">${n.venue}</span>
-                </div>
+              <!-- 3. Date & Time -->
+              <div class="flex items-center gap-3 text-xs text-slate-700 font-medium">
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-calendar text-slate-500"></i>
+                  <span>${n.dateFormatted || n.date}</span>
+                </span>
+                <span class="text-slate-300">•</span>
+                <span class="flex items-center gap-1.5">
+                  <i class="fa-regular fa-clock text-slate-500"></i>
+                  <span>${n.timeFormatted || n.time || '--'}</span>
+                </span>
+              </div>
 
-                <div class="flex items-center gap-1.5 flex-shrink-0">
+              <!-- 4. Venue -->
+              <div class="flex items-start gap-1.5 text-xs text-slate-700 font-medium">
+                <i class="fa-solid fa-location-dot text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
+                <span>स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
+              </div>
+
+              <!-- 5. Detail -->
+              <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                <p class="line-clamp-2">${n.summary || ''}</p>
+              </div>
+
+              <!-- 6. Action Buttons -->
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                <button 
+                  type="button" 
+                  onclick="openNoticeDetailModal('${n.id}')"
+                  class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs"
+                  title="पूरी सूचना का विवरण देखें"
+                >
+                  <i class="fa-solid fa-eye text-slate-500 text-xs"></i>
+                  <span>विवरण</span>
+                </button>
+
+                ${(n.rawItem && n.rawItem.id) ? `
                   <button 
                     type="button" 
-                    onclick="openNoticeDetailModal('${n.id}')"
-                    class="px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
-                    title="पूरी सूचना का विवरण देखें"
+                    onclick="openMemberEventParticipantsModal('${n.rawItem.id}')" 
+                    class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    title="इस बैठक में उपस्थित रहे सदस्यों की सूची देखें"
                   >
-                    <i class="fa-solid fa-eye text-slate-500 text-[10px]"></i>
-                    <span>विवरण</span>
+                    <i class="fa-solid fa-users text-xs"></i>
+                    <span>प्रतिभागी</span>
+                    ${(n.rawItem.participants && n.rawItem.participants.length > 0) ? `
+                      <span class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-white text-indigo-800 border border-indigo-200 ml-0.5">
+                        ${n.rawItem.participants.length}
+                      </span>
+                    ` : ''}
                   </button>
-
-                  ${(n.rawItem && n.rawItem.id) ? `
-                    <button 
-                      type="button" 
-                      onclick="openMemberEventParticipantsModal('${n.rawItem.id}')" 
-                      class="px-2.5 py-1 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all flex items-center gap-1 cursor-pointer"
-                      title="इस बैठक में उपस्थित रहे सदस्यों की सूची देखें"
-                    >
-                      <i class="fa-solid fa-users text-[10px]"></i>
-                      <span>प्रतिभागी</span>
-                      ${(n.rawItem.participants && n.rawItem.participants.length > 0) ? `
-                        <span class="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-white text-indigo-800 border border-indigo-200 ml-0.5">
-                          ${n.rawItem.participants.length}
-                        </span>
-                      ` : ''}
-                    </button>
-                  ` : ''}
-                </div>
+                ` : ''}
               </div>
             </div>
           `).join('');
