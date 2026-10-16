@@ -1770,49 +1770,43 @@
       <!-- ============================================== -->
       <div id="view-settings-section" class="hidden space-y-6 animate-in fade-in duration-200">
         
-        <!-- Header & Action Bar -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-          <div>
-            <div class="flex items-center gap-2.5">
-              <div class="w-10 h-10 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-lg shadow-sm">
-                <i class="fa-solid fa-gears"></i>
-              </div>
-              <div>
-                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
-                  सिस्टम मास्टर सेटिंग्स (Admin Master Controls)
-                </h2>
-                <p class="text-xs text-slate-500">स्टेटस, इवेंट प्रकार, शीर्षक, वेन्यू एवं कल्याणकारी योजनाओं का केंद्रीय प्रबंधन</p>
-              </div>
+        <!-- Header & Action Bar (Mobile-friendly single row) -->
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-base sm:text-lg shadow-2xs shrink-0">
+              <i class="fa-solid fa-gears"></i>
             </div>
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900 truncate">
+              Admin Master Controls
+            </h2>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button onclick="saveAllSettingsToCloud()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-orange-500/20 flex items-center gap-2 transition-all">
-              <i class="fa-solid fa-cloud-arrow-up"></i>
-              <span>सेटिंग्स सेव करें (Save to Cloud)</span>
+          <div class="shrink-0">
+            <button onclick="saveAllSettingsToCloud()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-95 text-white font-bold px-3 sm:px-4 py-2 rounded-xl text-xs shadow-sm shadow-orange-500/20 flex items-center gap-1.5 transition-all cursor-pointer">
+              <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+              <span>Save to Cloud</span>
             </button>
           </div>
         </div>
 
         <!-- Master Settings Cards Grid (Compact & Modern) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
           <!-- Card 1: Status Master -->
           <button 
             type="button"
             onclick="switchSettingsTab('status')" 
             id="tab-btn-status"
-            class="group p-3 rounded-2xl bg-white border border-orange-500 shadow-md ring-2 ring-orange-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-white border border-orange-500 shadow-md ring-2 ring-orange-500/20 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-2">
-              <div class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-tags"></i>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-100 text-orange-700 font-mono" id="badge-count-status">3</span>
             </div>
             <div>
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 1</p>
+              <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 1</p>
               <h4 class="text-xs font-black text-slate-900 group-hover:text-orange-600 transition-colors truncate">Status Master</h4>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">सदस्यता स्थिति</p>
             </div>
           </button>
 
@@ -1821,18 +1815,17 @@
             type="button"
             onclick="switchSettingsTab('event')" 
             id="tab-btn-event"
-            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-2">
-              <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-calendar-check"></i>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 font-mono" id="badge-count-event">3+</span>
             </div>
             <div>
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 2</p>
+              <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 2</p>
               <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors truncate">Event Master</h4>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">कार्यक्रम / बैठक</p>
             </div>
           </button>
 
@@ -1841,18 +1834,17 @@
             type="button"
             onclick="switchSettingsTab('scheme')" 
             id="tab-btn-scheme"
-            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-amber-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-amber-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-2">
-              <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-hand-holding-heart"></i>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 font-mono" id="badge-count-scheme">4</span>
             </div>
             <div>
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 3</p>
+              <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 3</p>
               <h4 class="text-xs font-black text-slate-900 group-hover:text-amber-600 transition-colors truncate">Scheme Master</h4>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">कल्याणकारी योजनाएं</p>
             </div>
           </button>
 
@@ -1861,18 +1853,17 @@
             type="button"
             onclick="switchSettingsTab('fund')" 
             id="tab-btn-fund"
-            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-teal-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-teal-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-2">
-              <div class="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-vault"></i>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600 font-mono" id="badge-count-fund">0</span>
             </div>
             <div>
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 4</p>
+              <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 4</p>
               <h4 class="text-xs font-black text-slate-900 group-hover:text-teal-600 transition-colors truncate">Fund Management</h4>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">कोष व बैंक खाते</p>
             </div>
           </button>
 
@@ -1881,18 +1872,17 @@
             type="button"
             onclick="switchSettingsTab('expense')" 
             id="tab-btn-expense"
-            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-rose-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-rose-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-2">
-              <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-file-invoice-dollar"></i>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-700 font-mono" id="badge-count-expense">Master</span>
             </div>
             <div>
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 5</p>
+              <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 5</p>
               <h4 class="text-xs font-black text-slate-900 group-hover:text-rose-600 transition-colors truncate">Expense Master</h4>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">खर्च व वेंडर प्रबंधन</p>
             </div>
           </button>
 
@@ -1901,18 +1891,17 @@
             type="button"
             onclick="switchSettingsTab('designation')" 
             id="tab-btn-designation"
-            class="group p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-sm text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-2">
-              <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs group-hover:scale-105 transition-transform">
                 <i class="fa-solid fa-user-tie"></i>
               </div>
               <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-700 font-mono" id="badge-count-designation">8</span>
             </div>
             <div>
-              <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 6</p>
+              <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400">Master 6</p>
               <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors truncate">Team Members</h4>
-              <p class="text-[10px] text-slate-500 truncate mt-0.5">समिति पदनाम प्रबंधन</p>
             </div>
           </button>
         </div>
@@ -1921,31 +1910,28 @@
         <!-- SUB-PAGE 1: STATUS MASTER                  -->
         <!-- ========================================== -->
         <div id="settings-page-status" class="space-y-4">
-          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-tags text-orange-500"></i> सदस्यता स्थिति प्रबंधन (Member Status List)
-                </h3>
-                <p class="text-xs text-slate-500">सदस्य पंजीकरण और फ़िल्टर में उपयोग होने वाले स्थिति नाम (Active, Prime, Inactive आदि)</p>
-              </div>
-              <button onclick="openAddStatusModal()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-tags text-orange-500"></i> Member Status List
+              </h3>
+              <button onclick="openAddStatusModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 active:scale-95 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया स्टेटस जोड़ें</span>
+                <span>Add Status</span>
               </button>
             </div>
 
             <!-- Status List Table/Cards -->
-            <div class="mt-4 overflow-x-auto">
+            <div class="mt-3.5 overflow-x-auto">
               <table class="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold">
                     <th class="py-2.5 px-3 rounded-l-xl">#</th>
-                    <th class="py-2.5 px-3">Status Name (अंग्रेज़ी)</th>
-                    <th class="py-2.5 px-3">विवरण / हिंदी नाम</th>
-                    <th class="py-2.5 px-3">रंग / थीम</th>
-                    <th class="py-2.5 px-3">प्रकार</th>
-                    <th class="py-2.5 px-3 text-right rounded-r-xl">कार्य</th>
+                    <th class="py-2.5 px-3">Status Name</th>
+                    <th class="py-2.5 px-3">Description</th>
+                    <th class="py-2.5 px-3">Color / Theme</th>
+                    <th class="py-2.5 px-3">Type</th>
+                    <th class="py-2.5 px-3 text-right rounded-r-xl">Action</th>
                   </tr>
                 </thead>
                 <tbody id="status-master-tbody" class="divide-y divide-slate-100">
@@ -1959,51 +1945,45 @@
         <!-- ========================================== -->
         <!-- SUB-PAGE 2: EVENT MASTER                   -->
         <!-- ========================================== -->
-        <div id="settings-page-event" class="hidden space-y-6">
+        <div id="settings-page-event" class="hidden space-y-4 sm:space-y-6">
           
           <!-- Section 2A: Event Categories (Types) -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-layer-group text-indigo-500"></i> इवेंट श्रेणी / प्रकार (Event Categories)
-                </h3>
-                <p class="text-xs text-slate-500">General Meeting, Special Event, Emergency meeting इत्यादि के विकल्प</p>
-              </div>
-              <button onclick="openAddEventCatModal()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-indigo-500"></i> Event Categories
+              </h3>
+              <button onclick="openAddEventCatModal()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नई इवेंट श्रेणी</span>
+                <span>Add Category</span>
               </button>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" id="event-categories-grid">
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="event-categories-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
           <!-- Section 2B: Event Standard Titles (Presets) -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-heading text-purple-500"></i> सामान्य इवेंट शीर्षक सुझाव (Predefined Event Titles)
-                </h3>
-                <p class="text-xs text-slate-500">मीटिंग फॉर्म भरते समय तुरंत चुनने के लिए उपयोगी मानक शीर्षक</p>
-              </div>
-              <button onclick="openAddEventTitleModal()" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-heading text-purple-500"></i> Predefined Event Titles
+              </h3>
+              <button onclick="openAddEventTitleModal()" class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 active:scale-95 text-purple-800 border border-purple-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया शीर्षक जोड़ें</span>
+                <span>Add Title</span>
               </button>
             </div>
 
-            <div class="mt-4 overflow-x-auto">
+            <div class="mt-3.5 overflow-x-auto">
               <table class="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold">
                     <th class="py-2.5 px-3 rounded-l-xl">#</th>
-                    <th class="py-2.5 px-3">शीर्षक (Title)</th>
-                    <th class="py-2.5 px-3">संबंधित श्रेणी (Category)</th>
-                    <th class="py-2.5 px-3 text-right rounded-r-xl">कार्य</th>
+                    <th class="py-2.5 px-3">Title</th>
+                    <th class="py-2.5 px-3">Category</th>
+                    <th class="py-2.5 px-3 text-right rounded-r-xl">Action</th>
                   </tr>
                 </thead>
                 <tbody id="event-titles-tbody" class="divide-y divide-slate-100">
@@ -2013,22 +1993,19 @@
             </div>
           </div>
 
-          <!-- Section 2C: Standard Venues (स्थान मास्टर) -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-location-dot text-rose-500"></i> मानक स्थान सूची (Standard Event Venues)
-                </h3>
-                <p class="text-xs text-slate-500">नियमित बैठक स्थल जिन्हें फॉर्म में 1-क्लिक में चुना जा सकता है</p>
-              </div>
-              <button onclick="openAddVenueModal()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <!-- Section 2C: Standard Venues -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-rose-500"></i> Standard Event Venues
+              </h3>
+              <button onclick="openAddVenueModal()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया वेन्यू जोड़ें</span>
+                <span>Add Venue</span>
               </button>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" id="event-venues-grid">
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="event-venues-grid">
               <!-- Populated via JS -->
             </div>
           </div>
@@ -2039,163 +2016,154 @@
         <!-- SUB-PAGE 3: SCHEME MASTER                  -->
         <!-- ========================================== -->
         <div id="settings-page-scheme" class="hidden space-y-4">
-          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> कल्याणकारी योजनाएं एवं शुल्क मास्टर (Schemes Master)
-                </h3>
-                <p class="text-xs text-slate-500">सदस्य सहयोग राशि, कल्याणकारी योजनाएं, मासिक/वार्षिक सदस्यता शुल्क दरें</p>
-              </div>
-              <button onclick="openAddSchemeModal()" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> Schemes Master
+              </h3>
+              <button onclick="openAddSchemeModal()" class="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नई योजना जोड़ें</span>
+                <span>Add Scheme</span>
               </button>
             </div>
 
             <!-- Schemes Status Filter Bar (ALL, Open, Upcoming, Closed) -->
-            <div class="mt-4 flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-              <button onclick="filterSchemes('ALL')" id="filter-scheme-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-amber-600 text-white shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0">
-                <span>सभी योजनाएं</span> (<span id="scheme-count-all">0</span>)
+            <div class="mt-3.5 flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+              <button onclick="filterSchemes('ALL')" id="filter-scheme-all" class="px-3 py-1.5 rounded-xl font-bold bg-amber-600 text-white shadow-2xs transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>All Schemes</span> (<span id="scheme-count-all">0</span>)
               </button>
-              <button onclick="filterSchemes('Open')" id="filter-scheme-open" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0">
+              <button onclick="filterSchemes('Open')" id="filter-scheme-open" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Open (चालू)</span> (<span id="scheme-count-open">0</span>)
+                <span>Open</span> (<span id="scheme-count-open">0</span>)
               </button>
-              <button onclick="filterSchemes('Upcoming')" id="filter-scheme-upcoming" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0">
+              <button onclick="filterSchemes('Upcoming')" id="filter-scheme-upcoming" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
                 <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                <span>Upcoming (आगामी)</span> (<span id="scheme-count-upcoming">0</span>)
+                <span>Upcoming</span> (<span id="scheme-count-upcoming">0</span>)
               </button>
-              <button onclick="filterSchemes('Closed')" id="filter-scheme-closed" class="px-3.5 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0">
+              <button onclick="filterSchemes('Closed')" id="filter-scheme-closed" class="px-3 py-1.5 rounded-xl font-semibold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
                 <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                <span>Closed (समाप्त)</span> (<span id="scheme-count-closed">0</span>)
+                <span>Closed</span> (<span id="scheme-count-closed">0</span>)
               </button>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4" id="schemes-cards-grid">
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3" id="schemes-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
-          <!-- Section 2: Membership & Plans Rates Master (सदस्यता शुल्क एवं योजना दर नियंत्रण) -->
-          <div class="bg-gradient-to-br from-amber-50/70 via-orange-50/40 to-white rounded-3xl p-5 sm:p-6 border border-amber-200/90 shadow-sm space-y-5">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-amber-200/70">
-              <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+          <!-- Section 2: Membership & Plans Rates Master -->
+          <div class="bg-gradient-to-br from-amber-50/70 via-orange-50/40 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-amber-200/90 shadow-2xs space-y-4">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-amber-200/70">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-sm sm:text-base shadow-2xs flex-shrink-0">
                   <i class="fa-solid fa-sliders"></i>
                 </div>
-                <div>
-                  <h3 class="text-sm sm:text-base font-black text-slate-900 font-devanagari">
-                    सदस्यता शुल्क एवं योजना दर नियंत्रण (Membership & Plans Rate Master)
-                  </h3>
-                  <p class="text-xs text-slate-500 mt-0.5">PASY मासिक अंशदान, विलंब शुल्क (Fine) एवं प्रीमियम/सामान्य सदस्यता वार्षिक शुल्क का केंद्रीय नियंत्रण</p>
-                </div>
+                <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                  Membership & Plans Rate Master
+                </h3>
               </div>
               <button 
                 type="button" 
                 onclick="handleSaveMembershipPlanRates()" 
-                class="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 active:scale-95 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
+                class="px-3 py-1.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 active:scale-95 text-white font-bold rounded-xl text-xs shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
               >
                 <i class="fa-solid fa-floppy-disk text-xs"></i>
-                <span>दरें सुरक्षित करें (Save Rates)</span>
+                <span>Save Rates</span>
               </button>
             </div>
 
             <!-- 3 Columns Control Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               
               <!-- 1. PASY Monthly Contribution Rate Card -->
-              <div class="p-4 bg-white rounded-2xl border border-cyan-200 shadow-xs flex flex-col justify-between space-y-3">
+              <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-cyan-200 shadow-2xs flex flex-col justify-between space-y-2.5">
                 <div>
-                  <div class="flex items-center justify-between mb-1.5">
+                  <div class="flex items-center justify-between mb-1">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-700 font-mono">1. PASY CONTRIBUTION</span>
                     <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
                   </div>
                   <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
                     <i class="fa-solid fa-hands-holding-child text-cyan-600"></i>
-                    पारिवारिक योजना मासिक अंशदान
+                    PASY Monthly Contribution
                   </h4>
-                  <p class="text-[10px] text-slate-400 mt-0.5">प्रति सदस्य प्रति माह देय अंशदान राशि</p>
                 </div>
 
                 <div class="pt-2 border-t border-slate-100">
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1">मासिक दर (₹ / Month):</label>
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Monthly Rate (₹ / Month):</label>
                   <div class="relative">
-                    <span class="absolute left-3 top-2.5 text-slate-400 font-bold text-xs">₹</span>
+                    <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
                     <input 
                       type="number" 
                       id="rate-pasy-monthly-fee" 
                       min="1" 
                       step="1" 
                       value="150" 
-                      class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500"
+                      class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500"
                     >
                   </div>
-                  <span class="text-[10px] text-cyan-700 font-medium mt-1 block">डिफ़ॉल्ट: ₹150 / माह (30 माह)</span>
+                  <span class="text-[10px] text-cyan-700 font-medium mt-1 block">Default: ₹150 / Month (30 months)</span>
                 </div>
               </div>
 
               <!-- 2. PASY Fine Rate Card -->
-              <div class="p-4 bg-white rounded-2xl border border-rose-200 shadow-xs flex flex-col justify-between space-y-3">
+              <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-rose-200 shadow-2xs flex flex-col justify-between space-y-2.5">
                 <div>
-                  <div class="flex items-center justify-between mb-1.5">
+                  <div class="flex items-center justify-between mb-1">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700 font-mono">2. PASY FINE RATE</span>
                     <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                   </div>
                   <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
                     <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
-                    विलंब शुल्क दर (Late Fine Rate)
+                    Late Fine Rate
                   </h4>
-                  <p class="text-[10px] text-slate-400 mt-0.5">3rd Sunday के बाद प्रति सप्ताह जुड़ने वाला जुर्माना</p>
                 </div>
 
                 <div class="pt-2 border-t border-slate-100">
-                  <label class="block text-[11px] font-bold text-slate-600 mb-1">प्रति सप्ताह विलंब दर (₹ / Week):</label>
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Weekly Fine Rate (₹ / Week):</label>
                   <div class="relative">
-                    <span class="absolute left-3 top-2.5 text-slate-400 font-bold text-xs">₹</span>
+                    <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
                     <input 
                       type="number" 
                       id="rate-pasy-fine-week" 
                       min="0" 
                       step="1" 
                       value="20" 
-                      class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                      class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
                     >
                   </div>
-                  <span class="text-[10px] text-rose-700 font-medium mt-1 block">डिफ़ॉल्ट: ₹20 प्रति सप्ताह / रविवार</span>
+                  <span class="text-[10px] text-rose-700 font-medium mt-1 block">Default: ₹20 / Sunday</span>
                 </div>
               </div>
 
               <!-- 3. Membership Fee Rates Card (Premium vs Normal) -->
-              <div class="p-4 bg-white rounded-2xl border border-amber-300 shadow-xs flex flex-col justify-between space-y-3">
+              <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-amber-300 shadow-2xs flex flex-col justify-between space-y-2.5">
                 <div>
-                  <div class="flex items-center justify-between mb-1.5">
+                  <div class="flex items-center justify-between mb-1">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 font-mono">3. MEMBERSHIP PLANS</span>
                     <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                   </div>
                   <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
                     <i class="fa-solid fa-crown text-amber-500"></i>
-                    सदस्यता वार्षिक शुल्क (Membership Fee)
+                    Membership Annual Fees
                   </h4>
-                  <p class="text-[10px] text-slate-400 mt-0.5">प्रीमियम एवं सामान्य सदस्यों का वार्षिक शुल्क</p>
                 </div>
 
                 <div class="pt-2 border-t border-slate-100 space-y-2">
                   <!-- Premium Rate -->
                   <div>
                     <label class="flex items-center justify-between text-[11px] font-bold text-amber-900 mb-0.5">
-                      <span>👑 प्रीमियम सदस्य (Premium / Prime):</span>
-                      <span class="text-[9px] text-amber-600 font-mono">प्रति वर्ष</span>
+                      <span>👑 Prime Member:</span>
+                      <span class="text-[9px] text-amber-600 font-mono">Per Year</span>
                     </label>
                     <div class="relative">
-                      <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
+                      <span class="absolute left-3 top-1.5 text-slate-400 font-bold text-xs">₹</span>
                       <input 
                         type="number" 
                         id="rate-membership-premium" 
                         min="0" 
                         step="1" 
                         value="1200" 
-                        class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                        class="w-full pl-7 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                       >
                     </div>
                   </div>
@@ -2203,18 +2171,18 @@
                   <!-- Normal Rate -->
                   <div>
                     <label class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-0.5">
-                      <span>🟢 सामान्य सदस्य (Normal / Active):</span>
-                      <span class="text-[9px] text-slate-400 font-mono">प्रति वर्ष</span>
+                      <span>🟢 Active Member:</span>
+                      <span class="text-[9px] text-slate-400 font-mono">Per Year</span>
                     </label>
                     <div class="relative">
-                      <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
+                      <span class="absolute left-3 top-1.5 text-slate-400 font-bold text-xs">₹</span>
                       <input 
                         type="number" 
                         id="rate-membership-normal" 
                         min="0" 
                         step="1" 
                         value="600" 
-                        class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-slate-400/20 focus:border-slate-400"
+                        class="w-full pl-7 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-slate-400/20 focus:border-slate-400"
                       >
                     </div>
                   </div>
@@ -2226,169 +2194,157 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- SUB-PAGE 4: FUND MANAGEMENT (कोष प्रबंधन)   -->
+        <!-- SUB-PAGE 4: FUND MANAGEMENT             -->
         <!-- ========================================== -->
-        <div id="settings-page-fund" class="hidden space-y-6">
+        <div id="settings-page-fund" class="hidden space-y-4 sm:space-y-6">
           
-          <!-- Opening Balances Card (2025 Opening Fund - 2025 से पूर्व संचित कोष) -->
-          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-md">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-white/20">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
-                  <h3 class="text-base sm:text-lg font-black tracking-wide">प्रारंभिक कोष (Opening Balance - 2025 से पूर्व संचित कोष)</h3>
-                </div>
-                <p class="text-xs text-amber-100 mt-1" id="opening-balance-remarks-text">समिति 2025 से पूर्व संचालित है - प्रारंभिक जमा राशि</p>
+          <!-- Opening Balances Card -->
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-white/20">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                <h3 class="text-sm sm:text-base font-black tracking-wide">Opening Balance</h3>
               </div>
-              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-4 py-2 bg-white text-orange-800 hover:bg-orange-50 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
+              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-3 py-1.5 bg-white text-orange-800 hover:bg-orange-50 active:scale-95 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-pen-to-square"></i>
-                <span>प्रारंभिक कोष संशोधित करें (Edit Opening Balance)</span>
+                <span>Edit Opening Balance</span>
               </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-4">
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">नगद प्रारंभिक कोष (Cash Opening Balance)</p>
-                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-cash">₹ 34,025</h4>
-                <p class="text-[10px] text-amber-100 mt-0.5">स्वयं जमा / Self Fund Cash</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 mt-3.5">
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20">
+                <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">Cash Opening Balance</p>
+                <h4 class="text-xl sm:text-2xl font-black mt-1 font-mono" id="disp-opening-cash">₹ 34,025</h4>
+                <p class="text-[10px] text-amber-100 mt-0.5">Self Fund Cash</p>
               </div>
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">बैंक प्रारंभिक कोष (Bank Opening Balance)</p>
-                <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-bank">₹ 0</h4>
-                <p class="text-[10px] text-amber-100 mt-0.5">SBI / बैंक खाता प्रारंभिक शेष</p>
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20">
+                <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">Bank Opening Balance</p>
+                <h4 class="text-xl sm:text-2xl font-black mt-1 font-mono" id="disp-opening-bank">₹ 0</h4>
+                <p class="text-[10px] text-amber-100 mt-0.5">SBI / Bank Account Balance</p>
               </div>
-              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-col justify-between">
+              <div class="bg-white/15 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-white/20 flex flex-col justify-between">
                 <div>
-                  <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">कुल प्रारंभिक संचित कोष</p>
-                  <h4 class="text-2xl font-black mt-1 font-mono" id="disp-opening-total">₹ 34,025</h4>
+                  <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">Total Opening Balance</p>
+                  <h4 class="text-xl sm:text-2xl font-black mt-1 font-mono" id="disp-opening-total">₹ 34,025</h4>
                 </div>
-                <p class="text-[10px] text-emerald-200 font-bold mt-1">✓ मुख्य कोष में स्वतः सम्मिलित</p>
+                <p class="text-[10px] text-emerald-200 font-bold mt-1">✓ Included in Central Treasury</p>
               </div>
             </div>
           </div>
 
           <!-- Treasury Summary Live Counters -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs flex items-center justify-between">
               <div>
-                <p class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider">कुल कोष (Total Fund)</p>
-                <h3 class="text-2xl font-black mt-1" id="fund-stat-total">₹ 0</h3>
-                <p class="text-[10px] text-emerald-100 mt-1">दान + सभी फंड</p>
+                <p class="text-[10px] sm:text-[11px] font-bold text-emerald-100 uppercase tracking-wider">Total Fund</p>
+                <h3 class="text-xl sm:text-2xl font-black mt-1" id="fund-stat-total">₹ 0</h3>
+                <p class="text-[10px] text-emerald-100 mt-0.5">Donations + All Funds</p>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 flex items-center justify-center text-lg sm:text-xl">
                 <i class="fa-solid fa-vault"></i>
               </div>
             </div>
 
-            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs flex items-center justify-between">
               <div>
-                <p class="text-[11px] font-bold text-blue-100 uppercase tracking-wider">बैंक कोष (Bank Fund)</p>
-                <h3 class="text-2xl font-black mt-1" id="fund-stat-bank">₹ 0</h3>
-                <p class="text-[10px] text-blue-100 mt-1">SBI Trust Account</p>
+                <p class="text-[10px] sm:text-[11px] font-bold text-blue-100 uppercase tracking-wider">Bank Fund</p>
+                <h3 class="text-xl sm:text-2xl font-black mt-1" id="fund-stat-bank">₹ 0</h3>
+                <p class="text-[10px] text-blue-100 mt-0.5">SBI Trust Account</p>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 flex items-center justify-center text-lg sm:text-xl">
                 <i class="fa-solid fa-building-columns"></i>
               </div>
             </div>
 
-            <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl p-5 text-white shadow-sm flex items-center justify-between">
+            <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl sm:rounded-3xl p-4 sm:p-5 text-white shadow-2xs flex items-center justify-between">
               <div>
-                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider">नगद कोष (In Hand Cash)</p>
-                <h3 class="text-2xl font-black mt-1" id="fund-stat-cash">₹ 0</h3>
-                <p class="text-[10px] text-amber-100 mt-1">कोषाध्यक्ष के पास नगद</p>
+                <p class="text-[10px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider">In Hand Cash</p>
+                <h3 class="text-xl sm:text-2xl font-black mt-1" id="fund-stat-cash">₹ 0</h3>
+                <p class="text-[10px] text-amber-100 mt-0.5">Cash with Treasurer</p>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-xl">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 flex items-center justify-center text-lg sm:text-xl">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
               </div>
             </div>
           </div>
 
           <!-- Section 1: Fund Types Master -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-layer-group text-teal-600"></i> कोष प्रकार मास्टर (Fund Types)
-                </h3>
-                <p class="text-xs text-slate-500">ट्रस्ट के सभी कोष खाते (Self, Bank, Cash in Hand, Loan, Investment आदि)</p>
-              </div>
-              <button onclick="openAddFundTypeModal()" class="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-teal-600"></i> Fund Types Master
+              </h3>
+              <button onclick="openAddFundTypeModal()" class="px-3 py-1.5 bg-teal-50 hover:bg-teal-100 active:scale-95 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया Fund Type जोड़ें</span>
+                <span>Add Fund Type</span>
               </button>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="fund-types-cards-grid">
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="fund-types-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
-          <!-- Section 1B: Bank Accounts (बैंक खाते प्रबंधन) -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-building-columns text-blue-600"></i> बैंक खाते (Bank Accounts)
-                </h3>
-                <p class="text-xs text-slate-500">ट्रस्ट के अधिकृत बैंक खाते, खाता नंबर, खाताधारक सदस्य एवं प्रकार (Single / Joint)</p>
-              </div>
-              <button onclick="openAddBankAccountModal()" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <!-- Section 1B: Bank Accounts -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-building-columns text-blue-600"></i> Bank Accounts
+              </h3>
+              <button onclick="openAddBankAccountModal()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया बैंक खाता जोड़ें (Add Bank Account)</span>
+                <span>Add Bank Account</span>
               </button>
             </div>
 
-            <div class="mt-4 flex flex-col space-y-3 w-full" id="bank-accounts-cards-grid">
+            <div class="mt-3.5 flex flex-col space-y-2.5 w-full" id="bank-accounts-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
-          <!-- Section 2: Fund Transfers / Transactions Register -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> कोष हस्तांतरण रजिस्टर (Fund Transfers & Expenses)
-                </h3>
-                <p class="text-xs text-slate-500">Bank to Hand, Hand to Bank, Bank to Party, Cash to Party लेनदेन विवरण</p>
-              </div>
-              <button onclick="openFundTransferModal()" class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-indigo-500/20">
+          <!-- Section 2: Fund Transfers Register -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> Fund Transfers & Transactions
+              </h3>
+              <button onclick="openFundTransferModal()" class="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>नया Fund Transfer / खर्च दर्ज करें</span>
+                <span>New Transfer</span>
               </button>
             </div>
 
             <!-- Transfer Type Filters & Search -->
-            <div class="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
-              <div class="flex items-center gap-2 overflow-x-auto pb-1">
-                <button onclick="filterFundTransfers('ALL')" id="filter-ft-all" class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-sm flex items-center gap-1 flex-shrink-0">
-                  <span>सभी ट्रांसफर</span> (<span id="ft-count-all">0</span>)
+            <div class="mt-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs">
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                <button onclick="filterFundTransfers('ALL')" id="filter-ft-all" class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-2xs flex items-center gap-1 flex-shrink-0 cursor-pointer">
+                  <span>All</span> (<span id="ft-count-all">0</span>)
                 </button>
-                <button onclick="filterFundTransfers('Bank to Hand')" id="filter-ft-b2h" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0">
+                <button onclick="filterFundTransfers('Bank to Hand')" id="filter-ft-b2h" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
                   <span>Bank to Hand</span>
                 </button>
-                <button onclick="filterFundTransfers('Hand to Bank')" id="filter-ft-h2b" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0">
+                <button onclick="filterFundTransfers('Hand to Bank')" id="filter-ft-h2b" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
                   <span>Hand to Bank</span>
                 </button>
-                <button onclick="filterFundTransfers('Bank to Party')" id="filter-ft-b2p" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0">
+                <button onclick="filterFundTransfers('Bank to Party')" id="filter-ft-b2p" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
                   <span>Bank to Party</span>
                 </button>
-                <button onclick="filterFundTransfers('Cash to Party')" id="filter-ft-c2p" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0">
+                <button onclick="filterFundTransfers('Cash to Party')" id="filter-ft-c2p" class="px-3 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1 flex-shrink-0 cursor-pointer">
                   <span>Cash to Party</span>
                 </button>
               </div>
             </div>
 
             <!-- Fund Transfers List Table -->
-            <div class="mt-4 overflow-x-auto rounded-2xl border border-slate-100">
+            <div class="mt-3.5 overflow-x-auto rounded-xl border border-slate-100">
               <table class="w-full text-left text-xs">
                 <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
                   <tr>
-                    <th class="p-3 pl-4">ट्रांसफर ID / दिनांक</th>
-                    <th class="p-3">लेनदेन प्रकार (Transaction Type)</th>
-                    <th class="p-3">विवरण / पार्टी का नाम (Party / Purpose)</th>
-                    <th class="p-3 text-right">राशि (Amount)</th>
-                    <th class="p-3 text-center pr-4">कार्रवाई</th>
+                    <th class="p-2.5 pl-3">Transfer ID / Date</th>
+                    <th class="p-2.5">Transaction Type</th>
+                    <th class="p-2.5">Party / Purpose</th>
+                    <th class="p-2.5 text-right">Amount</th>
+                    <th class="p-2.5 text-center pr-3">Action</th>
                   </tr>
                 </thead>
                 <tbody id="fund-transfers-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
@@ -2401,55 +2357,49 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- SUB-PAGE 5: EXPENSE MASTER (खर्च एवं वेंडर मास्टर) -->
+        <!-- SUB-PAGE 5: EXPENSE MASTER                 -->
         <!-- ========================================== -->
-        <div id="settings-page-expense" class="hidden space-y-6">
+        <div id="settings-page-expense" class="hidden space-y-4 sm:space-y-6">
           
           <!-- Section 1: Expense Schemes / Heads Master -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-shapes text-rose-600"></i> खर्च की योजना / मद मास्टर (Expense Schemes / Heads)
-                </h3>
-                <p class="text-xs text-slate-500">समिति के खर्च मद (उत्सव/समारोह, बैठक व्यवस्था, चिकित्सा सहायता, विविध आदि)</p>
-              </div>
-              <button onclick="openAddExpenseSchemeModal()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-shapes text-rose-600"></i> Expense Heads & Schemes
+              </h3>
+              <button onclick="openAddExpenseSchemeModal()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नई खर्च योजना जोड़ें (Add Expense Head)</span>
+                <span>Add Expense Head</span>
               </button>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="expense-schemes-cards-grid">
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="expense-schemes-cards-grid">
               <!-- Populated via JS -->
             </div>
           </div>
 
           <!-- Section 2: Vendor / Party Master -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
-              <div>
-                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-                  <i class="fa-solid fa-store text-indigo-600"></i> वेंडर / डीलर मास्टर (Vendors & Suppliers)
-                </h3>
-                <p class="text-xs text-slate-500">ट्रस्ट सामान/सेवा आपूर्तिकर्ता (टेंट हाउस, साउंड, पूजा सामग्री, प्रिंटिंग प्रेस आदि)</p>
-              </div>
-              <button onclick="openAddVendorModal()" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-store text-indigo-600"></i> Vendors & Suppliers
+              </h3>
+              <button onclick="openAddVendorModal()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया वेंडर जोड़ें (Add Vendor)</span>
+                <span>Add Vendor</span>
               </button>
             </div>
 
-            <div class="mt-4 overflow-x-auto rounded-2xl border border-slate-100">
+            <div class="mt-3.5 overflow-x-auto rounded-xl border border-slate-100">
               <table class="w-full text-left text-xs">
                 <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
                   <tr>
-                    <th class="p-3 pl-4">#</th>
-                    <th class="p-3">वेंडर / फर्म का नाम</th>
-                    <th class="p-3">श्रेणी / Category</th>
-                    <th class="p-3">मोबाइल नंबर</th>
-                    <th class="p-3">पता / स्थान</th>
-                    <th class="p-3 text-center pr-4">कार्रवाई</th>
+                    <th class="p-2.5 pl-3">#</th>
+                    <th class="p-2.5">Vendor / Firm Name</th>
+                    <th class="p-2.5">Category</th>
+                    <th class="p-2.5">Mobile Number</th>
+                    <th class="p-2.5">Address</th>
+                    <th class="p-2.5 text-center pr-3">Action</th>
                   </tr>
                 </thead>
                 <tbody id="vendors-master-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
@@ -2464,55 +2414,50 @@
         <!-- ========================================== -->
         <!-- SUB-PAGE 6: TEAM MEMBERS / DESIGNATION MASTER -->
         <!-- ========================================== -->
-        <div id="settings-page-designation" class="hidden space-y-6">
+        <div id="settings-page-designation" class="hidden space-y-4 sm:space-y-6">
           
           <!-- Top Card: Team Overview & Quick Add Button -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shadow-sm">
-                  <i class="fa-solid fa-user-tie"></i>
-                </div>
-                <div>
-                  <h3 class="text-base sm:text-lg font-extrabold text-slate-900 font-devanagari">
-                    कार्यकारिणी समिति पदनाम मास्टर (Team Members & Designations)
-                  </h3>
-                  <p class="text-xs text-slate-500">समिति के सभी आधिकारिक पद (अध्यक्ष, सचिव, कोषाध्यक्ष आदि) एवं उनके वरीयता क्रम का केंद्रीय प्रबंधन</p>
-                </div>
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base sm:text-lg shadow-2xs shrink-0">
+                <i class="fa-solid fa-user-tie"></i>
               </div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                Team Members & Designations
+              </h3>
             </div>
 
-            <div class="flex items-center gap-2 w-full md:w-auto">
+            <div class="shrink-0">
               <button 
                 type="button" 
                 onclick="openAddDesignationModal()" 
-                class="w-full md:w-auto px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                class="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <i class="fa-solid fa-plus text-xs"></i>
-                <span>+ नया पदनाम जोड़ें (Add Designation)</span>
+                <span>Add Designation</span>
               </button>
             </div>
           </div>
 
           <!-- Team Members / Designations Table Card -->
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs space-y-3">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
               <h4 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-sitemap text-indigo-500"></i> आधिकारिक पद सूची (Official Designations List)
+                <i class="fa-solid fa-sitemap text-indigo-500"></i> Official Designations List
               </h4>
-              <span class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full font-mono" id="designation-master-count-badge">0 पद</span>
+              <span class="text-[10px] sm:text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full font-mono" id="designation-master-count-badge">Total: 0</span>
             </div>
 
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
-                    <th class="p-3 pl-4 rounded-l-xl">वरीयता (#)</th>
-                    <th class="p-3">पदनाम (Designation Title)</th>
-                    <th class="p-3">विवरण / उत्तरदायित्व (Role Description)</th>
-                    <th class="p-3 text-center">वर्तमान पदाधिकारी</th>
-                    <th class="p-3 text-center">प्रकार</th>
-                    <th class="p-3 pr-4 text-center rounded-r-xl">कार्रवाई</th>
+                  <tr class="bg-slate-50 text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                    <th class="p-2.5 pl-3 rounded-l-xl">Priority (#)</th>
+                    <th class="p-2.5">Designation Title</th>
+                    <th class="p-2.5">Role Description</th>
+                    <th class="p-2.5 text-center">Current Officer</th>
+                    <th class="p-2.5 text-center">Type</th>
+                    <th class="p-2.5 pr-3 text-center rounded-r-xl">Action</th>
                   </tr>
                 </thead>
                 <tbody id="designations-master-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
