@@ -3133,9 +3133,9 @@
           <div class="flex items-center gap-2 px-1">
             <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></div>
             <h3 class="text-xs font-black uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-              <span>सक्रिय एवं आगामी सूचनाएं (Open & Active Notices)</span>
+              <span>OPEN & ACTIVE NOTICES</span>
               <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200" id="open-notices-badge">
-                0 सक्रिय
+                0 Active
               </span>
             </h3>
           </div>
@@ -3151,9 +3151,9 @@
           <div class="flex items-center gap-2 px-1">
             <i class="fa-solid fa-clock-rotate-left text-slate-400 text-xs"></i>
             <h3 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <span>पूर्व सूचनाएं एवं संपन्न बैठकें (Past Notices Archive)</span>
+              <span>PAST NOTICES ARCHIVE</span>
               <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" id="past-notices-badge">
-                0 पूर्व
+                0 Past
               </span>
             </h3>
           </div>
@@ -7784,8 +7784,8 @@
       if (totalBadge) totalBadge.textContent = rawNotices.length;
       if (filterAllCount) filterAllCount.textContent = rawNotices.length;
       if (headerBadge) headerBadge.textContent = rawNotices.filter(n => n.isOpen || n.isUpcoming).length;
-      if (openBadge) openBadge.textContent = `${openNotices.length} सक्रिय/आगामी`;
-      if (pastBadge) pastBadge.textContent = `${pastNotices.length} संपन्न/पूर्व`;
+      if (openBadge) openBadge.textContent = `${openNotices.length} Active`;
+      if (pastBadge) pastBadge.textContent = `${pastNotices.length} Past`;
 
       // Update popup filter modal counts
       const modalCountAll = document.getElementById('modal-filter-count-all');
