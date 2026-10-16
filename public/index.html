@@ -7175,6 +7175,56 @@
       return mCfg ? mCfg.defaultPaid : false;
     }
 
+    // Helper: Get payment date for a paid month (from auto-donations or member override or joining date)
+    function getPariwarikPaymentDate(m, monthKey) {
+      if (!m) return '';
+      const mId = (m.id || '').trim();
+      const mCfg = (typeof PARIWARIK_MONTHS !== 'undefined') ? PARIWARIK_MONTHS.find(x => x.key === monthKey) : null;
+      const monthLabel = mCfg ? mCfg.label : monthKey;
+
+      // 1. Look for linked donation in allDonations
+      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+        const matchedDon = allDonations.find(d => 
+          d && d.memberId === mId && 
+          (d.pariwarikMonthKey === monthKey || (d.remarks && d.remarks.includes(monthLabel)))
+        );
+        if (matchedDon) {
+          const rawDate = matchedDon.date || (matchedDon.createdAt ? matchedDon.createdAt.split('T')[0] : '');
+          if (rawDate) {
+            try {
+              const [y, mo, day] = rawDate.split('-');
+              if (y && mo && day) return `${day}/${mo}/${y.slice(-2)}`;
+              return rawDate;
+            } catch(e) {
+              return rawDate;
+            }
+          }
+        }
+      }
+
+      // 2. If member has explicit paid date mapping
+      if (m.pariwarikMonthlyDates && m.pariwarikMonthlyDates[monthKey]) {
+        return m.pariwarikMonthlyDates[monthKey];
+      }
+
+      // 3. Fallback for pre-settled defaultPaid months (Sep 2025 to Sep 2026)
+      // Display the month's established schedule date or member enrollment date
+      if (mCfg && mCfg.defaultPaid) {
+        const [y, mo] = monthKey.split('-');
+        return `15/${mo}/${y.slice(-2)}`;
+      }
+
+      // 4. Default fallback: member's general payment/joining date or today
+      if (m.pariwarikPaidAt) {
+        const pDate = m.pariwarikPaidAt.split('T')[0];
+        const [y, mo, day] = pDate.split('-');
+        if (y && mo && day) return `${day}/${mo}/${y.slice(-2)}`;
+      }
+
+      return 'जमा';
+    }
+    window.getPariwarikPaymentDate = getPariwarikPaymentDate;
+
     // ==============================================================
     // PASY FINE CALCULATION (पारिवारिक योजना विलंब शुल्क / जुर्माना गणना)
     // Rule: Monthly fee ₹150 due by 3rd Sunday.
@@ -10113,6 +10163,7 @@
           `;
         } else {
           paidGrid.innerHTML = paidMonthsList.map(m => {
+            const paidDate = getPariwarikPaymentDate(member, m.key);
             return `
               <div class="px-2 py-1.5 rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50/70 flex flex-col justify-between">
                 <div class="flex items-center justify-between gap-1 leading-none mb-1">
@@ -10127,7 +10178,10 @@
                   <span class="text-[9px] font-bold px-1.5 py-0.2 rounded border text-emerald-700 bg-emerald-100/80 border-emerald-200">
                     जमा
                   </span>
-                  <span class="text-[8px] font-mono text-slate-400 font-semibold">Paid</span>
+                  <span class="text-[8px] font-mono text-emerald-700 font-bold flex items-center gap-0.5" title="भुगतान तिथि (Payment Date)">
+                    <i class="fa-regular fa-calendar-check text-[7px] text-emerald-600"></i>
+                    <span>${paidDate}</span>
+                  </span>
                 </div>
               </div>
             `;
