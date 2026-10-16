@@ -3641,42 +3641,60 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">पूरा नाम (Full Name)</span>
-              <span class="font-extrabold text-slate-800 text-sm mt-0.5 block" id="user-prof-name">--</span>
+          <!-- Ultra-compact & Mobile-friendly Grid (2-columns on mobile, 3 on desktop) -->
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 text-xs">
+            <!-- 1. Full Name -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Full Name (नाम)</span>
+              <span class="font-extrabold text-slate-900 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-name">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">पिता / अभिभावक का नाम (Father's Name)</span>
-              <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-father">--</span>
+
+            <!-- 2. Father's Name -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Father's Name (पिता)</span>
+              <span class="font-bold text-slate-800 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-father">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">पंजीकृत मोबाइल नंबर (Mobile No.)</span>
-              <span class="font-mono font-bold text-slate-800 text-sm mt-0.5 block" id="user-prof-phone">--</span>
+
+            <!-- 3. Mobile -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Mobile No. (मोबाइल)</span>
+              <span class="font-mono font-bold text-slate-800 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-phone">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">स्थायी पता / ग्राम (Address)</span>
-              <span class="font-bold text-slate-800 mt-0.5 block" id="user-prof-address">--</span>
+
+            <!-- 4. Address -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Address (पता / ग्राम)</span>
+              <span class="font-bold text-slate-800 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-address">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">सदस्यता श्रेणी (Membership Status)</span>
-              <span class="font-bold text-amber-700 mt-0.5 block" id="user-prof-status">--</span>
+
+            <!-- 5. Membership Status -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Status (श्रेणी)</span>
+              <span class="font-bold text-amber-700 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-status">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">रक्त समूह (Blood Group)</span>
-              <span class="font-mono font-bold text-rose-600 mt-0.5 block" id="user-prof-blood">--</span>
+
+            <!-- 6. Blood Group -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Blood Group (रक्त समूह)</span>
+              <span class="font-mono font-bold text-rose-600 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-blood">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">सदस्यता प्रारंभ तिथि (Member Since)</span>
-              <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-since">--</span>
+
+            <!-- 7. Member Since -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Member Since (प्रारंभ)</span>
+              <span class="font-mono font-bold text-slate-800 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-since">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">परिवार पहचान संख्या (Family ID)</span>
-              <span class="font-mono font-bold text-slate-800 mt-0.5 block" id="user-prof-family-id">--</span>
+
+            <!-- 8. Family ID -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Family ID (परिवार सं.)</span>
+              <span class="font-mono font-bold text-slate-800 text-xs sm:text-sm mt-0.5 truncate" id="user-prof-family-id">--</span>
             </div>
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
-              <span class="text-[11px] text-slate-400 font-medium block">ट्रस्ट शाखा (Trust Branch)</span>
-              <span class="font-bold text-slate-800 mt-0.5 block">गुनघसा, गोमो, धनबाद (828401)</span>
+
+            <!-- 9. Branch -->
+            <div class="p-2.5 sm:p-3 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 flex flex-col justify-between col-span-2 md:col-span-1">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">Trust Branch (शाखा)</span>
+              <span class="font-bold text-slate-800 text-xs sm:text-sm mt-0.5 truncate">गुनघसा, गोमो (828401)</span>
             </div>
           </div>
         </div>
