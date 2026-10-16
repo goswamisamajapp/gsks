@@ -3699,42 +3699,25 @@
           </div>
         </div>
 
-        <!-- 3. Current Plan & Membership Details Section (वर्तमान सदस्यता प्लान एवं सुविधाएं) -->
-        <div class="bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-white rounded-3xl p-5 sm:p-6 border border-indigo-200/80 shadow-sm space-y-5 relative overflow-hidden">
+        <!-- 3. Current Plan & Membership Details Section (वर्तमान सदस्यता प्लान) -->
+        <div class="bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-white rounded-3xl p-4 sm:p-6 border border-indigo-200/80 shadow-sm space-y-4 sm:space-y-5 relative overflow-hidden">
           <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-200/30 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-indigo-100/80 relative z-10">
+          <div class="flex items-center justify-between gap-3 pb-3 border-b border-indigo-100/80 relative z-10">
             <div class="flex items-center gap-2.5">
-              <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-lg shadow-sm">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm">
                 <i class="fa-solid fa-gem"></i>
               </div>
               <div>
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari">
-                  वर्तमान सदस्यता प्लान (Current Plan & Membership)
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari leading-none">
+                  वर्तमान सदस्यता प्लान
                 </h3>
-                <p class="text-xs text-slate-500">आपकी सक्रिय सदस्यता योजना, विशेषाधिकार एवं वार्षिक नवीनीकरण</p>
               </div>
             </div>
 
-            <!-- Action Buttons: Upgrade Plan & Renew Plan -->
-            <div class="flex items-center gap-2 w-full sm:w-auto">
-              <button 
-                type="button" 
-                onclick="handleMemberUpgradePlan()" 
-                id="btn-member-plan-upgrade"
-                class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <i class="fa-solid fa-crown text-[11px]"></i>
-                <span id="btn-member-plan-upgrade-text">प्लान अपग्रेड करें (Upgrade)</span>
-              </button>
-              <button 
-                type="button" 
-                onclick="handleMemberRenewPlan()" 
-                class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <i class="fa-solid fa-rotate text-[11px]"></i>
-                <span>नवीनीकरण करें (Renew)</span>
-              </button>
+            <!-- Hidden action buttons hooks for JS integrity -->
+            <div class="hidden items-center gap-2">
+              <button type="button" id="btn-member-plan-upgrade"><span id="btn-member-plan-upgrade-text"></span></button>
             </div>
           </div>
 
