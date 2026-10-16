@@ -2575,46 +2575,44 @@
       <!-- SUB-VIEW 1: MEMBER MAIN DASHBOARD -->
       <div id="member-view-dashboard" class="space-y-6 animate-in fade-in duration-200">
         
-        <!-- 1. SABSE UPAR: WELCOME MEMBER SMART CARD (Modern Digital Membership Card) -->
-        <section class="relative overflow-hidden rounded-3xl p-4 sm:p-5 bg-gradient-to-br from-amber-50 via-orange-50/60 to-white border border-amber-200/70 shadow-xs space-y-3">
-          <!-- Background Subtle Decorative Blurs -->
-          <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
-          <div class="absolute -left-8 -top-8 w-28 h-28 bg-orange-400/10 rounded-full blur-2xl pointer-events-none"></div>
+        <!-- 1. SABSE UPAR: WELCOME MEMBER SMART CARD (Compact 2-Line Layout) -->
+        <section class="relative overflow-hidden rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 bg-gradient-to-br from-amber-50 via-orange-50/50 to-white border border-amber-200/70 shadow-xs">
+          <!-- Hidden hooks for JS safety -->
+          <span id="user-card-id" class="hidden"></span>
+          <span id="user-card-father" class="hidden"></span>
+          <span id="user-card-address" class="hidden"></span>
+          <span id="user-card-since" class="hidden"></span>
 
-          <!-- Top Row: Avatar + Name + Badges + QR/Trust Badge -->
-          <div class="relative z-10 flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-              <!-- Digital Avatar with Badge -->
+          <!-- Background Subtle Decorative Blurs -->
+          <div class="absolute -right-8 -bottom-8 w-28 h-28 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="absolute -left-8 -top-8 w-24 h-24 bg-orange-400/10 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div class="relative z-10 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
+              <!-- FIRST LINE: Avatar (Profile Photo without ID tag) -->
               <div class="relative flex-shrink-0">
-                <div class="w-13 h-13 sm:w-15 sm:h-15 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 p-0.5 shadow-sm">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 p-0.5 shadow-xs">
                   <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center text-orange-600 text-xl sm:text-2xl font-black font-devanagari" id="user-avatar-initial">
                     ग
                   </div>
                 </div>
-                <span class="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md text-[9px] font-black bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-xs font-mono border border-white" id="user-card-id">
-                  GSKS-000
-                </span>
               </div>
 
-              <!-- Name & Status Badges -->
-              <div class="min-w-0 space-y-1">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight truncate font-devanagari" id="user-card-name">
-                    सदस्य का नाम
-                  </h3>
-                  <span id="user-card-status" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center">
-                    सक्रिय सदस्य
-                  </span>
-                </div>
+              <!-- Lines Container -->
+              <div class="min-w-0 flex flex-col justify-center gap-1">
+                <!-- FIRST LINE: Name only -->
+                <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight truncate font-devanagari leading-snug" id="user-card-name">
+                  सदस्य का नाम
+                </h3>
 
-                <!-- Designation Pill -->
-                <div class="flex items-center gap-1.5 flex-wrap">
+                <!-- SECOND LINE: Prime, Member bas -->
+                <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                  <span id="user-card-status" class="px-2.5 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center">
+                    <i class="fa-solid fa-crown text-[9px] text-amber-600 mr-1"></i>Prime
+                  </span>
                   <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-[10px] sm:text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs font-devanagari" id="user-card-designation">
                     <i class="fa-solid fa-user-tie text-[9px] text-indigo-600"></i>
                     <span id="user-card-designation-text">सदस्य (Member)</span>
-                  </span>
-                  <span class="text-[10px] text-slate-400 font-mono font-medium">
-                    Since: <strong class="text-slate-700" id="user-card-since">2025</strong>
                   </span>
                 </div>
               </div>
@@ -2629,20 +2627,6 @@
             >
               <i class="fa-solid fa-id-card"></i>
             </button>
-          </div>
-
-          <!-- Bottom Micro-Info Strip (Father & Address) in 2 Compact Chips -->
-          <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2 border-t border-amber-100/90 text-xs">
-            <div class="flex items-center gap-1.5 text-slate-600 min-w-0 bg-white/70 backdrop-blur-2xs px-2.5 py-1 rounded-xl border border-amber-100/60">
-              <i class="fa-solid fa-user text-[10px] text-amber-500 flex-shrink-0"></i>
-              <span class="text-[10px] text-slate-400 font-medium">पिता/संरक्षक:</span>
-              <span class="font-bold text-slate-800 text-[11px] truncate" id="user-card-father">--</span>
-            </div>
-            <div class="flex items-center gap-1.5 text-slate-600 min-w-0 bg-white/70 backdrop-blur-2xs px-2.5 py-1 rounded-xl border border-amber-100/60">
-              <i class="fa-solid fa-location-dot text-[10px] text-rose-500 flex-shrink-0"></i>
-              <span class="text-[10px] text-slate-400 font-medium">ग्राम/पता:</span>
-              <span class="font-bold text-slate-800 text-[11px] truncate" id="user-card-address">--</span>
-            </div>
           </div>
         </section>
 
@@ -7258,20 +7242,24 @@
       
       if (elCardStatus) {
         if (isPrime) {
-          elCardStatus.innerHTML = '<i class="fa-solid fa-crown text-[9px] text-amber-600 mr-1"></i>⭐ विशिष्ट सदस्य (Prime)';
-          elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center';
+          elCardStatus.innerHTML = '<i class="fa-solid fa-crown text-[9px] text-amber-600 mr-1"></i>Prime';
+          elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center';
         } else if (isInactive) {
-          elCardStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>निष्क्रिय सदस्य (Inactive)';
+          elCardStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>Inactive';
           elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 shadow-2xs inline-flex items-center';
         } else {
-          elCardStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>सक्रिय सदस्य (Active)';
+          elCardStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Active';
           elCardStatus.className = 'px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs inline-flex items-center';
         }
       }
       
       const elCardDesText = document.getElementById('user-card-designation-text');
       if (elCardDesText) {
-        elCardDesText.textContent = member.designation || 'सदस्य (Member)';
+        let des = (member.designation || 'Member').trim();
+        if (des === 'सदस्य (Member)' || des === 'सदस्य') {
+          des = 'Member';
+        }
+        elCardDesText.textContent = des;
       }
 
       if (elAvatar) elAvatar.textContent = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
