@@ -3710,13 +3710,13 @@
         </div>
 
         <!-- 3. Current Plan & Membership Details Section (वर्तमान सदस्यता प्लान) -->
-        <div class="bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-white rounded-3xl p-4 sm:p-6 border border-indigo-200/80 shadow-sm space-y-4 sm:space-y-5 relative overflow-hidden">
-          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-200/30 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/40 rounded-3xl p-3.5 sm:p-5 border border-indigo-100/80 shadow-sm space-y-3.5 sm:space-y-4 relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-purple-200/20 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div class="flex items-center justify-between gap-3 pb-3 border-b border-indigo-100/80 relative z-10">
+          <div class="flex items-center justify-between gap-3 pb-2.5 border-b border-indigo-100/70 relative z-10">
             <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm">
-                <i class="fa-solid fa-gem"></i>
+              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-amber-600 text-white flex items-center justify-center text-sm shadow-xs shadow-amber-500/25">
+                <i class="fa-solid fa-crown text-xs"></i>
               </div>
               <div>
                 <h3 class="text-sm sm:text-base font-extrabold text-slate-900 font-devanagari leading-none">
@@ -3731,43 +3731,78 @@
             </div>
           </div>
 
-          <!-- Plan Details 3-Cards Row -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
-            <!-- 1. Current Plan Card -->
-            <div class="p-4 bg-white/90 rounded-2xl border border-indigo-100 shadow-2xs space-y-1.5">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">वर्तमान प्लान (Current Plan)</span>
-              <div class="flex items-center gap-2">
-                <span class="text-base font-black text-slate-900 font-devanagari" id="plan-display-name">
+          <!-- Plan Details: Colorful & Mobile Optimized Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 relative z-10">
+            <!-- 1. Current Plan Card (Vibrant Amber / Gold) -->
+            <div class="p-3.5 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl text-white shadow-xs shadow-orange-500/20 flex flex-col justify-between relative overflow-hidden">
+              <div class="absolute -right-4 -bottom-4 text-white/15 text-5xl pointer-events-none">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <div class="relative z-10">
+                <div class="flex items-center justify-between gap-1 mb-1.5">
+                  <span class="text-[10px] font-black uppercase tracking-wider text-amber-100">CURRENT PLAN</span>
+                  <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                </div>
+                <h4 class="text-sm sm:text-base font-black font-devanagari tracking-tight text-white leading-tight drop-shadow-xs" id="plan-display-name">
                   विशिष्ट सदस्य (Prime Member)
+                </h4>
+              </div>
+              <div class="mt-2.5 relative z-10">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-white/20 backdrop-blur-md text-white border border-white/30" id="plan-badge-status">
+                  👑 VIP प्रीमियम प्लान सक्रिय
                 </span>
               </div>
-              <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200" id="plan-badge-status">
-                सक्रिय सदस्यता
-              </span>
             </div>
 
-            <!-- 2. Yearly Membership Fee Card -->
-            <div class="p-4 bg-white/90 rounded-2xl border border-indigo-100 shadow-2xs space-y-1">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">वार्षिक सदस्यता शुल्क (Yearly Fee)</span>
-              <h4 class="text-xl sm:text-2xl font-black text-indigo-700 font-mono" id="plan-display-fee">₹ 1,200</h4>
-              <p class="text-[10px] text-slate-500">वार्षिक नवीनीकरण शुल्क • देय प्रतिवर्ष</p>
+            <!-- 2. Yearly Membership Fee Card (Vibrant Blue / Indigo) -->
+            <div class="p-3.5 bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-700 rounded-2xl text-white shadow-xs shadow-indigo-600/20 flex flex-col justify-between relative overflow-hidden">
+              <div class="absolute -right-4 -bottom-4 text-white/15 text-5xl pointer-events-none">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div class="relative z-10">
+                <div class="flex items-center justify-between gap-1 mb-1">
+                  <span class="text-[10px] font-black uppercase tracking-wider text-blue-100">YEARLY FEE</span>
+                  <i class="fa-solid fa-calendar-check text-[11px] text-blue-200"></i>
+                </div>
+                <div class="flex items-baseline gap-1">
+                  <h4 class="text-xl sm:text-2xl font-black font-mono tracking-tight text-white" id="plan-display-fee">₹ 1,200</h4>
+                  <span class="text-[10px] font-bold text-blue-100">/ वर्ष</span>
+                </div>
+              </div>
+              <div class="mt-2 text-[10px] text-blue-100/90 font-medium relative z-10 flex items-center gap-1">
+                <i class="fa-solid fa-arrows-rotate text-[9px] text-blue-200"></i>
+                <span>वार्षिक नवीनीकरण शुल्क • देय प्रतिवर्ष</span>
+              </div>
             </div>
 
-            <!-- 3. Validity / Status Card -->
-            <div class="p-4 bg-white/90 rounded-2xl border border-indigo-100 shadow-2xs space-y-1">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">सदस्यता वैधता (Validity)</span>
-              <h4 class="text-base font-black text-emerald-700 font-devanagari" id="plan-display-validity">आजीवन सक्रिय (Active)</h4>
-              <p class="text-[10px] text-slate-400" id="plan-display-validity-desc">समिति रिकॉर्ड में सत्यापित</p>
+            <!-- 3. Validity / Status Card (Vibrant Emerald / Teal) -->
+            <div class="p-3.5 bg-gradient-to-br from-emerald-500 via-teal-600 to-emerald-700 rounded-2xl text-white shadow-xs shadow-emerald-600/20 flex flex-col justify-between relative overflow-hidden">
+              <div class="absolute -right-4 -bottom-4 text-white/15 text-5xl pointer-events-none">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div class="relative z-10">
+                <div class="flex items-center justify-between gap-1 mb-1">
+                  <span class="text-[10px] font-black uppercase tracking-wider text-emerald-100">VALIDITY STATUS</span>
+                  <i class="fa-solid fa-circle-check text-[11px] text-emerald-200"></i>
+                </div>
+                <h4 class="text-sm sm:text-base font-black font-devanagari tracking-tight text-white leading-tight" id="plan-display-validity">
+                  आजीवन वीआईपी सक्रिय
+                </h4>
+              </div>
+              <div class="mt-2 text-[10px] text-emerald-100/90 font-medium relative z-10 flex items-center gap-1">
+                <i class="fa-solid fa-circle-info text-[9px] text-emerald-200"></i>
+                <span id="plan-display-validity-desc">समिति के सर्वोच्च विशेषाधिकार प्राप्त</span>
+              </div>
             </div>
           </div>
 
-          <!-- Benefits Checklist Box -->
-          <div class="p-4 bg-white/80 rounded-2xl border border-indigo-100 space-y-2.5 relative z-10">
-            <span class="text-xs font-black text-slate-800 flex items-center gap-1.5 font-devanagari">
+          <!-- Benefits Checklist Box (Clean & Modern) -->
+          <div class="p-3.5 bg-white/90 backdrop-blur-sm rounded-2xl border border-indigo-100 shadow-2xs space-y-2 relative z-10">
+            <span class="text-[11px] font-black text-slate-800 flex items-center gap-1.5 font-devanagari">
               <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
               प्लान अंतर्गत प्राप्त सुविधाएं एवं लाभ (Benefits):
             </span>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs" id="plan-benefits-checklist">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs" id="plan-benefits-checklist">
               <!-- Dynamically populated via JS -->
             </div>
           </div>
@@ -10509,15 +10544,15 @@
       const btnUpgradeText = document.getElementById('btn-member-plan-upgrade-text');
 
       if (isPrime) {
-        if (planNameEl) planNameEl.textContent = '⭐ विशिष्ट सदस्य (Prime Member)';
+        if (planNameEl) planNameEl.textContent = 'विशिष्ट सदस्य (Prime Member)';
         if (planBadgeEl) {
           planBadgeEl.textContent = '👑 VIP प्रीमियम प्लान सक्रिय';
-          planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300';
+          planBadgeEl.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/20 backdrop-blur-md text-white border border-white/30';
         }
-        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Prime Member')).toLocaleString('en-IN')} / वर्ष`;
+        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Prime Member')).toLocaleString('en-IN')}`;
         if (planValEl) {
           planValEl.textContent = 'आजीवन वीआईपी सक्रिय';
-          planValEl.className = 'text-base font-black text-amber-700 font-devanagari';
+          planValEl.className = 'text-sm sm:text-base font-black font-devanagari tracking-tight text-white leading-tight';
         }
         if (planValDescEl) planValDescEl.textContent = 'समिति के सर्वोच्च विशेषाधिकार प्राप्त';
 
@@ -10556,15 +10591,15 @@
           `;
         }
       } else if (isInactive) {
-        if (planNameEl) planNameEl.textContent = '⚪ निष्क्रिय सदस्य (Inactive)';
+        if (planNameEl) planNameEl.textContent = 'निष्क्रिय सदस्य (Inactive)';
         if (planBadgeEl) {
-          planBadgeEl.textContent = '⚠️ सदस्यता नवीनीकरण प्रतीक्षित';
-          planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300';
+          planBadgeEl.textContent = '⚠️ नवीनीकरण प्रतीक्षित';
+          planBadgeEl.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/20 backdrop-blur-md text-white border border-white/30';
         }
-        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Active')).toLocaleString('en-IN')} / वर्ष`;
+        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Active')).toLocaleString('en-IN')}`;
         if (planValEl) {
           planValEl.textContent = 'निष्क्रिय (Inactive)';
-          planValEl.className = 'text-base font-black text-rose-600 font-devanagari';
+          planValEl.className = 'text-sm sm:text-base font-black font-devanagari tracking-tight text-white leading-tight';
         }
         if (planValDescEl) planValDescEl.textContent = 'नवीनीकरण कर पुनः सक्रिय करें';
 
@@ -10592,15 +10627,15 @@
         }
       } else {
         // Active Member
-        if (planNameEl) planNameEl.textContent = '🟢 सक्रिय सदस्य (Active Member)';
+        if (planNameEl) planNameEl.textContent = 'सक्रिय सदस्य (Active Member)';
         if (planBadgeEl) {
           planBadgeEl.textContent = '✅ सक्रिय सामान्य प्लान';
-          planBadgeEl.className = 'inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+          planBadgeEl.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/20 backdrop-blur-md text-white border border-white/30';
         }
-        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Active')).toLocaleString('en-IN')} / वर्ष`;
+        if (planFeeEl) planFeeEl.textContent = `₹ ${(getMembershipFee('Active')).toLocaleString('en-IN')}`;
         if (planValEl) {
           planValEl.textContent = 'सक्रिय (Active)';
-          planValEl.className = 'text-base font-black text-emerald-700 font-devanagari';
+          planValEl.className = 'text-sm sm:text-base font-black font-devanagari tracking-tight text-white leading-tight';
         }
         if (planValDescEl) planValDescEl.textContent = 'समिति में नियमित सक्रिय सदस्यता';
 
