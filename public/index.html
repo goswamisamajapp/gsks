@@ -2543,71 +2543,34 @@
           </div>
         </div>
 
-        <!-- Right: Navigation, Member Status Badge & Logout -->
-        <div class="flex items-center gap-2 sm:gap-2.5">
-          <!-- Member Navigation Tabs -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200/80 text-xs font-semibold">
-            <button 
-              type="button" 
-              id="user-nav-btn-dash" 
-              onclick="switchMemberView('dashboard')" 
-              class="px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer"
-            >
-              <i class="fa-solid fa-house text-[11px]"></i>
-              <span class="hidden sm:inline">डैशबोर्ड</span>
-            </button>
-            <button 
-              type="button" 
-              id="user-nav-btn-notices" 
-              onclick="switchMemberView('notifications')" 
-              class="px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer"
-            >
-              <i class="fa-solid fa-bell text-[11px]"></i>
-              <span>सूचनाएं</span>
-              <span id="user-header-notice-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-white">1</span>
-            </button>
-            <button 
-              type="button" 
-              id="user-nav-btn-donations" 
-              onclick="switchMemberView('donations')" 
-              class="px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer"
-            >
-              <i class="fa-solid fa-receipt text-[11px]"></i>
-              <span>मेरे दान</span>
-            </button>
-          </div>
-
-          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-amber-50 rounded-xl border border-amber-200">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-xs font-bold text-amber-900" id="user-header-name">सदस्य</span>
-          </div>
-
+        <!-- Right: Settings & Logout -->
+        <div class="flex items-center gap-2">
           <!-- Setting Gear Button for My Profile -->
           <button 
             type="button"
             id="user-nav-btn-profile"
             onclick="switchMemberView('profile')" 
-            class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 font-bold text-xs transition-colors border border-slate-200 flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 transition-colors border border-slate-200 flex items-center justify-center cursor-pointer shadow-2xs active:scale-95"
             title="मेरी प्रोफ़ाइल (Settings & Profile)"
           >
-            <i class="fa-solid fa-gear text-slate-600 hover:text-orange-600 text-xs"></i>
-            <span class="hidden sm:inline">प्रोफ़ाइल</span>
+            <i class="fa-solid fa-gear text-slate-600 hover:text-orange-600 text-sm"></i>
           </button>
 
+          <!-- Logout Button -->
           <button 
             type="button"
             onclick="logoutMember()" 
-            class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 font-bold text-xs transition-colors border border-slate-200 flex items-center gap-1.5 cursor-pointer"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 transition-colors border border-slate-200 flex items-center justify-center cursor-pointer shadow-2xs active:scale-95"
+            title="लॉगआउट (Logout)"
           >
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <span class="hidden sm:inline">लॉगआउट</span>
+            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 pb-24 sm:pb-28 space-y-6">
       
       <!-- SUB-VIEW 1: MEMBER MAIN DASHBOARD -->
       <div id="member-view-dashboard" class="space-y-6 animate-in fade-in duration-200">
@@ -3568,6 +3531,41 @@
       </footer>
 
     </main>
+
+    <!-- Bottom Mobile Nav Bar for Member Portal (Dashboard, Events, PASY, Profile) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-xl">
+      <!-- 1. Dashboard -->
+      <button onclick="switchMemberView('dashboard')" id="member-bottom-nav-dashboard" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <span class="text-[10px] font-extrabold tracking-tight">Dashboard</span>
+      </button>
+
+      <!-- 2. Events -->
+      <button onclick="switchMemberView('events')" id="member-bottom-nav-events" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-indigo-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">Events</span>
+      </button>
+
+      <!-- 3. PASY -->
+      <button onclick="switchMemberView('pasy')" id="member-bottom-nav-pasy" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-cyan-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-users-rectangle"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">PASY</span>
+      </button>
+
+      <!-- 4. Profile -->
+      <button onclick="switchMemberView('profile')" id="member-bottom-nav-profile" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-purple-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">Profile</span>
+      </button>
+    </div>
 
   </div>
 
@@ -7303,10 +7301,11 @@
       const viewPasy = document.getElementById('member-view-pasy');
       const viewProfile = document.getElementById('member-view-profile');
 
-      const btnDash = document.getElementById('user-nav-btn-dash');
-      const btnNotices = document.getElementById('user-nav-btn-notices');
-      const btnDonations = document.getElementById('user-nav-btn-donations');
-      const btnProfile = document.getElementById('user-nav-btn-profile');
+      // Bottom Navigation Buttons
+      const bNavDash = document.getElementById('member-bottom-nav-dashboard');
+      const bNavEvents = document.getElementById('member-bottom-nav-events');
+      const bNavPasy = document.getElementById('member-bottom-nav-pasy');
+      const bNavProfile = document.getElementById('member-bottom-nav-profile');
 
       // Reset all views
       if (viewDash) viewDash.classList.add('hidden');
@@ -7315,37 +7314,72 @@
       if (viewPasy) viewPasy.classList.add('hidden');
       if (viewProfile) viewProfile.classList.add('hidden');
 
-      // Reset button styles
-      if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
-      if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
-      if (btnDonations) btnDonations.className = 'px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 text-slate-600 hover:text-orange-600 cursor-pointer';
-      if (btnProfile) btnProfile.className = 'px-2.5 sm:px-3 py-1.5 rounded-xl font-semibold transition-all text-xs flex items-center gap-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 border border-slate-200 cursor-pointer shadow-2xs';
+      // Helper to reset bottom nav buttons
+      const resetBottomNav = () => {
+        const inactiveClass = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-slate-800 active:scale-95 cursor-pointer';
+        [bNavDash, bNavEvents, bNavPasy, bNavProfile].forEach(b => {
+          if (b) {
+            b.className = inactiveClass;
+            const iconDiv = b.querySelector('div');
+            if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors';
+          }
+        });
+      };
+
+      resetBottomNav();
 
       if (view === 'profile') {
         if (viewProfile) viewProfile.classList.remove('hidden');
-        if (btnProfile) btnProfile.className = 'px-2.5 sm:px-3 py-1.5 rounded-xl font-black transition-all text-xs flex items-center gap-1.5 bg-orange-600 text-white shadow-sm border border-orange-600 cursor-pointer';
+        if (bNavProfile) {
+          bNavProfile.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-purple-700 bg-purple-50 font-bold active:scale-95 cursor-pointer';
+          const iconDiv = bNavProfile.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xs shadow-sm shadow-purple-500/25';
+        }
         renderMemberProfile(currentLoggedInMember);
+      } else if (view === 'events') {
+        if (viewDash) viewDash.classList.remove('hidden');
+        if (bNavEvents) {
+          bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-700 bg-indigo-50 font-bold active:scale-95 cursor-pointer';
+          const iconDiv = bNavEvents.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xs shadow-sm shadow-indigo-500/25';
+        }
+        setTimeout(() => {
+          const eventsSection = document.getElementById('user-events-list');
+          if (eventsSection) eventsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+        return;
       } else if (view === 'notifications') {
         if (viewNotices) viewNotices.classList.remove('hidden');
-        if (btnNotices) btnNotices.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
         renderMemberAllNotifications(currentLoggedInMember);
       } else if (view === 'donations') {
         if (viewDonations) viewDonations.classList.remove('hidden');
-        if (btnDonations) btnDonations.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
         renderMemberDonationsPage(currentLoggedInMember);
       } else if (view === 'pasy') {
         const canAccessPasy = typeof isPariwarikMember === 'function' ? isPariwarikMember(currentLoggedInMember) : false;
         if (!canAccessPasy) {
           alert('⚠️ पारिवारिक आर्थिक सहायता योजना (PASY) का उपयोग केवल नामांकित (PASY Enabled) सदस्यों के लिए उपलब्ध है।');
           if (viewDash) viewDash.classList.remove('hidden');
-          if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
+          if (bNavDash) {
+            bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer';
+            const iconDiv = bNavDash.querySelector('div');
+            if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25';
+          }
           return;
         }
         if (viewPasy) viewPasy.classList.remove('hidden');
+        if (bNavPasy) {
+          bNavPasy.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-cyan-700 bg-cyan-50 font-bold active:scale-95 cursor-pointer';
+          const iconDiv = bNavPasy.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white flex items-center justify-center text-xs shadow-sm shadow-cyan-500/25';
+        }
         renderMemberPasyPage(currentLoggedInMember);
       } else {
         if (viewDash) viewDash.classList.remove('hidden');
-        if (btnDash) btnDash.className = 'px-3 py-1.5 rounded-xl font-bold transition-all text-xs flex items-center gap-1.5 shadow-sm bg-orange-600 text-white cursor-pointer';
+        if (bNavDash) {
+          bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer';
+          const iconDiv = bNavDash.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25';
+        }
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
