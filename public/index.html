@@ -3529,38 +3529,38 @@
 
     </main>
 
-    <!-- Bottom Mobile Nav Bar for Member Portal (Dashboard, Events, PASY, Profile) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-xl">
+    <!-- Bottom Mobile Nav Bar for Member Portal (Dashboard, Events/Notices, PASY, Profile) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-50/90 via-indigo-50/80 to-purple-50/90 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
       <!-- 1. Dashboard -->
-      <button onclick="switchMemberView('dashboard')" id="member-bottom-nav-dashboard" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25">
+      <button onclick="switchMemberView('dashboard')" id="member-bottom-nav-dashboard" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-700 bg-amber-100/70 font-bold active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/30">
           <i class="fa-solid fa-chart-pie"></i>
         </div>
-        <span class="text-[10px] font-extrabold tracking-tight">Dashboard</span>
+        <span class="text-[10px] font-extrabold tracking-tight">डैशबोर्ड</span>
       </button>
 
-      <!-- 2. Events -->
-      <button onclick="switchMemberView('events')" id="member-bottom-nav-events" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-indigo-600 active:scale-95 cursor-pointer">
-        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
-          <i class="fa-solid fa-calendar-days"></i>
+      <!-- 2. Events / Notifications -->
+      <button onclick="switchMemberView('events')" id="member-bottom-nav-events" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-600/70 hover:text-indigo-700 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-indigo-100/70 text-indigo-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-bell"></i>
         </div>
-        <span class="text-[10px] font-bold tracking-tight">Events</span>
+        <span class="text-[10px] font-bold tracking-tight">इवेंट्स / सूचना</span>
       </button>
 
       <!-- 3. PASY -->
-      <button onclick="switchMemberView('pasy')" id="member-bottom-nav-pasy" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-cyan-600 active:scale-95 cursor-pointer">
-        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+      <button onclick="switchMemberView('pasy')" id="member-bottom-nav-pasy" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-teal-600/70 hover:text-teal-700 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-teal-100/70 text-teal-600 flex items-center justify-center text-xs transition-colors">
           <i class="fa-solid fa-users-rectangle"></i>
         </div>
         <span class="text-[10px] font-bold tracking-tight">PASY</span>
       </button>
 
       <!-- 4. Profile -->
-      <button onclick="switchMemberView('profile')" id="member-bottom-nav-profile" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-purple-600 active:scale-95 cursor-pointer">
-        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+      <button onclick="switchMemberView('profile')" id="member-bottom-nav-profile" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-purple-600/70 hover:text-purple-700 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center text-xs transition-colors">
           <i class="fa-solid fa-user-gear"></i>
         </div>
-        <span class="text-[10px] font-bold tracking-tight">Profile</span>
+        <span class="text-[10px] font-bold tracking-tight">प्रोफाइल</span>
       </button>
     </div>
 
@@ -7337,16 +7337,28 @@
       if (viewPasy) viewPasy.classList.add('hidden');
       if (viewProfile) viewProfile.classList.add('hidden');
 
-      // Helper to reset bottom nav buttons
+      // Helper to reset bottom nav buttons with distinctive colorful base styling
       const resetBottomNav = () => {
-        const inactiveClass = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-slate-800 active:scale-95 cursor-pointer';
-        [bNavDash, bNavEvents, bNavPasy, bNavProfile].forEach(b => {
-          if (b) {
-            b.className = inactiveClass;
-            const iconDiv = b.querySelector('div');
-            if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors';
-          }
-        });
+        if (bNavDash) {
+          bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-700/80 hover:text-amber-800 active:scale-95 cursor-pointer';
+          const iconDiv = bNavDash.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-amber-100/70 text-amber-600 flex items-center justify-center text-xs transition-colors';
+        }
+        if (bNavEvents) {
+          bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-700/80 hover:text-indigo-800 active:scale-95 cursor-pointer';
+          const iconDiv = bNavEvents.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-indigo-100/70 text-indigo-600 flex items-center justify-center text-xs transition-colors';
+        }
+        if (bNavPasy) {
+          bNavPasy.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-teal-700/80 hover:text-teal-800 active:scale-95 cursor-pointer';
+          const iconDiv = bNavPasy.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-teal-100/70 text-teal-600 flex items-center justify-center text-xs transition-colors';
+        }
+        if (bNavProfile) {
+          bNavProfile.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-purple-700/80 hover:text-purple-800 active:scale-95 cursor-pointer';
+          const iconDiv = bNavProfile.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center text-xs transition-colors';
+        }
       };
 
       resetBottomNav();
@@ -7354,25 +7366,18 @@
       if (view === 'profile') {
         if (viewProfile) viewProfile.classList.remove('hidden');
         if (bNavProfile) {
-          bNavProfile.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-purple-700 bg-purple-50 font-bold active:scale-95 cursor-pointer';
+          bNavProfile.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-purple-800 bg-purple-100/80 font-bold active:scale-95 cursor-pointer';
           const iconDiv = bNavProfile.querySelector('div');
-          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xs shadow-sm shadow-purple-500/25';
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center text-xs shadow-md shadow-purple-500/30';
         }
         renderMemberProfile(currentLoggedInMember);
-      } else if (view === 'events') {
-        if (viewDash) viewDash.classList.remove('hidden');
-        if (bNavEvents) {
-          bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-700 bg-indigo-50 font-bold active:scale-95 cursor-pointer';
-          const iconDiv = bNavEvents.querySelector('div');
-          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xs shadow-sm shadow-indigo-500/25';
-        }
-        setTimeout(() => {
-          const eventsSection = document.getElementById('user-events-list');
-          if (eventsSection) eventsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
-        return;
-      } else if (view === 'notifications') {
+      } else if (view === 'events' || view === 'notifications') {
         if (viewNotices) viewNotices.classList.remove('hidden');
+        if (bNavEvents) {
+          bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-800 bg-indigo-100/80 font-bold active:scale-95 cursor-pointer';
+          const iconDiv = bNavEvents.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-xs shadow-md shadow-indigo-500/30';
+        }
         renderMemberAllNotifications(currentLoggedInMember);
       } else if (view === 'donations') {
         if (viewDonations) viewDonations.classList.remove('hidden');
@@ -7383,25 +7388,25 @@
           alert('⚠️ पारिवारिक आर्थिक सहायता योजना (PASY) का उपयोग केवल नामांकित (PASY Enabled) सदस्यों के लिए उपलब्ध है।');
           if (viewDash) viewDash.classList.remove('hidden');
           if (bNavDash) {
-            bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer';
+            bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-800 bg-amber-100/80 font-bold active:scale-95 cursor-pointer';
             const iconDiv = bNavDash.querySelector('div');
-            if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25';
+            if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-md shadow-orange-500/30';
           }
           return;
         }
         if (viewPasy) viewPasy.classList.remove('hidden');
         if (bNavPasy) {
-          bNavPasy.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-cyan-700 bg-cyan-50 font-bold active:scale-95 cursor-pointer';
+          bNavPasy.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-teal-800 bg-teal-100/80 font-bold active:scale-95 cursor-pointer';
           const iconDiv = bNavPasy.querySelector('div');
-          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white flex items-center justify-center text-xs shadow-sm shadow-cyan-500/25';
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-600 text-white flex items-center justify-center text-xs shadow-md shadow-teal-500/30';
         }
         renderMemberPasyPage(currentLoggedInMember);
       } else {
         if (viewDash) viewDash.classList.remove('hidden');
         if (bNavDash) {
-          bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer';
+          bNavDash.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-800 bg-amber-100/80 font-bold active:scale-95 cursor-pointer';
           const iconDiv = bNavDash.querySelector('div');
-          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25';
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-md shadow-orange-500/30';
         }
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
