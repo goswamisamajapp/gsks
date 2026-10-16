@@ -3482,13 +3482,16 @@
                 </div>
               </div>
               <div class="flex items-center gap-1.5 text-slate-400 group-hover:text-slate-600">
-                <span id="m-pasy-toggle-text" class="text-[10px] font-bold">देखें</span>
-                <i id="m-pasy-paid-chevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>
+                <span id="m-pasy-toggle-text" class="text-[10px] font-bold">
+                  <span class="md:hidden">देखें</span>
+                  <span class="hidden md:inline">छुपाएं</span>
+                </span>
+                <i id="m-pasy-paid-chevron" class="fa-solid fa-chevron-down text-xs transition-transform duration-200 md:rotate-180"></i>
               </div>
             </button>
 
-            <!-- Collapsible Paid Months Grid (Collapsed / Hidden by default on mobile) -->
-            <div id="m-pasy-paid-months-wrapper" class="hidden p-3 sm:p-4 border-t border-slate-100 bg-white">
+            <!-- Paid Months Grid (Visible by default on PC (md:block), Hidden on Mobile (hidden md:block)) -->
+            <div id="m-pasy-paid-months-wrapper" class="hidden md:block p-3 sm:p-4 border-t border-slate-100 bg-white">
               <div id="m-pasy-paid-months-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-1.5 sm:gap-2">
                 <!-- Populated dynamically via JS -->
               </div>
@@ -7070,15 +7073,24 @@
       const toggleText = document.getElementById('m-pasy-toggle-text');
       if (!wrapper) return;
 
-      const isHidden = wrapper.classList.contains('hidden');
-      if (isHidden) {
-        wrapper.classList.remove('hidden');
-        if (chevron) chevron.classList.add('rotate-180');
-        if (toggleText) toggleText.textContent = 'छुपाएं';
-      } else {
+      // Check current computed display or class
+      const isVisible = !wrapper.classList.contains('hidden') && (window.innerWidth >= 768 || !wrapper.classList.contains('hidden'));
+      const isCurrentlyShown = window.getComputedStyle(wrapper).display !== 'none';
+
+      if (isCurrentlyShown) {
         wrapper.classList.add('hidden');
-        if (chevron) chevron.classList.remove('rotate-180');
-        if (toggleText) toggleText.textContent = 'देखें';
+        wrapper.classList.remove('md:block');
+        if (chevron) {
+          chevron.classList.remove('rotate-180', 'md:rotate-180');
+        }
+        if (toggleText) toggleText.innerHTML = 'देखें';
+      } else {
+        wrapper.classList.remove('hidden');
+        wrapper.classList.add('block');
+        if (chevron) {
+          chevron.classList.add('rotate-180');
+        }
+        if (toggleText) toggleText.innerHTML = 'छुपाएं';
       }
     }
     window.togglePasyPaidMonthsList = togglePasyPaidMonthsList;
