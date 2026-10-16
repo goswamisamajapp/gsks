@@ -3724,11 +3724,6 @@
                 </h3>
               </div>
             </div>
-
-            <!-- Hidden action buttons hooks for JS integrity -->
-            <div class="hidden items-center gap-2">
-              <button type="button" id="btn-member-plan-upgrade"><span id="btn-member-plan-upgrade-text"></span></button>
-            </div>
           </div>
 
           <!-- Plan Details: Colorful & Mobile Optimized Cards -->
@@ -3805,6 +3800,30 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs" id="plan-benefits-checklist">
               <!-- Dynamically populated via JS -->
             </div>
+          </div>
+
+          <!-- Bottom Action Buttons: Renew Membership & Upgrade Plan (Mobile Friendly & Vibrant) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 relative z-10">
+            <!-- 1. Renew Membership Button -->
+            <button 
+              type="button" 
+              onclick="handleMemberRenewPlan()" 
+              class="w-full py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 active:scale-95 text-white transition-all shadow-sm shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <i class="fa-solid fa-rotate text-emerald-200 text-xs"></i>
+              <span>Renew Membership</span>
+            </button>
+
+            <!-- 2. Upgrade Plan Button -->
+            <button 
+              type="button" 
+              onclick="handleMemberUpgradePlan()" 
+              id="btn-member-plan-upgrade"
+              class="w-full py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm shadow-orange-500/30 flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <i class="fa-solid fa-crown text-amber-200 text-xs"></i>
+              <span id="btn-member-plan-upgrade-text">Upgrade Plan</span>
+            </button>
           </div>
         </div>
 
@@ -10558,7 +10577,7 @@
 
         if (btnUpgradeText) btnUpgradeText.textContent = '👑 Prime Active (सर्वोच्च प्लान)';
         if (btnUpgrade) {
-          btnUpgrade.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed flex items-center justify-center gap-1.5 opacity-80';
+          btnUpgrade.className = 'w-full py-2.5 px-4 rounded-xl text-xs font-black bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed flex items-center justify-center gap-2 opacity-80';
           btnUpgrade.disabled = true;
         }
 
@@ -10605,7 +10624,7 @@
 
         if (btnUpgradeText) btnUpgradeText.textContent = '⚡ Prime में अपग्रेड करें';
         if (btnUpgrade) {
-          btnUpgrade.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer';
+          btnUpgrade.className = 'w-full py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm shadow-orange-500/30 flex items-center justify-center gap-2 cursor-pointer';
           btnUpgrade.disabled = false;
         }
 
@@ -10641,7 +10660,7 @@
 
         if (btnUpgradeText) btnUpgradeText.textContent = '⭐ Prime में अपग्रेड करें (Upgrade)';
         if (btnUpgrade) {
-          btnUpgrade.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer';
+          btnUpgrade.className = 'w-full py-2.5 px-4 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 active:scale-95 text-white transition-all shadow-sm shadow-orange-500/30 flex items-center justify-center gap-2 cursor-pointer';
           btnUpgrade.disabled = false;
         }
 
