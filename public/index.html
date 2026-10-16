@@ -3743,39 +3743,41 @@
           <p class="text-[11px] text-slate-400 mt-0.5 font-devanagari">गोस्वामी समाज कल्याण समिति • अधिकृत बैठक</p>
         </div>
 
-        <!-- Date, Time & Venue Info Cards -->
-        <div class="space-y-2 text-xs">
-          <!-- Date & Time Grid -->
-          <div class="grid grid-cols-2 gap-2">
-            <div class="bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs flex-shrink-0">
+        <!-- Unified Meeting Info Card (Date, Time, Venue in a clean compact widget) -->
+        <div class="bg-gradient-to-br from-slate-50 to-indigo-50/30 rounded-2xl p-3 border border-slate-200/90 divide-y divide-slate-100 shadow-2xs">
+          <!-- Row 1: Date & Time in 2 columns -->
+          <div class="grid grid-cols-2 gap-2 pb-2.5">
+            <!-- Date -->
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs flex-shrink-0">
                 <i class="fa-regular fa-calendar-days"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">तारीख व दिन</span>
+                <span class="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">तारीख व दिन</span>
                 <strong class="text-slate-800 font-devanagari text-[11px] leading-tight block truncate" id="m-modal-event-date">--</strong>
               </div>
             </div>
 
-            <div class="bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xs flex-shrink-0">
+            <!-- Time -->
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs flex-shrink-0">
                 <i class="fa-regular fa-clock"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">समय</span>
+                <span class="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">समय</span>
                 <strong class="text-slate-800 font-mono text-[11px] leading-tight block truncate" id="m-modal-event-time">--</strong>
               </div>
             </div>
           </div>
 
-          <!-- Venue Card -->
-          <div class="bg-slate-50/90 p-2.5 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+          <!-- Row 2: Venue (Single clean row) -->
+          <div class="pt-2.5 flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs flex-shrink-0">
               <i class="fa-solid fa-location-dot"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">स्थान / वेन्यू</span>
-              <strong class="text-slate-900 text-xs font-semibold leading-snug block" id="m-modal-event-venue">शिव मंदिर, गुनघसा</strong>
+              <span class="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">बैठक स्थल</span>
+              <strong class="text-slate-900 text-xs font-semibold leading-snug block truncate" id="m-modal-event-venue">शिव मंदिर, गुनघसा</strong>
             </div>
           </div>
         </div>
@@ -8279,11 +8281,11 @@
 
       const dt = ev.datetime ? new Date(ev.datetime) : null;
       const dateStr = dt && !isNaN(dt)
-        ? dt.toLocaleDateString('hi-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+        ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
         : (ev.date || '--');
       const timeStr = dt && !isNaN(dt)
         ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })
-        : (ev.time || 'शाम 05:00 बजे');
+        : (ev.time || '05:00 PM');
 
       const badgeColor = ev.category === 'Emergency meeting'
         ? 'bg-rose-100 text-rose-700 border-rose-200'
