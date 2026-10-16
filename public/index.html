@@ -6656,6 +6656,39 @@
     </div>
   </div>
 
+  <!-- ============================================================== -->
+  <!-- MODAL: APP NOTIFICATION / ALERT POPUP (आधुनिक सुंदर पॉपअप अलर्ट)   -->
+  <!-- ============================================================== -->
+  <div id="app-alert-modal" class="hidden fixed inset-0 z-[999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200 text-center">
+      
+      <!-- Icon with dynamic color ring -->
+      <div id="app-alert-icon-container" class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-xs mb-3.5 bg-amber-100 text-amber-600">
+        <i id="app-alert-icon" class="fa-solid fa-bell"></i>
+      </div>
+
+      <!-- Title -->
+      <h3 id="app-alert-title" class="text-base font-extrabold text-slate-900 font-devanagari mb-1.5">
+        सूचना
+      </h3>
+
+      <!-- Message Text -->
+      <p id="app-alert-message" class="text-xs text-slate-600 leading-relaxed font-medium whitespace-pre-line mb-5">
+        --
+      </p>
+
+      <!-- Action Button (OK / ठीक है) -->
+      <button 
+        type="button" 
+        id="app-alert-btn"
+        onclick="closeAppAlertModal()" 
+        class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-all text-center cursor-pointer shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+      >
+        <span>ठीक है (OK)</span>
+      </button>
+
+    </div>
+  </div>
   <script src="members-preloaded.js"></script>
   <script src="events-preloaded.js"></script>
   <script src="donations-preloaded.js"></script>
@@ -6751,6 +6784,62 @@
     let currentLayout = 'cards';
     let activeViewingMemberId = null;
     let pendingDeleteMemberId = null;
+
+    // ==============================================================
+    // BEAUTIFUL APP NOTIFICATION / ALERT POPUP (आधुनिक सुंदर पॉपअप)
+    // ==============================================================
+    let appAlertCallback = null;
+
+    function showAppAlert(message, title = 'सूचना', type = 'info', callback = null) {
+      const modal = document.getElementById('app-alert-modal');
+      if (!modal) {
+        alert(message);
+        if (typeof callback === 'function') callback();
+        return;
+      }
+
+      appAlertCallback = callback;
+
+      const titleEl = document.getElementById('app-alert-title');
+      const msgEl = document.getElementById('app-alert-message');
+      const iconWrap = document.getElementById('app-alert-icon-container');
+      const iconEl = document.getElementById('app-alert-icon');
+      const btnEl = document.getElementById('app-alert-btn');
+
+      if (titleEl) titleEl.textContent = title;
+      if (msgEl) msgEl.textContent = message;
+
+      if (iconWrap && iconEl) {
+        iconWrap.className = 'w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-xs mb-3.5 transition-all';
+        if (type === 'error') {
+          iconWrap.classList.add('bg-rose-100', 'text-rose-600');
+          iconEl.className = 'fa-solid fa-triangle-exclamation';
+        } else if (type === 'success') {
+          iconWrap.classList.add('bg-emerald-100', 'text-emerald-600');
+          iconEl.className = 'fa-solid fa-circle-check';
+        } else if (type === 'warning' || type === 'notice') {
+          iconWrap.classList.add('bg-amber-100', 'text-amber-600');
+          iconEl.className = 'fa-solid fa-clock-rotate-left';
+        } else {
+          iconWrap.classList.add('bg-blue-100', 'text-blue-600');
+          iconEl.className = 'fa-solid fa-bell';
+        }
+      }
+
+      modal.classList.remove('hidden');
+    }
+    window.showAppAlert = showAppAlert;
+
+    function closeAppAlertModal() {
+      const modal = document.getElementById('app-alert-modal');
+      if (modal) modal.classList.add('hidden');
+      if (typeof appAlertCallback === 'function') {
+        const cb = appAlertCallback;
+        appAlertCallback = null;
+        try { cb(); } catch(e) {}
+      }
+    }
+    window.closeAppAlertModal = closeAppAlertModal;
 
     // Pariwarik Arthik & Membership Plan Rates Getters (Sep 2025 to Feb 2028 - 30 Months)
     let PARIWARIK_MONTHLY_FEE = 150;
@@ -8507,7 +8596,7 @@
       if (!eventId) return;
       const ev = (allEvents || []).find(e => e.id === eventId);
       if (!ev) {
-        alert('बैठक / कार्यक्रम का विवरण प्राप्त नहीं हो सका');
+        showAppAlert('बैठक / कार्यक्रम का विवरण प्राप्त नहीं हो सका', 'त्रुटि', 'error');
         return;
       }
 
@@ -8809,13 +8898,13 @@
 
       const member = currentLoggedInMember;
       if (!member) {
-        alert('कृपया उपस्थिति दर्ज करने के लिए पहले सदस्य पोर्टल में लॉगिन करें।');
+        showAppAlert('कृपया उपस्थिति दर्ज करने के लिए पहले सदस्य पोर्टल में लॉगिन करें।', 'लॉगिन आवश्यक', 'notice');
         return;
       }
 
       const activeCheck = checkIsMeetingActiveNow(ev);
       if (!activeCheck.active) {
-        alert(activeCheck.reason);
+        showAppAlert(activeCheck.reason, 'बैठक सूचना', 'notice');
         return;
       }
 
@@ -8930,7 +9019,7 @@
       if (!eventId) return;
       const ev = (allEvents || []).find(e => e.id === eventId);
       if (!ev) {
-        alert('बैठक / कार्यक्रम का विवरण प्राप्त नहीं हो सका');
+        showAppAlert('बैठक / कार्यक्रम का विवरण प्राप्त नहीं हो सका', 'त्रुटि', 'error');
         return;
       }
 
