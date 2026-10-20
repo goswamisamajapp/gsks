@@ -7736,7 +7736,8 @@
       if (!allEvents || allEvents.length === 0) {
         loadEventsFallback();
       }
-      if (!allDonations || allDonations.length === 0) {
+      // Fallback only if no donations and no cache
+      if ((!allDonations || allDonations.length === 0) && localStorage.getItem('gsks_cached_donations') === null) {
         loadDonationsFallback();
       }
       if (!allExpenses || allExpenses.length === 0) {
@@ -11501,7 +11502,7 @@
 
     async function loadDonationsFallback() {
       // 1. Immediate fallback to PRELOADED if empty
-      if (!allDonations || allDonations.length === 0) {
+      if ((!allDonations || allDonations.length === 0) && localStorage.getItem('gsks_cached_donations') === null) {
         const pre = (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS)) ? window.PRELOADED_DONATIONS : window.__INITIAL_DONATIONS__;
         if (Array.isArray(pre) && pre.length > 0) {
           allDonations = [...pre];
