@@ -7002,9 +7002,9 @@
     let allDonations = (() => {
       try {
         const cached = localStorage.getItem('gsks_cached_donations');
-        if (cached) {
+        if (cached !== null) {
           const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) return parsed;
         }
       } catch(e) {}
       if (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS) && window.PRELOADED_DONATIONS.length > 0) {
@@ -7710,7 +7710,7 @@
         const pre = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? window.__INITIAL_EVENTS__ : window.PRELOADED_EVENTS;
         if (Array.isArray(pre) && pre.length > 0) allEvents = [...pre];
       }
-      if (!allDonations || allDonations.length === 0) {
+      if ((!allDonations || allDonations.length === 0) && localStorage.getItem('gsks_cached_donations') === null) {
         const pre = (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS)) ? window.PRELOADED_DONATIONS : window.__INITIAL_DONATIONS__;
         if (Array.isArray(pre) && pre.length > 0) allDonations = [...pre];
       }
@@ -11203,13 +11203,8 @@
             list.push(doc.data());
           });
 
-          if (list.length > 0) {
-            allMembers = list;
-            try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
-          } else if (!allMembers || allMembers.length === 0) {
-            loadMembersDataFallback();
-            return;
-          }
+          allMembers = list;
+          try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
           allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
           updateStats();
           renderMembers();
@@ -11243,12 +11238,8 @@
             }
             eList.push(remoteEv);
           });
-          if (eList.length > 0) {
-            allEvents = eList;
-          } else if (!allEvents || allEvents.length === 0) {
-            loadEventsFallback();
-            return;
-          }
+          allEvents = eList;
+          try { localStorage.setItem('gsks_cached_events', JSON.stringify(allEvents)); } catch(e) {}
           // Sort events by date descending
           allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
           updateEventsStats();
@@ -11272,13 +11263,8 @@
         donationsCol.onSnapshot((liveDonationsSnap) => {
           const dList = [];
           liveDonationsSnap.forEach(doc => dList.push(doc.data()));
-          if (dList.length > 0) {
-            allDonations = dList;
-            try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
-          } else if (!allDonations || allDonations.length === 0) {
-            loadDonationsFallback();
-            return;
-          }
+          allDonations = dList;
+          try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
           // Sort donations by date / timestamp descending (recent first)
           allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateDonationsStats();
@@ -11297,13 +11283,8 @@
         expensesCol.onSnapshot((liveExpensesSnap) => {
           const expList = [];
           liveExpensesSnap.forEach(doc => expList.push(doc.data()));
-          if (expList.length > 0) {
-            allExpenses = expList;
-            try { localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses)); } catch(e) {}
-          } else if (!allExpenses || allExpenses.length === 0) {
-            loadExpensesFallback();
-            return;
-          }
+          allExpenses = expList;
+          try { localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses)); } catch(e) {}
           allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           updateExpensesStats();
@@ -11318,13 +11299,8 @@
         fundTransfersCol.onSnapshot((liveSnap) => {
           const ftList = [];
           liveSnap.forEach(doc => ftList.push(doc.data()));
-          if (ftList.length > 0) {
-            allFundTransfers = ftList;
-            try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
-          } else if (!allFundTransfers || allFundTransfers.length === 0) {
-            loadFundTransfersFallback();
-            return;
-          }
+          allFundTransfers = ftList;
+          try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
           allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           renderFundTransfersList();
@@ -15626,8 +15602,9 @@
       const id = pendingDeleteDonationId;
       closeDeleteDonationModal();
 
-      // 1. Local array update
+      // 1. Local array update and cache sync
       allDonations = allDonations.filter(d => d.id !== id);
+      try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
       updateDonationsStats();
       renderDonationsList();
 
