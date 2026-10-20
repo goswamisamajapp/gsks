@@ -6962,82 +6962,19 @@
 
     </div>
   </div>
-  <script src="members-preloaded.js"></script>
-  <script src="events-preloaded.js"></script>
-  <script src="donations-preloaded.js"></script>
-  <script src="expenses-preloaded.js"></script>
-  <script>
-    let allMembers = (() => {
-      try {
-        const cached = localStorage.getItem('gsks_cached_members');
-        if (cached !== null) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch(e) {}
-      if (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS) && window.PRELOADED_MEMBERS.length > 0) {
-        return [...window.PRELOADED_MEMBERS];
-      }
-      if (typeof window.__INITIAL_MEMBERS__ !== 'undefined' && Array.isArray(window.__INITIAL_MEMBERS__) && window.__INITIAL_MEMBERS__.length > 0) {
-        return [...window.__INITIAL_MEMBERS__];
-      }
-      return [];
-    })();
-    let allEvents = (() => {
-      try {
-        const cached = localStorage.getItem('gsks_cached_events');
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-      } catch(e) {}
-      if (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__) && window.__INITIAL_EVENTS__.length > 0) {
-        return [...window.__INITIAL_EVENTS__];
-      }
-      if (typeof window.PRELOADED_EVENTS !== 'undefined' && Array.isArray(window.PRELOADED_EVENTS) && window.PRELOADED_EVENTS.length > 0) {
-        return [...window.PRELOADED_EVENTS];
-      }
-      return [];
-    })();
-    let allDonations = (() => {
-      try {
-        const cached = localStorage.getItem('gsks_cached_donations');
-        if (cached !== null) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch(e) {}
-      if (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS) && window.PRELOADED_DONATIONS.length > 0) {
-        return [...window.PRELOADED_DONATIONS];
-      }
-      if (typeof window.__INITIAL_DONATIONS__ !== 'undefined' && Array.isArray(window.__INITIAL_DONATIONS__) && window.__INITIAL_DONATIONS__.length > 0) {
-        return [...window.__INITIAL_DONATIONS__];
-      }
-      return [];
-    })();
-    let allFundTransfers = (() => {
-      try {
-        const cached = localStorage.getItem('gsks_cached_fund_transfers');
-        if (cached !== null) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch (e) {}
-      return [];
-    })();
-    let allExpenses = (() => {
-      try {
-        const cached = localStorage.getItem('gsks_cached_expenses');
-        if (cached !== null) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch (e) {}
-      if (typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES)) {
-        return [...window.PRELOADED_EXPENSES];
-      }
-      return [];
-    })();
+            <script>
+    const API_BASE_URL = (window.location && window.location.hostname && (window.location.hostname.includes('render.com') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+      ? ''
+      : 'https://gsks-ovlf.onrender.com';
+    function apiFetch(endpoint, options) {
+      const fullUrl = endpoint.startsWith('http') ? endpoint : (API_BASE_URL + endpoint);
+      return fetch(fullUrl, options);
+    }
+    let allMembers = [];
+    let allEvents = [];
+    let allDonations = [];
+    let allFundTransfers = [];
+    let allExpenses = [];
     let currentExpenseMethodFilter = 'ALL';
     let currentExpenseSchemeFilter = 'ALL';
     let currentExpenseVendorFilter = 'ALL';
@@ -7702,31 +7639,6 @@
       if (filterSt) filterSt.value = 'ALL';
 
       // Immediate memory hydration from preloaded cache if available
-      if ((!allMembers || allMembers.length === 0) && localStorage.getItem('gsks_cached_members') === null) {
-        const pre = (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS)) ? window.PRELOADED_MEMBERS : window.__INITIAL_MEMBERS__;
-        if (Array.isArray(pre) && pre.length > 0) allMembers = [...pre];
-      }
-      if ((!allEvents || allEvents.length === 0) && localStorage.getItem('gsks_cached_events') === null) {
-        const pre = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? window.__INITIAL_EVENTS__ : window.PRELOADED_EVENTS;
-        if (Array.isArray(pre) && pre.length > 0) allEvents = [...pre];
-      }
-      if ((!allDonations || allDonations.length === 0) && localStorage.getItem('gsks_cached_donations') === null) {
-        const pre = (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS)) ? window.PRELOADED_DONATIONS : window.__INITIAL_DONATIONS__;
-        if (Array.isArray(pre) && pre.length > 0) allDonations = [...pre];
-      }
-      if (!allExpenses || allExpenses.length === 0) {
-        try {
-          const cached = localStorage.getItem('gsks_cached_expenses');
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            if (Array.isArray(parsed) && parsed.length > 0) allExpenses = parsed;
-          }
-        } catch(e) {}
-        if ((!allExpenses || allExpenses.length === 0) && localStorage.getItem('gsks_cached_expenses') === null && typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES) && window.PRELOADED_EXPENSES.length > 0) {
-          allExpenses = [...window.PRELOADED_EXPENSES];
-        }
-      }
-
       updateDate();
       initFirebaseRealtime();
 
@@ -7736,8 +7648,7 @@
       if (!allEvents || allEvents.length === 0) {
         loadEventsFallback();
       }
-      // Fallback only if no donations and no cache
-      if ((!allDonations || allDonations.length === 0) && localStorage.getItem('gsks_cached_donations') === null) {
+      if (!allDonations || allDonations.length === 0) {
         loadDonationsFallback();
       }
       if (!allExpenses || allExpenses.length === 0) {
@@ -11205,7 +11116,7 @@
           });
 
           allMembers = list;
-          try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+          /* direct live sync */
           allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
           updateStats();
           renderMembers();
@@ -11240,7 +11151,7 @@
             eList.push(remoteEv);
           });
           allEvents = eList;
-          try { localStorage.setItem('gsks_cached_events', JSON.stringify(allEvents)); } catch(e) {}
+          /* direct live sync */
           // Sort events by date descending
           allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
           updateEventsStats();
@@ -11265,7 +11176,7 @@
           const dList = [];
           liveDonationsSnap.forEach(doc => dList.push(doc.data()));
           allDonations = dList;
-          try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
+          /* direct live sync */
           // Sort donations by date / timestamp descending (recent first)
           allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateDonationsStats();
@@ -11285,7 +11196,7 @@
           const expList = [];
           liveExpensesSnap.forEach(doc => expList.push(doc.data()));
           allExpenses = expList;
-          try { localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses)); } catch(e) {}
+          /* direct live sync */
           allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           updateExpensesStats();
@@ -11301,7 +11212,7 @@
           const ftList = [];
           liveSnap.forEach(doc => ftList.push(doc.data()));
           allFundTransfers = ftList;
-          try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
+          /* direct live sync */
           allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
           updateStats();
           renderFundTransfersList();
@@ -11402,14 +11313,14 @@
 
     async function loadFundTransfersFallback() {
       try {
-        const res = await fetch('/api/fund-transfers');
+        const res = await apiFetch('/api/fund-transfers');
         const fetched = await res.json();
         if (Array.isArray(fetched) && fetched.length > 0) {
           allFundTransfers = fetched;
-          try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
+          /* direct live sync */
         } else if (!allFundTransfers || allFundTransfers.length === 0) {
           try {
-            const cached = localStorage.getItem('gsks_cached_fund_transfers');
+            const cached = null;
             if (cached) {
               const parsed = JSON.parse(cached);
               if (Array.isArray(parsed) && parsed.length > 0) allFundTransfers = parsed;
@@ -11423,7 +11334,7 @@
       } catch (err) {
         console.error('Failed to load fund transfers fallback:', err);
         try {
-          const cached = localStorage.getItem('gsks_cached_fund_transfers');
+          const cached = null;
           if (cached) {
             const parsed = JSON.parse(cached);
             if (Array.isArray(parsed) && parsed.length > 0) {
@@ -11440,14 +11351,14 @@
 
     async function loadExpensesFallback() {
       try {
-        const res = await fetch('/api/expenses');
+        const res = await apiFetch('/api/expenses');
         const fetched = await res.json();
         if (Array.isArray(fetched) && fetched.length > 0) {
           allExpenses = fetched;
-          try { localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses)); } catch(e) {}
+          /* direct live sync */
         } else if (!allExpenses || allExpenses.length === 0) {
           try {
-            const cached = localStorage.getItem('gsks_cached_expenses');
+            const cached = null;
             if (cached) {
               const parsed = JSON.parse(cached);
               if (Array.isArray(parsed) && parsed.length > 0) allExpenses = parsed;
@@ -11501,21 +11412,9 @@
     }
 
     async function loadDonationsFallback() {
-      // 1. Immediate fallback to PRELOADED if empty
-      if ((!allDonations || allDonations.length === 0) && localStorage.getItem('gsks_cached_donations') === null) {
-        const pre = (typeof window.PRELOADED_DONATIONS !== 'undefined' && Array.isArray(window.PRELOADED_DONATIONS)) ? window.PRELOADED_DONATIONS : window.__INITIAL_DONATIONS__;
-        if (Array.isArray(pre) && pre.length > 0) {
-          allDonations = [...pre];
-          allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-          updateDonationsStats();
-          updateStats();
-          renderDonationsList();
-        }
-      }
-
-      // 2. Try Local Express server if available
+      // 1. Try Live Express / Render server if available
       try {
-        const res = await fetch('/api/donations');
+        const res = await apiFetch('/api/donations');
         if (res.ok) {
           const list = await res.json();
           if (Array.isArray(list) && list.length > 0) {
@@ -11544,7 +11443,7 @@
               updateStats();
               renderDonationsList();
               if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
-              try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
+              /* direct live sync */
             }
           }
         }
@@ -11554,20 +11453,9 @@
     }
 
     async function loadEventsFallback() {
-      // 1. Immediate fallback to PRELOADED
-      if (!allEvents || allEvents.length === 0) {
-        const pre = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? window.__INITIAL_EVENTS__ : window.PRELOADED_EVENTS;
-        if (Array.isArray(pre) && pre.length > 0) {
-          allEvents = [...pre];
-          allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
-          updateEventsStats();
-          renderEventsList();
-        }
-      }
-
-      // 2. Try Local Express server if available
+      // 1. Try Live Express / Render server if available
       try {
-        const res = await fetch('/api/events');
+        const res = await apiFetch('/api/events');
         if (res.ok) {
           const fetchedEvents = await res.json();
           if (Array.isArray(fetchedEvents) && fetchedEvents.length > 0) {
@@ -11592,7 +11480,7 @@
               allEvents.sort((a, b) => new Date(b.datetime || b.date || 0) - new Date(a.datetime || a.date || 0));
               updateEventsStats();
               renderEventsList();
-              try { localStorage.setItem('gsks_cached_events', JSON.stringify(allEvents)); } catch(e) {}
+              /* direct live sync */
             }
           }
         }
@@ -11602,22 +11490,9 @@
     }
 
     async function loadMembersDataFallback() {
-      // 1. Immediate fallback to PRELOADED if empty
-      if (!allMembers || allMembers.length === 0) {
-        const pre = (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS)) ? window.PRELOADED_MEMBERS : window.__INITIAL_MEMBERS__;
-        if (Array.isArray(pre) && pre.length > 0) {
-          allMembers = [...pre];
-          allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
-          updateStats();
-          renderMembers();
-          if (typeof renderPariwarikView === 'function') renderPariwarikView();
-          if (typeof renderArchivedList === 'function') renderArchivedList();
-        }
-      }
-
-      // 2. Try Local Express server if available
+      // 1. Try Live Express / Render server if available
       try {
-        const res = await fetch('/api/members');
+        const res = await apiFetch('/api/members');
         if (res.ok) {
           const list = await res.json();
           if (Array.isArray(list) && list.length > 0) {
@@ -11646,7 +11521,7 @@
               renderMembers();
               if (typeof renderPariwarikView === 'function') renderPariwarikView();
               if (typeof renderArchivedList === 'function') renderArchivedList();
-              try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+              /* direct live sync */
             }
           }
         }
@@ -11657,7 +11532,7 @@
 
     async function loadSettingsFallback() {
       try {
-        const res = await fetch('/api/settings');
+        const res = await apiFetch('/api/settings');
         const data = await res.json();
         applySettings(data);
       } catch (err) {
@@ -11667,7 +11542,7 @@
 
     async function saveSettingsToBackend(data) {
       try {
-        await fetch('/api/settings/save', {
+        await apiFetch('/api/settings/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
@@ -11698,7 +11573,7 @@
 
       // 2. Persist to Express Central Server API (/api/events/save)
       try {
-        await fetch('/api/events/save', {
+        await apiFetch('/api/events/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(eventObj)
@@ -11728,7 +11603,7 @@
       } else {
         allMembers.push(memberData);
       }
-      try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+      /* direct live sync */
       updateStats();
       renderMembers();
       if (typeof renderArchivedList === 'function') {
@@ -11737,7 +11612,7 @@
 
       // 2. Persist to Express Central Server API
       try {
-        await fetch('/api/members/update', {
+        await apiFetch('/api/members/update', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(memberData)
@@ -12525,14 +12400,14 @@
 
         // 1. Remove from local array
         allMembers = allMembers.filter(m => m.id !== memberId);
-        try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+        /* direct live sync */
         updateStats();
         renderMembers();
         renderArchivedList();
 
         // 2. Remove from Server JSON
         try {
-          await fetch('/api/members/delete', {
+          await apiFetch('/api/members/delete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: memberId })
@@ -13164,7 +13039,7 @@
 
       // 2. Persist to Backend API
       try {
-        await fetch('/api/events/save', {
+        await apiFetch('/api/events/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(eventPayload)
@@ -13201,13 +13076,13 @@
 
       // 1. Local update
       allEvents = allEvents.filter(e => e.id !== id);
-      try { localStorage.setItem('gsks_cached_events', JSON.stringify(allEvents)); } catch(e) {}
+      /* direct live sync */
       updateEventsStats();
       renderEventsList();
 
       // 2. Backend API
       try {
-        await fetch('/api/events/delete', {
+        await apiFetch('/api/events/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id })
@@ -13372,7 +13247,7 @@
 
       // Persist to Backend API
       try {
-        await fetch('/api/events/save', {
+        await apiFetch('/api/events/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(ev)
@@ -13597,7 +13472,7 @@
         }
 
         // 2. Clear backend JSON file
-        await fetch('/api/members/clear', { method: 'POST' });
+        await apiFetch('/api/members/clear', { method: 'POST' });
 
         // 3. Reset local in-memory array and UI
         allMembers = [];
@@ -15516,7 +15391,7 @@
 
       // 2. Persist to Express Central Server API
       try {
-        await fetch('/api/donations/save', {
+        await apiFetch('/api/donations/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(donationPayload)
@@ -15611,13 +15486,13 @@
 
       // 1. Local array update and cache sync
       allDonations = allDonations.filter(d => d.id !== id);
-      try { localStorage.setItem('gsks_cached_donations', JSON.stringify(allDonations)); } catch(e) {}
+      /* direct live sync */
       updateDonationsStats();
       renderDonationsList();
 
       // 2. Server express API
       try {
-        await fetch('/api/donations/delete', {
+        await apiFetch('/api/donations/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id })
@@ -15915,7 +15790,7 @@
         } else {
           allFundTransfers.unshift(recordData);
         }
-        try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
+        /* direct live sync */
 
         closeBankDepositModal();
         updateStats();
@@ -15924,7 +15799,7 @@
 
         // 2. Persist to Express Backend
         try {
-          await fetch('/api/fund-transfers/save', {
+          await apiFetch('/api/fund-transfers/save', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(recordData)
@@ -16028,14 +15903,14 @@
       if (!confirm(`Are you sure you want to delete this bank record (${id})?`)) return;
 
       allFundTransfers = allFundTransfers.filter(item => item.id !== id);
-      try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
+      /* direct live sync */
       updateStats();
       renderFundTransfersList();
       if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
 
       // Express API
       try {
-        await fetch('/api/fund-transfers/delete', {
+        await apiFetch('/api/fund-transfers/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id })
@@ -16649,7 +16524,7 @@
       } else {
         allFundTransfers.unshift(transferData);
       }
-      try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
+      /* direct live sync */
       closeFundTransferModal();
       updateStats();
       renderFundTransfersList();
@@ -16657,7 +16532,7 @@
 
       // 2. Server API sync
       try {
-        await fetch('/api/fund-transfers/save', {
+        await apiFetch('/api/fund-transfers/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(transferData)
@@ -16683,14 +16558,14 @@
 
       // 1. Local update
       allFundTransfers = allFundTransfers.filter(t => t.id !== id);
-      try { localStorage.setItem('gsks_cached_fund_transfers', JSON.stringify(allFundTransfers)); } catch(e) {}
+      /* direct live sync */
       updateStats();
       renderFundTransfersList();
       if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
 
       // 2. Server API
       try {
-        await fetch('/api/fund-transfers/delete', {
+        await apiFetch('/api/fund-transfers/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id })
@@ -17214,7 +17089,7 @@
 
           // Save donation to Server & Firestore
           try {
-            await fetch('/api/donations/save', {
+            await apiFetch('/api/donations/save', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(donationPayload)
@@ -17246,7 +17121,7 @@
           if (typeof renderDonationsList === 'function') renderDonationsList();
 
           try {
-            await fetch('/api/donations/delete', {
+            await apiFetch('/api/donations/delete', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ id: delId })
@@ -18202,7 +18077,7 @@
 
         // Save Donation to Central API & Firestore
         try {
-          await fetch('/api/donations/save', {
+          await apiFetch('/api/donations/save', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(donationPayload)
@@ -18240,7 +18115,7 @@
           if (typeof renderDonationsList === 'function') renderDonationsList();
 
           try {
-            await fetch('/api/donations/delete', {
+            await apiFetch('/api/donations/delete', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ id: delDonationId })
@@ -19208,7 +19083,7 @@
         allExpenses.unshift(expenseData);
       }
       try {
-        localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses));
+        /* direct live sync */
       } catch (err) {}
 
       closeExpenseModal();
@@ -19220,7 +19095,7 @@
 
       // 2. Persist to Central Server API
       try {
-        await fetch('/api/expenses/save', {
+        await apiFetch('/api/expenses/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(expenseData)
@@ -19244,7 +19119,7 @@
 
       allExpenses = allExpenses.filter(item => item.id !== id);
       try {
-        localStorage.setItem('gsks_cached_expenses', JSON.stringify(allExpenses));
+        /* direct live sync */
       } catch (err) {}
 
       updateExpensesStats();
@@ -19253,7 +19128,7 @@
 
       // Express API
       try {
-        await fetch('/api/expenses/delete', {
+        await apiFetch('/api/expenses/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id })

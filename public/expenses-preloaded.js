@@ -1,1 +1,1 @@
-window.PRELOADED_EXPENSES = [];
+/* Preloaded static cache removed in favor of pure online sync */
