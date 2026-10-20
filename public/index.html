@@ -11728,6 +11728,7 @@
       } else {
         allMembers.push(memberData);
       }
+      try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
       updateStats();
       renderMembers();
       if (typeof renderArchivedList === 'function') {
@@ -12571,10 +12572,14 @@
         // Restore member: set status back to Active (or Prime Member if previously was prime)
         const newStatus = (member.pariwarikMember || member.isPrime) ? 'Prime Member' : 'Active';
         
+        member.status = newStatus;
         await syncMemberToBackend({
           id: member.id,
           status: newStatus
         });
+        updateStats();
+        renderMembers();
+        renderArchivedList();
 
         alert(`✅ सदस्य "${member.name}" को सफलतापूर्वक पुनः सक्रिय (Restore) कर दिया गया है!`);
       } catch (err) {
