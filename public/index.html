@@ -64,15 +64,2507 @@
 
       <!-- Portal Tabs -->
       <div class="bg-slate-100 p-1 rounded-2xl flex text-xs font-semibold mb-6">
-        <button 
-            type="button" 
-            onclick="forceRefreshAppData(this)" 
-            id="member-desktop-nav-refresh" 
-            title="रिफ्रेश और डेटा रीलोड"
-            class="px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs active:scale-95"
+        <button id="tab-admin" onclick="switchPortalTab('admin')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700">
+          <i class="fa-solid fa-shield-halved mr-1.5"></i> Admin Portal
+        </button>
+        <button id="tab-user" onclick="switchPortalTab('user')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900">
+          <i class="fa-solid fa-users mr-1.5"></i> Member Portal
+        </button>
+      </div>
+
+      <!-- Admin Login Box -->
+      <div id="admin-login-box">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 text-sm">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">Admin Login</h2>
+            <p class="text-[11px] text-slate-500">प्रबंधक पैनल में प्रवेश करें</p>
+          </div>
+        </div>
+
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Admin ID</label>
+            <div class="relative">
+              <i class="fa-solid fa-user-shield absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="admin-id" 
+                placeholder="Login ID दर्ज करें" 
+                value="Admin"
+                required
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
+              >
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Password</label>
+            <div class="relative">
+              <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+              <input 
+                type="password" 
+                id="admin-password" 
+                placeholder="Password दर्ज करें" 
+                required
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
+              >
+              <button type="button" onclick="togglePassVisibility()" class="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 text-xs">
+                <i id="pass-eye-icon" class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="login-error" class="hidden text-[11px] text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200 font-medium"></div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold text-xs tracking-wide shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
           >
-            <i class="fa-solid fa-arrows-rotate text-emerald-600"></i>
-            <span>रिफ्रेश (Refresh)</span>
+            <span>Login to Dashboard</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- User Portal Box -->
+      <div id="user-login-box" class="hidden">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 text-sm">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-900">Member Portal (सदस्य लॉगिन)</h2>
+            <p class="text-[11px] text-slate-500">सदस्य कोड (ID) या पंजीकृत मोबाइल नंबर से प्रवेश करें</p>
+          </div>
+        </div>
+
+        <form onsubmit="handleMemberLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">सदस्य ID या मोबाइल नंबर *</label>
+            <div class="relative">
+              <i class="fa-solid fa-id-card absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="member-login-input" 
+                placeholder="उदा. GSKS-001 या 7781931880" 
+                required
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
+              >
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">💡 अपना GSKS सदस्यता कोड (ID) या मोबाइल नंबर दर्ज करें</p>
+          </div>
+
+          <div id="member-login-error" class="hidden text-[11px] text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200 font-medium"></div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold text-xs tracking-wide shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-right-to-bracket text-xs"></i>
+            <span>सदस्य डैशबोर्ड में प्रवेश करें</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="text-center pt-6 mt-6 border-t border-slate-100 text-[11px] text-slate-400">
+        © 2026 GSKS Trust • Goswami Samaj Kalyan Samiti
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================== -->
+  <!-- VIEW 2: ADMIN APP / PORTAL                     -->
+  <!-- ============================================== -->
+  <div id="admin-dashboard" class="hidden flex-1 flex flex-col w-full">
+    
+    <!-- Top Global Header -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Left: Logo & Trust Name -->
+        <div class="flex items-center gap-3">
+          <img src="/logo-opt.png" alt="GSKS" class="w-10 h-10 rounded-full object-cover border-2 border-orange-200 shadow-sm">
+          <div>
+            <h1 class="text-sm sm:text-base font-extrabold text-orange-800 font-devanagari leading-tight">
+              गोस्वामी समाज कल्याण समिति
+            </h1>
+            <p class="text-[11px] text-slate-500 hidden sm:block">
+              गुनघसा, गोमो, धनबाद - 828401 | Admin Console
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Dashboard Button, Admin Status & Logout -->
+        <div class="flex items-center gap-2.5">
+          <!-- Refresh Live Data Button -->
+          <button 
+            type="button"
+            onclick="forceRefreshAppData(this)" 
+            id="nav-btn-refresh-data"
+            title="क्लाउड से डेटा रिफ्रेश करें (Sync & Refresh Live Data)"
+            class="px-3.5 py-1.5 rounded-xl text-teal-700 bg-teal-50 hover:bg-teal-100 font-bold text-xs flex items-center gap-1.5 transition-all border border-teal-200 shadow-sm active:scale-95 cursor-pointer"
+          >
+            <i class="fa-solid fa-arrows-rotate text-teal-600 text-xs"></i>
+            <span>Refresh Data</span>
+          </button>
+          <button 
+            onclick="switchAdminView('dashboard')" 
+            id="nav-btn-dashboard"
+            class="px-3.5 py-1.5 rounded-xl text-orange-700 bg-orange-50 hover:bg-orange-100 font-bold text-xs flex items-center gap-1.5 transition-all border border-orange-200 shadow-sm"
+          >
+            <i class="fa-solid fa-chart-pie text-orange-600"></i>
+            <span>Dashboard</span>
+          </button>
+          <div class="hidden sm:flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-semibold border border-emerald-200">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Admin Active</span>
+          </div>
+          <!-- Settings Master Button -->
+          <button 
+            onclick="switchAdminView('settings')" 
+            id="nav-btn-settings"
+            title="सिस्टम सेटिंग्स (Master Settings)"
+            class="px-3.5 py-1.5 bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200"
+          >
+            <i class="fa-solid fa-gear text-sm transition-transform hover:rotate-90"></i>
+            <span class="hidden sm:inline">Settings</span>
+          </button>
+
+          <button 
+            onclick="logoutAdmin()" 
+            class="px-3.5 py-1.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-200"
+          >
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span class="hidden sm:inline">Logout</span>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 pb-24 md:pb-8">
+
+      <!-- ============================================== -->
+      <!-- TAB 1: DASHBOARD OVERVIEW                      -->
+      <!-- ============================================== -->
+      <div id="view-dashboard-section" class="space-y-6">
+
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-orange-500/15 relative overflow-hidden flex items-center">
+          <div class="relative z-10">
+            <h2 class="text-2xl sm:text-4xl font-black tracking-tight">प्रणाम, अध्यक्ष जी 🙏</h2>
+          </div>
+          <div class="absolute -right-6 -bottom-8 text-white/10 text-9xl font-black pointer-events-none select-none">
+            ॐ
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS STRIP (Welcome Message के ठीक नीचे) -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis">
+              <i class="fa-solid fa-bolt text-amber-500 text-sm flex-shrink-0"></i> Quick Actions & Modules (त्वरित कार्य)
+            </h3>
+          </div>
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm">
+            <div class="grid grid-cols-2 lg:grid-cols-6 gap-3">
+            <!-- Action 1: Events & Meetings -->
+            <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-calendar-days"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-indigo-950 truncate">Events</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-200/80 text-indigo-900" id="quick-events-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Meetings & Events →</p>
+              </div>
+            </button>
+
+            <!-- Action 2: Add New Member -->
+            <button onclick="openAddMemberModal()" class="group p-3.5 rounded-2xl bg-orange-50/60 hover:bg-orange-100/70 text-left border border-orange-200/80 hover:border-orange-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-orange-600 text-white flex items-center justify-center text-sm shadow-md shadow-orange-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-user-plus"></i>
+              </div>
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-slate-900 group-hover:text-orange-950 truncate">Add Member</h4>
+                <p class="text-[11px] text-slate-500 truncate">+ New Registration →</p>
+              </div>
+            </button>
+
+            <!-- Action 3: Donations -->
+            <button onclick="switchAdminView('donations')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/40 hover:from-emerald-100 hover:to-teal-100 text-left border border-emerald-200/80 hover:border-emerald-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-emerald-950 truncate">Donations</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-emerald-200/80 text-emerald-900" id="quick-donations-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Receipts & Records →</p>
+              </div>
+            </button>
+
+            <!-- Action 4: Expenses -->
+            <button onclick="switchAdminView('expenses')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-50/40 hover:from-rose-100 hover:to-pink-100 text-left border border-rose-200/80 hover:border-rose-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm shadow-md shadow-rose-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-950 truncate">Expenses</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-200/80 text-rose-900" id="quick-expenses-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Bills & Payments →</p>
+              </div>
+            </button>
+
+            <!-- Action 5: Bank Entries -->
+            <button onclick="switchAdminView('bank')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50/40 hover:from-blue-100 hover:to-indigo-100 text-left border border-blue-200/80 hover:border-blue-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-sm shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-blue-950 truncate">Bank Entries</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-200/80 text-blue-900" id="quick-bank-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Passbook & Records →</p>
+              </div>
+            </button>
+
+            <!-- Action 6: PASY -->
+            <button onclick="switchAdminView('pariwarik')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-50/40 hover:from-cyan-100 hover:to-sky-100 text-left border border-cyan-200/80 hover:border-cyan-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-sm shadow-md shadow-cyan-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-cyan-950 truncate">PASY</h4>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Scheme & Relief →</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+        <!-- Membership Stats (Dynamic Breakdown) -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i class="fa-solid fa-address-book text-orange-500 text-sm"></i> Member Statistics (सदस्य विवरण)
+            </h3>
+            <button onclick="switchAdminView('members')" class="text-xs text-orange-600 font-semibold hover:underline">
+              पूरी सूची देखें →
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
+            <!-- Card 1: Total Members -->
+            <div onclick="switchAdminView('members', 'ALL')" class="cursor-pointer bg-gradient-to-br from-orange-50 via-amber-50/30 to-white rounded-2xl p-3 sm:p-4 border border-orange-200/90 shadow-xs flex flex-col justify-between hover:border-orange-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-orange-900">Total</span>
+                <span class="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-users"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-orange-950" id="dash-total-members">0</p>
+              </div>
+            </div>
+
+            <!-- Card 2: Active Members -->
+            <div onclick="switchAdminView('members', 'Active')" class="cursor-pointer bg-gradient-to-br from-emerald-50 via-green-50/30 to-white rounded-2xl p-3 sm:p-4 border border-emerald-200/90 shadow-xs flex flex-col justify-between hover:border-emerald-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">Active</span>
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-user-check"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-emerald-950" id="dash-active-members">0</p>
+              </div>
+            </div>
+
+            <!-- Card 3: Prime Members (DEDICATED VIP CARD) -->
+            <div onclick="switchAdminView('prime')" class="cursor-pointer bg-gradient-to-br from-amber-100/60 via-yellow-50 to-white rounded-2xl p-3 sm:p-4 border-2 border-amber-300 shadow-xs flex flex-col justify-between hover:border-amber-500 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-950">Prime</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-200/80 text-amber-800 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-crown text-amber-700"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-prime-members">0</p>
+              </div>
+            </div>
+
+            <!-- Card 4: Pending Members -->
+            <div onclick="switchAdminView('members', 'Pending')" class="cursor-pointer bg-gradient-to-br from-yellow-50 via-amber-50/30 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">Pending</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-user-clock"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-pending-members">0</p>
+              </div>
+            </div>
+
+            <!-- Card 5: Inactive Members -->
+            <div onclick="switchAdminView('members', 'Inactive')" class="cursor-pointer bg-gradient-to-br from-slate-100/80 via-slate-50 to-white rounded-2xl p-3 sm:p-4 border border-slate-200/90 shadow-xs flex flex-col justify-between hover:border-slate-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-700">Inactive</span>
+                <span class="w-7 h-7 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-user-slash"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-slate-800" id="dash-inactive-members">0</p>
+              </div>
+            </div>
+
+            <!-- Card 6: Archived Members -->
+            <div onclick="switchAdminView('archived')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-pink-50/30 to-white rounded-2xl p-3 sm:p-4 border border-rose-200/90 shadow-xs flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-900">Archived</span>
+                <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center text-xs shadow-xs">
+                  <i class="fa-solid fa-box-archive"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-rose-800" id="dash-archived-members">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Treasury Section -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis">
+              <i class="fa-solid fa-vault text-orange-500 text-sm flex-shrink-0"></i> Trust Treasury (समिति का कोष)
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
+            <!-- 1. Total Fund Available -->
+            <div class="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl p-3 sm:p-4 border border-emerald-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-emerald-300 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">Total Fund</span>
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-black shadow-xs">
+                  ₹
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-emerald-950" id="dash-total-fund">₹ 0</p>
+              </div>
+            </div>
+
+            <!-- 2. In Bank -->
+            <div onclick="switchAdminView('bank')" class="cursor-pointer bg-gradient-to-br from-sky-50 via-blue-50/40 to-white rounded-2xl p-3 sm:p-4 border border-sky-200/90 shadow-xs flex flex-col justify-between hover:border-sky-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-sky-900">In Bank</span>
+                <span class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-building-columns"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-sky-950" id="dash-bank-fund">₹ 0</p>
+              </div>
+            </div>
+
+            <!-- 3. In Hand -->
+            <div class="bg-gradient-to-br from-amber-50 via-yellow-50/30 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-amber-300 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">In Hand</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs shadow-xs">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-cash-fund">₹ 0</p>
+              </div>
+            </div>
+
+            <!-- 4. Total Expenses -->
+            <div onclick="switchAdminView('expenses')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-red-50/30 to-white rounded-2xl p-3 sm:p-4 border border-rose-200/90 shadow-xs flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-900">Expenses</span>
+                <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-receipt"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-rose-800" id="dash-expenses-total">₹ 0</p>
+                <span class="hidden" id="dash-expenses-split"></span>
+              </div>
+            </div>
+
+            <!-- 5. General / Total Dues Amount -->
+            <div onclick="switchAdminView('dues', 'ALL')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/30 to-white rounded-2xl p-3 sm:p-4 border border-purple-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-purple-400 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-purple-900">Dues</span>
+                <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-file-invoice-dollar"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-purple-950" id="dash-dues-fund">₹ 0</p>
+              </div>
+            </div>
+
+            <!-- 6. PASY Dues Amount -->
+            <div onclick="switchAdminView('dues', 'PASY')" class="cursor-pointer bg-gradient-to-br from-cyan-50 via-teal-50/30 to-white rounded-2xl p-3 sm:p-4 border border-cyan-200/90 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-cyan-400 transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-cyan-900">PASY Dues</span>
+                <span class="w-7 h-7 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs shadow-xs group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-cyan-950" id="dash-pasy-dues">₹ 0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ============================================== -->
+      <!-- TAB 2: MEMBERS DIRECTORY PAGE                  -->
+      <!-- ============================================== -->
+      <div id="view-members-section" class="hidden space-y-4 sm:space-y-6">
+        
+        <!-- Header & Action Bar -->
+        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3.5">
+          <!-- Top Row: Title & Count Badge (Takes full space so title never wraps in 2 lines) -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-10 h-10 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center text-lg shadow-sm shrink-0">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <h2 class="text-base sm:text-xl font-extrabold text-slate-900 whitespace-nowrap">
+                    Members Directory
+                  </h2>
+                  <span id="badge-total-members" class="px-2 py-0.5 bg-orange-100 text-orange-800 text-[10px] sm:text-xs font-bold rounded-full whitespace-nowrap">
+                    0
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Member Button: Clean label, no duplicate plus -->
+            <button onclick="openAddMemberModal()" class="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-[0.98] text-white font-bold px-4 py-2.5 sm:py-2 rounded-xl text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+              <i class="fa-solid fa-user-plus text-xs"></i>
+              <span>Add Member</span>
+            </button>
+          </div>
+
+          <!-- Controls Row: Search Input + 2 Filters (Compact 2-col on mobile) -->
+          <div class="space-y-2.5 pt-1 border-t border-slate-100">
+            <!-- Search Bar -->
+            <div class="relative w-full">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="member-search-input" 
+                oninput="handleSearchMembers(this.value)" 
+                placeholder="Search name, phone, father, village..." 
+                class="w-full bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium transition-all"
+              >
+              <button type="button" 
+                      onclick="document.getElementById('member-search-input').value=''; handleSearchMembers(''); this.classList.add('hidden');" 
+                      id="member-search-clear" 
+                      class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-[9px] transition-colors" 
+                      title="Clear">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <!-- 2-Column Responsive Filter Selects on Mobile -->
+            <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
+              <!-- Address / Area Filter -->
+              <select 
+                id="member-address-filter" 
+                onchange="handleFilterAddress(this.value)" 
+                class="w-full sm:w-auto bg-slate-50 hover:bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 sm:py-2 text-[11px] sm:text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all truncate"
+              >
+                <option value="ALL">All Villages</option>
+                <option value="GUNGHASA">Gunghasa</option>
+                <option value="CHIRABAD">Chirabad</option>
+                <option value="AZAD NAGAR">Azad Nagar</option>
+                <option value="KALYANPUR">Kalyanpur</option>
+                <option value="PIPRADIH">Pipradih</option>
+                <option value="MATHADIH">Mathadih</option>
+              </select>
+
+              <!-- Status Filter -->
+              <select 
+                id="member-status-filter" 
+                onchange="handleFilterStatus(this.value)" 
+                class="w-full sm:w-auto bg-slate-50 hover:bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 sm:py-2 text-[11px] sm:text-xs text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all truncate"
+              >
+                <option value="ALL">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Prime Member">Prime Member</option>
+                <option value="Pending">Pending</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary & Toggle Bar -->
+        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+          <span id="filtered-count-text" class="text-[11px] sm:text-xs font-semibold text-slate-600">Showing 72 members</span>
+          <div class="flex items-center gap-1 bg-slate-200/70 p-0.5 sm:p-1 rounded-xl">
+            <button onclick="setMemberLayout('cards')" id="btn-layout-cards" class="px-2.5 py-1 rounded-lg bg-white text-orange-700 font-bold shadow-2xs transition-all flex items-center gap-1 text-[11px] cursor-pointer">
+              <i class="fa-solid fa-grip"></i> Cards
+            </button>
+            <button onclick="setMemberLayout('table')" id="btn-layout-table" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1 text-[11px] cursor-pointer">
+              <i class="fa-solid fa-table-list"></i> Table
+            </button>
+          </div>
+        </div>
+
+        <!-- CARDS VIEW (Responsive grid: 1 col on mobile, 2 on md, 3 on xl) -->
+        <div id="members-grid-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5 sm:gap-4">
+          <!-- Populated via JavaScript -->
+        </div>
+
+        <!-- TABLE VIEW -->
+        <div id="members-table-container" class="hidden bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
+                <tr>
+                  <th class="py-3 px-4">सदस्य</th>
+                  <th class="py-3 px-4">पिता का नाम</th>
+                  <th class="py-3 px-4">गाँव / पता</th>
+                  <th class="py-3 px-4">फ़ोन / WhatsApp</th>
+                  <th class="py-3 px-4">कुल दान / देय</th>
+                  <th class="py-3 px-4 text-center">Status</th>
+                  <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="members-table-body" class="divide-y divide-slate-100">
+                <!-- Populated via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ============================================== -->
+      <!-- TAB 3: ARCHIVED MEMBERS SECTION                -->
+      <!-- ============================================== -->
+      <div id="view-archived-section" class="hidden space-y-6">
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900 font-devanagari flex items-center gap-2">
+              <i class="fa-solid fa-box-archive text-rose-600"></i> आर्काइव सदस्य (Archived Members)
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">Delete किए गए सदस्य यहाँ सुरक्षित संग्रहीत रहते हैं (Restore या Permanent Delete कर सकते हैं)</p>
+          </div>
+          <button onclick="switchAdminView('members')" class="text-xs text-orange-600 font-bold hover:underline">
+            ← वापस सक्रिय सूची में जाएं
+          </button>
+        </div>
+
+        <div id="archived-list-container" class="space-y-3">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+
+      <!-- ============================================== -->
+      <!-- TAB 4: EVENTS & MEETINGS SECTION               -->
+      <!-- ============================================== -->
+      <div id="view-events-section" class="hidden space-y-6">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">
+                  Events & Meetings
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openEventModal()" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 transition-all">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Add Event</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Controls for Events: Category Chips + Status/Date Dropdown -->
+        <div class="bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <!-- MOBILE FILTER BAR (Visible on mobile screens) -->
+          <div class="sm:hidden flex items-center gap-2">
+            <button onclick="openMobileEventFilterModal('category')" class="flex-1 py-2.5 px-3 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl font-bold text-xs flex items-center justify-between border border-slate-200 shadow-2xs">
+              <span class="flex items-center gap-1.5 truncate">
+                <i class="fa-solid fa-layer-group text-indigo-600"></i>
+                <span id="mob-active-cat-label">सभी श्रेणी</span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+            </button>
+            <button onclick="openMobileEventFilterModal('filters')" class="py-2.5 px-3.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl font-bold text-xs flex items-center gap-1.5 border border-indigo-200 shadow-2xs">
+              <i class="fa-solid fa-sliders"></i>
+              <span>फिल्टर</span>
+            </button>
+          </div>
+
+          <!-- DESKTOP FILTER BAR (Visible on tablets and desktop) -->
+          <div class="hidden sm:flex sm:flex-row sm:items-center justify-between gap-3">
+            <!-- Category Filters (Left) -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs">
+              <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap">
+                सभी श्रेणी (<span id="event-count-all">0</span>)
+              </button>
+              <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
+              </button>
+              <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
+              </button>
+              <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
+              </button>
+            </div>
+
+            <!-- Status & Date Filters (Right) -->
+            <div class="flex items-center gap-2 flex-wrap self-end sm:self-auto w-full sm:w-auto">
+              <!-- Date Filter Dropdown -->
+              <div class="relative w-full sm:w-auto min-w-[170px]">
+                <i class="fa-regular fa-calendar-days absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
+                <select id="event-date-filter-select" onchange="filterEventDate(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
+                  <option value="ALL">📅 सभी दिनांक (All Dates)</option>
+                  <option value="UPCOMING">⏳ आगामी दिनांक (Upcoming)</option>
+                  <option value="TODAY">📍 आज की बैठक (Today)</option>
+                  <option value="THIS_MONTH">🗓️ इस माह (This Month)</option>
+                  <option value="PAST">⏪ पुरानी बैठकें (Past)</option>
+                  <option value="CUSTOM">📆 कस्टम रेंज (Custom Range)</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+              </div>
+
+              <!-- Custom Date Inputs -->
+              <div id="event-custom-date-container" class="hidden items-center gap-1.5 bg-slate-50 p-1 rounded-xl border border-slate-200 text-xs">
+                <input type="date" id="event-date-from" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="शुरुआती दिनांक">
+                <span class="text-slate-400 text-[10px]">से</span>
+                <input type="date" id="event-date-to" onchange="applyCustomEventDateFilter()" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-mono text-slate-700 focus:outline-none focus:border-indigo-500" title="अंतिम दिनांक">
+              </div>
+
+              <!-- Status Dropdown Filter -->
+              <div class="relative w-full sm:w-auto min-w-[170px]">
+                <i class="fa-solid fa-filter absolute left-3 top-2.5 text-indigo-500 text-xs pointer-events-none"></i>
+                <select id="event-status-filter-select" onchange="filterEventStatus(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl pl-8 pr-8 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer appearance-none">
+                  <option value="ALL">📋 सभी स्टेटस (All Status)</option>
+                  <option value="Open">🟢 Open / जारी</option>
+                  <option value="Upcoming" selected>🔵 Upcoming / आगामी</option>
+                  <option value="Closed">⚫ Closed / समाप्त</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-2.5 text-slate-400 text-[10px] pointer-events-none"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events Cards Grid -->
+        <div id="events-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated via JavaScript -->
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB 4B: DONATIONS & SEWA MANAGEMENT SECTION    -->
+      <!-- ============================================== -->
+      <div id="view-donations-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+              </div>
+              <div>
+                <h2 class="text-base sm:text-xl font-extrabold text-slate-900">
+                  Donations & Funds
+                </h2>
+                <p class="text-[11px] sm:text-xs text-slate-500">Donation receipts, online/cash collections & records</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openDonationModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Add Donation</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Donations Summary 4-Cards Grid (Clean English: Total, Today, Cash, UPI) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+          <!-- Total Donation -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-emerald-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-total">0</span></h3>
+              <p class="text-[10px] text-emerald-600 font-semibold truncate"><span id="don-stat-count">0</span> Receipts</p>
+            </div>
+          </div>
+
+          <!-- Today's Donation -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-blue-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-calendar-day"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Today</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-today">0</span></h3>
+              <p class="text-[10px] text-blue-600 font-semibold">Today's Total</p>
+            </div>
+          </div>
+
+          <!-- Cash Donation -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-amber-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cash</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-cash">0</span></h3>
+              <p class="text-[10px] text-amber-600 font-semibold">In Hand</p>
+            </div>
+          </div>
+
+          <!-- Online Donation (UPI) -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-purple-100 shadow-sm flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-base sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">UPI</p>
+              <h3 class="text-sm sm:text-xl font-black text-slate-900 font-mono mt-0.5 truncate">₹<span id="don-stat-online">0</span></h3>
+              <p class="text-[10px] text-purple-600 font-semibold">Bank / QR</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Controls & Search/Filter Strip -->
+        <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <!-- Left: Search Box -->
+          <div class="relative flex-1">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+            <input type="text" id="donation-search-input" oninput="renderDonationsList()" placeholder="दानदाता का नाम, ID या योजना..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium">
+          </div>
+
+          <!-- Mobile Filter Button (Visible on Mobile Only) -->
+          <button 
+            type="button" 
+            onclick="openMobileDonationFilterModal()" 
+            class="sm:hidden px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 cursor-pointer flex-shrink-0"
+            title="Filter Donations"
+          >
+            <i class="fa-solid fa-sliders text-emerald-600"></i>
+            <span>Filter</span>
+            <span id="mob-donation-filter-indicator" class="hidden w-2 h-2 rounded-full bg-emerald-600"></span>
+          </button>
+
+          <!-- Right: Method & Scheme Filters (Desktop view: hidden on mobile) -->
+          <div class="hidden sm:flex items-center gap-2 flex-wrap">
+            <!-- Method Filter -->
+            <select id="donation-method-filter" onchange="renderDonationsList(); syncDonationFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+              <option value="ALL">सभी माध्यम (Cash + Online)</option>
+              <option value="Cash">💵 केवल नकद (Cash)</option>
+              <option value="Online">📱 केवल ऑनलाइन (Online)</option>
+            </select>
+
+            <!-- Scheme Filter -->
+            <select id="donation-scheme-filter" onchange="renderDonationsList(); syncDonationFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
+              <option value="ALL">सभी योजनाएं</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Donations List Table / Cards (Recent to Old) -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-emerald-600"></i> Donation Receipts (Recent to Old)
+            </h3>
+            <span class="text-xs text-slate-400 font-medium font-mono" id="donations-table-count">0 Receipts</span>
+          </div>
+
+          <!-- Mobile 2-Line Receipts List (Visible on Mobile only) -->
+          <div id="donations-mobile-cards" class="sm:hidden p-2.5 space-y-2.5 bg-slate-50/40">
+            <!-- Dynamically populated via renderDonationsList() for mobile -->
+          </div>
+
+          <!-- Desktop Table (Visible on Desktop only) -->
+          <div class="hidden sm:block overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                  <th class="p-3.5 pl-5">Receipt / Date</th>
+                  <th class="p-3.5">Donor</th>
+                  <th class="p-3.5">Scheme</th>
+                  <th class="p-3.5">Method</th>
+                  <th class="p-3.5 font-mono text-right">Amount</th>
+                  <th class="p-3.5 pr-5 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="donations-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderDonationsList() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4C: PARIWARIK ARTHIK YOJNA (पारिवारिक आर्थिक योजना) -->
+      <!-- ======================================================== -->
+      <div id="view-pariwarik-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-lg shadow-sm shrink-0">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+              <div>
+                <h2 class="text-base sm:text-xl font-extrabold text-slate-900">
+                  Pariwarik Arthik Yojna (PASY)
+                </h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium">पारिवारिक आर्थिक सहयोग योजना • 30 सदस्य x 30 माह</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button onclick="switchAdminView('dashboard')" class="px-3.5 py-1.5 sm:px-4 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Top Monthly Dynamic Summary Cards (For Selected Month) - 2 cols on mobile, 4 cols on lg -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          <!-- Card 1: Total Members -->
+          <div class="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-indigo-100 uppercase tracking-wider truncate">Total Members</p>
+              <h3 class="text-xl sm:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-members">0</h3>
+              <p class="text-[9px] sm:text-[11px] text-indigo-100 mt-0.5 truncate">Scheme Members</p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Selected Month Total Amount -->
+          <div class="bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-700 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-cyan-100 uppercase tracking-wider truncate">Target (<span id="pariwarik-selected-month-lbl">Month</span>)</p>
+              <h3 class="text-lg sm:text-2xl lg:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-total">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-cyan-100 mt-0.5 truncate">₹150 × 30 members</p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+            </div>
+          </div>
+
+          <!-- Card 3: Selected Month Paid Amount -->
+          <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-emerald-100 uppercase tracking-wider truncate">Month Paid</p>
+              <h3 class="text-lg sm:text-2xl lg:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-paid">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-emerald-100 mt-0.5 truncate font-medium">
+                <span class="bg-white/20 px-1.5 py-0.2 rounded-full font-bold text-white text-[9px] sm:text-[10px]" id="pariwarik-paid-count">0 Paid</span>
+              </p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+
+          <!-- Card 4: Selected Month Dues Amount -->
+          <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-rose-100 uppercase tracking-wider truncate">Month Dues</p>
+              <h3 class="text-lg sm:text-2xl lg:text-3xl font-black mt-0.5 sm:mt-1 truncate" id="pariwarik-stat-dues">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-rose-100 mt-0.5 truncate font-medium">
+                <span class="bg-white/20 px-1.5 py-0.2 rounded-full font-bold text-white text-[9px] sm:text-[10px]" id="pariwarik-unpaid-count">0 Unpaid</span>
+              </p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Row 2: 30 Months Overall Scheme Grand Summary Cards (4 Cards) - 2 cols on mobile, 4 cols on lg -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+          <!-- Overall Card 1: Grand Total -->
+          <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-slate-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-slate-300 truncate">Grand Total (30 Mo)</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-white truncate" id="pariwarik-grand-total">₹ 1,35,000</h3>
+              <p class="text-[9px] sm:text-[11px] text-slate-300 mt-0.5 truncate">
+                <span class="bg-white/10 px-1.5 py-0.2 rounded-full text-indigo-300 font-bold text-[9px]" id="pariwarik-grand-months-count">30 Months</span>
+              </p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-indigo-600/30 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+          </div>
+
+          <!-- Overall Card 2: Overall Total Paid -->
+          <div class="bg-gradient-to-br from-teal-900 via-emerald-900 to-emerald-950 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-emerald-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-emerald-200 truncate">Total Collected</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-emerald-300 truncate" id="pariwarik-overall-paid">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-emerald-100 mt-0.5 truncate">
+                <span class="bg-white/15 px-1.5 py-0.2 rounded-full text-emerald-200 font-bold text-[9px]" id="pariwarik-completed-months-count">0 Completed</span>
+              </p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-emerald-500/25 text-emerald-300 border border-emerald-400/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+
+          <!-- Overall Card 3: Overall Total Dues -->
+          <div class="bg-gradient-to-br from-rose-950 via-red-900 to-rose-900 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-rose-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-rose-200 truncate">Total Outstanding</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-rose-200 truncate" id="pariwarik-overall-dues">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-rose-100 mt-0.5 truncate">
+                <span class="bg-white/15 px-1.5 py-0.2 rounded-full text-rose-200 font-bold text-[9px]" id="pariwarik-remaining-months-count">0 Remaining</span>
+              </p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-rose-500/25 text-rose-300 border border-rose-400/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+          </div>
+
+          <!-- Overall Card 4: In Fund Deposit (All Paid Months x 500) -->
+          <div class="bg-gradient-to-br from-amber-950 via-amber-900 to-orange-950 rounded-2xl sm:rounded-3xl p-3 sm:p-4 text-white shadow-sm flex items-center justify-between border border-amber-700/50">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-amber-200 truncate">Fund Deposit</p>
+              <h3 class="text-base sm:text-2xl lg:text-3xl font-black mt-0.5 text-amber-300 truncate" id="pariwarik-fund-deposit">₹ 0</h3>
+              <p class="text-[9px] sm:text-[11px] text-amber-100 mt-0.5 truncate">
+                <span class="bg-white/15 px-1.5 py-0.2 rounded-full text-amber-200 font-bold text-[9px]" id="pariwarik-fund-deposit-calc">0 Mo × ₹500</span>
+              </p>
+            </div>
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-amber-500/25 text-amber-300 border border-amber-400/20 flex items-center justify-center text-base sm:text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-vault"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Row 3: Month Winner & Total Distributed Amount (2 Cards) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
+          <!-- Row 3 Card 1: Month Winner Name -->
+          <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-yellow-600 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-white shadow-sm flex items-center justify-between border border-amber-400/30">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-amber-100 flex items-center gap-1.5 uppercase tracking-wider truncate">
+                <i class="fa-solid fa-trophy text-yellow-200"></i>
+                <span>Month Winner (विजेता)</span>
+              </p>
+              <h3 class="text-base sm:text-xl font-black mt-1 text-white truncate max-w-xs sm:max-w-md" id="pariwarik-stat-winner-name">Winner not declared yet</h3>
+              <p class="text-[10px] sm:text-[11px] text-amber-100 mt-1 flex items-center gap-1.5 font-medium truncate" id="pariwarik-stat-winner-sub">
+                <span class="bg-white/20 px-2 py-0.5 rounded-full font-bold text-white text-[9px] sm:text-[10px]" id="pariwarik-stat-winner-badge">Prize: ₹4,000</span>
+                <span id="pariwarik-stat-winner-month-lbl">• Selected Month</span>
+              </p>
+            </div>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center text-xl shadow-inner shrink-0 text-yellow-100 border border-white/25 ml-2">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+          </div>
+
+          <!-- Row 3 Card 2: Total Distributed Amount -->
+          <div class="bg-gradient-to-br from-purple-900 via-indigo-900 to-slate-900 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 text-white shadow-sm flex items-center justify-between border border-purple-500/30">
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-xs font-bold text-purple-200 flex items-center gap-1.5 uppercase tracking-wider truncate">
+                <i class="fa-solid fa-hand-holding-dollar text-purple-300"></i>
+                <span>Total Distributed (वितरित)</span>
+              </p>
+              <h3 class="text-base sm:text-2xl font-black mt-1 text-purple-200 truncate" id="pariwarik-total-distributed">₹ 0</h3>
+              <p class="text-[10px] sm:text-[11px] text-purple-100 mt-1 flex items-center gap-1.5 font-medium truncate">
+                <span class="bg-white/15 px-2 py-0.5 rounded-full text-purple-200 font-bold text-[9px] sm:text-[10px]" id="pariwarik-distributed-calc">0 Mo × ₹4,000</span>
+                <span>• Winner Payout</span>
+              </p>
+            </div>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-500/25 text-purple-300 border border-purple-400/20 flex items-center justify-center text-xl shadow-inner shrink-0 ml-2">
+              <i class="fa-solid fa-gift"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Monthly Tabs Grid (Sep 2025 to Feb 2028 - Total 30 Months) -->
+        <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 p-3 sm:p-4 shadow-2xs space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs shrink-0">
+                <i class="fa-solid fa-calendar-days"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-slate-800">Select Month:</span>
+                <span class="text-[10px] text-slate-400 font-medium ml-1">(30 Months)</span>
+              </div>
+            </div>
+            
+            <!-- Legend Indicators & Active Month Badge -->
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap text-[10px] sm:text-[11px] font-bold">
+              <div class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Paid</span>
+              </div>
+              <div class="flex items-center gap-1 text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                <span>Active</span>
+              </div>
+              <div class="flex items-center gap-1 text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span>Dues</span>
+              </div>
+              <span class="font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-200" id="pariwarik-active-month-badge">Month: --</span>
+            </div>
+          </div>
+          
+          <!-- Responsive Grid for 30 Months: 3 cols on mobile, 5 cols on sm, 10 cols on lg -->
+          <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 gap-1.5 sm:gap-2" id="pariwarik-months-tabs-bar">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- 5. Members Scheme Breakdown / Status Register -->
+        <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-3.5 sm:p-5 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            <div>
+              <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-cyan-600"></i> Members Scheme Register
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">मासिक अंशदान (₹150), जमा, बकाया एवं विजेता स्थिति</p>
+            </div>
+
+            <!-- Search Bar & Action Buttons -->
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+              <div class="relative flex-1 md:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" 
+                       id="pariwarik-search-input" 
+                       oninput="handlePariwarikSearch(this.value)" 
+                       placeholder="नाम, मोबाइल, ID से खोजें..." 
+                       class="w-full pl-8 pr-7 py-2 bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 transition-all">
+                <button type="button" 
+                        onclick="clearPariwarikSearch()" 
+                        id="pariwarik-search-clear" 
+                        class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-[9px] transition-colors" 
+                        title="Clear">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+
+              <!-- Quick Status Filter Toggle (All / Paid / Unpaid) -->
+              <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xl text-[11px] font-bold">
+                <button type="button" onclick="setPariwarikStatusFilter('ALL')" id="pariwarik-filter-all" class="px-2.5 py-1.5 rounded-lg bg-white text-slate-800 shadow-2xs">All</button>
+                <button type="button" onclick="setPariwarikStatusFilter('PAID')" id="pariwarik-filter-paid" class="px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Paid</button>
+                <button type="button" onclick="setPariwarikStatusFilter('UNPAID')" id="pariwarik-filter-unpaid" class="px-2.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Dues</button>
+              </div>
+
+              <div class="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/80">
+                <i class="fa-solid fa-users text-slate-400 text-[11px]"></i>
+                <span class="text-xs text-slate-700 font-bold font-mono" id="pariwarik-members-count">0</span>
+              </div>
+
+              <button type="button" 
+                      onclick="sendPariwarikPushAllNotification()" 
+                      class="shrink-0 flex items-center gap-1 px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer" 
+                      title="Send Push to all unpaid members">
+                <i class="fa-solid fa-bell text-xs"></i>
+                <span>Push All</span>
+              </button>
+              <button type="button" 
+                      onclick="openPariwarikBulkWhatsAppModal()" 
+                      class="shrink-0 flex items-center gap-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer" 
+                      title="Send WhatsApp reminder to all dues members">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>All Dues</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 1. MOBILE 2-LINE CARDS CONTAINER (Visible on mobile only) -->
+          <div id="pariwarik-mobile-cards" class="md:hidden p-3 space-y-2.5 bg-slate-50/50">
+            <!-- Dynamically populated via renderPariwarikView() -->
+          </div>
+
+          <!-- 2. DESKTOP TABLE VIEW (Visible on tablet/desktop) -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                  <th class="p-3.5 pl-5">Member / Father</th>
+                  <th class="p-3.5">Mobile & Address</th>
+                  <th class="p-3.5 text-center">Paid (Yes/No)</th>
+                  <th class="p-3.5 text-center">Month Winner</th>
+                  <th class="p-3.5 font-mono text-right text-emerald-700">Paid (₹)</th>
+                  <th class="p-3.5 font-mono text-right text-rose-700">Dues (₹)</th>
+                  <th class="p-3.5 font-mono text-right text-amber-700">Fine (₹)</th>
+                  <th class="p-3.5 font-mono text-right">Total (₹)</th>
+                  <th class="p-3.5 text-center pr-5">Alert / Action</th>
+                </tr>
+              </thead>
+              <tbody id="pariwarik-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderPariwarikView() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB 4C: EXPENSES MANAGEMENT SECTION (खर्च प्रबंधन) -->
+      <!-- ============================================== -->
+      <div id="view-expenses-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">
+                  Expenses Register
+                </h2>
+                <p class="text-xs text-slate-500">Expense tracking, vendor payments & accounts</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="openExpenseModal()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-rose-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Add Expense</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Expenses Summary 4-Cards Grid (Colourful Design) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+          <!-- 1. Total Expenses (Rose / Pink Tinted) -->
+          <div class="bg-gradient-to-br from-rose-50 via-pink-50/40 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-rose-200/90 shadow-xs hover:shadow-md transition-all flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-rose-500 text-white flex items-center justify-center text-base sm:text-xl flex-shrink-0 shadow-md shadow-rose-500/20">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-rose-800 uppercase tracking-wider">Total</p>
+              <h3 class="text-sm sm:text-xl font-black text-rose-950 font-mono mt-0.5 truncate">₹<span id="exp-stat-total">0</span></h3>
+              <p class="text-[10px] text-rose-600 font-semibold truncate"><span id="exp-stat-count">0</span> Bills</p>
+            </div>
+          </div>
+
+          <!-- 2. Cash Expenses (Amber / Yellow Tinted) -->
+          <div class="bg-gradient-to-br from-amber-50 via-yellow-50/40 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-amber-200/90 shadow-xs hover:shadow-md transition-all flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-500 text-white flex items-center justify-center text-base sm:text-xl flex-shrink-0 shadow-md shadow-amber-500/20">
+              <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-amber-800 uppercase tracking-wider">Cash</p>
+              <h3 class="text-sm sm:text-xl font-black text-amber-950 font-mono mt-0.5 truncate">₹<span id="exp-stat-cash">0</span></h3>
+              <p class="text-[10px] text-amber-700 font-semibold truncate">In Hand</p>
+            </div>
+          </div>
+
+          <!-- 3. Online Expenses (Sky / Blue Tinted) -->
+          <div class="bg-gradient-to-br from-sky-50 via-blue-50/40 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-sky-200/90 shadow-xs hover:shadow-md transition-all flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-600 text-white flex items-center justify-center text-base sm:text-xl flex-shrink-0 shadow-md shadow-blue-500/20">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-blue-800 uppercase tracking-wider">Online</p>
+              <h3 class="text-sm sm:text-xl font-black text-blue-950 font-mono mt-0.5 truncate">₹<span id="exp-stat-online">0</span></h3>
+              <p class="text-[10px] text-blue-600 font-semibold truncate">Bank / UPI</p>
+            </div>
+          </div>
+
+          <!-- 4. This Month Expenses (Purple / Violet Tinted) -->
+          <div class="bg-gradient-to-br from-purple-50 via-fuchsia-50/40 to-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 border border-purple-200/90 shadow-xs hover:shadow-md transition-all flex items-center gap-2.5 sm:gap-3.5">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-600 text-white flex items-center justify-center text-base sm:text-xl flex-shrink-0 shadow-md shadow-purple-500/20">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-purple-800 uppercase tracking-wider">This Month</p>
+              <h3 class="text-sm sm:text-xl font-black text-purple-950 font-mono mt-0.5 truncate">₹<span id="exp-stat-month">0</span></h3>
+              <p class="text-[10px] text-purple-600 font-semibold truncate">Current Month</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Controls & Search/Filter Strip -->
+        <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
+          <!-- Search Box -->
+          <div class="relative flex-1">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+            <input type="text" id="expense-search-input" oninput="renderExpensesList()" placeholder="खर्च विवरण, वेंडर, मद या ID खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium">
+          </div>
+
+          <!-- Mobile Filter Button (Visible on Mobile Only) -->
+          <button 
+            type="button" 
+            onclick="openMobileExpenseFilterModal()" 
+            class="sm:hidden px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 cursor-pointer flex-shrink-0"
+            title="Filter Expenses"
+          >
+            <i class="fa-solid fa-sliders text-rose-600"></i>
+            <span>Filter</span>
+            <span id="mob-expense-filter-indicator" class="hidden w-2 h-2 rounded-full bg-rose-600"></span>
+          </button>
+
+          <!-- Filter Dropdowns (Desktop view: hidden on mobile) -->
+          <div class="hidden sm:flex items-center gap-2 flex-wrap">
+            <select id="expense-method-filter" onchange="renderExpensesList(); syncExpenseFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer">
+              <option value="ALL">सभी माध्यम (Cash + Online)</option>
+              <option value="Cash">💵 केवल नकद (Cash)</option>
+              <option value="Online">📱 केवल बैंक/ऑनलाइन (Online)</option>
+            </select>
+
+            <select id="expense-scheme-filter" onchange="renderExpensesList(); syncExpenseFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[200px]">
+              <option value="ALL">सभी खर्च योजनाएं/मद</option>
+            </select>
+
+            <select id="expense-vendor-filter" onchange="renderExpensesList(); syncExpenseFilterLabels();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer max-w-[180px]">
+              <option value="ALL">सभी वेंडर (All Vendors)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3. Expenses List (Mobile 2-Line Cards & Desktop Table) -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-rose-600"></i> Expenses Register (Recent to Old)
+            </h3>
+            <span class="text-xs text-slate-400 font-medium font-mono" id="expenses-table-count">0 Entries</span>
+          </div>
+
+          <!-- Mobile Cards Container (Visible on Mobile Only) -->
+          <div id="expenses-mobile-cards" class="sm:hidden p-2.5 space-y-2.5 bg-slate-50/40">
+            <!-- Populated via JS (2-line layout per expense card) -->
+          </div>
+
+          <!-- Desktop Table (Hidden on Mobile) -->
+          <div class="hidden sm:block overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                  <th class="p-3.5 pl-5">Receipt / Date</th>
+                  <th class="p-3.5">Expense Head</th>
+                  <th class="p-3.5">Vendor & Details</th>
+                  <th class="p-3.5">Method</th>
+                  <th class="p-3.5 font-mono text-right">Amount</th>
+                  <th class="p-3.5 pr-5 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-table-body" class="divide-y divide-slate-100">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB 4D: BANK TRANSACTIONS & DEPOSITS SECTION    -->
+      <!-- ============================================== -->
+      <div id="view-bank-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg shadow-md shadow-blue-500/20">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div>
+                <h2 class="text-base sm:text-xl font-black text-slate-900 tracking-tight">
+                  Bank Transactions & Deposits
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <button type="button" id="btn-add-bank-record" onclick="openBankRecordModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Add Record</span>
+            </button>
+            <button onclick="openFundTransferModal()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-3.5 py-2.5 rounded-xl text-xs border border-slate-200 flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+              <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i>
+              <span>Fund Transfer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bank Treasury 4-Cards Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+          <!-- Total Bank Balance -->
+          <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-3.5 sm:p-5 text-white shadow-sm flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 text-white flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-vault"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-blue-100 uppercase tracking-wider truncate">Net Bank Balance</p>
+              <h3 class="text-sm sm:text-xl font-black font-mono mt-0.5 truncate" id="bank-stat-balance">₹ 0</h3>
+              <p class="text-[9px] sm:text-[10px] text-blue-200 font-medium truncate">Available In Bank</p>
+            </div>
+          </div>
+
+          <!-- Total Bank Inflow / Deposits -->
+          <div class="bg-emerald-50/70 rounded-3xl p-3.5 sm:p-5 border border-emerald-200/80 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white text-emerald-600 shadow-2xs border border-emerald-100 flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-arrow-down-long"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-emerald-700 uppercase tracking-wider truncate">Total Inflow</p>
+              <h3 class="text-sm sm:text-xl font-black text-emerald-800 font-mono mt-0.5 truncate" id="bank-stat-inflow">₹ 0</h3>
+              <p class="text-[9px] sm:text-[10px] text-emerald-600 font-semibold truncate">Opening + Deposits + Online</p>
+            </div>
+          </div>
+
+          <!-- Total Bank Outflow / Debits -->
+          <div class="bg-rose-50/70 rounded-3xl p-3.5 sm:p-5 border border-rose-200/80 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white text-rose-600 shadow-2xs border border-rose-100 flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-arrow-up-long"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-rose-700 uppercase tracking-wider truncate">Total Outflow</p>
+              <h3 class="text-sm sm:text-xl font-black text-rose-800 font-mono mt-0.5 truncate" id="bank-stat-outflow">₹ 0</h3>
+              <p class="text-[9px] sm:text-[10px] text-rose-600 font-semibold truncate">Withdrawals + Online Bills</p>
+            </div>
+          </div>
+
+          <!-- Active SBI Account Info -->
+          <div class="bg-indigo-50/70 rounded-3xl p-3.5 sm:p-5 border border-indigo-200/80 shadow-xs flex items-center gap-3">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white text-indigo-600 shadow-2xs border border-indigo-100 flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+              <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[10px] sm:text-[11px] font-bold text-indigo-700 uppercase tracking-wider truncate">Bank Account</p>
+              <h3 class="text-xs sm:text-sm font-black text-slate-800 font-mono truncate mt-0.5" id="bank-stat-acc-no">38294710293</h3>
+              <p class="text-[9px] sm:text-[10px] text-indigo-600 font-semibold truncate" id="bank-stat-acc-title">SBI Gomoh Branch</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank Records & History Container -->
+        <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
+          <!-- Filters & Search Toolbar -->
+          <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+            <!-- Filter Area: Mobile Dropdown Button & Desktop Pills -->
+            <div class="flex items-center gap-2">
+              <!-- Mobile Filter Popup Dropdown Button (Visible on mobile/tablet) -->
+              <div class="relative md:hidden w-full">
+                <button type="button" id="btn-bank-filter-dropdown" onclick="toggleBankFilterDropdown()" class="w-full flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-xs font-bold transition-all shadow-2xs">
+                  <div class="flex items-center gap-2 truncate">
+                    <i class="fa-solid fa-filter text-blue-600"></i>
+                    <span id="bank-filter-current-label">All Transactions</span>
+                    <span id="bank-filter-current-badge" class="px-1.5 py-0.5 rounded-full text-[10px] bg-blue-600 text-white font-mono">0</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-down text-[10px] text-blue-700 transition-transform" id="bank-filter-dropdown-chevron"></i>
+                </button>
+
+                <!-- Popup Dropdown Menu -->
+                <div id="bank-filter-dropdown-menu" class="hidden absolute left-0 right-0 top-full mt-1.5 z-40 bg-white rounded-2xl border border-slate-200 shadow-xl p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                  <button type="button" onclick="selectBankFilterOption('ALL')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-list-ul text-blue-600 text-[11px]"></i> All Transactions</span>
+                    <span id="bank-menu-count-all" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">0</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('DEPOSIT')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Deposits</span>
+                    <span id="bank-menu-count-deposit" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('ONLINE_DONATION')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-teal-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-teal-500"></span> Online Donations</span>
+                    <span id="bank-menu-count-donations" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('TRANSFER')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> Transfers</span>
+                    <span id="bank-menu-count-transfers" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                  <button type="button" onclick="selectBankFilterOption('EXPENSE')" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition-colors">
+                    <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-500"></span> Online Expenses</span>
+                    <span id="bank-menu-count-expenses" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">(0)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Desktop Filter Pills (Hidden on mobile, clean pills on desktop) -->
+              <div class="hidden md:flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                <button onclick="filterBankTransactions('ALL')" id="filter-bank-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span>All Transactions</span>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-white/20" id="bank-count-all">0</span>
+                </button>
+                <button onclick="filterBankTransactions('DEPOSIT')" id="filter-bank-deposit" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Deposits</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-deposit">(0)</span>
+                </button>
+                <button onclick="filterBankTransactions('ONLINE_DONATION')" id="filter-bank-donations" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                  <span>Online Donations</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-donations">(0)</span>
+                </button>
+                <button onclick="filterBankTransactions('TRANSFER')" id="filter-bank-transfers" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                  <span>Transfers</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-transfers">(0)</span>
+                </button>
+                <button onclick="filterBankTransactions('EXPENSE')" id="filter-bank-expenses" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  <span>Online Expenses</span>
+                  <span class="text-[10px] text-slate-400 font-mono" id="bank-count-expenses">(0)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full lg:w-72">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="bank-search-input" 
+                oninput="handleBankSearch(this.value)" 
+                placeholder="Search UTR, Party, Ref..." 
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+              >
+            </div>
+          </div>
+
+          <!-- 1. MOBILE 2-LINE CARDS CONTAINER (Visible on mobile only) -->
+          <div id="bank-transactions-mobile-cards" class="md:hidden space-y-2.5">
+            <!-- Dynamically populated via renderBankTransactionsView() -->
+          </div>
+
+          <!-- 2. DESKTOP TABLE VIEW (Visible on tablet/desktop) -->
+          <div class="hidden md:block overflow-x-auto rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 pl-4">Date & ID</th>
+                  <th class="p-3.5">Type</th>
+                  <th class="p-3.5">Description & Party</th>
+                  <th class="p-3.5">Ref / UTR / Account</th>
+                  <th class="p-3.5 text-right text-emerald-700">Credit (+) Inflow</th>
+                  <th class="p-3.5 text-right text-rose-700">Debit (-) Outflow</th>
+                  <th class="p-3.5 text-center pr-4">Action</th>
+                </tr>
+              </thead>
+              <tbody id="bank-transactions-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderBankTransactionsView() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB: DUES & OUTSTANDING MANAGEMENT PAGE        -->
+      <!-- ============================================== -->
+      <div id="view-dues-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <div>
+                <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 font-devanagari">
+                  समस्त बकाया विवरण व वसूली प्रबंधन (Dues Register)
+                </h2>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">
+                  सामान्य सदस्यता, पारिवारिक योजना किस्त एवं लेट फाइन (जुर्माना) बकाया का एकीकृत विवरण
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button onclick="switchAdminView('dashboard')" class="px-3.5 py-2 rounded-xl text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>डैशबोर्ड</span>
+            </button>
+            <button onclick="openDuesBulkWhatsAppModal()" class="px-3.5 py-2 rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              <span>सभी को WhatsApp भेजें</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Summary Stat Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          <!-- Total Outstanding -->
+          <div class="bg-gradient-to-br from-purple-500 to-indigo-600 text-white rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between opacity-90">
+              <span class="text-xs font-bold uppercase tracking-wider">कुल समस्त बकाया</span>
+              <i class="fa-solid fa-calculator text-lg"></i>
+            </div>
+            <div class="mt-3">
+              <p class="text-2xl sm:text-3xl font-black font-mono tracking-tight" id="dues-stat-total">₹ 0</p>
+              <p class="text-[11px] opacity-80 mt-0.5 font-medium" id="dues-stat-members-count">0 सदस्य बकायादार</p>
+            </div>
+          </div>
+
+          <!-- General / Membership Dues -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700">सामान्य सदस्यता</span>
+              <div class="w-7 h-7 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-slate-900" id="dues-stat-general">₹ 0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="dues-stat-general-count">0 सदस्य</p>
+            </div>
+          </div>
+
+          <!-- PASY Installment Dues -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-cyan-700">पारिवारिक किस्त (₹150)</span>
+              <div class="w-7 h-7 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-cyan-900" id="dues-stat-pasy">₹ 0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="dues-stat-pasy-count">0 किस्तें बकाया</p>
+            </div>
+          </div>
+
+          <!-- PASY Late Fine Dues -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-700">विलंब शुल्क (Fine)</span>
+              <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-amber-600" id="dues-stat-fine">₹ 0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="dues-stat-fine-count">0 सदस्य जुर्माना देय</p>
+            </div>
+          </div>
+
+          <!-- Total Defaulters Count -->
+          <div class="col-span-2 sm:col-span-2 lg:col-span-1 bg-white rounded-3xl p-4 sm:p-5 border border-rose-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between text-slate-500">
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-700">कुल बकायादार</span>
+              <div class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-user-xmark"></i>
+              </div>
+            </div>
+            <div class="mt-3">
+              <p class="text-xl sm:text-2xl font-bold font-mono text-rose-700" id="dues-stat-defaulters">0</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">सक्रिय सदस्यों में से</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Pills & Search Bar -->
+        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+            
+            <!-- Type Filter Tabs -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 text-xs scrollbar-none" id="dues-filter-pills">
+              <button onclick="filterDuesType('ALL')" id="filter-dues-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-xs flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>समस्त बकाया (All)</span>
+                <span class="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-full font-mono" id="dues-badge-all">0</span>
+              </button>
+              <button onclick="filterDuesType('GENERAL')" id="filter-dues-general" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>सामान्य सदस्यता</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="dues-badge-general">(0)</span>
+              </button>
+              <button onclick="filterDuesType('PASY')" id="filter-dues-pasy" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>पारिवारिक किस्त</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="dues-badge-pasy">(0)</span>
+              </button>
+              <button onclick="filterDuesType('FINE')" id="filter-dues-fine" class="px-3.5 py-1.5 rounded-xl font-semibold bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+                <span>विलंब शुल्क (Fine)</span>
+                <span class="text-[10px] text-slate-400 font-mono" id="dues-badge-fine">(0)</span>
+              </button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative w-full lg:w-80">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="dues-search-input" 
+                oninput="handleDuesSearch(this.value)" 
+                placeholder="सदस्य का नाम / मोबाइल / ID खोजें..." 
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all font-medium"
+              >
+            </div>
+          </div>
+
+          <!-- Dues Table -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-100">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                <tr>
+                  <th class="p-3.5 pl-5">सदस्य / पिता का नाम</th>
+                  <th class="p-3.5">मोबाइल व पता</th>
+                  <th class="p-3.5">बकाया श्रेणी (Category)</th>
+                  <th class="p-3.5">विस्तृत विवरण (Details)</th>
+                  <th class="p-3.5 text-right font-mono">सामान्य बकाया (₹)</th>
+                  <th class="p-3.5 text-right font-mono">PASY किस्त (₹)</th>
+                  <th class="p-3.5 text-right font-mono text-amber-600">फाइन (₹)</th>
+                  <th class="p-3.5 text-right font-mono font-black text-rose-600">कुल देय (₹)</th>
+                  <th class="p-3.5 text-center pr-5">कार्रवाई</th>
+                </tr>
+              </thead>
+              <tbody id="dues-table-body" class="divide-y divide-slate-100">
+                <!-- Dynamically populated via renderDuesView() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TAB 5: SYSTEM & MASTER SETTINGS PAGE           -->
+      <!-- ============================================== -->
+      <div id="view-settings-section" class="hidden space-y-6 animate-in fade-in duration-200">
+        
+        <!-- Header & Action Bar (Mobile-friendly single row) -->
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-base sm:text-lg shadow-2xs shrink-0">
+              <i class="fa-solid fa-gears"></i>
+            </div>
+            <h2 class="text-sm sm:text-base font-extrabold text-slate-900 truncate">
+              Admin Master Controls
+            </h2>
+          </div>
+
+          <div class="shrink-0">
+            <button onclick="saveAllSettingsToCloud()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-95 text-white font-bold px-3 sm:px-4 py-2 rounded-xl text-xs shadow-sm shadow-orange-500/20 flex items-center gap-1.5 transition-all cursor-pointer">
+              <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+              <span>Save to Cloud</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Settings Cards Grid (Compact, Colorful & Modern) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
+          <!-- Card 1: Status Master (Orange) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('status')" 
+            id="tab-btn-status"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100/90 border-2 border-orange-500 shadow-md ring-2 ring-orange-500/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-orange-500 text-white font-mono shadow-2xs" id="badge-count-status">3</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-orange-950 group-hover:text-orange-600 transition-colors truncate">Status Master</h4>
+            </div>
+          </button>
+
+          <!-- Card 2: Event Master (Indigo/Blue) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('event')" 
+            id="tab-btn-event"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50/70 border border-indigo-200 hover:border-indigo-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500 text-white font-mono shadow-2xs" id="badge-count-event">3+</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-indigo-950 group-hover:text-indigo-600 transition-colors truncate">Event Master</h4>
+            </div>
+          </button>
+
+          <!-- Card 3: Scheme Master (Amber/Gold) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('scheme')" 
+            id="tab-btn-scheme"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50/70 border border-amber-200 hover:border-amber-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white font-mono shadow-2xs" id="badge-count-scheme">4</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-amber-950 group-hover:text-amber-600 transition-colors truncate">Scheme Master</h4>
+            </div>
+          </button>
+
+          <!-- Card 4: Fund Management (Emerald/Teal) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('fund')" 
+            id="tab-btn-fund"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/70 border border-emerald-200 hover:border-emerald-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-vault"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-600 text-white font-mono shadow-2xs" id="badge-count-fund">0</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-emerald-950 group-hover:text-teal-600 transition-colors truncate">Fund Management</h4>
+            </div>
+          </button>
+
+          <!-- Card 5: Expense Master (Rose/Red) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('expense')" 
+            id="tab-btn-expense"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-50/70 border border-rose-200 hover:border-rose-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white font-mono shadow-2xs" id="badge-count-expense">Master</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-rose-950 group-hover:text-rose-600 transition-colors truncate">Expense Master</h4>
+            </div>
+          </button>
+
+          <!-- Card 6: Team Members (Purple/Violet) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('designation')" 
+            id="tab-btn-designation"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-purple-50 to-violet-50/70 border border-purple-200 hover:border-purple-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-purple-500 to-violet-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-purple-600 text-white font-mono shadow-2xs" id="badge-count-designation">8</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-purple-950 group-hover:text-indigo-600 transition-colors truncate">Team Members</h4>
+            </div>
+          </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 1: STATUS MASTER                  -->
+        <!-- ========================================== -->
+        <div id="settings-page-status" class="space-y-4">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-tags text-orange-500"></i> Member Status List
+              </h3>
+              <button onclick="openAddStatusModal()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 active:scale-95 text-emerald-800 border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Status</span>
+              </button>
+            </div>
+
+            <!-- Status List: Mobile Cards -->
+            <div id="status-master-mobile-list" class="space-y-2 sm:hidden mt-3">
+              <!-- Populated via JS -->
+            </div>
+
+            <!-- Status List Table (Desktop) -->
+            <div class="hidden sm:block mt-3.5 overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold">
+                    <th class="py-2.5 px-3 rounded-l-xl">#</th>
+                    <th class="py-2.5 px-3">Status Name</th>
+                    <th class="py-2.5 px-3">Description</th>
+                    <th class="py-2.5 px-3">Color / Theme</th>
+                    <th class="py-2.5 px-3">Type</th>
+                    <th class="py-2.5 px-3 text-right rounded-r-xl">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="status-master-tbody" class="divide-y divide-slate-100">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 2: EVENT MASTER                   -->
+        <!-- ========================================== -->
+        <div id="settings-page-event" class="hidden space-y-4 sm:space-y-6">
+          
+          <!-- Section 2A: Event Categories (Types) -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-indigo-500"></i> Event Categories
+              </h3>
+              <button onclick="openAddEventCatModal()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Category</span>
+              </button>
+            </div>
+
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="event-categories-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 2B: Event Standard Titles (Presets) -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-heading text-purple-500"></i> Predefined Event Titles
+              </h3>
+              <button onclick="openAddEventTitleModal()" class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 active:scale-95 text-purple-800 border border-purple-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Title</span>
+              </button>
+            </div>
+
+            <div class="mt-3.5 overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-bold">
+                    <th class="py-2.5 px-3 rounded-l-xl">#</th>
+                    <th class="py-2.5 px-3">Title</th>
+                    <th class="py-2.5 px-3">Category</th>
+                    <th class="py-2.5 px-3 text-right rounded-r-xl">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="event-titles-tbody" class="divide-y divide-slate-100">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 2C: Standard Venues -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-location-dot text-rose-500"></i> Standard Event Venues
+              </h3>
+              <button onclick="openAddVenueModal()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Venue</span>
+              </button>
+            </div>
+
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="event-venues-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 3: SCHEME MASTER                  -->
+        <!-- ========================================== -->
+        <div id="settings-page-scheme" class="hidden space-y-4">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> Schemes Master
+              </h3>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="openSchemeFilterModal()" id="btn-scheme-filter-popup" class="px-2.5 sm:px-3 py-1.5 bg-slate-50 hover:bg-amber-50 active:scale-95 text-slate-700 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                  <i class="fa-solid fa-filter text-amber-600 text-xs"></i>
+                  <span id="scheme-active-filter-label">All</span>
+                  <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
+                </button>
+                <button onclick="openAddSchemeModal()" class="px-2.5 sm:px-3 py-1.5 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                  <span>Add Scheme</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3" id="schemes-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 2: Membership & Plans Rates Master -->
+          <div class="bg-gradient-to-br from-amber-50/70 via-orange-50/40 to-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-amber-200/90 shadow-2xs space-y-4">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-amber-200/70">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-sm sm:text-base shadow-2xs flex-shrink-0">
+                  <i class="fa-solid fa-sliders"></i>
+                </div>
+                <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                  Membership & Plans Rate Master
+                </h3>
+              </div>
+              <button 
+                type="button" 
+                onclick="handleSaveMembershipPlanRates()" 
+                class="px-3 py-1.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 active:scale-95 text-white font-bold rounded-xl text-xs shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
+              >
+                <i class="fa-solid fa-floppy-disk text-xs"></i>
+                <span>Save Rates</span>
+              </button>
+            </div>
+
+            <!-- 3 Columns Control Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              
+              <!-- 1. PASY Monthly Contribution Rate Card -->
+              <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-cyan-200 shadow-2xs flex flex-col justify-between space-y-2.5">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-700 font-mono">1. PASY CONTRIBUTION</span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-hands-holding-child text-cyan-600"></i>
+                    PASY Monthly Contribution
+                  </h4>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100">
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Monthly Rate (₹ / Month):</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
+                    <input 
+                      type="number" 
+                      id="rate-pasy-monthly-fee" 
+                      min="1" 
+                      step="1" 
+                      value="150" 
+                      class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500"
+                    >
+                  </div>
+                  <span class="text-[10px] text-cyan-700 font-medium mt-1 block">Default: ₹150 / Month (30 months)</span>
+                </div>
+              </div>
+
+              <!-- 2. PASY Fine Rate Card -->
+              <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-rose-200 shadow-2xs flex flex-col justify-between space-y-2.5">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700 font-mono">2. PASY FINE RATE</span>
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                    Late Fine Rate
+                  </h4>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100">
+                  <label class="block text-[11px] font-bold text-slate-600 mb-1">Weekly Fine Rate (₹ / Week):</label>
+                  <div class="relative">
+                    <span class="absolute left-3 top-2 text-slate-400 font-bold text-xs">₹</span>
+                    <input 
+                      type="number" 
+                      id="rate-pasy-fine-week" 
+                      min="0" 
+                      step="1" 
+                      value="20" 
+                      class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                    >
+                  </div>
+                  <span class="text-[10px] text-rose-700 font-medium mt-1 block">Default: ₹20 / Sunday</span>
+                </div>
+              </div>
+
+              <!-- 3. Membership Fee Rates Card (Premium vs Normal) -->
+              <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-amber-300 shadow-2xs flex flex-col justify-between space-y-2.5">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 font-mono">3. MEMBERSHIP PLANS</span>
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-crown text-amber-500"></i>
+                    Membership Annual Fees
+                  </h4>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 space-y-2">
+                  <!-- Premium Rate -->
+                  <div>
+                    <label class="flex items-center justify-between text-[11px] font-bold text-amber-900 mb-0.5">
+                      <span>👑 Prime Member:</span>
+                      <span class="text-[9px] text-amber-600 font-mono">Per Year</span>
+                    </label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-1.5 text-slate-400 font-bold text-xs">₹</span>
+                      <input 
+                        type="number" 
+                        id="rate-membership-premium" 
+                        min="0" 
+                        step="1" 
+                        value="1200" 
+                        class="w-full pl-7 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      >
+                    </div>
+                  </div>
+
+                  <!-- Normal Rate -->
+                  <div>
+                    <label class="flex items-center justify-between text-[11px] font-bold text-slate-700 mb-0.5">
+                      <span>🟢 Active Member:</span>
+                      <span class="text-[9px] text-slate-400 font-mono">Per Year</span>
+                    </label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-1.5 text-slate-400 font-bold text-xs">₹</span>
+                      <input 
+                        type="number" 
+                        id="rate-membership-normal" 
+                        min="0" 
+                        step="1" 
+                        value="600" 
+                        class="w-full pl-7 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-black text-xs focus:outline-none focus:ring-2 focus:ring-slate-400/20 focus:border-slate-400"
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 4: FUND MANAGEMENT             -->
+        <!-- ========================================== -->
+        <div id="settings-page-fund" class="hidden space-y-4 sm:space-y-6">
+          
+          <!-- Opening Balances Card -->
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-2xl sm:rounded-3xl p-3 sm:p-5 text-white shadow-2xs">
+            <div class="flex items-center justify-between gap-2 pb-2.5 sm:pb-3 border-b border-white/20">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                <h3 class="text-xs sm:text-base font-black tracking-wide">Opening Balance</h3>
+              </div>
+              <button type="button" onclick="openEditOpeningBalanceModal()" class="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white text-orange-800 hover:bg-orange-50 active:scale-95 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span class="hidden sm:inline">Edit Opening Balance</span>
+                <span class="sm:hidden">Edit</span>
+              </button>
+            </div>
+
+            <!-- Compact 3-Column Grid on Mobile and Desktop -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-3.5 mt-2.5 sm:mt-3.5">
+              <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20">
+                <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Cash</p>
+                <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-cash">₹ 34,025</h4>
+                <p class="text-[9px] text-amber-100 mt-0.5 hidden sm:block">Self Fund Cash</p>
+              </div>
+              <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20">
+                <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Bank</p>
+                <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-bank">₹ 0</h4>
+                <p class="text-[9px] text-amber-100 mt-0.5 hidden sm:block">Bank Account</p>
+              </div>
+              <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20 flex flex-col justify-between">
+                <div>
+                  <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Total</p>
+                  <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-total">₹ 34,025</h4>
+                </div>
+                <p class="text-[9px] text-emerald-200 font-bold mt-0.5 hidden sm:block truncate">✓ Treasury</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Treasury Summary Live Counters -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 text-white shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between justify-between">
+              <div>
+                <div class="flex items-center gap-1 sm:hidden mb-1">
+                  <div class="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-[9px]">
+                    <i class="fa-solid fa-vault"></i>
+                  </div>
+                  <p class="text-[9px] font-bold text-emerald-100 uppercase tracking-wider truncate">Total</p>
+                </div>
+                <p class="text-[11px] font-bold text-emerald-100 uppercase tracking-wider hidden sm:block">Total Fund</p>
+                <h3 class="text-xs sm:text-2xl font-black font-mono mt-0.5 sm:mt-1 truncate" id="fund-stat-total">₹ 0</h3>
+                <p class="text-[10px] text-emerald-100 mt-0.5 hidden sm:block">Donations + All Funds</p>
+              </div>
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 hidden sm:flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+                <i class="fa-solid fa-vault"></i>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 text-white shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between justify-between">
+              <div>
+                <div class="flex items-center gap-1 sm:hidden mb-1">
+                  <div class="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-[9px]">
+                    <i class="fa-solid fa-building-columns"></i>
+                  </div>
+                  <p class="text-[9px] font-bold text-blue-100 uppercase tracking-wider truncate">Bank</p>
+                </div>
+                <p class="text-[11px] font-bold text-blue-100 uppercase tracking-wider hidden sm:block">Bank Fund</p>
+                <h3 class="text-xs sm:text-2xl font-black font-mono mt-0.5 sm:mt-1 truncate" id="fund-stat-bank">₹ 0</h3>
+                <p class="text-[10px] text-blue-100 mt-0.5 hidden sm:block">SBI Trust Account</p>
+              </div>
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 hidden sm:flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl sm:rounded-3xl p-2.5 sm:p-5 text-white shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between justify-between">
+              <div>
+                <div class="flex items-center gap-1 sm:hidden mb-1">
+                  <div class="w-4 h-4 rounded-md bg-white/20 flex items-center justify-center text-[9px]">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                  </div>
+                  <p class="text-[9px] font-bold text-amber-100 uppercase tracking-wider truncate">Cash</p>
+                </div>
+                <p class="text-[11px] font-bold text-amber-100 uppercase tracking-wider hidden sm:block">In Hand Cash</p>
+                <h3 class="text-xs sm:text-2xl font-black font-mono mt-0.5 sm:mt-1 truncate" id="fund-stat-cash">₹ 0</h3>
+                <p class="text-[10px] text-amber-100 mt-0.5 hidden sm:block">Cash with Treasurer</p>
+              </div>
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 hidden sm:flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 1: Fund Types Master -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-teal-600"></i> Fund Types Master
+              </h3>
+              <button onclick="openAddFundTypeModal()" class="px-2.5 sm:px-3 py-1.5 bg-teal-50 hover:bg-teal-100 active:scale-95 text-teal-900 border border-teal-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Fund Type</span>
+              </button>
+            </div>
+
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2" id="fund-types-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 1B: Bank Accounts -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-building-columns text-blue-600"></i> Bank Accounts
+              </h3>
+              <button onclick="openAddBankAccountModal()" class="px-2.5 sm:px-3 py-1.5 bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-900 border border-blue-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Bank Account</span>
+              </button>
+            </div>
+
+            <div class="mt-3 flex flex-col space-y-2.5 w-full" id="bank-accounts-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 2: Fund Transfers Register -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-transfer text-indigo-600"></i> Fund Transfers
+              </h3>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="openFundTransferFilterModal()" id="btn-ft-filter-popup" class="px-2.5 sm:px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 active:scale-95 text-slate-700 hover:text-indigo-800 border border-slate-200 hover:border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                  <i class="fa-solid fa-filter text-indigo-600 text-xs"></i>
+                  <span id="ft-active-filter-label">All</span>
+                  <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
+                </button>
+                <button onclick="openFundTransferModal()" class="px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 active:scale-95 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                  <i class="fa-solid fa-plus text-xs"></i>
+                  <span>New Transfer</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Mobile List View (Fintech Cards) -->
+            <div class="block sm:hidden mt-3 space-y-2.5" id="fund-transfers-mobile-list">
+              <!-- Populated via JS -->
+            </div>
+
+            <!-- Desktop Table View -->
+            <div class="hidden sm:block mt-3.5 overflow-x-auto rounded-xl border border-slate-100">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th class="p-2.5 pl-3">Transfer ID / Date</th>
+                    <th class="p-2.5">Transaction Type</th>
+                    <th class="p-2.5">Party / Purpose</th>
+                    <th class="p-2.5 text-right">Amount</th>
+                    <th class="p-2.5 text-center pr-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="fund-transfers-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 5: EXPENSE MASTER                 -->
+        <!-- ========================================== -->
+        <div id="settings-page-expense" class="hidden space-y-4 sm:space-y-6">
+          
+          <!-- Section 1: Expense Schemes / Heads Master -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-shapes text-rose-600"></i> Expense Heads & Schemes
+              </h3>
+              <button onclick="openAddExpenseSchemeModal()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Expense Head</span>
+              </button>
+            </div>
+
+            <div class="mt-3.5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5" id="expense-schemes-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 2: Vendor / Party Master -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-store text-indigo-600"></i> Vendors & Suppliers
+              </h3>
+              <button onclick="openAddVendorModal()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-800 border border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Vendor</span>
+              </button>
+            </div>
+
+            <!-- Mobile View: Modern Cards (sm:hidden) -->
+            <div class="mt-3.5 space-y-2.5 sm:hidden" id="vendors-master-cards-mobile">
+              <!-- Populated via JS -->
+            </div>
+
+            <!-- Desktop / Tablet View: Table (hidden sm:block) -->
+            <div class="mt-3.5 hidden sm:block overflow-x-auto rounded-xl border border-slate-100">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200/80 uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th class="p-2.5 pl-3">#</th>
+                    <th class="p-2.5">Vendor / Firm Name</th>
+                    <th class="p-2.5">Category</th>
+                    <th class="p-2.5">Mobile Number</th>
+                    <th class="p-2.5">Address</th>
+                    <th class="p-2.5 text-center pr-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="vendors-master-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- SUB-PAGE 6: TEAM MEMBERS / DESIGNATION MASTER -->
+        <!-- ========================================== -->
+        <div id="settings-page-designation" class="hidden space-y-4 sm:space-y-6">
+          
+          <!-- Top Card: Team Overview & Quick Add Button -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base sm:text-lg shadow-2xs shrink-0">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                Team Members & Designations
+              </h3>
+            </div>
+
+            <div class="shrink-0">
+              <button 
+                type="button" 
+                onclick="openAddDesignationModal()" 
+                class="px-3 py-1.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+              >
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Designation</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Team Members / Designations Table Card -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs space-y-3">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-sitemap text-indigo-500"></i> Official Designations List
+              </h4>
+              <span class="text-[10px] sm:text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full font-mono" id="designation-master-count-badge">Total: 0</span>
+            </div>
+
+            <!-- Mobile View: Modern Cards (sm:hidden) -->
+            <div class="mt-3.5 space-y-2.5 sm:hidden" id="designations-master-cards-mobile">
+              <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Desktop View: Full Table (hidden sm:block) -->
+            <div class="hidden sm:block overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-50 text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                    <th class="p-2.5 pl-3 rounded-l-xl">Priority (#)</th>
+                    <th class="p-2.5">Designation Title</th>
+                    <th class="p-2.5">Role Description</th>
+                    <th class="p-2.5 text-center">Current Officer</th>
+                    <th class="p-2.5 text-center">Type</th>
+                    <th class="p-2.5 pr-3 text-center rounded-r-xl">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="designations-master-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                  <!-- Populated dynamically via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- Bottom Mobile Nav Bar (Modern & Colourful) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-3 py-2 flex items-center justify-around z-40 shadow-xl">
+      <!-- 1. Dashboard (Orange/Amber) -->
+      <button onclick="switchAdminView('dashboard')" id="mobile-nav-dashboard" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-orange-600 bg-orange-50 font-bold active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-sm shadow-orange-500/25">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <span class="text-[10px] font-extrabold tracking-tight">Dashboard</span>
+      </button>
+
+      <!-- 2. Members (Emerald/Teal) -->
+      <button onclick="switchAdminView('members')" id="mobile-nav-members" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-emerald-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">Members</span>
+      </button>
+
+      <!-- 3. Event (Indigo/Purple) -->
+      <button onclick="switchAdminView('events')" id="mobile-nav-events" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-indigo-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">Event</span>
+      </button>
+
+      <!-- 4. PASY (Cyan/Sky) -->
+      <button onclick="switchAdminView('pariwarik')" id="mobile-nav-pariwarik" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-slate-500 hover:text-cyan-600 active:scale-95 cursor-pointer">
+        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-xs transition-colors">
+          <i class="fa-solid fa-users-rectangle"></i>
+        </div>
+        <span class="text-[10px] font-bold tracking-tight">PASY</span>
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================== -->
+  <!-- VIEW 3: MEMBER APP / PORTAL (User Dashboard)   -->
+  <!-- ============================================== -->
+  <div id="member-dashboard" class="hidden flex-1 flex flex-col w-full">
+    
+    <!-- Member Header -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Left: Branding -->
+        <div class="flex items-center gap-3">
+          <img src="/logo-opt.png" alt="GSKS" class="w-10 h-10 rounded-full object-cover border-2 border-orange-200 shadow-sm">
+          <div>
+            <h1 class="text-sm sm:text-base font-extrabold text-orange-800 font-devanagari leading-tight">
+              गोस्वामी समाज कल्याण समिति
+            </h1>
+            <p class="text-[11px] text-slate-500 hidden sm:block">
+              गुनघसा, गोमो, धनबाद - 828401 | सदस्य पोर्टल (Member Portal)
+            </p>
+          </div>
+        </div>
+
+        <!-- Center: Desktop Top Navigation Bar (PC Mode me Uper) -->
+        <nav class="hidden md:flex items-center gap-1.5 lg:gap-2">
+          <!-- 1. Dashboard -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('dashboard')" 
+            id="member-desktop-nav-dashboard" 
+            class="px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs"
+          >
+            <i class="fa-solid fa-chart-pie text-amber-600"></i>
+            <span>डैशबोर्ड (Dashboard)</span>
           </button>
 
           <!-- 2. Events / Notifications -->
