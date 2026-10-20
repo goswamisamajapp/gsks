@@ -12516,22 +12516,69 @@
       }
 
       container.innerHTML = archived.map(m => `
-        <div class="bg-white rounded-2xl p-4 border border-rose-200 flex items-center justify-between gap-3 shadow-sm">
+        <div class="bg-white rounded-2xl p-4 border border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 font-extrabold flex items-center justify-center text-xs">
+            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 font-extrabold flex items-center justify-center text-xs flex-shrink-0">
               ${getInitials(m.name)}
             </div>
             <div>
-              <h4 class="text-xs font-extrabold text-slate-800">${m.name}</h4>
-              <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father} • ${m.address}</p>
+              <h4 class="text-xs font-extrabold text-slate-800">${m.name} <span class="font-mono text-[10px] text-slate-400">(${m.id})</span></h4>
+              <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father || '--'} • ${m.address || '--'}</p>
             </div>
           </div>
-          <button onclick="restoreMember('${m.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-emerald-200 cursor-pointer">
-            <i class="fa-solid fa-rotate-left"></i> Restore Member
-          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="restoreMember('${m.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-emerald-200 cursor-pointer">
+              <i class="fa-solid fa-rotate-left"></i> Restore
+            </button>
+            <button onclick="permanentDeleteMember('${m.id}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-rose-200 cursor-pointer" title="Permanently delete from database">
+              <i class="fa-solid fa-trash-can"></i> Delete Permanently
+            </button>
+          </div>
         </div>
       `).join('');
     }
+
+    async function permanentDeleteMember(memberId) {
+      try {
+        const member = allMembers.find(m => m.id === memberId);
+        const name = member ? member.name : memberId;
+        const confirmPermanent = confirm(`⚠️ क्या आप "${name}" (${memberId}) को डेटाबेस से हमेशा के लिए Permanently Delete करना चाहते हैं?\n\nयह प्रक्रिया वापस नहीं ली जा सकेगी!`);
+        if (!confirmPermanent) return;
+
+        // 1. Remove from local array
+        allMembers = allMembers.filter(m => m.id !== memberId);
+        try { localStorage.setItem('gsks_cached_members', JSON.stringify(allMembers)); } catch(e) {}
+        updateStats();
+        renderMembers();
+        renderArchivedList();
+
+        // 2. Remove from Server JSON
+        try {
+          await fetch('/api/members/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: memberId })
+          });
+        } catch (err) {
+          console.warn('API permanent delete error:', err);
+        }
+
+        // 3. Remove from Firestore
+        try {
+          if (typeof membersCol !== 'undefined' && membersCol) {
+            await membersCol.doc(memberId).delete();
+          }
+        } catch (err) {
+          console.warn('Firestore permanent delete error:', err);
+        }
+
+        showAppAlert(`सदस्य "${name}" को डेटाबेस से हमेशा के लिए सफलतापूर्वक हटा दिया गया है।`, 'Member Deleted', 'success');
+      } catch (err) {
+        console.error('Error permanently deleting member:', err);
+        showAppAlert('सदस्य हटाने में त्रुटि आई। कृपया पुनः प्रयास करें।', 'Error', 'error');
+      }
+    }
+    window.permanentDeleteMember = permanentDeleteMember;
 
     async function restoreMember(memberId) {
       try {

@@ -132,6 +132,21 @@ app.post('/api/members/update', (req, res) => {
   }
 });
 
+// API 2.5: Permanent delete member
+app.post('/api/members/delete', (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'Member ID required' });
+    const raw = fs.readFileSync(DATA_FILE, 'utf8');
+    let members = JSON.parse(raw);
+    members = members.filter(m => m.id !== id);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(members, null, 2), 'utf8');
+    return res.json({ success: true, message: 'Member permanently deleted', id });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete member' });
+  }
+});
+
 app.post('/api/members/clear', (req, res) => {
   try {
     fs.writeFileSync(DATA_FILE, '[]', 'utf8');
