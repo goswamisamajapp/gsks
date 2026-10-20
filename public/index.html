@@ -6970,9 +6970,9 @@
     let allMembers = (() => {
       try {
         const cached = localStorage.getItem('gsks_cached_members');
-        if (cached) {
+        if (cached !== null) {
           const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) return parsed;
         }
       } catch(e) {}
       if (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS) && window.PRELOADED_MEMBERS.length > 0) {
@@ -7018,9 +7018,9 @@
     let allFundTransfers = (() => {
       try {
         const cached = localStorage.getItem('gsks_cached_fund_transfers');
-        if (cached) {
+        if (cached !== null) {
           const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) return parsed;
         }
       } catch (e) {}
       return [];
@@ -7028,9 +7028,9 @@
     let allExpenses = (() => {
       try {
         const cached = localStorage.getItem('gsks_cached_expenses');
-        if (cached) {
+        if (cached !== null) {
           const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) return parsed;
         }
       } catch (e) {}
       if (typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES)) {
@@ -7702,11 +7702,11 @@
       if (filterSt) filterSt.value = 'ALL';
 
       // Immediate memory hydration from preloaded cache if available
-      if (!allMembers || allMembers.length === 0) {
+      if ((!allMembers || allMembers.length === 0) && localStorage.getItem('gsks_cached_members') === null) {
         const pre = (typeof window.PRELOADED_MEMBERS !== 'undefined' && Array.isArray(window.PRELOADED_MEMBERS)) ? window.PRELOADED_MEMBERS : window.__INITIAL_MEMBERS__;
         if (Array.isArray(pre) && pre.length > 0) allMembers = [...pre];
       }
-      if (!allEvents || allEvents.length === 0) {
+      if ((!allEvents || allEvents.length === 0) && localStorage.getItem('gsks_cached_events') === null) {
         const pre = (typeof window.__INITIAL_EVENTS__ !== 'undefined' && Array.isArray(window.__INITIAL_EVENTS__)) ? window.__INITIAL_EVENTS__ : window.PRELOADED_EVENTS;
         if (Array.isArray(pre) && pre.length > 0) allEvents = [...pre];
       }
@@ -7722,7 +7722,7 @@
             if (Array.isArray(parsed) && parsed.length > 0) allExpenses = parsed;
           }
         } catch(e) {}
-        if ((!allExpenses || allExpenses.length === 0) && typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES) && window.PRELOADED_EXPENSES.length > 0) {
+        if ((!allExpenses || allExpenses.length === 0) && localStorage.getItem('gsks_cached_expenses') === null && typeof window.PRELOADED_EXPENSES !== 'undefined' && Array.isArray(window.PRELOADED_EXPENSES) && window.PRELOADED_EXPENSES.length > 0) {
           allExpenses = [...window.PRELOADED_EXPENSES];
         }
       }
@@ -13195,6 +13195,7 @@
 
       // 1. Local update
       allEvents = allEvents.filter(e => e.id !== id);
+      try { localStorage.setItem('gsks_cached_events', JSON.stringify(allEvents)); } catch(e) {}
       updateEventsStats();
       renderEventsList();
 
