@@ -7503,86 +7503,386 @@
     let currentSettingsTab = 'status';
     let currentSchemeFilter = 'ALL';
     let masterSettings = {
-      designations: [
-        { id: 'des_1', name: 'अध्यक्ष (President)', order: 1, badge: 'amber', description: 'समिति के मुख्य कार्यकारी प्रमुख', isSystem: true },
-        { id: 'des_2', name: 'उपाध्यक्ष (Vice President)', order: 2, badge: 'indigo', description: 'अध्यक्ष की अनुपस्थिति में कार्यभार', isSystem: true },
-        { id: 'des_3', name: 'सचिव (Secretary)', order: 3, badge: 'blue', description: 'समिति के मुख्य प्रशासनिक व पत्राचार अधिकारी', isSystem: true },
-        { id: 'des_4', name: 'सह-सचिव (Joint Secretary)', order: 4, badge: 'indigo', description: 'सचिव के कार्यों में सहयोग', isSystem: true },
-        { id: 'des_5', name: 'कोषाध्यक्ष (Treasurer)', order: 5, badge: 'emerald', description: 'समिति के वित्त, कोष एवं बैंक खातों के प्रभारी', isSystem: true },
-        { id: 'des_6', name: 'उप-कोषाध्यक्ष (Deputy Treasurer)', order: 6, badge: 'emerald', description: 'कोषाध्यक्ष के कार्यों में सहयोग', isSystem: true },
-        { id: 'des_7', name: 'संरक्षक (Patron / Advisor)', order: 7, badge: 'purple', description: 'मार्गदर्शक एवं संरक्षक मंडल', isSystem: true },
-        { id: 'des_8', name: 'सदस्य (Member)', order: 8, badge: 'slate', description: 'समिति के सम्मानित पंजीकृत सदस्य', isSystem: true }
-      ],
-      fundTypes: [
-        { id: 'ft_1', name: 'Self', isSystem: true, description: 'Internal Trust Fund' },
-        { id: 'ft_2', name: 'Bank', isSystem: true, description: 'Bank Account Fund (SBI A/C)' },
-        { id: 'ft_3', name: 'Cash in Hand', isSystem: true, description: 'Cash with Treasurer' },
-        { id: 'ft_4', name: 'Loan', isSystem: false, description: 'Loan & Advance' },
-        { id: 'ft_5', name: 'Investment', isSystem: false, description: 'Fixed Deposit & Investments' }
-      ],
-      bankAccounts: [
+      "bankAccounts": [
         {
-          id: 'ba_1',
-          accountNumber: '38294710293',
-          bankName: 'State Bank of India (SBI)',
-          branchName: 'Gomoh Branch',
-          accountType: 'Joint',
-          members: ['अमित कुमार गोस्वामी (अध्यक्ष)', 'रोहित गोस्वामी (कोषाध्यक्ष)'],
-          remarks: 'ट्रस्ट आधिकारिक मुख्य खाता'
+          "id": "ba_1",
+          "accountNumber": "38294710293",
+          "bankName": "State Bank of India (SBI)",
+          "branchName": "Gomoh Branch",
+          "ifsc": "SBIN0001234",
+          "accountType": "Joint",
+          "members": [
+            "अमित कुमार गोस्वामी (अध्यक्ष)",
+            "रोहित गोस्वामी (कोषाध्यक्ष)"
+          ],
+          "remarks": "ट्रस्ट आधिकारिक मुख्य चालू खाता"
         }
       ],
-      statuses: [
-        { id: 'st_1', name: 'Active', badgeColor: 'emerald', isSystem: true, description: 'Active member' },
-        { id: 'st_2', name: 'Prime Member', badgeColor: 'amber', isSystem: true, description: 'Prime VIP member' },
-        { id: 'st_pending', name: 'Pending', badgeColor: 'amber', isSystem: true, description: 'Pending verification' },
-        { id: 'st_3', name: 'Inactive', badgeColor: 'slate', isSystem: true, description: 'Inactive member' }
+      "planRates": {
+        "membershipNormal": 100,
+        "membershipPremium": 200,
+        "pasyMonthlyFee": 150,
+        "pasyFineWeek": 20
+      },
+      "pariwarikLateFines": {
+        "GSKS-001": {
+          "2026-09": 200,
+          "2026-01": 880,
+          "2026-04": 640,
+          "2026-06": 460,
+          "2026-08": 280,
+          "2026-11": 20,
+          "2025-10": 1140,
+          "2026-05": 540,
+          "2025-11": 1060,
+          "2026-07": 360,
+          "2026-02": 800,
+          "2025-12": 980,
+          "2026-10": 100,
+          "2026-03": 720
+        }
+      },
+      "statuses": [
+        {
+          "id": "st_1",
+          "name": "Active",
+          "badgeColor": "emerald",
+          "isSystem": true,
+          "description": "सक्रिय सदस्य"
+        },
+        {
+          "id": "st_2",
+          "name": "Prime Member",
+          "badgeColor": "amber",
+          "isSystem": true,
+          "description": "विशिष्ट सदस्य (VIP)"
+        },
+        {
+          "id": "st_3",
+          "name": "Inactive",
+          "badgeColor": "slate",
+          "isSystem": true,
+          "description": "निष्क्रिय सदस्य"
+        }
       ],
-      eventCategories: [
-        { id: 'ec_1', name: 'General Meeting', color: 'blue', isSystem: true, description: 'सामान्य बैठक' },
-        { id: 'ec_2', name: 'Special Event', color: 'purple', isSystem: true, description: 'विशेष उत्सव/समारोह' },
-        { id: 'ec_3', name: 'Emergency meeting', color: 'rose', isSystem: true, description: 'आपातकालीन बैठक' }
+      "designations": [
+        {
+          "id": "des_1",
+          "name": "अध्यक्ष (President)",
+          "order": 1,
+          "badge": "amber",
+          "description": "समिति के मुख्य कार्यकारी प्रमुख",
+          "isSystem": true
+        },
+        {
+          "id": "des_2",
+          "name": "उपाध्यक्ष (Vice President)",
+          "order": 2,
+          "badge": "indigo",
+          "description": "अध्यक्ष की अनुपस्थिति में कार्यभार",
+          "isSystem": true
+        },
+        {
+          "id": "des_3",
+          "name": "सचिव (Secretary)",
+          "order": 3,
+          "badge": "blue",
+          "description": "समिति के मुख्य प्रशासनिक व पत्राचार अधिकारी",
+          "isSystem": true
+        },
+        {
+          "id": "des_4",
+          "name": "सह-सचिव (Joint Secretary)",
+          "order": 4,
+          "badge": "indigo",
+          "description": "सचिव के कार्यों में सहयोग",
+          "isSystem": true
+        },
+        {
+          "id": "des_5",
+          "name": "कोषाध्यक्ष (Treasurer)",
+          "order": 5,
+          "badge": "emerald",
+          "description": "समिति के वित्त, कोष एवं बैंक खातों के प्रभारी",
+          "isSystem": true
+        },
+        {
+          "id": "des_6",
+          "name": "उप-कोषाध्यक्ष (Deputy Treasurer)",
+          "order": 6,
+          "badge": "emerald",
+          "description": "कोषाध्यक्ष के कार्यों में सहयोग",
+          "isSystem": true
+        },
+        {
+          "id": "des_7",
+          "name": "संरक्षक (Patron / Advisor)",
+          "order": 7,
+          "badge": "purple",
+          "description": "मार्गदर्शक एवं संरक्षक म��डल",
+          "isSystem": true
+        },
+        {
+          "id": "des_8",
+          "name": "सदस्य (Member)",
+          "order": 8,
+          "badge": "slate",
+          "description": "समिति के सम्मानित पंजीकृत सदस्य",
+          "isSystem": true
+        }
       ],
-      eventTitles: [
-        { id: 'et_1', title: 'मासिक आम सभा एवं कोष समीक्षा', category: 'General Meeting' },
-        { id: 'et_2', title: 'वार्षिक महाधिवेशन एवं सम्मान समारोह', category: 'Special Event' },
-        { id: 'et_3', title: 'आपातकालीन कार्यकारिणी बैठक', category: 'Emergency meeting' },
-        { id: 'et_4', title: 'शिव चर्चा एवं सामाजिक विचार-विमर्श', category: 'General Meeting' }
+      "schemes": [
+        {
+          "id": "sc_1",
+          "name": "पारिवार��क आर्थिक सहायता योजना",
+          "amount": 150,
+          "frequency": "Monthly",
+          "description": "पारिवारिक आर्थिक सहायता योजना हेतु सहयोग राशि",
+          "status": "Open",
+          "amountType": "fixed"
+        },
+        {
+          "id": "sc_2",
+          "name": "वार्षिक सदस्यता शुल्क  (Prime Membership)",
+          "amount": 200,
+          "frequency": "Yearly",
+          "description": "वार्षिक सदस्यता शुल्क  (Prime Membership)",
+          "status": "Open",
+          "amountType": "fixed"
+        },
+        {
+          "id": "sc_3",
+          "name": "वार्षिक सदस्यता शुल्क  (General Membership)",
+          "amount": 100,
+          "frequency": "Yearly",
+          "description": "वार्षिक सदस्यता शुल्क  (General Membership)",
+          "status": "Open",
+          "amountType": "fixed"
+        },
+        {
+          "id": "sc_4",
+          "name": "आपातकालीन सहायता कोष",
+          "amount": 0,
+          "frequency": "Open",
+          "description": "आपातकालीन सहायता कोष",
+          "status": "Open",
+          "amountType": "custom"
+        },
+        {
+          "id": "sc_1792563874533",
+          "name": "सहयोग राशि  (General Donation)",
+          "amountType": "custom",
+          "amount": 0,
+          "frequency": "Open",
+          "status": "Open",
+          "description": "सहयोग राशि  (General Donation)"
+        },
+        {
+          "id": "sc_1792563925027",
+          "name": "छठ पूजा हेतु सहयोग राशि (2026)",
+          "amountType": "custom",
+          "amount": 0,
+          "frequency": "One-Time",
+          "status": "Open",
+          "description": "छठ पूजा हेतु सहयोग राशि (2026)"
+        },
+        {
+          "id": "sc_1792563958247",
+          "name": "छात्रवृति हेतु सहयोग राशि",
+          "amountType": "custom",
+          "amount": 0,
+          "frequency": "One-Time",
+          "status": "Open",
+          "description": "छात्रवृति हेतु सहयोग राशि"
+        },
+        {
+          "id": "sc_1792563982419",
+          "name": "कन्यादान हेतु सहयोग राशि",
+          "amountType": "custom",
+          "amount": 0,
+          "frequency": "One-Time",
+          "status": "Open",
+          "description": "कन्यादान हेतु सहयोग राशि"
+        }
       ],
-      eventVenues: [
-        { id: 'ev_1', venue: 'शिव मंदिर परिसर, गुनघसा' },
-        { id: 'ev_2', venue: 'सामुदायिक भवन, गोमो' },
-        { id: 'ev_3', venue: 'केंद्रीय ट्रस्ट कार्यालय, धनबाद' }
+      "eventCategories": [
+        {
+          "id": "ec_1",
+          "name": "General Meeting",
+          "color": "blue",
+          "isSystem": true,
+          "description": "सामान्य बैठक"
+        },
+        {
+          "id": "ec_2",
+          "name": "Special Event",
+          "color": "purple",
+          "isSystem": true,
+          "description": "विशेष उत्सव/समारोह"
+        },
+        {
+          "id": "ec_3",
+          "name": "Emergency meeting",
+          "color": "rose",
+          "isSystem": true,
+          "description": "आपातकालीन बैठक"
+        }
       ],
-      schemes: [
-        { id: 'sc_1', name: 'मासिक सहयोग कोष (Monthly Sewa)', amountType: 'fixed', amount: 100, frequency: 'Monthly', description: 'प्रति माह नियमित ट्रस्ट सेवा सहायता', status: 'Open' },
-        { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amountType: 'fixed', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Open' },
-        { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amountType: 'fixed', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Open' },
-        { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amountType: 'custom', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Open' }
+      "expenseSchemes": [
+        {
+          "id": "exs_1",
+          "name": "उत्सव एवं समारोह व्यय (Event/Festival)",
+          "description": "वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय"
+        },
+        {
+          "id": "exs_2",
+          "name": "बैठक एवं कार्यालय व्यय (Meeting/Office)",
+          "description": "चाय-नाश्ता, रजि��्टर, स्टेशनरी व व्यवस्था व्यय"
+        },
+        {
+          "id": "exs_3",
+          "name": "आपातकालीन चिकित्सा व सहायता अनुदान",
+          "description": "ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता"
+        },
+        {
+          "id": "exs_4",
+          "name": "सामाजिक विकास एवं विविध व्यय",
+          "description": "सामुदायिक कार्य एवं अन्य आकस्मिक व्यय"
+        }
       ],
-      openingBalances: { cash: 0, bank: 0, remarks: '' },
-      vendors: [
-        { id: 'ven_1', name: 'टेंट हाउस एवं डेकोरेशन', phone: '', category: 'Tent & Sound', address: 'गोमो' },
-        { id: 'ven_2', name: 'साउंड एवं लाउडस्पीकर सिस्टम', phone: '', category: 'Sound', address: 'गोमो' },
-        { id: 'ven_3', name: 'पूजा सामग्री व फूल भंडार', phone: '', category: 'Pooja Items', address: 'गुनघसा' },
-        { id: 'ven_4', name: 'प्रिंटिंग प्रेस (रसीद बही/बैनर)', phone: '', category: 'Printing', address: 'धनबाद' }
+      "eventVenues": [
+        {
+          "id": "ev_1",
+          "venue": "नीचे टोला काली मंदिर प्रांगण, गुनघसा",
+          "latitude": 23.862453,
+          "longitude": 86.168323
+        },
+        {
+          "id": "ev_2",
+          "venue": "प्राथमिक विद्यालय प्रांगण, चिराबाद, गुनघसा",
+          "latitude": 23.865045,
+          "longitude": 86.178933
+        },
+        {
+          "id": "ev_3",
+          "venue": "मध्य विद्यालय प्रांगण, गुनघसा",
+          "latitude": 23.864282,
+          "longitude": 86.172725
+        }
       ],
-      expenseSchemes: [
-        { id: 'exs_1', name: 'उत्सव एवं समारोह व्यय (Event/Festival)', description: 'वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय' },
-        { id: 'exs_2', name: 'बैठक एवं कार्यालय व्यय (Meeting/Office)', description: 'चाय-नाश्ता, रजिस्टर, स्टेशनरी व व्यवस्था व्यय' },
-        { id: 'exs_3', name: 'आपातकालीन चिकित्सा व सहायता अनुदान', description: 'ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता' },
-        { id: 'exs_4', name: 'सामाजिक विकास एवं विविध व्यय', description: 'सामुदायिक कार्य एवं अन्य आकस्मिक व्यय' }
+      "pariwarikFineExemptions": {
+        "GSKS-001": {
+          "2026-02": false,
+          "2025-12": false,
+          "2026-10": false,
+          "2026-05": false,
+          "2025-11": false,
+          "2026-07": false,
+          "2026-03": false,
+          "2025-09": false,
+          "2026-01": false,
+          "2026-09": false,
+          "2026-11": false,
+          "2025-10": false,
+          "2026-04": false,
+          "2026-08": false,
+          "2026-06": false
+        }
+      },
+      "eventTitles": [
+        {
+          "id": "et_1",
+          "title": "मासिक आम सभा",
+          "category": "General Meeting"
+        },
+        {
+          "id": "et_2",
+          "title": "मासिक आम सभा एवं पारिवारिक आर्थिक सहायता योजना हेतु सदस्य का चुनाव",
+          "category": "General Meeting"
+        },
+        {
+          "id": "et_3",
+          "title": "आपातकालीन कार्यकारिणी बैठक",
+          "category": "Emergency meeting"
+        },
+        {
+          "id": "et_4",
+          "title": "स्थापना दिवस सह विद्यार्थी प्रतिभा सम्मान समारोह",
+          "category": "Special Event"
+        }
       ],
-      pariwarikFineWaivers: {},
-      pariwarikFinePaid: {},
-      planRates: {
-        pasyMonthlyFee: 150,
-        pasyFineWeek: 20,
-        membershipPremium: 1200,
-        membershipNormal: 600
-      }
+      "openingBalances": {
+        "cash": 0,
+        "bank": 0,
+        "remarks": ""
+      },
+      "vendors": [
+        {
+          "id": "ven_1",
+          "name": "टेंट हाउस एवं डेकोरेशन",
+          "phone": "",
+          "category": "Tent & Sound",
+          "address": "गोमो"
+        },
+        {
+          "id": "ven_2",
+          "name": "साउंड एवं लाउडस्पीकर सिस्टम",
+          "phone": "",
+          "category": "Sound",
+          "address": "गोमो"
+        },
+        {
+          "id": "ven_3",
+          "name": "पूजा सामग्री व फूल भंडार",
+          "phone": "",
+          "category": "Pooja Items",
+          "address": "गुनघसा"
+        },
+        {
+          "id": "ven_4",
+          "name": "प्रिंटिंग प्रेस (रसीद बही/बैनर)",
+          "phone": "",
+          "category": "Printing",
+          "address": "धनबाद"
+        }
+      ],
+      "pariwarikFinePaid": {},
+      "pariwarikFineWaivers": {},
+      "fundTypes": [
+        {
+          "id": "ft_1",
+          "name": "Self",
+          "isSystem": true,
+          "description": "स्वयं / आंतरिक निधि"
+        },
+        {
+          "id": "ft_2",
+          "name": "Bank",
+          "isSystem": true,
+          "description": "बैंक खाता कोष (SBI A/C)"
+        },
+        {
+          "id": "ft_3",
+          "name": "Cash in Hand",
+          "isSystem": true,
+          "description": "कोषाध्यक्ष के पास नगद"
+        },
+        {
+          "id": "ft_4",
+          "name": "Loan",
+          "isSystem": false,
+          "description": "ऋण / अग्रिम निधि"
+        },
+        {
+          "id": "ft_5",
+          "name": "Investment",
+          "isSystem": false,
+          "description": "निवेश / सावधि जमा (FD)"
+        }
+      ]
     };
 
-    // Switch between Admin and Member login portals
+// Switch between Admin and Member login portals
     function switchPortalTab(type) {
       const adminBtn = document.getElementById('tab-admin');
       const userBtn = document.getElementById('tab-user');
@@ -11617,12 +11917,32 @@
     }
 
     async function loadSettingsFallback() {
+      // 1. Try Live Express / Render API
       try {
         const res = await apiFetch('/api/settings');
-        const data = await res.json();
-        applySettings(data);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data === 'object') {
+            applySettings(data);
+            return;
+          }
+        }
       } catch (err) {
-        console.warn('Fallback loading settings failed:', err);
+        console.warn('Backend API settings fetch failed, trying Firestore REST:', err);
+      }
+
+      // 2. Direct Firestore REST fallback
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/settings/master');
+        if (restRes.ok) {
+          const docJson = await restRes.json();
+          const cleanDoc = parseFirestoreDocument(docJson);
+          if (cleanDoc) {
+            applySettings(cleanDoc);
+          }
+        }
+      } catch (e) {
+        console.warn('Fallback loading settings failed completely:', e);
       }
     }
 
