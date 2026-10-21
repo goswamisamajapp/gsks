@@ -15365,23 +15365,20 @@
           schemes.map(s => {
             const amtStr = s.amountType === 'fixed' ? ` (₹${s.amount})` : ' (इच्छानुसार)';
             return `<option value="${s.name}" data-amount="${s.amount || ''}" data-type="${s.amountType || 'fixed'}">${s.name}${amtStr}</option>`;
-          }).join('') +
-          `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
+          }).join('');
       }
 
       if (filterSelect) {
         const cur = filterSelect.value || 'ALL';
         filterSelect.innerHTML = `<option value="ALL">सभी योजनाएं</option>` +
-          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('') +
-          `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
         filterSelect.value = cur;
       }
 
       if (mobFilterSelect) {
         const cur = mobFilterSelect.value || 'ALL';
         mobFilterSelect.innerHTML = `<option value="ALL">All Schemes (सभी योजनाएं)</option>` +
-          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('') +
-          `<option value="सामान्य न्यास कोष (General Trust Fund)">सामान्य न्यास कोष (General Trust Fund)</option>`;
+          schemes.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
         mobFilterSelect.value = cur;
       }
     }
@@ -15838,7 +15835,7 @@
         memberId: document.getElementById('donation-member-id').value || 'NON_MEMBER',
         donorName: document.getElementById('donation-donor-name').value.trim(),
         phone: document.getElementById('donation-donor-phone').value.trim(),
-        scheme: document.getElementById('donation-scheme-name').value || 'सामान्य न्यास कोष',
+        scheme: document.getElementById('donation-scheme-name').value || (masterSettings && masterSettings.schemes && masterSettings.schemes[0] ? masterSettings.schemes[0].name : 'सहयोग राशि'),
         amount: parseFloat(document.getElementById('donation-amount').value) || 0,
         date: document.getElementById('donation-date').value,
         method: selectedMethod,
