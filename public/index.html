@@ -738,18 +738,9 @@
           <!-- DESKTOP FILTER BAR (Visible on tablets and desktop) -->
           <div class="hidden sm:flex sm:flex-row sm:items-center justify-between gap-3">
             <!-- Category Filters (Left) -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs">
+            <div id="desktop-event-category-filters" class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs">
               <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap">
                 सभी श्रेणी (<span id="event-count-all">0</span>)
-              </button>
-              <button onclick="filterEvents('General Meeting')" id="filter-event-general" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
-                <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting (<span id="event-count-general">0</span>)
-              </button>
-              <button onclick="filterEvents('Special Event')" id="filter-event-special" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
-                <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event (<span id="event-count-special">0</span>)
-              </button>
-              <button onclick="filterEvents('Emergency meeting')" id="filter-event-emergency" class="px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap">
-                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Emergency (<span id="event-count-emergency">0</span>)
               </button>
             </div>
 
@@ -5083,28 +5074,10 @@
       <!-- Section A: Category selection -->
       <div id="mob-filter-cat-section" class="space-y-2 mb-4">
         <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">इवेंट श्रेणी (Category)</label>
-        <div class="grid grid-cols-1 gap-2">
+        <div id="mobile-event-category-filters" class="grid grid-cols-1 gap-2">
           <button onclick="selectMobileEventCategory('ALL')" id="mob-cat-btn-all" class="w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-slate-800 text-white shadow-xs">
             <span>सभी श्रेणी</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] bg-white/20" id="mob-count-all">0</span>
-          </button>
-          <button onclick="selectMobileEventCategory('General Meeting')" id="mob-cat-btn-general" class="w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200">
-            <span class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span> General Meeting
-            </span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200" id="mob-count-general">0</span>
-          </button>
-          <button onclick="selectMobileEventCategory('Special Event')" id="mob-cat-btn-special" class="w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200">
-            <span class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span> Special Event
-            </span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200" id="mob-count-special">0</span>
-          </button>
-          <button onclick="selectMobileEventCategory('Emergency meeting')" id="mob-cat-btn-emergency" class="w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200">
-            <span class="flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-rose-500"></span> Emergency
-            </span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-200" id="mob-count-emergency">0</span>
           </button>
         </div>
       </div>
@@ -12998,12 +12971,63 @@
     // ==============================================
     // 5. EVENTS & MEETINGS LOGIC
     // ==============================================
+        function renderDynamicEventCategoryFilters() {
+      const cats = masterSettings.eventCategories || [];
+      const deskContainer = document.getElementById('desktop-event-category-filters');
+      const mobContainer = document.getElementById('mobile-event-category-filters');
+      const allCount = allEvents.length;
+
+      // 1. Desktop Filters
+      if (deskContainer) {
+        let deskHtml = `
+          <button onclick="filterEvents('ALL')" id="filter-event-all" class="px-3.5 py-1.5 rounded-xl ${currentEventFilter === 'ALL' ? 'font-bold bg-slate-800 text-white shadow-2xs' : 'font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'} transition-all whitespace-nowrap">
+            सभी श्रेणी (<span id="event-count-all">${allCount}</span>)
+          </button>
+        `;
+        cats.forEach(c => {
+          const count = allEvents.filter(e => e.category === c.name).length;
+          const isSelected = currentEventFilter === c.name;
+          const dotClass = getStatusDotClass(c.color);
+          const activeBg = c.color === 'blue' ? 'bg-blue-600 text-white shadow-2xs' : (c.color === 'purple' ? 'bg-purple-600 text-white shadow-2xs' : (c.color === 'rose' ? 'bg-rose-600 text-white shadow-2xs' : (c.color === 'emerald' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-amber-600 text-white shadow-2xs')));
+          const normalBg = 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200';
+          deskHtml += `
+            <button onclick="filterEvents('${encodeURIComponent(c.name)}')" class="px-3.5 py-1.5 rounded-xl ${isSelected ? 'font-bold ' + activeBg : 'font-medium ' + normalBg} transition-all flex items-center gap-1.5 whitespace-nowrap">
+              <span class="w-2 h-2 rounded-full ${dotClass}"></span> ${c.name} (<span>${count}</span>)
+            </button>
+          `;
+        });
+        deskContainer.innerHTML = deskHtml;
+      }
+
+      // 2. Mobile Filters
+      if (mobContainer) {
+        let mobHtml = `
+          <button onclick="selectMobileEventCategory('ALL')" class="w-full py-2.5 px-3 rounded-xl ${currentEventFilter === 'ALL' ? 'font-bold bg-slate-800 text-white shadow-xs' : 'font-medium bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200'} text-xs text-left flex items-center justify-between">
+            <span>सभी श्रेणी</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] ${currentEventFilter === 'ALL' ? 'bg-white/20' : 'bg-slate-200'}">${allCount}</span>
+          </button>
+        `;
+        cats.forEach(c => {
+          const count = allEvents.filter(e => e.category === c.name).length;
+          const isSelected = currentEventFilter === c.name;
+          const dotClass = getStatusDotClass(c.color);
+          const activeBg = c.color === 'blue' ? 'bg-blue-600 text-white shadow-xs' : (c.color === 'purple' ? 'bg-purple-600 text-white shadow-xs' : (c.color === 'rose' ? 'bg-rose-600 text-white shadow-xs' : (c.color === 'emerald' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-amber-600 text-white shadow-xs')));
+          const normalBg = 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200';
+          mobHtml += `
+            <button onclick="selectMobileEventCategory('${encodeURIComponent(c.name)}')" class="w-full py-2.5 px-3 rounded-xl ${isSelected ? 'font-bold ' + activeBg : 'font-medium ' + normalBg} text-xs text-left flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full ${dotClass}"></span> ${c.name}
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] ${isSelected ? 'bg-white/20' : 'bg-slate-200'}">${count}</span>
+            </button>
+          `;
+        });
+        mobContainer.innerHTML = mobHtml;
+      }
+    }
+
     function updateEventsStats() {
       const allCount = allEvents.length;
-      const genCount = allEvents.filter(e => e.category === 'General Meeting').length;
-      const speCount = allEvents.filter(e => e.category === 'Special Event').length;
-      const emgCount = allEvents.filter(e => e.category === 'Emergency meeting').length;
-
       const stOpenCount = allEvents.filter(e => getEffectiveEventStatus(e) === 'Open').length;
       const stUpCount = allEvents.filter(e => getEffectiveEventStatus(e) === 'Upcoming').length;
       const stClosedCount = allEvents.filter(e => getEffectiveEventStatus(e) === 'Closed').length;
@@ -13011,26 +13035,11 @@
       const elNav = document.getElementById('nav-events-count');
       const elQuick = document.getElementById('quick-events-count');
       const elAll = document.getElementById('event-count-all');
-      const elGen = document.getElementById('event-count-general');
-      const elSpe = document.getElementById('event-count-special');
-      const elEmg = document.getElementById('event-count-emergency');
-
       if (elNav) elNav.textContent = allCount;
       if (elQuick) elQuick.textContent = allCount;
       if (elAll) elAll.textContent = allCount;
-      if (elGen) elGen.textContent = genCount;
-      if (elSpe) elSpe.textContent = speCount;
-      if (elEmg) elEmg.textContent = emgCount;
 
-      // Update Mobile Filter Modal counts
-      const mobAll = document.getElementById('mob-count-all');
-      const mobGen = document.getElementById('mob-count-general');
-      const mobSpe = document.getElementById('mob-count-special');
-      const mobEmg = document.getElementById('mob-count-emergency');
-      if (mobAll) mobAll.textContent = allCount;
-      if (mobGen) mobGen.textContent = genCount;
-      if (mobSpe) mobSpe.textContent = speCount;
-      if (mobEmg) mobEmg.textContent = emgCount;
+      renderDynamicEventCategoryFilters();
 
       // Update Dropdown options with dynamic counts
       const statusSelect = document.getElementById('event-status-filter-select');
@@ -13094,36 +13103,16 @@
     window.closeMobileEventFilterModal = closeMobileEventFilterModal;
 
     function updateMobileCategoryButtons() {
-      const cat = currentEventFilter;
-      const btnAll = document.getElementById('mob-cat-btn-all');
-      const btnGen = document.getElementById('mob-cat-btn-general');
-      const btnSpe = document.getElementById('mob-cat-btn-special');
-      const btnEmg = document.getElementById('mob-cat-btn-emergency');
+      renderDynamicEventCategoryFilters();
       const label = document.getElementById('mob-active-cat-label');
-
-      [btnAll, btnGen, btnSpe, btnEmg].forEach(b => {
-        if (!b) return;
-        b.className = 'w-full py-2.5 px-3 rounded-xl font-medium text-xs text-left flex items-center justify-between bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200';
-      });
-
-      if (cat === 'General Meeting' && btnGen) {
-        btnGen.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-blue-600 text-white shadow-xs';
-        if (label) label.textContent = 'General Meeting';
-      } else if (cat === 'Special Event' && btnSpe) {
-        btnSpe.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-purple-600 text-white shadow-xs';
-        if (label) label.textContent = 'Special Event';
-      } else if (cat === 'Emergency meeting' && btnEmg) {
-        btnEmg.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-rose-600 text-white shadow-xs';
-        if (label) label.textContent = 'Emergency';
-      } else {
-        if (btnAll) btnAll.className = 'w-full py-2.5 px-3 rounded-xl font-bold text-xs text-left flex items-center justify-between bg-slate-800 text-white shadow-xs';
-        if (label) label.textContent = 'सभी श्रेणी';
+      if (label) {
+        label.textContent = currentEventFilter === 'ALL' ? 'सभी श्रेणी' : currentEventFilter;
       }
     }
 
     function selectMobileEventCategory(category) {
-      filterEvents(category);
-      updateMobileCategoryButtons();
+      const decodedCat = category === 'ALL' ? 'ALL' : decodeURIComponent(category);
+      filterEvents(decodedCat);
       closeMobileEventFilterModal();
     }
     window.selectMobileEventCategory = selectMobileEventCategory;
@@ -13139,28 +13128,12 @@
     window.updateMobileFilterLabels = updateMobileFilterLabels;
 
     function filterEvents(category) {
-      currentEventFilter = category;
-      const btnAll = document.getElementById('filter-event-all');
-      const btnGen = document.getElementById('filter-event-general');
-      const btnSpe = document.getElementById('filter-event-special');
-      const btnEmg = document.getElementById('filter-event-emergency');
-
-      [btnAll, btnGen, btnSpe, btnEmg].forEach(btn => {
-        if (!btn) return;
-        btn.className = 'px-3.5 py-1.5 rounded-xl font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 transition-all flex items-center gap-1.5 whitespace-nowrap';
-      });
-
-      if (category === 'General Meeting' && btnGen) {
-        btnGen.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-blue-600 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap';
-      } else if (category === 'Special Event' && btnSpe) {
-        btnSpe.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-purple-600 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap';
-      } else if (category === 'Emergency meeting' && btnEmg) {
-        btnEmg.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-rose-600 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap';
-      } else if (btnAll) {
-        btnAll.className = 'px-3.5 py-1.5 rounded-xl font-bold bg-slate-800 text-white shadow-2xs transition-all whitespace-nowrap';
+      currentEventFilter = (category && category !== 'ALL') ? decodeURIComponent(category) : 'ALL';
+      renderDynamicEventCategoryFilters();
+      const label = document.getElementById('mob-active-cat-label');
+      if (label) {
+        label.textContent = currentEventFilter === 'ALL' ? 'सभी श्रेणी' : currentEventFilter;
       }
-
-      updateMobileCategoryButtons();
       renderEventsList();
     }
 
@@ -13323,6 +13296,15 @@
         const btnText = document.getElementById('event-save-btn-text');
 
         // Populate preset dropdowns from Event Master
+        const catSelect = document.getElementById('event-category-select');
+        const eventCats = masterSettings.eventCategories || [];
+        if (catSelect && eventCats.length > 0) {
+          catSelect.innerHTML = eventCats.map(c => {
+            const icon = c.color === 'blue' ? '🔵' : (c.color === 'purple' ? '🟣' : (c.color === 'rose' ? '🔴' : (c.color === 'emerald' ? '🟢' : '🟡')));
+            return `<option value="${c.name}">${icon} ${c.name}</option>`;
+          }).join('');
+        }
+
         const titlePresets = document.getElementById('event-title-presets');
         if (titlePresets && masterSettings.eventTitles) {
           titlePresets.innerHTML = `<option value="">⚡ Presets</option>` +
@@ -13343,8 +13325,7 @@
           if (modalTitle) modalTitle.textContent = 'Edit Event';
           if (btnText) btnText.textContent = 'Update Event';
 
-          const catSelect = document.getElementById('event-category-select');
-          if (catSelect) catSelect.value = ev.category || 'General Meeting';
+          if (catSelect) catSelect.value = ev.category || (eventCats[0] ? eventCats[0].name : 'General Meeting');
 
           const stSelect = document.getElementById('event-status-select');
           if (stSelect) stSelect.value = ev.status || 'Upcoming';
@@ -13367,7 +13348,7 @@
           if (btnText) btnText.textContent = 'Save Event';
 
           const catSelect = document.getElementById('event-category-select');
-          if (catSelect) catSelect.value = 'General Meeting';
+          if (catSelect) catSelect.value = (eventCats[0] ? eventCats[0].name : 'General Meeting');
 
           const stSelect = document.getElementById('event-status-select');
           if (stSelect) stSelect.value = 'Upcoming';
@@ -14177,11 +14158,9 @@
               <button onclick="editEventCatItem('${c.id}')" class="text-indigo-600 hover:text-indigo-800 text-xs p-1.5 rounded-lg hover:bg-indigo-50 transition-colors" title="संपादित करें (Edit)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
-              ${c.isSystem ? '' : `
-                <button onclick="deleteEventCatItem('${c.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="हटाएं (Delete)">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
-              `}
+              <button onclick="deleteEventCatItem('${c.id}')" class="text-rose-600 hover:text-rose-800 text-xs p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="हटाएं (Delete)">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
             </div>
           </div>
         `).join('');
@@ -15350,6 +15329,9 @@
       populateDonationSchemeDropdowns();
       if (typeof populateFundTransferPurposeDropdown === 'function') {
         populateFundTransferPurposeDropdown();
+      }
+      if (typeof renderDynamicEventCategoryFilters === 'function') {
+        renderDynamicEventCategoryFilters();
       }
     }
 
