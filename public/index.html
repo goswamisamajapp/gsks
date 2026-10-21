@@ -2326,6 +2326,31 @@
             </div>
           </div>
 
+          <!-- Section 1C: UPI IDs & QR Registry (Dynamic Add, Edit, Delete) -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
+            <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center text-sm shadow-2xs shrink-0">
+                  <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div class="min-w-0">
+                  <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                    UPI IDs & QR Registry
+                  </h3>
+                  <p class="text-[10px] text-slate-400 truncate">ट्रस्ट एवं दान हेतु आधिकारिक UPI आईडी व QR संग्रह</p>
+                </div>
+              </div>
+              <button onclick="openAddUpiModal()" class="px-2.5 sm:px-3 py-1.5 bg-purple-50 hover:bg-purple-100 active:scale-95 text-purple-900 border border-purple-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add UPI ID</span>
+              </button>
+            </div>
+
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3" id="upi-ids-cards-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
           <!-- Section 2: Fund Transfers Register -->
           <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200 shadow-2xs">
             <div class="flex items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
@@ -6143,6 +6168,77 @@
   </div>
 
   <!-- ============================================================== -->
+  <!-- MODAL 8C: ADD/EDIT UPI ID MODAL                                 -->
+  <!-- ============================================================== -->
+  <div id="upi-item-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="upi-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-qrcode text-purple-600"></i> Add UPI ID
+        </h3>
+        <button onclick="closeUpiModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveUpiItem(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="upi-item-id">
+
+        <!-- UPI ID & Payee Name -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">UPI ID (VPA) *</label>
+          <div class="relative">
+            <i class="fa-solid fa-at absolute left-3 top-2.5 text-purple-500 text-xs"></i>
+            <input type="text" id="upi-item-address" required placeholder="e.g. gsks@sbi, trust@ybl, 9876543210@paytm" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Payee / Account Name *</label>
+          <input type="text" id="upi-item-payeename" required placeholder="e.g. Akhil Bhartiya Shaiv Samaj Sewa Trust" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500">
+        </div>
+
+        <!-- Bank Name / App Provider & Purpose / Note -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Bank / App Name</label>
+            <input type="text" id="upi-item-bankname" placeholder="e.g. SBI / PhonePe / Paytm / GPay" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Status</label>
+            <select id="upi-item-status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500">
+              <option value="Active" selected>🟢 Active (चालू)</option>
+              <option value="Inactive">⚪ Inactive (अक्रिय)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Description / Remarks</label>
+          <input type="text" id="upi-item-remarks" placeholder="e.g. PASY सहयोग एवं ऑनलाइन दान हेतु मुख्य UPI" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500">
+        </div>
+
+        <!-- Is Primary / Default Checkbox -->
+        <div class="p-3 bg-purple-50/70 rounded-xl border border-purple-200/80 flex items-center gap-2.5">
+          <input type="checkbox" id="upi-item-isprimary" class="w-4 h-4 text-purple-600 rounded border-slate-300 focus:ring-purple-500 cursor-pointer">
+          <label for="upi-item-isprimary" class="font-bold text-purple-950 text-xs cursor-pointer">
+            Set as Primary UPI (डिफ़ॉल्ट ऑनलाइन पेमेंट QR हेतु उपयोग करें)
+          </label>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeUpiModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-purple-500/20 transition-all cursor-pointer">
+            Save UPI ID
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- MODAL 9: FUND TRANSFER / TRANSACTION MODAL                      -->
   <!-- ============================================================== -->
   <div id="fund-transfer-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -7189,15 +7285,26 @@
       if (amountEl) amountEl.textContent = `₹${fee}`;
 
       // Get Trust UPI ID from masterSettings if configured, else fallback
-      let upiId = '9876543210@sbi';
-      if (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0) {
+      let upiId = 'gsks@sbi';
+      let payeeDisplayName = 'Akhil Bhartiya Shaiv Samaj Sewa Trust';
+
+      // 1. First check new dynamic UPI Registry
+      if (masterSettings && masterSettings.upiList && masterSettings.upiList.length > 0) {
+        const primaryUpi = masterSettings.upiList.find(u => u.isPrimary && u.status !== 'Inactive') || 
+                           masterSettings.upiList.find(u => u.status !== 'Inactive') || 
+                           masterSettings.upiList[0];
+        if (primaryUpi && primaryUpi.address) {
+          upiId = primaryUpi.address;
+          if (primaryUpi.payeeName) payeeDisplayName = primaryUpi.payeeName;
+        }
+      } else if (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0) {
         const accWithUpi = masterSettings.bankAccounts.find(a => a.upiId);
         if (accWithUpi && accWithUpi.upiId) upiId = accWithUpi.upiId;
       }
       if (upiText) upiText.textContent = upiId;
 
       // Generate dynamic UPI QR URL
-      const payeeName = encodeURIComponent('Akhil Bhartiya Shaiv Samaj Sewa Trust');
+      const payeeName = encodeURIComponent(payeeDisplayName);
       const note = encodeURIComponent(`PASY ${label}`);
       const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${payeeName}&am=${fee}&cu=INR&tn=${note}`;
       if (qrImg) {
@@ -12657,6 +12764,7 @@
         'delete-donation-modal',
         'fundtype-master-modal',
         'bankaccount-modal',
+        'upi-item-modal',
         'fund-transfer-modal',
         'pariwarik-bulk-whatsapp-modal',
         'dues-bulk-whatsapp-modal',
@@ -14246,6 +14354,7 @@
       // Render Tab Components
       renderFundTypesGrid();
       renderBankAccountsGrid();
+      renderUpiRegistryGrid();
       renderFundTransfersList();
       renderExpenseMasterTab();
       renderDesignationMasterTab();
@@ -17377,6 +17486,233 @@
       }).join('');
     }
 
+    // ==============================================================
+    // UPI IDS & QR REGISTRY LOGIC (Add, Edit, Delete, QR Preview)
+    // ==============================================================
+    function openAddUpiModal() {
+      closeAllModals();
+      const modal = document.getElementById('upi-item-modal');
+      const heading = document.getElementById('upi-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-qrcode text-purple-600"></i> Add UPI ID';
+
+      document.getElementById('upi-item-id').value = '';
+      document.getElementById('upi-item-address').value = '';
+      document.getElementById('upi-item-payeename').value = 'Akhil Bhartiya Shaiv Samaj Sewa Trust';
+      document.getElementById('upi-item-bankname').value = '';
+      document.getElementById('upi-item-status').value = 'Active';
+      document.getElementById('upi-item-remarks').value = '';
+      
+      const isPrimaryBox = document.getElementById('upi-item-isprimary');
+      if (isPrimaryBox) {
+        // If no UPI exists yet, default first one to primary
+        isPrimaryBox.checked = !(masterSettings.upiList && masterSettings.upiList.length > 0);
+      }
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function editUpiItem(id) {
+      const item = (masterSettings.upiList || []).find(u => u.id === id);
+      if (!item) return;
+
+      closeAllModals();
+      const modal = document.getElementById('upi-item-modal');
+      const heading = document.getElementById('upi-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-purple-600"></i> Edit UPI ID';
+
+      document.getElementById('upi-item-id').value = item.id;
+      document.getElementById('upi-item-address').value = item.address || '';
+      document.getElementById('upi-item-payeename').value = item.payeeName || 'Akhil Bhartiya Shaiv Samaj Sewa Trust';
+      document.getElementById('upi-item-bankname').value = item.bankName || '';
+      document.getElementById('upi-item-status').value = item.status || 'Active';
+      document.getElementById('upi-item-remarks').value = item.remarks || '';
+
+      const isPrimaryBox = document.getElementById('upi-item-isprimary');
+      if (isPrimaryBox) {
+        isPrimaryBox.checked = !!item.isPrimary;
+      }
+
+      if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    }
+
+    function closeUpiModal() {
+      const modal = document.getElementById('upi-item-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    }
+
+    async function handleSaveUpiItem(e) {
+      e.preventDefault();
+      const id = document.getElementById('upi-item-id').value;
+      const address = document.getElementById('upi-item-address').value.trim();
+      const payeeName = document.getElementById('upi-item-payeename').value.trim() || 'Akhil Bhartiya Shaiv Samaj Sewa Trust';
+      const bankName = document.getElementById('upi-item-bankname').value.trim();
+      const status = document.getElementById('upi-item-status').value || 'Active';
+      const remarks = document.getElementById('upi-item-remarks').value.trim();
+      const isPrimary = document.getElementById('upi-item-isprimary').checked;
+
+      if (!address) {
+        alert("कृपया वैध UPI ID (VPA) दर्ज करें!");
+        return;
+      }
+
+      if (!masterSettings.upiList) masterSettings.upiList = [];
+
+      // If marked as primary, unmark other UPI IDs
+      if (isPrimary) {
+        masterSettings.upiList.forEach(u => u.isPrimary = false);
+      }
+
+      const upiData = {
+        id: id || 'upi_' + Date.now(),
+        address,
+        payeeName,
+        bankName,
+        status,
+        remarks,
+        isPrimary,
+        updatedAt: new Date().toISOString()
+      };
+
+      if (id) {
+        const idx = masterSettings.upiList.findIndex(u => u.id === id);
+        if (idx !== -1) {
+          masterSettings.upiList[idx] = upiData;
+        }
+      } else {
+        masterSettings.upiList.push(upiData);
+      }
+
+      // If this is the only UPI item, ensure it's primary
+      if (masterSettings.upiList.length === 1) {
+        masterSettings.upiList[0].isPrimary = true;
+      }
+
+      closeUpiModal();
+      renderUpiRegistryGrid();
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteUpiItem(id) {
+      const item = (masterSettings.upiList || []).find(u => u.id === id);
+      if (!item) return;
+
+      if (!confirm(`क्या आप UPI ID "${item.address}" को हटाना चाहते हैं?`)) return;
+
+      const wasPrimary = item.isPrimary;
+      masterSettings.upiList = (masterSettings.upiList || []).filter(u => u.id !== id);
+
+      // If we deleted the primary UPI, promote first remaining one
+      if (wasPrimary && masterSettings.upiList.length > 0) {
+        masterSettings.upiList[0].isPrimary = true;
+      }
+
+      renderUpiRegistryGrid();
+      await saveAllSettingsToCloud();
+    }
+
+    function renderUpiRegistryGrid() {
+      const grid = document.getElementById('upi-ids-cards-grid');
+      if (!grid) return;
+
+      // Provide default trust UPI if list is not initialized yet
+      if (!masterSettings.upiList) {
+        masterSettings.upiList = [
+          {
+            id: 'upi_1',
+            address: 'gsks@sbi',
+            payeeName: 'Akhil Bhartiya Shaiv Samaj Sewa Trust',
+            bankName: 'SBI Gomoh',
+            status: 'Active',
+            remarks: 'समिति मुख्य दान एवं किश्त UPI खाता',
+            isPrimary: true
+          }
+        ];
+      }
+
+      const list = masterSettings.upiList || [];
+
+      if (list.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-8 text-center text-slate-400 text-xs">
+            <i class="fa-solid fa-qrcode text-2xl mb-2 text-slate-300"></i>
+            <p class="font-bold text-slate-600">No UPI IDs registered.</p>
+            <p class="text-[11px] text-slate-400 mt-1">Click <b>"+ Add UPI ID"</b> above to add a UPI ID.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = list.map(u => {
+        const isPrimary = !!u.isPrimary;
+        const isActive = u.status !== 'Inactive';
+        const payee = encodeURIComponent(u.payeeName || 'Akhil Bhartiya Shaiv Samaj Sewa Trust');
+        const upiUri = `upi://pay?pa=${encodeURIComponent(u.address)}&pn=${payee}&cu=INR`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
+
+        return `
+          <div class="relative overflow-hidden rounded-2xl p-3.5 sm:p-4 bg-gradient-to-br from-slate-900 via-purple-950 to-indigo-950 text-white shadow-xs border border-purple-500/30 space-y-3 w-full">
+            <!-- Background glow accent -->
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-purple-500/20 rounded-full blur-xl pointer-events-none"></div>
+
+            <!-- Top Row: UPI Icon + Title + Status Badges + Action Buttons -->
+            <div class="flex items-center justify-between gap-2 relative z-10">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/30 text-purple-300 flex items-center justify-center text-sm shadow-xs flex-shrink-0">
+                  <i class="fa-solid fa-at"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <h4 class="font-mono font-black text-white text-xs sm:text-sm tracking-wide truncate">${u.address}</h4>
+                    ${isPrimary 
+                      ? '<span class="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/40">★ Primary</span>' 
+                      : ''}
+                    <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-md ${isActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-500/20 text-slate-300 border border-slate-500/30'}">
+                      ${isActive ? '🟢 Active' : '⚪ Inactive'}
+                    </span>
+                  </div>
+                  <p class="text-[10px] text-purple-200/80 font-medium truncate mt-0.5">${u.payeeName || 'Akhil Bhartiya Shaiv Samaj Sewa Trust'}</p>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center gap-1 flex-shrink-0">
+                <button type="button" onclick="editUpiItem('${u.id}')" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Edit UPI ID">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button type="button" onclick="deleteUpiItem('${u.id}')" class="w-7 h-7 rounded-lg bg-rose-500/80 hover:bg-rose-600 active:scale-95 text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Delete UPI ID">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Middle Card: Mini QR Code & Copyable UPI Address Bar -->
+            <div class="flex items-center gap-3 bg-black/30 backdrop-blur-sm p-2.5 rounded-xl border border-white/10 relative z-10">
+              <div class="w-12 h-12 bg-white rounded-lg p-0.5 flex-shrink-0 flex items-center justify-center shadow-xs">
+                <img src="${qrUrl}" alt="UPI QR" class="w-full h-full object-contain rounded">
+              </div>
+              <div class="min-w-0 flex-1">
+                <span class="text-[9px] uppercase tracking-wider font-bold text-purple-300 block">Virtual Payment Address (VPA)</span>
+                <span class="font-mono font-bold text-xs text-white truncate block">${u.address}</span>
+              </div>
+              <button type="button" onclick="navigator.clipboard.writeText('${u.address}'); alert('UPI ID copied: ${u.address}');" class="px-2 py-1 bg-white/10 hover:bg-white/20 text-purple-200 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 shrink-0 cursor-pointer" title="Copy UPI ID">
+                <i class="fa-solid fa-copy"></i>
+                <span>Copy</span>
+              </button>
+            </div>
+
+            <!-- Footer: Bank Name / Notes -->
+            <div class="flex items-center justify-between text-[10px] text-purple-200/80 gap-1 pt-0.5 relative z-10">
+              <div class="flex items-center gap-1.5 truncate min-w-0">
+                <i class="fa-solid fa-building-columns text-[9px] text-purple-400 flex-shrink-0"></i>
+                <span class="truncate">${u.bankName || 'Direct UPI'}</span>
+              </div>
+              ${u.remarks ? `<span class="text-[9px] text-purple-300/80 truncate flex-shrink-0">• ${u.remarks}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     // Populate Purpose / Fund Type Dropdown in Fund Transfer Modal
     function populateFundTransferPurposeDropdown(selectedVal = '') {
       const select = document.getElementById('fundtransfer-remarks-select');
@@ -17889,6 +18225,13 @@
     window.handleSaveBankAccount = handleSaveBankAccount;
     window.deleteBankAccountItem = deleteBankAccountItem;
     window.renderBankAccountsGrid = renderBankAccountsGrid;
+
+    window.openAddUpiModal = openAddUpiModal;
+    window.editUpiItem = editUpiItem;
+    window.closeUpiModal = closeUpiModal;
+    window.handleSaveUpiItem = handleSaveUpiItem;
+    window.deleteUpiItem = deleteUpiItem;
+    window.renderUpiRegistryGrid = renderUpiRegistryGrid;
 
     window.openFundTransferModal = openFundTransferModal;
     window.closeFundTransferModal = closeFundTransferModal;
