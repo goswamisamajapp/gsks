@@ -1,112 +1,4 @@
 {
-  "fundTypes": [
-    {
-      "id": "ft_1",
-      "name": "Self",
-      "isSystem": true,
-      "description": "स्वयं / आंतरिक निधि"
-    },
-    {
-      "id": "ft_2",
-      "name": "Bank",
-      "isSystem": true,
-      "description": "बैंक खाता कोष (SBI A/C)"
-    },
-    {
-      "id": "ft_3",
-      "name": "Cash in Hand",
-      "isSystem": true,
-      "description": "कोषाध्यक्ष के पास नगद"
-    },
-    {
-      "id": "ft_4",
-      "name": "Loan",
-      "isSystem": false,
-      "description": "ऋण / अग्रिम निधि"
-    },
-    {
-      "id": "ft_5",
-      "name": "Investment",
-      "isSystem": false,
-      "description": "निवेश / सावधि जमा (FD)"
-    }
-  ],
-  "vendors": [
-    {
-      "id": "ven_1",
-      "name": "टेंट हाउस एवं डेकोरेशन",
-      "phone": "",
-      "category": "Tent & Sound",
-      "address": "गोमो"
-    },
-    {
-      "id": "ven_2",
-      "name": "साउंड एवं लाउडस्पीकर सिस्टम",
-      "phone": "",
-      "category": "Sound",
-      "address": "गोमो"
-    },
-    {
-      "id": "ven_3",
-      "name": "पूजा सामग्री व फूल भंडार",
-      "phone": "",
-      "category": "Pooja Items",
-      "address": "गुनघसा"
-    },
-    {
-      "id": "ven_4",
-      "name": "प्रिंटिंग प्रेस (रसीद बही/बैनर)",
-      "phone": "",
-      "category": "Printing",
-      "address": "धनबाद"
-    }
-  ],
-  "openingBalances": {
-    "bank": 0,
-    "remarks": "",
-    "cash": 0
-  },
-  "pariwarikLateFines": {
-    "GSKS-001": {
-      "2025-11": 1060,
-      "2026-03": 720,
-      "2026-06": 460,
-      "2025-10": 1140,
-      "2026-05": 540,
-      "2026-10": 100,
-      "2026-02": 800,
-      "2026-07": 360,
-      "2026-09": 200,
-      "2025-12": 980,
-      "2026-04": 640,
-      "2026-08": 280,
-      "2026-01": 880,
-      "2026-11": 20
-    }
-  },
-  "statuses": [
-    {
-      "id": "st_1",
-      "name": "Active",
-      "badgeColor": "emerald",
-      "isSystem": true,
-      "description": "सक्रिय सदस्य"
-    },
-    {
-      "id": "st_2",
-      "name": "Prime Member",
-      "badgeColor": "amber",
-      "isSystem": true,
-      "description": "विशिष्ट सदस्य (VIP)"
-    },
-    {
-      "id": "st_3",
-      "name": "Inactive",
-      "badgeColor": "slate",
-      "isSystem": true,
-      "description": "निष्क्रिय सदस्य"
-    }
-  ],
   "designations": [
     {
       "id": "des_1",
@@ -161,7 +53,7 @@
       "name": "संरक्षक (Patron / Advisor)",
       "order": 7,
       "badge": "purple",
-      "description": "मार्गदर्शक एवं संरक्षक ���ंडल",
+      "description": "मार्गदर्शक एवं संरक्षक मंडल",
       "isSystem": true
     },
     {
@@ -173,10 +65,22 @@
       "isSystem": true
     }
   ],
+  "planRates": {
+    "pasyMonthlyFee": 150,
+    "membershipPremium": 200,
+    "pasyFineWeek": 20,
+    "membershipNormal": 100
+  },
+  "openingBalances": {
+    "cash": 0,
+    "bank": 0,
+    "remarks": ""
+  },
+  "pariwarikFineWaivers": {},
   "eventTitles": [
     {
       "id": "et_1",
-      "title": "मासि�� आम सभा",
+      "title": "मासिक आम सभा",
       "category": "General Meeting"
     },
     {
@@ -195,77 +99,6 @@
       "category": "Special Event"
     }
   ],
-  "planRates": {
-    "membershipNormal": 100,
-    "pasyMonthlyFee": 150,
-    "pasyFineWeek": 20,
-    "membershipPremium": 200
-  },
-  "expenseSchemes": [
-    {
-      "id": "exs_1",
-      "name": "उत्सव एवं समारोह व्यय (Event/Festival)",
-      "description": "वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय"
-    },
-    {
-      "id": "exs_2",
-      "name": "बैठक एवं कार्यालय व्यय (Meeting/Office)",
-      "description": "चाय-नाश्ता, रजिस्टर, स्टेशनरी व व्यवस्था व्यय"
-    },
-    {
-      "id": "exs_3",
-      "name": "आपातकालीन चिकित्सा व सहायता अनुदान",
-      "description": "ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता"
-    },
-    {
-      "id": "exs_4",
-      "name": "सामाजिक विकास एवं विविध व्यय",
-      "description": "सामुदायिक कार्य एवं अन्य आकस्मिक व्यय"
-    }
-  ],
-  "eventCategories": [
-    {
-      "id": "ec_1",
-      "name": "General Meeting",
-      "color": "blue",
-      "isSystem": true,
-      "description": "सामान्य बैठक"
-    },
-    {
-      "id": "ec_2",
-      "name": "Special Event",
-      "color": "purple",
-      "isSystem": true,
-      "description": "विशेष उत्सव/समारोह"
-    },
-    {
-      "id": "ec_3",
-      "name": "Emergency meeting",
-      "color": "rose",
-      "isSystem": true,
-      "description": "आपातकालीन बैठक"
-    }
-  ],
-  "eventVenues": [
-    {
-      "id": "ev_1",
-      "venue": "नीचे टोला काली मंदिर प्रांगण, गुनघसा",
-      "latitude": 23.862453,
-      "longitude": 86.168323
-    },
-    {
-      "id": "ev_2",
-      "venue": "प्राथमिक विद्यालय प्रांगण, चिराबाद, गुनघसा",
-      "latitude": 23.865045,
-      "longitude": 86.178933
-    },
-    {
-      "id": "ev_3",
-      "venue": "मध्य विद्यालय प्रांगण, गुनघसा",
-      "latitude": 23.864282,
-      "longitude": 86.172725
-    }
-  ],
   "bankAccounts": [
     {
       "id": "ba_1",
@@ -281,27 +114,56 @@
       "remarks": "ट्रस्ट आधिकारिक मुख्य चालू खाता"
     }
   ],
+  "vendors": [
+    {
+      "id": "ven_1",
+      "name": "टेंट हाउस एवं डेकोरेशन",
+      "phone": "",
+      "category": "Tent & Sound",
+      "address": "गोमो"
+    },
+    {
+      "id": "ven_2",
+      "name": "साउंड एवं लाउडस्पीकर सिस्टम",
+      "phone": "",
+      "category": "Sound",
+      "address": "गोमो"
+    },
+    {
+      "id": "ven_3",
+      "name": "पूजा सामग्री व फूल भंडार",
+      "phone": "",
+      "category": "Pooja Items",
+      "address": "गुनघसा"
+    },
+    {
+      "id": "ven_4",
+      "name": "प्रिंटिंग प्रेस (रसीद बही/बैनर)",
+      "phone": "",
+      "category": "Printing",
+      "address": "धनबाद"
+    }
+  ],
+  "pariwarikFinePaid": {},
   "pariwarikFineExemptions": {
     "GSKS-001": {
-      "2026-02": false,
-      "2026-07": false,
-      "2026-09": false,
-      "2025-12": false,
-      "2026-04": false,
-      "2026-08": false,
-      "2026-01": false,
       "2026-11": false,
-      "2025-11": false,
-      "2025-09": false,
+      "2026-05": false,
+      "2026-09": false,
       "2026-03": false,
       "2026-06": false,
+      "2026-10": false,
+      "2025-11": false,
+      "2026-01": false,
+      "2025-09": false,
+      "2026-02": false,
+      "2025-12": false,
+      "2026-07": false,
       "2025-10": false,
-      "2026-05": false,
-      "2026-10": false
+      "2026-04": false,
+      "2026-08": false
     }
   },
-  "pariwarikFinePaid": {},
-  "pariwarikFineWaivers": {},
   "schemes": [
     {
       "id": "sc_1",
@@ -374,6 +236,127 @@
       "frequency": "One-Time",
       "status": "Open",
       "description": "कन्यादान हेतु सहयोग राशि"
+    }
+  ],
+  "statuses": [
+    {
+      "id": "st_1",
+      "name": "Active",
+      "badgeColor": "emerald",
+      "isSystem": true,
+      "description": "सक्रिय सदस्य"
+    },
+    {
+      "id": "st_2",
+      "name": "Prime Member",
+      "badgeColor": "amber",
+      "isSystem": true,
+      "description": "विशिष्ट सदस्य (VIP)"
+    },
+    {
+      "id": "st_3",
+      "name": "Inactive",
+      "badgeColor": "slate",
+      "isSystem": true,
+      "description": "निष्क्रिय सदस्य"
+    }
+  ],
+  "pariwarikLateFines": {},
+  "eventCategories": [
+    {
+      "id": "ec_1",
+      "name": "General Meeting",
+      "color": "blue",
+      "isSystem": true,
+      "description": "सामान्य बैठक"
+    },
+    {
+      "id": "ec_2",
+      "name": "Special Event",
+      "color": "purple",
+      "isSystem": true,
+      "description": "विशेष उत्सव/समारोह"
+    },
+    {
+      "id": "ec_3",
+      "name": "Emergency meeting",
+      "color": "rose",
+      "isSystem": true,
+      "description": "आपातकालीन बैठक"
+    }
+  ],
+  "eventVenues": [
+    {
+      "id": "ev_1",
+      "venue": "नीचे टोला काली मंदिर प्रांगण, गुनघसा",
+      "latitude": 23.862453,
+      "longitude": 86.168323
+    },
+    {
+      "id": "ev_2",
+      "venue": "प्राथमिक विद्यालय प्रांगण, चिराबाद, गुनघसा",
+      "latitude": 23.865045,
+      "longitude": 86.178933
+    },
+    {
+      "id": "ev_3",
+      "venue": "मध्य विद्यालय प्रांगण, गुनघसा",
+      "latitude": 23.864282,
+      "longitude": 86.172725
+    }
+  ],
+  "fundTypes": [
+    {
+      "id": "ft_1",
+      "name": "Self",
+      "isSystem": true,
+      "description": "स्वयं / आंतरिक निधि"
+    },
+    {
+      "id": "ft_2",
+      "name": "Bank",
+      "isSystem": true,
+      "description": "बैंक खाता कोष (SBI A/C)"
+    },
+    {
+      "id": "ft_3",
+      "name": "Cash in Hand",
+      "isSystem": true,
+      "description": "कोषाध्यक्ष के पास नगद"
+    },
+    {
+      "id": "ft_4",
+      "name": "Loan",
+      "isSystem": false,
+      "description": "ऋण / अग्रिम निधि"
+    },
+    {
+      "id": "ft_5",
+      "name": "Investment",
+      "isSystem": false,
+      "description": "निवेश / सावधि जमा (FD)"
+    }
+  ],
+  "expenseSchemes": [
+    {
+      "id": "exs_1",
+      "name": "उत्सव एवं समारोह व्यय (Event/Festival)",
+      "description": "वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय"
+    },
+    {
+      "id": "exs_2",
+      "name": "बैठक एवं कार्यालय व्यय (Meeting/Office)",
+      "description": "चाय-नाश्ता, रजिस्टर, स्टेशनरी व व्यवस्था व्यय"
+    },
+    {
+      "id": "exs_3",
+      "name": "आपातकालीन चिकित्सा व सहायता अनुदान",
+      "description": "ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता"
+    },
+    {
+      "id": "exs_4",
+      "name": "सामाजिक विकास एवं विविध व्यय",
+      "description": "सामुदायिक कार्य एवं अन्य आकस्मिक व्यय"
     }
   ]
 }
