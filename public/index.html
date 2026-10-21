@@ -4354,10 +4354,13 @@
 
       <!-- Modal Footer Action Buttons -->
       <div class="flex items-center gap-2 mt-5">
-        <button onclick="openEditModalFromView()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+        <button type="button" onclick="openAddDonationFromView()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-600/20 cursor-pointer">
+          <i class="fa-solid fa-hand-holding-dollar"></i> + Add Donation
+        </button>
+        <button type="button" onclick="openEditModalFromView()" class="flex-1 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-bold py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm shadow-orange-600/20 cursor-pointer">
           <i class="fa-solid fa-pen-to-square"></i> Edit Details
         </button>
-        <button onclick="closeViewModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors">
+        <button type="button" onclick="closeViewModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer">
           Close
         </button>
       </div>
@@ -12232,6 +12235,18 @@
       }
     }
 
+    
+    function openAddDonationFromView() {
+      const targetId = activeViewingMemberId;
+      closeViewModal();
+      if (targetId) {
+        openDonationModal(null, targetId);
+      } else {
+        openDonationModal();
+      }
+    }
+    window.openAddDonationFromView = openAddDonationFromView;
+
     function openEditModalFromView() {
       closeViewModal();
       if (activeViewingMemberId) {
@@ -15364,7 +15379,7 @@
       }
     }
 
-    function openDonationModal(donationId = null) {
+    function openDonationModal(donationId = null, preselectedMemberId = null) {
       try {
         closeAllModals();
         populateDonationSchemeDropdowns();
@@ -15400,9 +15415,17 @@
           if (titleEl) titleEl.textContent = 'Add Donation';
           if (btnTextEl) btnTextEl.textContent = 'Save Donation';
 
-          if (document.getElementById('donation-member-id')) document.getElementById('donation-member-id').value = '';
-          if (document.getElementById('donation-donor-name')) document.getElementById('donation-donor-name').value = '';
-          if (document.getElementById('donation-donor-phone')) document.getElementById('donation-donor-phone').value = '';
+          if (preselectedMemberId) {
+            const memberSelectEl = document.getElementById('donation-member-id');
+            if (memberSelectEl) {
+              memberSelectEl.value = preselectedMemberId;
+              handleDonationMemberSelect(preselectedMemberId);
+            }
+          } else {
+            if (document.getElementById('donation-member-id')) document.getElementById('donation-member-id').value = '';
+            if (document.getElementById('donation-donor-name')) document.getElementById('donation-donor-name').value = '';
+            if (document.getElementById('donation-donor-phone')) document.getElementById('donation-donor-phone').value = '';
+          }
           if (document.getElementById('donation-amount')) document.getElementById('donation-amount').value = '';
           if (document.getElementById('donation-remarks')) document.getElementById('donation-remarks').value = '';
 
