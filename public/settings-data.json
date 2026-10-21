@@ -102,16 +102,17 @@
   "bankAccounts": [
     {
       "id": "ba_1",
-      "accountNumber": "38294710293",
-      "bankName": "State Bank of India (SBI)",
+      "bankName": "BANDHAN BANK LIMITED",
+      "accountNumber": "20200123658965",
       "branchName": "Gomoh Branch",
-      "ifsc": "SBIN0001234",
+      "ifsc": "BDBL0001234",
       "accountType": "Joint",
       "members": [
-        "अमित कुमार गोस्वामी (अध्यक्ष)",
-        "रोहित गोस्वामी (कोषाध्यक्ष)"
+        "NITISH NATH",
+        "MANIK CHAND GOSWAMI",
+        "PRABHU DAYAL GOSWAMI"
       ],
-      "remarks": "ट्रस्ट आधिकारिक मुख्य चालू खाता"
+      "remarks": "ट्रस्ट आधिकारिक मुख्य संयुक्त खाता"
     }
   ],
   "vendors": [
