@@ -14896,12 +14896,15 @@
     // Save All Settings to Cloud (Firestore + Server Express JSON)
     async function saveAllSettingsToCloud(showAlert = true) {
       try {
+        // Sanitize object recursively for Firestore (Firestore throws on undefined)
+        const cleanSettings = JSON.parse(JSON.stringify(masterSettings, (k, v) => (v === undefined ? null : v)));
+
         // 1. Sync to Firestore
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(masterSettings, { merge: true });
+          await settingsCol.doc('master').set(cleanSettings, { merge: true });
         }
         // 2. Sync to Backend Express JSON API
-        await saveSettingsToBackend(masterSettings);
+        await saveSettingsToBackend(cleanSettings);
 
         renderSettingsView();
         updateDropdownsFromSettings();

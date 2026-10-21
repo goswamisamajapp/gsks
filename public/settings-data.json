@@ -95,13 +95,13 @@
   "eventTitles": [
     {
       "id": "et_1",
-      "title": "मासिक आम सभा एवं कोष समीक्षा",
+      "title": "मासिक आम सभा",
       "category": "General Meeting"
     },
     {
       "id": "et_2",
-      "title": "वार्षिक महाधिवेशन एवं सम्मान समारोह",
-      "category": "Special Event"
+      "title": "मासिक आम सभा एवं पारिवारिक आर्थिक सहायता योजना हेतु सदस्य का चुनाव",
+      "category": "General Meeting"
     },
     {
       "id": "et_3",
@@ -110,67 +110,113 @@
     },
     {
       "id": "et_4",
-      "title": "शिव चर्चा एवं सामाजिक विचार-विमर्श",
-      "category": "General Meeting"
+      "title": "स्थापना दिवस सह विद्यार्थी प्रतिभा सम्मान समारोह",
+      "category": "Special Event"
     }
   ],
   "eventVenues": [
     {
       "id": "ev_1",
-      "venue": "शिव मंदिर परिसर, गुनघसा"
+      "venue": "नीचे टोला काली मंदिर प्रांगण, गुनघसा",
+      "latitude": 23.862453,
+      "longitude": 86.168323
     },
     {
       "id": "ev_2",
-      "venue": "सामुदायिक भवन, गोमो"
+      "venue": "प्राथमिक विद्यालय प्रांगण, चिराबाद, गुनघसा",
+      "latitude": 23.865045,
+      "longitude": 86.178933
     },
     {
       "id": "ev_3",
-      "venue": "केंद्रीय ट्रस्ट कार्यालय, धनबाद"
+      "venue": "मध्य विद्यालय प्रांगण, गुनघसा",
+      "latitude": 23.864282,
+      "longitude": 86.172725
     }
   ],
   "schemes": [
     {
       "id": "sc_1",
-      "name": "मासिक सहयोग कोष (Monthly Sewa)",
-      "amount": 100,
+      "name": "पारिवारिक आर्थिक सहायता योजना",
+      "amount": 150,
       "frequency": "Monthly",
-      "description": "प्रति माह नियमित ट्रस्ट सेवा सहायता",
-      "status": "Active"
+      "description": "पारिवारिक आर्थिक सहायता योजना हेतु सहयोग राशि",
+      "status": "Open",
+      "amountType": "fixed"
     },
     {
       "id": "sc_2",
-      "name": "वार्षिक सदस्यता शुल्क (Annual Dues)",
-      "amount": 1200,
+      "name": "वार्षिक सदस्यता शुल्क  (Prime Membership)",
+      "amount": 200,
       "frequency": "Yearly",
-      "description": "वार्षिक सदस्यता नवीनीकरण",
-      "status": "Active"
+      "description": "वार्षिक सदस्यता शुल्क  (Prime Membership)",
+      "status": "Open",
+      "amountType": "fixed"
     },
     {
       "id": "sc_3",
-      "name": "विशेष कन्या विवाह सहाय योजना",
-      "amount": 500,
-      "frequency": "One-Time",
-      "description": "ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान",
-      "status": "Active"
+      "name": "वार्षिक सदस्यता शुल्क  (General Membership)",
+      "amount": 100,
+      "frequency": "Yearly",
+      "description": "वार्षिक सदस्यता शुल्क  (General Membership)",
+      "status": "Open",
+      "amountType": "fixed"
     },
     {
       "id": "sc_4",
-      "name": "आपातकालीन चिकित्सा सहायता कोष",
+      "name": "आपातकालीन सहायता कोष",
       "amount": 0,
       "frequency": "Open",
-      "description": "गंभीर बीमारी पर विशेष आर्थिक सहयोग",
-      "status": "Active"
+      "description": "आपातकालीन सहायता कोष",
+      "status": "Open",
+      "amountType": "custom"
+    },
+    {
+      "id": "sc_1792563874533",
+      "name": "सहयोग राशि  (General Donation)",
+      "amountType": "custom",
+      "amount": 0,
+      "frequency": "Open",
+      "status": "Open",
+      "description": "सहयोग राशि  (General Donation)"
+    },
+    {
+      "id": "sc_1792563925027",
+      "name": "छठ पूजा हेतु सहयोग राशि (2026)",
+      "amountType": "custom",
+      "amount": 0,
+      "frequency": "One-Time",
+      "status": "Open",
+      "description": "छठ पूजा हेतु सहयोग राशि (2026)"
+    },
+    {
+      "id": "sc_1792563958247",
+      "name": "छात्रवृति हेतु सहयोग राशि",
+      "amountType": "custom",
+      "amount": 0,
+      "frequency": "One-Time",
+      "status": "Open",
+      "description": "छात्रवृति हेतु सहयोग राशि"
+    },
+    {
+      "id": "sc_1792563982419",
+      "name": "कन्यादान हेतु सहयोग राशि",
+      "amountType": "custom",
+      "amount": 0,
+      "frequency": "One-Time",
+      "status": "Open",
+      "description": "कन्यादान हेतु सहयोग राशि"
     }
   ],
   "openingBalances": {
-    "cash": 0,
+    "remarks": "",
     "bank": 0,
-    "remarks": ""
+    "cash": 0
   },
   "vendors": [
     {
       "id": "ven_1",
-      "name": "टेंट हाउस एवं डेकोरेशन",
+      "name": "ट��ंट हाउस एवं डेकोरेशन",
       "phone": "",
       "category": "Tent & Sound",
       "address": "गोमो"
@@ -211,7 +257,7 @@
     {
       "id": "exs_3",
       "name": "आपातकालीन चिकित्सा व सहायता अनुदान",
-      "description": "ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता"
+      "description": "ज़रूरतमंद परिवार को आर्��िक/चिकित्सा सहायता"
     },
     {
       "id": "exs_4",
@@ -220,5 +266,114 @@
     }
   ],
   "pariwarikFinePaid": {},
-  "pariwarikFineExemptions": {}
+  "pariwarikFineExemptions": {
+    "GSKS-001": {
+      "2026-02": false,
+      "2026-08": false,
+      "2026-05": false,
+      "2025-10": false,
+      "2026-09": false,
+      "2026-04": false,
+      "2026-06": false,
+      "2026-11": false,
+      "2026-03": false,
+      "2026-07": false,
+      "2026-10": false,
+      "2025-11": false,
+      "2025-09": false,
+      "2026-01": false,
+      "2025-12": false
+    }
+  },
+  "pariwarikFineWaivers": {},
+  "designations": [
+    {
+      "id": "des_1",
+      "name": "अध्यक्ष (President)",
+      "order": 1,
+      "badge": "amber",
+      "description": "समिति के मुख्य कार्यकारी प्रमुख",
+      "isSystem": true
+    },
+    {
+      "id": "des_2",
+      "name": "उपाध्यक्ष (Vice President)",
+      "order": 2,
+      "badge": "indigo",
+      "description": "अध्यक्ष की अनुपस्थिति में कार्यभार",
+      "isSystem": true
+    },
+    {
+      "id": "des_3",
+      "name": "सचिव (Secretary)",
+      "order": 3,
+      "badge": "blue",
+      "description": "समिति के मुख्य प्रशासनिक व पत्राचार अधिकारी",
+      "isSystem": true
+    },
+    {
+      "id": "des_4",
+      "name": "सह-सचिव (Joint Secretary)",
+      "order": 4,
+      "badge": "indigo",
+      "description": "सचिव के कार्यों में सहयोग",
+      "isSystem": true
+    },
+    {
+      "id": "des_5",
+      "name": "कोषाध्यक्ष (Treasurer)",
+      "order": 5,
+      "badge": "emerald",
+      "description": "समिति के वित्त, कोष एवं बैंक खातों के प्रभारी",
+      "isSystem": true
+    },
+    {
+      "id": "des_6",
+      "name": "उप-कोषाध्यक्ष (Deputy Treasurer)",
+      "order": 6,
+      "badge": "emerald",
+      "description": "कोषाध्यक्ष के कार्यों में सहयोग",
+      "isSystem": true
+    },
+    {
+      "id": "des_7",
+      "name": "संरक्षक (Patron / Advisor)",
+      "order": 7,
+      "badge": "purple",
+      "description": "मार्गदर्शक एवं संरक्षक मंडल",
+      "isSystem": true
+    },
+    {
+      "id": "des_8",
+      "name": "सदस्य (Member)",
+      "order": 8,
+      "badge": "slate",
+      "description": "समिति के सम्मानित पंजीकृत सदस्य",
+      "isSystem": true
+    }
+  ],
+  "pariwarikLateFines": {
+    "GSKS-001": {
+      "2026-06": 460,
+      "2026-11": 20,
+      "2026-04": 640,
+      "2025-10": 1140,
+      "2026-09": 200,
+      "2026-08": 280,
+      "2026-02": 800,
+      "2026-05": 540,
+      "2025-12": 980,
+      "2026-01": 880,
+      "2025-11": 1060,
+      "2026-03": 720,
+      "2026-07": 360,
+      "2026-10": 100
+    }
+  },
+  "planRates": {
+    "pasyMonthlyFee": 150,
+    "pasyFineWeek": 20,
+    "membershipPremium": 200,
+    "membershipNormal": 100
+  }
 }
