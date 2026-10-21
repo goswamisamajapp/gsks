@@ -7208,19 +7208,19 @@
     window.getMembershipFee = getMembershipFee;
 
     const PARIWARIK_MONTHS = [
-      { key: '2025-09', label: 'Sep 2025', defaultPaid: true },
-      { key: '2025-10', label: 'Oct 2025', defaultPaid: true },
-      { key: '2025-11', label: 'Nov 2025', defaultPaid: true },
-      { key: '2025-12', label: 'Dec 2025', defaultPaid: true },
-      { key: '2026-01', label: 'Jan 2026', defaultPaid: true },
-      { key: '2026-02', label: 'Feb 2026', defaultPaid: true },
-      { key: '2026-03', label: 'Mar 2026', defaultPaid: true },
-      { key: '2026-04', label: 'Apr 2026', defaultPaid: true },
-      { key: '2026-05', label: 'May 2026', defaultPaid: true },
-      { key: '2026-06', label: 'Jun 2026', defaultPaid: true },
-      { key: '2026-07', label: 'Jul 2026', defaultPaid: true },
-      { key: '2026-08', label: 'Aug 2026', defaultPaid: true },
-      { key: '2026-09', label: 'Sep 2026', defaultPaid: true },
+      { key: '2025-09', label: 'Sep 2025', defaultPaid: false },
+      { key: '2025-10', label: 'Oct 2025', defaultPaid: false },
+      { key: '2025-11', label: 'Nov 2025', defaultPaid: false },
+      { key: '2025-12', label: 'Dec 2025', defaultPaid: false },
+      { key: '2026-01', label: 'Jan 2026', defaultPaid: false },
+      { key: '2026-02', label: 'Feb 2026', defaultPaid: false },
+      { key: '2026-03', label: 'Mar 2026', defaultPaid: false },
+      { key: '2026-04', label: 'Apr 2026', defaultPaid: false },
+      { key: '2026-05', label: 'May 2026', defaultPaid: false },
+      { key: '2026-06', label: 'Jun 2026', defaultPaid: false },
+      { key: '2026-07', label: 'Jul 2026', defaultPaid: false },
+      { key: '2026-08', label: 'Aug 2026', defaultPaid: false },
+      { key: '2026-09', label: 'Sep 2026', defaultPaid: false },
       { key: '2026-10', label: 'Oct 2026', defaultPaid: false },
       { key: '2026-11', label: 'Nov 2026', defaultPaid: false },
       { key: '2026-12', label: 'Dec 2026', defaultPaid: false },
@@ -7267,14 +7267,23 @@
 
     function isPariwarikPaidForMonth(m, monthKey) {
       if (!m) return false;
-      // 1. If explicit override in member's monthly map
+      // 1. If explicit payment marked in member's monthly map
       if (m.pariwarikMonthlyPaid && m.pariwarikMonthlyPaid[monthKey] !== undefined) {
         const val = m.pariwarikMonthlyPaid[monthKey];
         return (val === true || val === 'true' || val === 'yes' || val === 'Yes');
       }
-      // 2. Fallback to month default rule (Sep 2025 to Sep 2026 default paid true)
-      const mCfg = PARIWARIK_MONTHS.find(x => x.key === monthKey);
-      return mCfg ? mCfg.defaultPaid : false;
+      // 2. Check if a linked donation exists in allDonations for this member and month
+      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations) && m.id) {
+        const mCfg = (typeof PARIWARIK_MONTHS !== 'undefined') ? PARIWARIK_MONTHS.find(x => x.key === monthKey) : null;
+        const monthLabel = mCfg ? mCfg.label : monthKey;
+        const hasDon = allDonations.some(d => 
+          d && d.memberId === m.id && 
+          (d.pariwarikMonthKey === monthKey || (d.remarks && d.remarks.includes(monthLabel)))
+        );
+        if (hasDon) return true;
+      }
+      // Clean zero base: Default is UNPAID (false) for all months
+      return false;
     }
 
     // Helper: Get payment date for a paid month (from auto-donations or member override or joining date)
@@ -7309,12 +7318,7 @@
         return m.pariwarikMonthlyDates[monthKey];
       }
 
-      // 3. Fallback for pre-settled defaultPaid months (Sep 2025 to Sep 2026)
-      // Display the month's established schedule date or member enrollment date
-      if (mCfg && mCfg.defaultPaid) {
-        const [y, mo] = monthKey.split('-');
-        return `15/${mo}/${y.slice(-2)}`;
-      }
+      /* zero default date fallback */
 
       // 4. Default fallback: member's general payment/joining date or today
       if (m.pariwarikPaidAt) {
