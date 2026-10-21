@@ -12786,6 +12786,11 @@
       const member = allMembers.find(m => m.id === id);
       if (!member) return;
 
+      // Ensure dynamic designations are loaded fresh with current member's designation selected
+      if (typeof populateDesignationDropdowns === 'function') {
+        populateDesignationDropdowns(member.designation || 'सदस्य (Member)');
+      }
+
       document.getElementById('edit-member-id').value = member.id;
       document.getElementById('edit-modal-sub').textContent = `ID: ${member.id} • Registered Member`;
       document.getElementById('edit-name').value = member.name;
@@ -12829,6 +12834,11 @@
     // ==============================================
     function openAddMemberModal() {
       closeAllModals();
+
+      // Ensure dynamic designations are loaded fresh from settings
+      if (typeof populateDesignationDropdowns === 'function') {
+        populateDesignationDropdowns();
+      }
 
       // Default date to today formatted DD-MM-YYYY
       const today = new Date();
@@ -15449,6 +15459,58 @@
       }
     }
 
+    function populateDesignationDropdowns(selectedVal = null) {
+      const addDesignationSelect = document.getElementById('add-designation');
+      const editDesignationSelect = document.getElementById('edit-designation');
+      const desList = (masterSettings && masterSettings.designations && masterSettings.designations.length > 0)
+        ? [...masterSettings.designations].sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99))
+        : [
+            { name: 'अध्यक्ष (President)' },
+            { name: 'उपाध्यक्ष (Vice President)' },
+            { name: 'सचिव (Secretary)' },
+            { name: 'सह-सचिव (Joint Secretary)' },
+            { name: 'कोषाध्यक्ष (Treasurer)' },
+            { name: 'उप-कोषाध्यक्ष (Deputy Treasurer)' },
+            { name: 'संरक्षक (Patron / Advisor)' },
+            { name: 'सदस्य (Member)' }
+          ];
+
+      const optionsHtml = desList.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+
+      if (addDesignationSelect) {
+        const cur = addDesignationSelect.value || 'सदस्य (Member)';
+        addDesignationSelect.innerHTML = optionsHtml;
+        addDesignationSelect.value = cur;
+        if (!addDesignationSelect.value && addDesignationSelect.options.length > 0) {
+          addDesignationSelect.selectedIndex = addDesignationSelect.options.length - 1;
+        }
+      }
+
+      if (editDesignationSelect) {
+        editDesignationSelect.innerHTML = optionsHtml;
+        if (selectedVal) {
+          // Attempt exact or normalized match
+          const matchedOpt = Array.from(editDesignationSelect.options).find(opt => 
+            opt.value === selectedVal || 
+            opt.value.trim().toLowerCase() === selectedVal.trim().toLowerCase()
+          );
+          if (matchedOpt) {
+            editDesignationSelect.value = matchedOpt.value;
+          } else {
+            // If custom designation not yet in settings list, temporarily append it
+            const customOpt = document.createElement('option');
+            customOpt.value = selectedVal;
+            customOpt.textContent = selectedVal;
+            editDesignationSelect.appendChild(customOpt);
+            editDesignationSelect.value = selectedVal;
+          }
+        } else {
+          editDesignationSelect.value = 'सदस्य (Member)';
+        }
+      }
+    }
+    window.populateDesignationDropdowns = populateDesignationDropdowns;
+
     // Dynamically populate member status filter & add/edit member modal selects
     function updateDropdownsFromSettings() {
       const filterSelect = document.getElementById('member-status-filter');
@@ -15475,33 +15537,8 @@
         editSelect.value = curVal;
       }
 
-      // Populate Designations in Add & Edit Member Modals
-      const addDesignationSelect = document.getElementById('add-designation');
-      const editDesignationSelect = document.getElementById('edit-designation');
-      const desList = (masterSettings && masterSettings.designations && masterSettings.designations.length > 0)
-        ? [...masterSettings.designations].sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99))
-        : [
-            { name: 'अध्यक्ष (President)' },
-            { name: 'उपाध्यक्ष (Vice President)' },
-            { name: 'सचिव (Secretary)' },
-            { name: 'सह-सचिव (Joint Secretary)' },
-            { name: 'कोषाध्यक्ष (Treasurer)' },
-            { name: 'उप-कोषाध्यक्ष (Deputy Treasurer)' },
-            { name: 'संरक्षक (Patron / Advisor)' },
-            { name: 'सदस्य (Member)' }
-          ];
-
-      if (addDesignationSelect) {
-        const curVal = addDesignationSelect.value || 'सदस्य (Member)';
-        addDesignationSelect.innerHTML = desList.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
-        addDesignationSelect.value = curVal || 'सदस्य (Member)';
-      }
-
-      if (editDesignationSelect) {
-        const curVal = editDesignationSelect.value || 'सदस्य (Member)';
-        editDesignationSelect.innerHTML = desList.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
-        editDesignationSelect.value = curVal || 'सदस्य (Member)';
-      }
+      // Populate Designations in Add & Edit Member Modals dynamically
+      populateDesignationDropdowns();
 
       populateDonationSchemeDropdowns();
       if (typeof populateFundTransferPurposeDropdown === 'function') {
