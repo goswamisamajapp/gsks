@@ -11707,9 +11707,14 @@
       // 3. Persist to Firebase Firestore (Realtime Cloud)
       try {
         if (typeof membersCol !== 'undefined' && membersCol) {
-          console.log('Writing doc to Firestore:', memberData.id, memberData);
-          await membersCol.doc(memberData.id).set(memberData, { merge: true });
-          console.log('Successfully saved to Firestore:', memberData.id);
+          // Sanitize: Firestore crashes if any value is undefined. Clean object recursively.
+          const cleanData = JSON.parse(JSON.stringify(memberData, (k, v) => (v === undefined ? null : v)));
+          Object.keys(cleanData).forEach(key => {
+            if (cleanData[key] === null || cleanData[key] === undefined) delete cleanData[key];
+          });
+          console.log('Writing doc to Firestore:', cleanData.id, cleanData);
+          await membersCol.doc(cleanData.id).set(cleanData, { merge: true });
+          console.log('Successfully saved to Firestore:', cleanData.id);
         }
       } catch (err) {
         console.error('Firestore write error:', err);
@@ -17224,12 +17229,15 @@
 
       // Persist to Central Server
       try {
-        await syncMemberToBackend({
+        const payload = {
           id: memberId,
-          pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid,
-          pariwarikPaid: mem.pariwarikPaid,
-          pariwarikPaidAt: mem.pariwarikPaidAt
-        });
+          pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid || {},
+          pariwarikPaid: !!mem.pariwarikPaid
+        };
+        if (mem.pariwarikPaidAt) {
+          payload.pariwarikPaidAt = mem.pariwarikPaidAt;
+        }
+        await syncMemberToBackend(payload);
       } catch (err) {
         console.warn('Error saving pariwarik paid status:', err);
       }
