@@ -13051,6 +13051,7 @@
         'expensescheme-master-modal',
         'bank-deposit-modal',
         'view-bank-record-modal',
+        'designation-master-modal',
         'mobile-donation-filter-modal',
         'mobile-event-filter-modal',
         'mobile-expense-filter-modal',
@@ -14585,6 +14586,7 @@
         renderOpeningBalancesCard();
         renderFundTypesGrid();
         renderBankAccountsGrid();
+        renderUpiRegistryGrid();
         renderFundTransfersList();
       } else if (tab === 'expense') {
         if (pageExpense) pageExpense.classList.remove('hidden');
@@ -14595,6 +14597,9 @@
       } else {
         if (pageStatus) pageStatus.classList.remove('hidden');
       }
+
+      // Re-render whole settings view to guarantee live cards & tables reflect latest data
+      renderSettingsView();
     }
 
     function applySettings(data) {
@@ -15828,12 +15833,20 @@
         renderSettingsView();
         updateDropdownsFromSettings();
         if (showAlert) {
-          alert("✅ सेटिंग्स सफलतापूर्वक क्लाउड में सुरक्षित हो गईं!");
+          if (typeof showAppAlert === 'function') {
+            showAppAlert("सेटिंग्स सफलतापूर्वक क्लाउड में सुरक्षित हो गईं!", "क्लाउड सुरक्षित", "success");
+          } else {
+            alert("✅ सेटिंग्स सफलतापूर्वक क्लाउड में सुरक्षित हो गईं!");
+          }
         }
       } catch (err) {
         console.error('Error saving settings:', err);
         if (showAlert) {
-          alert("सेटिंग्स सेव करते समय त्रुटि: " + err.message);
+          if (typeof showAppAlert === 'function') {
+            showAppAlert("सेटिंग्स सेव करते समय त्रुटि: " + err.message, "त्रुटि", "error");
+          } else {
+            alert("सेटिंग्स सेव करते समय त्रुटि: " + err.message);
+          }
         }
       }
     }
