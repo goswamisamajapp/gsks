@@ -7351,8 +7351,14 @@
         : PARIWARIK_MONTHS;
 
       monthsToEvaluate.forEach(mCfg => {
-        // Strictly ignore defaultPaid months (Sep 2025 - Sep 2026 pre-settled): ZERO fine
+        // Strictly ignore defaultPaid months: ZERO fine
         if (mCfg.defaultPaid) return;
+
+        // Check Fine Enable/Disable toggle (By default fine is enabled/true; if set to false, NO fine calculated!)
+        const fineExemptMap = (masterSettings && masterSettings.pariwarikFineExemptions) || {};
+        if (fineExemptMap[member.id] && fineExemptMap[member.id][mCfg.key] === false) {
+          return; // Fine explicitly turned OFF by Admin for this month!
+        }
 
         // 1-Month Advance Rule: किस्त माह का अंशदान 1 माह पूर्व के 3rd Sunday तक जमा होना अनिवार्य है
         // Example: Oct 2026 किस्त -> डेडलाइन: Sep 2026 का 3rd Sunday
@@ -17584,10 +17590,28 @@
                   ${fineInfo.waiver > 0 ? `<span class="text-[9px] text-emerald-600 font-sans font-bold">(-₹${fineInfo.waiver})</span>` : ''}
                 </div>
 
-                <!-- Action Buttons: Fine Waiver, Push, WhatsApp -->
+                <!-- Action Buttons: Fine Waiver, Two Toggles, Push, WhatsApp -->
                 <div class="flex items-center gap-1.5 shrink-0">
+                  <!-- Toggle 1: Fine Apply (Amber) -->
+                  ${(() => {
+                    const fineExempts = (masterSettings && masterSettings.pariwarikFineExemptions && masterSettings.pariwarikFineExemptions[m.id]) || {};
+                    const isFineActive = (fineExempts[currentPariwarikMonth] !== false);
+                    return `
+                      <label class="relative inline-flex items-center cursor-pointer select-none" title="${isFineActive ? 'Fine ON' : 'Fine OFF'}">
+                        <input type="checkbox" onchange="togglePariwarikFineApplicable('${m.id}', this.checked, '${currentPariwarikMonth}')" ${isFineActive ? 'checked' : ''} class="sr-only peer">
+                        <div class="w-7 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+                      </label>
+                    `;
+                  })()}
+
+                  <!-- Toggle 2: Fine Paid (Emerald) -->
+                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'Fine Paid' : 'Fine Unpaid'}">
+                    <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
+                    <div class="w-7 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
+                  </label>
+
                   <button type="button" 
-                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
+                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')"" 
                           class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80" 
                           title="Set Fine Waiver">
                     <i class="fa-solid fa-tags text-[10px]"></i>
@@ -17701,9 +17725,9 @@
               <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
                 ₹${mDues.toLocaleString('en-IN')}
               </td>
-              <!-- Fine (₹) + Waiver Edit Button + iOS Style Paid Toggle Switch -->
+              <!-- Fine (₹) + Waiver Edit Button + 2 Toggles (Apply Fine & Mark Paid) -->
               <td class="p-3.5 text-right">
-                <div class="inline-flex items-center justify-end gap-2">
+                <div class="inline-flex items-center justify-end gap-1.5 sm:gap-2">
                   <div class="text-right">
                     <div class="font-mono font-black text-xs ${fineInfo.isPaid ? 'text-emerald-600 line-through' : (fineInfo.netFine > 0 ? 'text-amber-600' : 'text-slate-300')}">
                       ₹${fineInfo.netFine.toLocaleString('en-IN')}
@@ -17713,12 +17737,26 @@
                   <button type="button" 
                           onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
                           class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer" 
-                          title="Set Fine Waiver">
+                          title="Waiver छूट दर्ज करें">
                     <i class="fa-solid fa-tags text-[10px]"></i>
                   </button>
-                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'Fine Paid' : (fineInfo.netFine > 0 ? 'Fine Unpaid - Click to mark paid' : 'No Fine')}">
+
+                  <!-- Toggle 1: Fine Apply (ON = Fine काउंट होगा, OFF = Fine नहीं लगेगा) -->
+                  ${(() => {
+                    const fineExempts = (masterSettings && masterSettings.pariwarikFineExemptions && masterSettings.pariwarikFineExemptions[m.id]) || {};
+                    const isFineActive = (fineExempts[currentPariwarikMonth] !== false);
+                    return `
+                      <label class="relative inline-flex items-center cursor-pointer select-none" title="${isFineActive ? 'Fine सक्रिय (ON) - क्लिक करके इस माह का Fine बंद करें' : 'Fine बंद (OFF) - कोई जुर्माना नहीं लगेगा'}">
+                        <input type="checkbox" onchange="togglePariwarikFineApplicable('${m.id}', this.checked, '${currentPariwarikMonth}')" ${isFineActive ? 'checked' : ''} class="sr-only peer">
+                        <div class="w-8 h-4.5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+                      </label>
+                    `;
+                  })()}
+
+                  <!-- Toggle 2: Fine Paid Status (Green) -->
+                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'Fine जमा हो चुका है (Paid)' : (fineInfo.netFine > 0 ? 'Fine बकाया - जमा करने के लिए ऑन करें' : 'कोई Fine बकाया नहीं')}">
                     <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
-                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-40 cursor-not-allowed' : ''}"></div>
+                    <div class="w-8 h-4.5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
                   </label>
                 </div>
               </td>
@@ -18243,6 +18281,42 @@
     window.recalcFineWaiverModalPreview = recalcFineWaiverModalPreview;
     window.handleSaveFineWaiver = handleSaveFineWaiver;
     window.togglePariwarikFinePaid = togglePariwarikFinePaid;
+
+    // Toggle whether Fine logic is ACTIVE/ENABLED for a member in a specific month
+    // Default is ON (true). When toggled OFF (false), fine is not counted (0).
+    async function togglePariwarikFineApplicable(memberId, isEnabled, targetMonthKey = null) {
+      try {
+        const monthKey = targetMonthKey || currentPariwarikMonth;
+        if (!masterSettings.pariwarikFineExemptions || typeof masterSettings.pariwarikFineExemptions !== 'object') {
+          masterSettings.pariwarikFineExemptions = {};
+        }
+        if (!masterSettings.pariwarikFineExemptions[memberId] || typeof masterSettings.pariwarikFineExemptions[memberId] !== 'object') {
+          masterSettings.pariwarikFineExemptions[memberId] = {};
+        }
+
+        // isEnabled === true means Fine applies (default).
+        // isEnabled === false means Fine is OFF (exempt).
+        if (isEnabled) {
+          delete masterSettings.pariwarikFineExemptions[memberId][monthKey];
+        } else {
+          masterSettings.pariwarikFineExemptions[memberId][monthKey] = false;
+        }
+
+        renderPariwarikView();
+
+        // Sync to Firestore & Backend
+        if (typeof settingsCol !== 'undefined' && settingsCol) {
+          await settingsCol.doc('master').set(masterSettings, { merge: true });
+        }
+        await saveSettingsToBackend(masterSettings);
+        console.log(`PASY Fine for ${memberId} on ${monthKey} set to ${isEnabled ? 'APPLICABLE' : 'EXEMPT/OFF'}`);
+      } catch (err) {
+        console.error('Error toggling fine applicability:', err);
+        alert('विलंब शुल्क स्थिति बदलने में त्रुटि: ' + err.message);
+      }
+    }
+    window.togglePariwarikFineApplicable = togglePariwarikFineApplicable;
+
 
     // ==============================================================
     // DUES & OUTSTANDING MANAGEMENT MODULE (समस्त बकाया विवरण व प्रबंधन)
