@@ -61,10 +61,15 @@ const DEFAULT_SETTINGS = {
     { id: 'ev_3', venue: 'केंद्रीय ट्रस्ट कार्यालय, धनबाद' }
   ],
   schemes: [
-    { id: 'sc_1', name: 'मासिक सहयोग कोष (Monthly Sewa)', amount: 100, frequency: 'Monthly', description: 'प्रति माह नियमित ट्रस्ट सेवा सहायता', status: 'Active' },
-    { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क (Annual Dues)', amount: 1200, frequency: 'Yearly', description: 'वार्षिक सदस्यता नवीनीकरण', status: 'Active' },
-    { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Active' },
-    { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Active' }
+    { id: 'sc_1', name: 'पारिवारिक आर्थिक सहायता योजना', amount: 150, frequency: 'Monthly', description: 'पारिवारिक आर्थिक सहायता योजना हेतु सहयोग राशि', status: 'Open', amountType: 'fixed' },
+    { id: 'sc_2', name: 'वार्षिक सदस्यता शुल्क  (Prime Membership)', amount: 200, frequency: 'Yearly', description: 'वार्षिक सदस्यता शुल्क  (Prime Membership)', status: 'Open', amountType: 'fixed' },
+    { id: 'sc_3', name: 'वार्षिक सदस्यता शुल्क  (General Membership)', amount: 100, frequency: 'Yearly', description: 'वार्षिक सदस्यता शुल्क  (General Membership)', status: 'Open', amountType: 'fixed' },
+    { id: 'sc_4', name: 'आपातकालीन सहायता कोष', amount: 0, frequency: 'Open', description: 'आपातकालीन सहायता कोष', status: 'Open', amountType: 'custom' },
+    { id: 'sc_1792563874533', name: 'सहयोग राशि  (General Donation)', amount: 0, frequency: 'Open', description: 'सहयोग राशि  (General Donation)', status: 'Open', amountType: 'custom' },
+    { id: 'sc_1792563925027', name: 'छठ पूजा हेतु सहयोग राशि (2026)', amount: 0, frequency: 'One-Time', description: 'छठ पूजा हेतु सहयोग राशि (2026)', status: 'Open', amountType: 'custom' },
+    { id: 'sc_1792563958247', name: 'छात्रवृति हेतु सहयोग राशि', amount: 0, frequency: 'One-Time', description: 'छात्रवृति हेतु सहयोग राशि', status: 'Open', amountType: 'custom' },
+    { id: 'sc_1792563982419', name: 'कन्यादान हेतु सहयोग राशि', amount: 0, frequency: 'One-Time', description: 'कन्यादान हेतु सहयोग राशि', status: 'Open', amountType: 'custom' },
+    { id: 'sc_1792567916290', name: 'छठ पूजा हेतु सहयोग राशि (2025)', amount: 0, frequency: 'One-Time', description: 'छठ पूजा हेतु सहयोग राशि (2025)', status: 'Closed', amountType: 'custom' }
   ],
   openingBalances: {
     cash: 0,
