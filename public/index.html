@@ -7922,14 +7922,23 @@
     }
 
     function showDashboard() {
+      // Clear any member session state
+      localStorage.removeItem('gsks_member_auth');
+      currentLoggedInMember = null;
       document.documentElement.classList.remove('member-logged-in');
       document.documentElement.classList.add('admin-logged-in');
       const loginScr = document.getElementById('login-screen');
       const adminDash = document.getElementById('admin-dashboard');
       const memberDash = document.getElementById('member-dashboard');
 
-      if (loginScr) loginScr.classList.add('hidden');
-      if (memberDash) memberDash.classList.add('hidden');
+      if (loginScr) {
+        loginScr.classList.add('hidden');
+        loginScr.style.display = 'none';
+      }
+      if (memberDash) {
+        memberDash.classList.add('hidden');
+        memberDash.style.display = 'none';
+      }
       if (adminDash) {
         adminDash.classList.remove('hidden');
         adminDash.style.display = 'flex';
@@ -8048,9 +8057,23 @@
     function logoutAdmin() {
       localStorage.removeItem('gsks_admin_auth');
       document.documentElement.classList.remove('admin-logged-in');
-      document.getElementById('admin-dashboard').classList.add('hidden');
-      document.getElementById('login-screen').classList.remove('hidden');
-      document.getElementById('admin-password').value = '';
+      const adminDash = document.getElementById('admin-dashboard');
+      if (adminDash) {
+        adminDash.classList.add('hidden');
+        adminDash.style.display = 'none';
+      }
+      const memberDash = document.getElementById('member-dashboard');
+      if (memberDash) {
+        memberDash.classList.add('hidden');
+        memberDash.style.display = 'none';
+      }
+      const loginScr = document.getElementById('login-screen');
+      if (loginScr) {
+        loginScr.classList.remove('hidden');
+        loginScr.style.display = '';
+      }
+      const pwdEl = document.getElementById('admin-password');
+      if (pwdEl) pwdEl.value = '';
     }
 
     // ==============================================
@@ -8092,15 +8115,21 @@
 
       if (member) {
         if (errBox) errBox.classList.add('hidden');
-        currentLoggedInMember = member;
+        // Clear admin auth immediately so admin dashboard can never flash or be prioritized
+        localStorage.removeItem('gsks_admin_auth');
         localStorage.setItem('gsks_member_auth', JSON.stringify({ id: member.id, phone: member.phone }));
+        currentLoggedInMember = member;
+
+        // Switch immediately to member dashboard
+        showMemberDashboard(member);
+
+        // Hydrate secondary data in background without blocking screen transition
         if (!allEvents || allEvents.length === 0) {
-          await loadEventsFallback();
+          loadEventsFallback();
         }
         if (!allDonations || allDonations.length === 0) {
-          await loadDonationsFallback();
+          loadDonationsFallback();
         }
-        showMemberDashboard(member);
       } else {
         if (errBox) {
           errBox.textContent = '❌ कोई सदस्य नहीं मिला! कृपया अपनी सही GSKS ID या 10-अंकीय मोबाइल नंबर जांचें।';
@@ -8110,6 +8139,8 @@
     }
 
     function showMemberDashboard(member) {
+      // Ensure admin auth is purged when member dashboard is active
+      localStorage.removeItem('gsks_admin_auth');
       currentLoggedInMember = member;
       document.documentElement.classList.remove('admin-logged-in');
       document.documentElement.classList.add('member-logged-in');
@@ -8118,9 +8149,18 @@
       const adminDash = document.getElementById('admin-dashboard');
       const memberDash = document.getElementById('member-dashboard');
 
-      if (loginScr) loginScr.classList.add('hidden');
-      if (adminDash) adminDash.classList.add('hidden');
-      if (memberDash) memberDash.classList.remove('hidden');
+      if (loginScr) {
+        loginScr.classList.add('hidden');
+        loginScr.style.display = 'none';
+      }
+      if (adminDash) {
+        adminDash.classList.add('hidden');
+        adminDash.style.display = 'none';
+      }
+      if (memberDash) {
+        memberDash.classList.remove('hidden');
+        memberDash.style.display = 'flex';
+      }
 
       initFirebaseRealtime();
       renderMemberDashboard(member);
@@ -8132,9 +8172,20 @@
       currentLoggedInMember = null;
       document.documentElement.classList.remove('member-logged-in');
       const memberDash = document.getElementById('member-dashboard');
+      const adminDash = document.getElementById('admin-dashboard');
       const loginScr = document.getElementById('login-screen');
-      if (memberDash) memberDash.classList.add('hidden');
-      if (loginScr) loginScr.classList.remove('hidden');
+      if (memberDash) {
+        memberDash.classList.add('hidden');
+        memberDash.style.display = 'none';
+      }
+      if (adminDash) {
+        adminDash.classList.add('hidden');
+        adminDash.style.display = 'none';
+      }
+      if (loginScr) {
+        loginScr.classList.remove('hidden');
+        loginScr.style.display = '';
+      }
       const inputEl = document.getElementById('member-login-input');
       if (inputEl) inputEl.value = '';
       const errBox = document.getElementById('member-login-error');
