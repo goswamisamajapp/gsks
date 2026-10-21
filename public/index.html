@@ -2214,7 +2214,7 @@
             <div class="grid grid-cols-3 gap-2 sm:gap-3.5 mt-2.5 sm:mt-3.5">
               <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20">
                 <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Cash</p>
-                <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-cash">₹ 34,025</h4>
+                <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-cash">₹ 0</h4>
                 <p class="text-[9px] text-amber-100 mt-0.5 hidden sm:block">Self Fund Cash</p>
               </div>
               <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20">
@@ -2225,7 +2225,7 @@
               <div class="bg-white/15 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 border border-white/20 flex flex-col justify-between">
                 <div>
                   <p class="text-[9px] sm:text-[11px] font-bold text-amber-100 uppercase tracking-wider truncate">Total</p>
-                  <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-total">₹ 34,025</h4>
+                  <h4 class="text-xs sm:text-2xl font-black mt-0.5 sm:mt-1 font-mono truncate" id="disp-opening-total">₹ 0</h4>
                 </div>
                 <p class="text-[9px] text-emerald-200 font-bold mt-0.5 hidden sm:block truncate">✓ Treasury</p>
               </div>
@@ -5960,7 +5960,7 @@
           <label class="block font-bold text-slate-700 mb-1">Cash Opening Balance *</label>
           <div class="relative">
             <span class="absolute left-3 top-2 text-slate-400 font-bold">₹</span>
-            <input type="number" id="opening-bal-cash-input" required min="0" step="any" placeholder="34025" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
+            <input type="number" id="opening-bal-cash-input" required min="0" step="any" placeholder="0" class="w-full pl-7 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm">
           </div>
         </div>
 
@@ -7554,8 +7554,7 @@
         { id: 'sc_3', name: 'विशेष कन्या विवाह सहाय योजना', amountType: 'fixed', amount: 500, frequency: 'One-Time', description: 'ज़रूरतमंद परिवार के विवाह में ट्रस्ट अनुदान', status: 'Open' },
         { id: 'sc_4', name: 'आपातकालीन चिकित्सा सहायता कोष', amountType: 'custom', amount: 0, frequency: 'Open', description: 'गंभीर बीमारी पर विशेष आर्थिक सहयोग', status: 'Open' }
       ],
-      openingBalances : { cash: 500, bank: 34025, remarks: 'वर्ष 2025 से पूर्व संचित कोष'
-      },
+      openingBalances: { cash: 0, bank: 0, remarks: '' },
       vendors: [
         { id: 'ven_1', name: 'टेंट हाउस एवं डेकोरेशन', phone: '', category: 'Tent & Sound', address: 'गोमो' },
         { id: 'ven_2', name: 'साउंड एवं लाउडस्पीकर सिस्टम', phone: '', category: 'Sound', address: 'गोमो' },
@@ -11741,7 +11740,7 @@
       document.getElementById('dash-archived-members').textContent = archivedCount;
 
       // Dynamic Treasury Calculations from Opening Balance, actual Donations, Fund Transfers, and Expenses
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025 };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 0, bank: 0 };
       const openCash = parseFloat(openBalances.cash) || 0;
       const openBank = parseFloat(openBalances.bank) || 0;
 
@@ -16015,13 +16014,13 @@
     function openEditOpeningBalanceModal() {
       closeAllModals();
       const modal = document.getElementById('opening-balance-modal');
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances: { cash: 0, bank: 0, remarks: '' };
 
       const cashInput = document.getElementById('opening-bal-cash-input');
       const bankInput = document.getElementById('opening-bal-bank-input');
       const remarksInput = document.getElementById('opening-bal-remarks-input');
 
-      if (cashInput) cashInput.value = openBalances.cash !== undefined ? openBalances.cash : 34025;
+      if (cashInput) cashInput.value = openBalances.cash !== undefined ? openBalances.cash : 0;
       if (bankInput) bankInput.value = openBalances.bank !== undefined ? openBalances.bank : 0;
       if (remarksInput) remarksInput.value = openBalances.remarks || '';
 
@@ -16039,7 +16038,7 @@
     async function handleSaveOpeningBalance(e) {
       if (e && e.preventDefault) e.preventDefault();
       try {
-        const cashVal = document.getElementById('opening-bal-cash-input') ? document.getElementById('opening-bal-cash-input').value : 34025;
+        const cashVal = document.getElementById('opening-bal-cash-input') ? document.getElementById('opening-bal-cash-input').value : 0;
         const bankVal = document.getElementById('opening-bal-bank-input') ? document.getElementById('opening-bal-bank-input').value : 0;
         const remVal = document.getElementById('opening-bal-remarks-input') ? document.getElementById('opening-bal-remarks-input').value : '';
 
@@ -19228,7 +19227,7 @@
 
     // --- OPENING BALANCES CARD RENDERING ---
     function renderOpeningBalancesCard() {
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025, remarks: 'वर्ष 2025 से पूर्व संचित कोष' };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances: { cash: 0, bank: 0, remarks: '' };
       const openCash = parseFloat(openBalances.cash) || 0;
       const openBank = parseFloat(openBalances.bank) || 0;
       const openTotal = openCash + openBank;
@@ -19511,7 +19510,7 @@
 
     function getBankTransactionsList() {
       const list = [];
-      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 500, bank: 34025 };
+      const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 0, bank: 0 };
       const openBank = parseFloat(openBalances.bank) || 0;
 
       // 1. Bank Opening Balance Entry

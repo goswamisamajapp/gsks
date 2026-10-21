@@ -163,9 +163,9 @@
     }
   ],
   "openingBalances": {
-    "cash": 34025,
+    "cash": 0,
     "bank": 0,
-    "remarks": "वर्ष 2025 से पूर्व संचित कोष"
+    "remarks": ""
   },
   "vendors": [
     {
