@@ -8402,7 +8402,7 @@
       "bankName": "NITISH NATH",
       "status": "Active",
       "remarks": "अध्यक्ष जी का UPI ID",
-      "isPrimary": false,
+      "isPrimary": true,
       "updatedAt": "2026-10-21T13:04:21.558Z"
     },
     {
@@ -8412,7 +8412,7 @@
       "bankName": "PRABHU DAYAL GOSWAMI",
       "status": "Active",
       "remarks": "कोषाध्यक्ष जी का UPI ID",
-      "isPrimary": true,
+      "isPrimary": false,
       "updatedAt": "2026-10-21T13:05:40.015Z"
     }
   ]
@@ -8710,6 +8710,9 @@
       }
 
       initFirebaseRealtime();
+      if (typeof loadSettingsFallback === 'function') {
+        loadSettingsFallback();
+      }
       renderMemberDashboard(member);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -22017,6 +22020,7 @@
         try {
           const authData = JSON.parse(localStorage.getItem('gsks_member_auth'));
           if (authData && authData.id) {
+            if (typeof loadSettingsFallback === 'function') await loadSettingsFallback();
             if (!allMembers || allMembers.length === 0) await loadMembersDataFallback();
             if (!allEvents || allEvents.length === 0) await loadEventsFallback();
             if (!allDonations || allDonations.length === 0) await loadDonationsFallback();
