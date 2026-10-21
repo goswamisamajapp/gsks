@@ -10160,12 +10160,20 @@
         return false;
       });
 
+      // Sort recent first
+      myDonations.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+
       const totalAmt = myDonations.reduce((sum, d) => sum + (parseFloat(d.amount) || 0), 0);
       const displayTotal = totalAmt > 0 ? totalAmt : (Number(member.donation) || 0);
 
       if (badgeEl) badgeEl.textContent = `₹ ${displayTotal.toLocaleString('en-IN')}`;
       if (statTotalEl) statTotalEl.textContent = `₹ ${displayTotal.toLocaleString('en-IN')}`;
       if (statCountEl) statCountEl.textContent = `${myDonations.length} रसीदें`;
+
+      // Always re-calculate quick stats cards dynamically
+      if (typeof renderMemberQuickStats === 'function') {
+        renderMemberQuickStats(member);
+      }
 
       if (myDonations.length === 0) {
         const emptyHtml = `
@@ -10228,9 +10236,9 @@
         }).join('');
       }
 
-      // Render Desktop Table
+      // Render Desktop Table (Top 5 most recent)
       if (tbody) {
-        tbody.innerHTML = myDonations.map(d => {
+        tbody.innerHTML = myDonations.slice(0, 5).map(d => {
           const amt = parseFloat(d.amount) || 0;
           const dt = d.date || (d.createdAt ? d.createdAt.split('T')[0] : '--');
           const methodBadge = d.method === 'Cash' 
@@ -11559,7 +11567,10 @@
           renderDonationsList();
           if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
           if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
-            if (currentLoggedInMember) renderMemberDonations(currentLoggedInMember);
+            if (currentLoggedInMember) {
+              renderMemberDonations(currentLoggedInMember);
+              if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
+            }
           }
         }, (err) => {
           console.warn("Firestore donations onSnapshot error:", err);
@@ -11804,6 +11815,12 @@
             updateStats();
             renderDonationsList();
             if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+            if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+              if (currentLoggedInMember) {
+                renderMemberDonations(currentLoggedInMember);
+                if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
+              }
+            }
             return;
           }
         }
@@ -11823,6 +11840,12 @@
               updateStats();
               renderDonationsList();
               if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+              if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+                if (currentLoggedInMember) {
+                  renderMemberDonations(currentLoggedInMember);
+                  if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
+                }
+              }
               /* direct live sync */
             }
           }
