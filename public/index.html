@@ -17017,11 +17017,8 @@
     // Helper: Always ensures all eligible Pariwarik members are retrieved (at least 30 members)
     function getPariwarikMemberList() {
       const nonRemoved = allMembers.filter(m => m.status !== 'removed');
-      let members = nonRemoved.filter(m => isPariwarikMember(m));
-      if (members.length === 0 && nonRemoved.length > 0) {
-        members = nonRemoved.slice(0, 30);
-      }
-      return members;
+      // Strictly only enrolled members where PASY is ON (isPariwarikMember === true)
+      return nonRemoved.filter(m => isPariwarikMember(m));
     }
 
     function renderPariwarikMonthsTabs() {
