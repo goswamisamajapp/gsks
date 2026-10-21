@@ -7285,6 +7285,48 @@
       return false;
     }
 
+    // Helper: Get real current active calendar month key (e.g. "2026-10")
+    function getPariwarikCurrentActiveMonthKey() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const key = `${y}-${m}`;
+      const exists = PARIWARIK_MONTHS.some(x => x.key === key);
+      if (exists) return key;
+      if (key < PARIWARIK_MONTHS[0].key) return PARIWARIK_MONTHS[0].key;
+      return PARIWARIK_MONTHS[PARIWARIK_MONTHS.length - 1].key;
+    }
+    window.getPariwarikCurrentActiveMonthKey = getPariwarikCurrentActiveMonthKey;
+
+    // Helper: Get member's cumulative PASY dues up to the current active month (or specified upToMonthKey)
+    // Counts all unpaid months from Sep 2025 up to current month (e.g. up to 2026-10)
+    function getMemberPasyCumulativeDues(member, upToMonthKey = null) {
+      if (!member || !isPariwarikMember(member)) {
+        return { unpaidCount: 0, totalDues: 0, unpaidMonths: [], upToMonthKey: '' };
+      }
+      const limitMonthKey = upToMonthKey || getPariwarikCurrentActiveMonthKey();
+      const unpaidMonths = [];
+
+      PARIWARIK_MONTHS.forEach(mCfg => {
+        if (mCfg.key <= limitMonthKey) {
+          const isPaid = isPariwarikPaidForMonth(member, mCfg.key);
+          if (!isPaid) {
+            unpaidMonths.push(mCfg);
+          }
+        }
+      });
+
+      const unpaidCount = unpaidMonths.length;
+      const totalDues = unpaidCount * PARIWARIK_MONTHLY_FEE;
+      return {
+        unpaidCount,
+        totalDues,
+        unpaidMonths,
+        upToMonthKey: limitMonthKey
+      };
+    }
+    window.getMemberPasyCumulativeDues = getMemberPasyCumulativeDues;
+
     // Helper: Get payment date for a paid month (from auto-donations or member override or joining date)
     function getPariwarikPaymentDate(m, monthKey) {
       if (!m) return '';
@@ -17910,6 +17952,7 @@
           const isWinner = (currentWinnerMemberId === m.id);
           const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
           const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+          const cumDuesInfo = (typeof getMemberPasyCumulativeDues === 'function') ? getMemberPasyCumulativeDues(m) : { unpaidCount: (hasPaid ? 0 : 1), totalDues: mDues };
           const fineInfo = calculateMemberPasyFine(m, currentPariwarikMonth);
 
           // Other won month check
@@ -17973,7 +18016,7 @@
               <div class="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-900/5">
                 <div class="flex items-center gap-2 min-w-0 font-mono text-[11px] flex-wrap">
                   <span class="font-black ${hasPaid ? 'text-emerald-700' : 'text-slate-400'}">₹${mPaid}</span>
-                  ${mDues > 0 ? `<span class="font-bold text-rose-600">Dues: ₹${mDues}</span>` : ''}
+                  ${cumDuesInfo.totalDues > 0 ? `<span class="font-bold text-rose-600" title="कुल देय बकाया (वर्तमान माह तक)">Dues: ₹${cumDuesInfo.totalDues.toLocaleString('en-IN')}${cumDuesInfo.unpaidCount > 1 ? ` (${cumDuesInfo.unpaidCount}M)` : ''}</span>` : ''}
                   ${fineInfo.netFine > 0 ? `<span class="font-bold text-amber-600">Fine: ₹${fineInfo.netFine}</span>` : ''}
                   ${fineInfo.waiver > 0 ? `<span class="text-[9px] text-emerald-600 font-sans font-bold">(-₹${fineInfo.waiver})</span>` : ''}
                 </div>
@@ -18044,6 +18087,7 @@
           const isWinner = (currentWinnerMemberId === m.id);
           const mPaid = hasPaid ? PARIWARIK_MONTHLY_FEE : 0;
           const mDues = hasPaid ? 0 : PARIWARIK_MONTHLY_FEE;
+          const cumDuesInfo = (typeof getMemberPasyCumulativeDues === 'function') ? getMemberPasyCumulativeDues(m) : { unpaidCount: (hasPaid ? 0 : 1), totalDues: mDues };
           const fineInfo = calculateMemberPasyFine(m, currentPariwarikMonth);
 
           let otherWonMonthKey = null;
@@ -18115,9 +18159,10 @@
               <td class="p-3.5 text-right font-mono font-bold ${hasPaid ? 'text-emerald-600 font-black' : 'text-slate-400'}">
                 ₹${mPaid.toLocaleString('en-IN')}
               </td>
-              <!-- Dues (₹) -->
-              <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
-                ₹${mDues.toLocaleString('en-IN')}
+              <!-- Dues (₹) - Cumulative unpaid up to current month -->
+              <td class="p-3.5 text-right font-mono font-bold ${cumDuesInfo.totalDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}" title="वर्तमान माह तक कुल ${cumDuesInfo.unpaidCount} माह का बकाया: ₹${cumDuesInfo.totalDues}">
+                <div>₹${cumDuesInfo.totalDues.toLocaleString('en-IN')}</div>
+                ${cumDuesInfo.unpaidCount > 1 ? `<div class="text-[9px] font-sans font-semibold text-rose-500">${cumDuesInfo.unpaidCount} माह बकाया</div>` : ''}
               </td>
               <!-- Fine (₹) + Waiver Edit Button + 2 Distinct Toggles (Apply Fine & Mark Paid) -->
               <td class="p-3.5 text-right">
@@ -18259,7 +18304,13 @@
 
       let msg = '';
       if (!hasPaid) {
+        const memberObj = (allMembers || []).find(x => x.id === memberId);
+      const cumDues = (typeof getMemberPasyCumulativeDues === 'function' && memberObj) ? getMemberPasyCumulativeDues(memberObj) : null;
+      if (cumDues && cumDues.unpaidCount > 1) {
+        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत आपके *${cumDues.unpaidCount} माह* की कुल किस्त बकाया राशि *₹${cumDues.totalDues.toLocaleString('en-IN')}* अभी तक प्राप्त नहीं हुई है।\n\n(शामिल माह: ${(cumDues.unpaidMonths || []).map(x => x.label).join(', ')})\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+      } else {
         msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की ₹${PARIWARIK_MONTHLY_FEE} की किस्त अभी तक प्राप्त नहीं हुई है।\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+      }
       } else {
         msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की आपकी ₹${PARIWARIK_MONTHLY_FEE} की किस्त सफलतापूर्वक प्राप्त हो चुकी है।\n\nआपके सहयोग के लिए धन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
       }
@@ -18315,7 +18366,10 @@
                 </div>
               </div>
               <div class="shrink-0 flex items-center gap-2">
-                <span class="text-rose-600 font-mono font-bold text-xs">₹150</span>
+                <div class="text-right">
+                  <div class="text-rose-600 font-mono font-bold text-xs">₹${((typeof getMemberPasyCumulativeDues === 'function') ? getMemberPasyCumulativeDues(m).totalDues : 150).toLocaleString('en-IN')}</div>
+                  ${((typeof getMemberPasyCumulativeDues === 'function') && getMemberPasyCumulativeDues(m).unpaidCount > 1) ? `<div class="text-[9px] text-rose-500 font-semibold">${getMemberPasyCumulativeDues(m).unpaidCount} माह बकाया</div>` : ''}
+                </div>
                 <button type="button" 
                         onclick="sendPariwarikWhatsAppNotification('${m.id}', '${(m.name || '').replace(/'/g, "\\'")}', '${(m.phone || '')}', false)" 
                         ${!hasValidPhone ? 'disabled' : ''}
@@ -18753,18 +18807,17 @@
         // 1. General / Membership Dues
         const genDues = Number(m.dues) || 0;
 
-        // 2. PASY Installment Dues for the current selected month
+        // 2. PASY Installment Dues: Count ALL unpaid months up to current active month!
         let mPasyDues = 0;
         let pasyDueMonthsLabels = [];
+        let mPasyUnpaidCount = 0;
         if (isPasy) {
-          const hasPaidCurrent = typeof isPariwarikPaidForMonth === 'function' ? isPariwarikPaidForMonth(m, currentPariwarikMonth) : false;
-          if (!hasPaidCurrent) {
-            mPasyDues = pasyFee;
-            const installmentMonthLabel = typeof getPariwarikInstallmentMonthLabel === 'function' 
-              ? getPariwarikInstallmentMonthLabel(currentPariwarikMonth) 
-              : currentPariwarikMonth;
-            pasyDueMonthsLabels.push(installmentMonthLabel);
-          }
+          const pasyDuesInfo = (typeof getMemberPasyCumulativeDues === 'function')
+            ? getMemberPasyCumulativeDues(m)
+            : { unpaidCount: 0, totalDues: 0, unpaidMonths: [] };
+          mPasyDues = pasyDuesInfo.totalDues;
+          mPasyUnpaidCount = pasyDuesInfo.unpaidCount;
+          pasyDueMonthsLabels = (pasyDuesInfo.unpaidMonths || []).map(mc => mc.label);
         }
 
         // 3. PASY Fine Dues
@@ -18803,7 +18856,7 @@
           }
           if (mPasyDues > 0) {
             categories.push('PASY');
-            detailsList.push(`PASY किस्त (${pasyDueMonthsLabels.join(', ')}): ₹${mPasyDues}`);
+            detailsList.push(`PASY किस्त (${mPasyUnpaidCount} माह - ${pasyDueMonthsLabels.join(', ')}): ₹${mPasyDues.toLocaleString('en-IN')}`);
           }
           if (mFineDues > 0) {
             categories.push('FINE');
