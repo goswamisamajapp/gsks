@@ -7399,6 +7399,9 @@
       const modal = document.getElementById('pasy-pay-modal');
       if (!modal) return;
 
+      // Dynamically sync and refresh UPI & Payee display immediately when modal opens
+      updatePasyPayDetailsDisplay();
+
       const purposeSelect = document.getElementById('pasy-pay-purpose');
       const amountInput = document.getElementById('pasy-pay-amount');
       const remarksInput = document.getElementById('pasy-pay-remarks');
@@ -12614,7 +12617,22 @@
     }
 
     async function loadSettingsFallback() {
-      // 1. Try Live Express / Render API
+      // 1. Direct Firestore REST (Single Source of Truth for live cloud settings)
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/settings/master');
+        if (restRes.ok) {
+          const docJson = await restRes.json();
+          const cleanDoc = parseFirestoreDocument(docJson);
+          if (cleanDoc) {
+            applySettings(cleanDoc);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Firestore REST settings fetch fallback warning:', e);
+      }
+
+      // 2. Fallback to Express / Render API if Firestore REST is blocked
       try {
         const res = await apiFetch('/api/settings');
         if (res.ok) {
@@ -12625,21 +12643,7 @@
           }
         }
       } catch (err) {
-        console.warn('Backend API settings fetch failed, trying Firestore REST:', err);
-      }
-
-      // 2. Direct Firestore REST fallback
-      try {
-        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/settings/master');
-        if (restRes.ok) {
-          const docJson = await restRes.json();
-          const cleanDoc = parseFirestoreDocument(docJson);
-          if (cleanDoc) {
-            applySettings(cleanDoc);
-          }
-        }
-      } catch (e) {
-        console.warn('Fallback loading settings failed completely:', e);
+        console.warn('Backend API settings fetch failed:', err);
       }
     }
 
