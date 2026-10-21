@@ -17587,27 +17587,33 @@
                 </div>
 
                 <!-- Action Buttons: Fine Waiver, Two Toggles, Push, WhatsApp -->
-                <div class="flex items-center gap-1.5 shrink-0">
+                <div class="flex items-center gap-1 shrink-0 flex-wrap justify-end">
                   <!-- Toggle 1: Fine Apply (Amber) -->
                   ${(() => {
                     const fineExempts = (masterSettings && masterSettings.pariwarikFineExemptions && masterSettings.pariwarikFineExemptions[m.id]) || {};
                     const isFineActive = (fineExempts[currentPariwarikMonth] !== false);
                     return `
-                      <label class="relative inline-flex items-center cursor-pointer select-none" title="${isFineActive ? 'Fine ON' : 'Fine OFF'}">
-                        <input type="checkbox" onchange="togglePariwarikFineApplicable('${m.id}', this.checked, '${currentPariwarikMonth}')" ${isFineActive ? 'checked' : ''} class="sr-only peer">
-                        <div class="w-7 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
-                      </label>
+                      <div class="flex items-center gap-1 bg-slate-100 px-1.5 py-0.5 rounded-lg border border-slate-200" title="${isFineActive ? 'Fine ON' : 'Fine OFF'}">
+                        <span class="text-[8px] font-black ${isFineActive ? 'text-amber-700' : 'text-slate-400'}">${isFineActive ? 'Fine' : 'NoFine'}</span>
+                        <label class="relative inline-flex items-center cursor-pointer select-none">
+                          <input type="checkbox" onchange="togglePariwarikFineApplicable('${m.id}', this.checked, '${currentPariwarikMonth}')" ${isFineActive ? 'checked' : ''} class="sr-only peer">
+                          <div class="w-7 h-3.5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+                        </label>
+                      </div>
                     `;
                   })()}
 
                   <!-- Toggle 2: Fine Paid (Emerald) -->
-                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'Fine Paid' : 'Fine Unpaid'}">
-                    <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
-                    <div class="w-7 h-4 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
-                  </label>
+                  <div class="flex items-center gap-1 bg-slate-100 px-1.5 py-0.5 rounded-lg border border-slate-200" title="${fineInfo.isPaid ? 'Paid' : 'Unpaid'}">
+                    <span class="text-[8px] font-black ${fineInfo.isPaid ? 'text-emerald-700' : 'text-slate-400'}">Paid</span>
+                    <label class="relative inline-flex items-center cursor-pointer select-none">
+                      <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
+                      <div class="w-7 h-3.5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
+                    </label>
+                  </div>
 
                   <button type="button" 
-                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')"" 
+                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')""" 
                           class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80" 
                           title="Set Fine Waiver">
                     <i class="fa-solid fa-tags text-[10px]"></i>
@@ -17721,39 +17727,49 @@
               <td class="p-3.5 text-right font-mono font-bold ${mDues > 0 ? 'text-rose-600 font-black' : 'text-slate-300'}">
                 ₹${mDues.toLocaleString('en-IN')}
               </td>
-              <!-- Fine (₹) + Waiver Edit Button + 2 Toggles (Apply Fine & Mark Paid) -->
+              <!-- Fine (₹) + Waiver Edit Button + 2 Distinct Toggles (Apply Fine & Mark Paid) -->
               <td class="p-3.5 text-right">
-                <div class="inline-flex items-center justify-end gap-1.5 sm:gap-2">
-                  <div class="text-right">
-                    <div class="font-mono font-black text-xs ${fineInfo.isPaid ? 'text-emerald-600 line-through' : (fineInfo.netFine > 0 ? 'text-amber-600' : 'text-slate-300')}">
+                <div class="inline-flex items-center justify-end gap-2">
+                  <!-- Fine Amount Display -->
+                  <div class="text-right min-w-[50px]">
+                    <div class="font-mono font-black text-xs ${fineInfo.isPaid ? 'text-emerald-600 line-through' : (fineInfo.netFine > 0 ? 'text-amber-700' : 'text-slate-400')}">
                       ₹${fineInfo.netFine.toLocaleString('en-IN')}
                     </div>
-                    ${fineInfo.waiver > 0 ? `<div class="text-[9px] text-emerald-600 font-bold" title="Waiver: ₹${fineInfo.waiver}">-₹${fineInfo.waiver}</div>` : ''}
+                    ${fineInfo.waiver > 0 ? `<div class="text-[9px] text-emerald-600 font-bold leading-tight" title="Waiver: ₹${fineInfo.waiver}">-₹${fineInfo.waiver}</div>` : ''}
+                    ${fineInfo.isPaid ? `<div class="text-[8px] text-emerald-600 font-bold leading-tight">Paid</div>` : ''}
                   </div>
+
+                  <!-- Waiver Discount Modal Button -->
                   <button type="button" 
                           onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
-                          class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer" 
-                          title="Waiver छूट दर्ज करें">
+                          class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200" 
+                          title="Waiver (छूट) सेट करें">
                     <i class="fa-solid fa-tags text-[10px]"></i>
                   </button>
 
-                  <!-- Toggle 1: Fine Apply (ON = Fine काउंट होगा, OFF = Fine नहीं लगेगा) -->
+                  <!-- Toggle 1: Fine Apply (ON = Fine काउंट होगा, OFF = Fine 0 हो जाएगा) -->
                   ${(() => {
                     const fineExempts = (masterSettings && masterSettings.pariwarikFineExemptions && masterSettings.pariwarikFineExemptions[m.id]) || {};
                     const isFineActive = (fineExempts[currentPariwarikMonth] !== false);
                     return `
-                      <label class="relative inline-flex items-center cursor-pointer select-none" title="${isFineActive ? 'Fine सक्रिय (ON) - क्लिक करके इस माह का Fine बंद करें' : 'Fine बंद (OFF) - कोई जुर्माना नहीं लगेगा'}">
-                        <input type="checkbox" onchange="togglePariwarikFineApplicable('${m.id}', this.checked, '${currentPariwarikMonth}')" ${isFineActive ? 'checked' : ''} class="sr-only peer">
-                        <div class="w-8 h-4.5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
-                      </label>
+                      <div class="flex items-center gap-1 bg-slate-50 px-1.5 py-0.5 rounded-lg border border-slate-200" title="${isFineActive ? 'Fine लागू (Active): इस माह Fine काउंट हो रहा है' : 'Fine बंद (Exempt): इस माह कोई Fine नहीं लगेगा'}">
+                        <span class="text-[9px] font-bold ${isFineActive ? 'text-amber-700' : 'text-slate-400'}">${isFineActive ? 'Fine' : 'NoFine'}</span>
+                        <label class="relative inline-flex items-center cursor-pointer select-none">
+                          <input type="checkbox" onchange="togglePariwarikFineApplicable('${m.id}', this.checked, '${currentPariwarikMonth}')" ${isFineActive ? 'checked' : ''} class="sr-only peer">
+                          <div class="w-8 h-4 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-amber-500 shadow-inner"></div>
+                        </label>
+                      </div>
                     `;
                   })()}
 
                   <!-- Toggle 2: Fine Paid Status (Green) -->
-                  <label class="relative inline-flex items-center cursor-pointer select-none" title="${fineInfo.isPaid ? 'Fine जमा हो चुका है (Paid)' : (fineInfo.netFine > 0 ? 'Fine बकाया - जमा करने के लिए ऑन करें' : 'कोई Fine बकाया नहीं')}">
-                    <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
-                    <div class="w-8 h-4.5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
-                  </label>
+                  <div class="flex items-center gap-1 bg-slate-50 px-1.5 py-0.5 rounded-lg border border-slate-200" title="${fineInfo.isPaid ? 'Fine जमा हो चुका है' : (fineInfo.netFine > 0 ? 'Fine जमा करने के लिए ऑन करें' : 'कोई Fine बकाया नहीं')}">
+                    <span class="text-[9px] font-bold ${fineInfo.isPaid ? 'text-emerald-700' : 'text-slate-400'}">Paid</span>
+                    <label class="relative inline-flex items-center cursor-pointer select-none">
+                      <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
+                      <div class="w-8 h-4 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
+                    </label>
+                  </div>
                 </div>
               </td>
               <!-- Cumulative Total (₹) up to this month -->

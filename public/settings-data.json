@@ -218,5 +218,7 @@
       "name": "सामाजिक विकास एवं विविध व्यय",
       "description": "सामुदायिक कार्य एवं अन्य आकस्मिक व्यय"
     }
-  ]
+  ],
+  "pariwarikFinePaid": {},
+  "pariwarikFineExemptions": {}
 }
