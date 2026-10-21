@@ -420,5 +420,27 @@
   ],
   "pariwarikWinners": {
     "2026-02": "GSKS-001"
-  }
+  },
+  "upiList": [
+    {
+      "id": "upi_1",
+      "address": "7781931880-9@ybl",
+      "payeeName": "GOSWAMI SAMAJ KALYAN SAMITI",
+      "bankName": "NITISH NATH",
+      "status": "Active",
+      "remarks": "अध्यक्ष जी का UPI ID",
+      "isPrimary": false,
+      "updatedAt": "2026-10-21T13:04:21.558Z"
+    },
+    {
+      "id": "upi_1792587940015",
+      "address": "7004312107@nyes",
+      "payeeName": "GOSWAMI SAMAJ KALYAN SAMITI",
+      "bankName": "PRABHU DAYAL GOSWAMI",
+      "status": "Active",
+      "remarks": "कोषाध्यक्ष जी का UPI ID",
+      "isPrimary": true,
+      "updatedAt": "2026-10-21T13:05:40.015Z"
+    }
+  ]
 }
