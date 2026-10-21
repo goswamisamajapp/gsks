@@ -12338,7 +12338,7 @@
                 <span class="font-bold text-slate-800 truncate">${m.address || '--'}</span>
               </div>
               <div class="shrink-0 flex items-center gap-1 font-mono text-[11px]">
-                <span class="font-bold text-emerald-700">₹${m.donation || 0}</span>
+                <span class="font-bold text-emerald-700">₹${getMemberTotalGeneralDonation(m)}</span>
                 <span class="text-slate-300">/</span>
                 <span class="font-bold ${m.dues > 0 ? 'text-rose-600' : 'text-slate-400'}">₹${m.dues || 0}</span>
               </div>
@@ -12448,7 +12448,7 @@
             </div>
           </td>
           <td class="py-3 px-4 font-mono text-slate-700">
-            <span class="text-emerald-700 font-bold">₹${m.donation || 0}</span> / 
+            <span class="text-emerald-700 font-bold">₹${getMemberTotalGeneralDonation(m)}</span> / 
             <span class="text-amber-700 font-bold">₹${m.dues || 0}</span>
           </td>
           <td class="py-3 px-4 text-center">
@@ -12519,6 +12519,38 @@
       });
     }
 
+    // Calculate total general/other donations for a member (excluding ₹150 monthly PASY installments)
+    function getMemberTotalGeneralDonation(member) {
+      if (!member) return 0;
+      const mId = (member.id || '').trim().toLowerCase();
+      const mPhone = (member.phone || '').replace(/\D/g, '');
+      const mName = (member.name || '').trim().toLowerCase();
+
+      const relevantDonations = (allDonations || []).filter(d => {
+        const dMemberId = (d.memberId || '').trim().toLowerCase();
+        const dPhone = (d.phone || '').replace(/\D/g, '');
+        const dName = (d.donorName || '').trim().toLowerCase();
+
+        const isMatch = (mId && dMemberId === mId) ||
+          (mPhone && dPhone && dPhone.length >= 8 && (mPhone.endsWith(dPhone) || dPhone.endsWith(mPhone))) ||
+          (mName && dName && (dName === mName || dName.includes(mName) || mName.includes(dName)));
+
+        if (!isMatch) return false;
+
+        // Exclude monthly PASY installments
+        const scheme = (d.scheme || '').trim();
+        const remarks = (d.remarks || '').trim();
+        const isPasyInstallment = (scheme.includes('पारिवारिक आर्थिक सहायता') || scheme.includes('पारिवारिक योजना') || scheme.toUpperCase().includes('PASY')) &&
+          !d.isPasyFine && !scheme.includes('PASY Fine') && !scheme.includes('विलंब शुल्क') &&
+          (Boolean(d.pariwarikMonthKey) || remarks.includes('पारिवारिक योजना किस्त') || remarks.includes('किस्त'));
+
+        return !isPasyInstallment;
+      });
+
+      const sum = relevantDonations.reduce((acc, d) => acc + (parseFloat(d.amount) || 0), 0);
+      return sum > 0 ? sum : (parseFloat(member.donation) || 0);
+    }
+
     // ==============================================
     // 1. VIEW MODAL LOGIC (Big Photo, All Details, Dues)
     // ==============================================
@@ -12535,7 +12567,8 @@
       document.getElementById('view-name').textContent = member.name;
       document.getElementById('view-id').textContent = `Member ID: ${member.id}`;
       document.getElementById('view-status-badge').innerHTML = getStatusBadge(member.status);
-      document.getElementById('view-donation').textContent = `₹ ${(member.donation || 0).toLocaleString('en-IN')}`;
+      const totalDonationVal = getMemberTotalGeneralDonation(member);
+      document.getElementById('view-donation').textContent = `₹ ${totalDonationVal.toLocaleString('en-IN')}`;
       document.getElementById('view-dues').textContent = `₹ ${(member.dues || 0).toLocaleString('en-IN')}`;
       const viewDesEl = document.getElementById('view-designation');
       if (viewDesEl) viewDesEl.textContent = member.designation || 'सदस्य (Member)';
