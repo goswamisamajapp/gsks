@@ -12358,66 +12358,86 @@
     initFirebaseRealtime();
 
     async function loadFundTransfersFallback() {
+      // 1. Try Live Express / Render API
       try {
         const res = await apiFetch('/api/fund-transfers');
-        const fetched = await res.json();
-        if (Array.isArray(fetched) && fetched.length > 0) {
-          allFundTransfers = fetched;
-          /* direct live sync */
-        } else if (!allFundTransfers || allFundTransfers.length === 0) {
-          try {
-            const cached = null;
-            if (cached) {
-              const parsed = JSON.parse(cached);
-              if (Array.isArray(parsed) && parsed.length > 0) allFundTransfers = parsed;
-            }
-          } catch(e) {}
+        if (res.ok) {
+          const fetched = await res.json();
+          if (Array.isArray(fetched) && fetched.length > 0) {
+            allFundTransfers = fetched;
+            allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+            updateStats();
+            renderFundTransfersList();
+            if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+            return;
+          }
         }
-        allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-        updateStats();
-        renderFundTransfersList();
-        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       } catch (err) {
-        console.error('Failed to load fund transfers fallback:', err);
-        try {
-          const cached = null;
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              allFundTransfers = parsed;
+        console.warn('API fund transfers fetch failed, trying Firestore REST fallback:', err);
+      }
+
+      // 2. Direct Firestore REST fallback
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/fund_transfers?pageSize=500');
+        if (restRes.ok) {
+          const json = await restRes.json();
+          if (json && Array.isArray(json.documents)) {
+            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            if (list.length > 0) {
+              allFundTransfers = list;
               allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
               updateStats();
               renderFundTransfersList();
               if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+              return;
             }
           }
-        } catch(e) {}
+        }
+      } catch (e) {
+        console.warn('Firestore REST fund transfers fetch fallback warning:', e);
       }
     }
 
     async function loadExpensesFallback() {
+      // 1. Try Live Express / Render API
       try {
         const res = await apiFetch('/api/expenses');
-        const fetched = await res.json();
-        if (Array.isArray(fetched) && fetched.length > 0) {
-          allExpenses = fetched;
-          /* direct live sync */
-        } else if (!allExpenses || allExpenses.length === 0) {
-          try {
-            const cached = null;
-            if (cached) {
-              const parsed = JSON.parse(cached);
-              if (Array.isArray(parsed) && parsed.length > 0) allExpenses = parsed;
-            }
-          } catch(e) {}
+        if (res.ok) {
+          const fetched = await res.json();
+          if (Array.isArray(fetched) && fetched.length > 0) {
+            allExpenses = fetched;
+            allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+            updateStats();
+            updateExpensesStats();
+            renderExpensesList();
+            if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+            return;
+          }
         }
-        allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-        updateStats();
-        updateExpensesStats();
-        renderExpensesList();
-        if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       } catch (err) {
-        console.error('Failed to load expenses fallback:', err);
+        console.warn('API expenses fetch failed, trying Firestore REST fallback:', err);
+      }
+
+      // 2. Direct Firestore REST fallback
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/expenses?pageSize=500');
+        if (restRes.ok) {
+          const json = await restRes.json();
+          if (json && Array.isArray(json.documents)) {
+            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            if (list.length > 0) {
+              allExpenses = list;
+              allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+              updateStats();
+              updateExpensesStats();
+              renderExpensesList();
+              if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Firestore REST expenses fetch fallback warning:', e);
       }
     }
 
