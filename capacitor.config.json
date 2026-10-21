@@ -1,5 +1,9 @@
 {
   "appId": "org.gsks.trust",
   "appName": "Goswami Samaj Kalyan Samiti",
-  "webDir": "public"
+  "webDir": "public",
+  "server": {
+    "url": "https://gsks-ovlf.onrender.com",
+    "cleartext": true
+  }
 }
