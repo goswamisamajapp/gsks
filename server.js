@@ -241,6 +241,34 @@ app.post('/api/donations/save', (req, res) => {
   }
 });
 
+app.post('/api/donations/save-bulk', (req, res) => {
+  try {
+    const items = req.body;
+    if (!Array.isArray(items)) {
+      return res.status(400).json({ error: 'Payload must be an array of donations' });
+    }
+    if (!fs.existsSync(DONATIONS_FILE)) fs.writeFileSync(DONATIONS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(DONATIONS_FILE, 'utf8');
+    let donations = JSON.parse(raw);
+
+    items.forEach(donationItem => {
+      if (!donationItem || !donationItem.id) return;
+      const index = donations.findIndex(d => d.id === donationItem.id);
+      if (index !== -1) {
+        donations[index] = { ...donations[index], ...donationItem };
+      } else {
+        donations.unshift(donationItem);
+      }
+    });
+
+    fs.writeFileSync(DONATIONS_FILE, JSON.stringify(donations, null, 2), 'utf8');
+    return res.json({ success: true, count: items.length });
+  } catch (err) {
+    console.error('Bulk donation save error:', err);
+    res.status(500).json({ error: 'Failed to save bulk donations' });
+  }
+});
+
 app.post('/api/donations/delete', (req, res) => {
   try {
     const { id } = req.body;

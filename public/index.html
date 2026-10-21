@@ -810,7 +810,11 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+          <div class="flex items-center gap-2.5 w-full sm:w-auto flex-wrap sm:flex-nowrap">
+            <button onclick="openBulkDonationModal()" class="w-full sm:w-auto bg-white hover:bg-slate-50 border border-emerald-300 hover:border-emerald-500 text-emerald-800 font-bold px-3.5 py-2.5 rounded-xl text-xs shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
+              <i class="fa-solid fa-file-csv text-emerald-600 text-sm"></i>
+              <span>Upload Bulk Donation</span>
+            </button>
             <button onclick="openDonationModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
               <i class="fa-solid fa-plus text-xs"></i>
               <span>Add Donation</span>
@@ -3237,11 +3241,11 @@
 
           <button 
             type="button" 
-            onclick="switchMemberView('dashboard')" 
-            class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-2 cursor-pointer"
+            onclick="openPasyPayModal('DONATION', 'सामान्य सहयोग दान')" 
+            class="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <i class="fa-solid fa-arrow-left text-[11px]"></i>
-            <span>वापस डैशबोर्ड</span>
+            <i class="fa-solid fa-heart text-[12px] text-amber-200"></i>
+            <span>दान करें (Donate)</span>
           </button>
         </div>
 
@@ -5225,6 +5229,87 @@
           </span>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold" id="ft-count-c2p">0</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5B-BULK: BULK DONATION CSV UPLOAD MODAL                   -->
+  <!-- ============================================================== -->
+  <div id="bulk-donation-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 relative my-8 animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeBulkDonationModal()" class="absolute right-4 top-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-3 mb-5 border-b border-slate-100 pb-4">
+        <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg flex-shrink-0">
+          <i class="fa-solid fa-file-csv"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-base sm:text-lg font-black text-slate-900">Upload Bulk Donations (CSV)</h3>
+          <p class="text-[11px] sm:text-xs text-slate-500">Purane records ko bulk me upload karke receipts generate karein</p>
+        </div>
+        <button type="button" onclick="downloadBulkDonationSampleCsv()" class="bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-xl transition-all border border-slate-200 flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-download text-[10px]"></i>
+          <span class="hidden sm:inline">Download Sample CSV</span>
+          <span class="sm:hidden">Sample CSV</span>
+        </button>
+      </div>
+
+      <!-- Drag & Drop / File Input Box -->
+      <div class="space-y-4">
+        <div id="bulk-donation-dropzone" class="border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50/70 rounded-2xl p-6 text-center transition-all cursor-pointer">
+          <input type="file" id="bulk-donation-file-input" accept=".csv,text/csv" onchange="handleBulkDonationCsvFile(event)" class="hidden">
+          <label for="bulk-donation-file-input" class="cursor-pointer flex flex-col items-center">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <p class="text-xs sm:text-sm font-extrabold text-slate-800">Click to Select CSV File or Drag & Drop Here</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 mt-1">Columns: Receipt ID, Member ID, Donor Name, Phone, Scheme, Amount, Date, Method, Remarks</p>
+          </label>
+        </div>
+
+        <!-- Preview Section -->
+        <div id="bulk-donation-preview-container" class="hidden space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-700">Preview: <span id="bulk-donation-count" class="text-emerald-700 font-extrabold">0</span> donations ready</span>
+            <span id="bulk-donation-total-amt" class="font-mono font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200">Total: ₹0</span>
+          </div>
+
+          <div class="max-h-56 overflow-y-auto border border-slate-200 rounded-2xl">
+            <table class="w-full text-left text-[11px] border-collapse">
+              <thead class="bg-slate-50 sticky top-0 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-2">#</th>
+                  <th class="p-2">Receipt ID</th>
+                  <th class="p-2">Member ID</th>
+                  <th class="p-2">Donor Name</th>
+                  <th class="p-2">Phone</th>
+                  <th class="p-2">Scheme</th>
+                  <th class="p-2 text-right">Amount (₹)</th>
+                  <th class="p-2">Date</th>
+                  <th class="p-2">Method</th>
+                </tr>
+              </thead>
+              <tbody id="bulk-donation-preview-tbody" class="divide-y divide-slate-100 font-medium text-slate-700">
+                <!-- Rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-2 flex items-center gap-2">
+          <button type="button" onclick="closeBulkDonationModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer">
+            Cancel
+          </button>
+          <button type="button" id="bulk-donation-submit-btn" onclick="processBulkDonationImport()" disabled class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span id="bulk-donation-submit-text">Confirm & Upload to Cloud</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -7370,7 +7455,10 @@
 
         // Check Fine Enable/Disable toggle (By default fine is enabled/true; if set to false, NO fine calculated!)
         const fineExemptMap = (masterSettings && masterSettings.pariwarikFineExemptions) || {};
-        if (fineExemptMap[member.id] && fineExemptMap[member.id][mCfg.key] === false) {
+        if (
+          (fineExemptMap[member.id] && fineExemptMap[member.id][mCfg.key] === false) ||
+          (member.pariwarikFineExemptions && member.pariwarikFineExemptions[mCfg.key] === false)
+        ) {
           return; // Fine explicitly turned OFF by Admin for this month!
         }
 
@@ -16053,6 +16141,341 @@
     }
 
     // ==============================================================
+    // 7B. BULK DONATION CSV IMPORT & SAMPLE DOWNLOAD
+    // ==============================================================
+    let bulkDonationsParsedList = [];
+
+    function openBulkDonationModal() {
+      bulkDonationsParsedList = [];
+      const fileInput = document.getElementById('bulk-donation-file-input');
+      if (fileInput) fileInput.value = '';
+      const previewCont = document.getElementById('bulk-donation-preview-container');
+      if (previewCont) previewCont.classList.add('hidden');
+      const submitBtn = document.getElementById('bulk-donation-submit-btn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        document.getElementById('bulk-donation-submit-text').textContent = 'Confirm & Upload to Cloud';
+      }
+      const modal = document.getElementById('bulk-donation-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeBulkDonationModal() {
+      const modal = document.getElementById('bulk-donation-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+      bulkDonationsParsedList = [];
+    }
+
+    function downloadBulkDonationSampleCsv() {
+      const sampleRows = [
+        ['Receipt ID', 'Member ID', 'Donor Name', 'Phone', 'Scheme', 'Amount', 'Date', 'Method', 'Remarks'],
+        ['DON-1001', 'GSKS-001', 'MAHENDRA NATH GOSWAMI', '9876543210', 'सामान्य सहयोग दान', '500', '2026-10-15', 'Cash', 'Purana sahyog rashi'],
+        ['DON-1002', 'GSKS-002', 'VIJAY GOSWAMI', '9876543211', 'पारिवारिक आर्थिक सहयोग योजना', '150', '2026-10-10', 'Online', 'October kist payment'],
+        ['', 'NON_MEMBER', 'RAMESH KUMAR GOSWAMI', '9876543212', 'ट्रस्ट भवन निर्माण दान', '1000', '2026-09-20', 'Online', 'Bhawan nirman sahyog']
+      ];
+
+      const csvContent = sampleRows.map(row => 
+        row.map(cell => {
+          const str = String(cell || '');
+          if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+            return `"${str.replace(/"/g, '""')}"`;
+          }
+          return str;
+        }).join(',')
+      ).join('\r\n');
+
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'bulk_donation_sample_format.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function parseCsvToRows(text) {
+      const lines = [];
+      let row = [];
+      let inQuotes = false;
+      let currentVal = '';
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const nextChar = text[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && nextChar === '"') {
+            currentVal += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          row.push(currentVal.trim());
+          currentVal = '';
+        } else if ((char === '\r' || char === '\n') && !inQuotes) {
+          if (char === '\r' && nextChar === '\n') {
+            i++;
+          }
+          row.push(currentVal.trim());
+          if (row.some(cell => cell.length > 0)) {
+            lines.push(row);
+          }
+          row = [];
+          currentVal = '';
+        } else {
+          currentVal += char;
+        }
+      }
+
+      if (currentVal.length > 0 || row.length > 0) {
+        row.push(currentVal.trim());
+        if (row.some(cell => cell.length > 0)) {
+          lines.push(row);
+        }
+      }
+      return lines;
+    }
+
+    function handleBulkDonationCsvFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          const rows = parseCsvToRows(text);
+          if (rows.length < 2) {
+            alert('CSV फ़ाइल में कोई रिकॉर्ड नहीं मिला! कृपया Sample CSV चेक करें।');
+            return;
+          }
+
+          const headerRow = rows[0].map(h => (h || '').toLowerCase().replace(/[\s_-]/g, ''));
+          const rIdIdx = headerRow.findIndex(h => h.includes('receipt') || h === 'id');
+          const mIdIdx = headerRow.findIndex(h => h.includes('member'));
+          const nameIdx = headerRow.findIndex(h => h.includes('donor') || h.includes('name'));
+          const phoneIdx = headerRow.findIndex(h => h.includes('phone') || h.includes('mobile'));
+          const schemeIdx = headerRow.findIndex(h => h.includes('scheme') || h.includes('yojna'));
+          const amtIdx = headerRow.findIndex(h => h.includes('amount') || h.includes('rashi') || h.includes('amt'));
+          const dateIdx = headerRow.findIndex(h => h.includes('date') || h.includes('tarikh'));
+          const methodIdx = headerRow.findIndex(h => h.includes('method') || h.includes('mode'));
+          const remarksIdx = headerRow.findIndex(h => h.includes('remark') || h.includes('note'));
+
+          const parsedList = [];
+          const nowStr = new Date().toISOString();
+
+          for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || row.length === 0 || !row.some(c => c.trim())) continue;
+
+            const rawRId = rIdIdx !== -1 ? row[rIdIdx] : '';
+            const rawMId = mIdIdx !== -1 ? row[mIdIdx] : '';
+            const rawName = nameIdx !== -1 ? row[nameIdx] : '';
+            const rawPhone = phoneIdx !== -1 ? row[phoneIdx] : '';
+            const rawScheme = schemeIdx !== -1 ? row[schemeIdx] : '';
+            const rawAmt = amtIdx !== -1 ? row[amtIdx] : '0';
+            const rawDate = dateIdx !== -1 ? row[dateIdx] : '';
+            const rawMethod = methodIdx !== -1 ? row[methodIdx] : 'Cash';
+            const rawRemarks = remarksIdx !== -1 ? row[remarksIdx] : '';
+
+            const amt = parseFloat(String(rawAmt).replace(/[^0-9.]/g, '')) || 0;
+            if (amt <= 0) continue;
+
+            let resolvedMemberId = rawMId ? rawMId.trim() : 'NON_MEMBER';
+            let resolvedDonorName = rawName ? rawName.trim() : '';
+            let resolvedPhone = rawPhone ? rawPhone.trim().replace(/\D/g, '') : '';
+
+            // Match member by Member ID or Phone if available
+            if (resolvedMemberId && resolvedMemberId !== 'NON_MEMBER') {
+              const matched = (allMembers || []).find(m => (m.id || '').toUpperCase() === resolvedMemberId.toUpperCase());
+              if (matched) {
+                resolvedMemberId = matched.id;
+                if (!resolvedDonorName) resolvedDonorName = matched.name || '';
+                if (!resolvedPhone) resolvedPhone = (matched.phone || '').replace(/\D/g, '');
+              }
+            } else if (resolvedPhone) {
+              const matched = (allMembers || []).find(m => (m.phone || '').replace(/\D/g, '').endsWith(resolvedPhone.slice(-10)));
+              if (matched) {
+                resolvedMemberId = matched.id;
+                if (!resolvedDonorName) resolvedDonorName = matched.name || '';
+              }
+            }
+
+            if (!resolvedDonorName) {
+              resolvedDonorName = (resolvedMemberId && resolvedMemberId !== 'NON_MEMBER') ? resolvedMemberId : 'Unknown Donor';
+            }
+
+            // Standardize Date (YYYY-MM-DD)
+            let formattedDate = new Date().toISOString().slice(0, 10);
+            if (rawDate) {
+              const cleanedDate = rawDate.replace(/\//g, '-').trim();
+              const parts = cleanedDate.split('-');
+              if (parts.length === 3) {
+                if (parts[0].length === 4) {
+                  formattedDate = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+                } else if (parts[2].length === 4) {
+                  formattedDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                }
+              }
+            }
+
+            const recId = rawRId ? rawRId.trim() : `DON-BULK-${Date.now().toString().slice(-6)}-${i}`;
+            const method = (rawMethod && rawMethod.toLowerCase().includes('onl')) || rawMethod.toLowerCase().includes('upi') ? 'Online' : 'Cash';
+
+            parsedList.push({
+              id: recId,
+              memberId: resolvedMemberId,
+              donorName: resolvedDonorName,
+              phone: resolvedPhone,
+              scheme: rawScheme ? rawScheme.trim() : 'सामान्य सहयोग दान',
+              amount: amt,
+              date: formattedDate,
+              method: method,
+              remarks: rawRemarks ? rawRemarks.trim() : 'Bulk CSV Upload',
+              createdAt: nowStr
+            });
+          }
+
+          if (parsedList.length === 0) {
+            alert('CSV में कोई वैध दान रिकॉर्ड नहीं मिला! कृपया अमाउंट और कॉलम चेक करें।');
+            return;
+          }
+
+          bulkDonationsParsedList = parsedList;
+
+          // Render Preview Table
+          const previewCont = document.getElementById('bulk-donation-preview-container');
+          const countEl = document.getElementById('bulk-donation-count');
+          const totalEl = document.getElementById('bulk-donation-total-amt');
+          const tbody = document.getElementById('bulk-donation-preview-tbody');
+          const submitBtn = document.getElementById('bulk-donation-submit-btn');
+
+          if (countEl) countEl.textContent = parsedList.length;
+          const sumAmt = parsedList.reduce((acc, d) => acc + (d.amount || 0), 0);
+          if (totalEl) totalEl.textContent = `Total: ₹${sumAmt.toLocaleString('en-IN')}`;
+
+          if (tbody) {
+            tbody.innerHTML = parsedList.slice(0, 20).map((d, idx) => `
+              <tr class="hover:bg-emerald-50/40">
+                <td class="p-2 text-slate-400 font-mono">${idx + 1}</td>
+                <td class="p-2 font-mono font-bold text-slate-800">${d.id}</td>
+                <td class="p-2 font-mono text-emerald-700">${d.memberId}</td>
+                <td class="p-2 font-bold text-slate-900">${d.donorName}</td>
+                <td class="p-2 font-mono">${d.phone || '--'}</td>
+                <td class="p-2 truncate max-w-[120px]" title="${d.scheme}">${d.scheme}</td>
+                <td class="p-2 text-right font-mono font-bold text-emerald-700">₹${d.amount.toLocaleString('en-IN')}</td>
+                <td class="p-2 font-mono text-[10px]">${d.date}</td>
+                <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${d.method === 'Cash' ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'}">${d.method}</span></td>
+              </tr>
+            `).join('') + (parsedList.length > 20 ? `<tr><td colspan="9" class="p-2 text-center text-slate-400 italic font-semibold">... and ${parsedList.length - 20} more records</td></tr>` : '');
+          }
+
+          if (previewCont) previewCont.classList.remove('hidden');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            document.getElementById('bulk-donation-submit-text').textContent = `Confirm & Upload ${parsedList.length} Donations`;
+          }
+        } catch (err) {
+          console.error('Error parsing bulk CSV:', err);
+          alert('CSV फ़ाइल पढ़ने में त्रुटि: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function processBulkDonationImport() {
+      if (!bulkDonationsParsedList || bulkDonationsParsedList.length === 0) {
+        alert('अपलोड करने के लिए कोई रिकॉर्ड उपलब्ध नहीं है!');
+        return;
+      }
+
+      const submitBtn = document.getElementById('bulk-donation-submit-btn');
+      const submitText = document.getElementById('bulk-donation-submit-text');
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitText) submitText.textContent = 'Uploading to Cloud...';
+
+      const itemsToUpload = [...bulkDonationsParsedList];
+
+      // 1. Instant local array update
+      itemsToUpload.forEach(donationPayload => {
+        const exIdx = allDonations.findIndex(item => item.id === donationPayload.id);
+        if (exIdx !== -1) {
+          allDonations[exIdx] = { ...allDonations[exIdx], ...donationPayload };
+        } else {
+          allDonations.unshift(donationPayload);
+        }
+
+        // Also update member donation total in memory
+        if (donationPayload.memberId && donationPayload.memberId !== 'NON_MEMBER') {
+          const mem = (allMembers || []).find(m => m.id === donationPayload.memberId);
+          if (mem) {
+            mem.donation = (parseFloat(mem.donation) || 0) + donationPayload.amount;
+          }
+        }
+      });
+
+      updateStats();
+      updateDonationsStats();
+      renderDonationsList();
+      closeBulkDonationModal();
+
+      // 2. Persist to Express Central Server API
+      try {
+        await apiFetch('/api/donations/save-bulk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(itemsToUpload)
+        });
+      } catch (err) {
+        console.warn('Backend bulk donation API save error (falling back to single):', err);
+        for (const item of itemsToUpload) {
+          try {
+            await apiFetch('/api/donations/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(item)
+            });
+          } catch (e) {}
+        }
+      }
+
+      // 3. Persist to Cloud Firestore in batches
+      try {
+        if (typeof db !== 'undefined' && typeof donationsCol !== 'undefined' && donationsCol) {
+          const batchSize = 400;
+          for (let i = 0; i < itemsToUpload.length; i += batchSize) {
+            const chunk = itemsToUpload.slice(i, i + batchSize);
+            const batch = db.batch();
+            chunk.forEach(d => {
+              const ref = donationsCol.doc(d.id);
+              batch.set(ref, cleanDocForFirestore(d), { merge: true });
+            });
+            await batch.commit();
+          }
+        }
+      } catch (err) {
+        console.warn('Firestore bulk donation save warning:', err);
+      }
+
+      alert(`✅ सफलतापूर्वक ${itemsToUpload.length} दान रसीदें रियल-टाइम क्लाउड में सुरक्षित कर दी गई हैं!`);
+    }
+
+    window.openBulkDonationModal = openBulkDonationModal;
+    window.closeBulkDonationModal = closeBulkDonationModal;
+    window.downloadBulkDonationSampleCsv = downloadBulkDonationSampleCsv;
+    window.handleBulkDonationCsvFile = handleBulkDonationCsvFile;
+    window.processBulkDonationImport = processBulkDonationImport;
+
+    // ==============================================================
     // 8. FUND MANAGEMENT LOGIC (Fund Types & Fund Transfers)
     // ==============================================================
 
@@ -18053,7 +18476,9 @@
                   <!-- Toggle 1: Fine Apply (Amber) -->
                   ${(() => {
                     const fineExempts = (masterSettings && masterSettings.pariwarikFineExemptions && masterSettings.pariwarikFineExemptions[m.id]) || {};
-                    const isFineActive = (fineExempts[currentPariwarikMonth] !== false);
+                    const isExemptInSettings = (fineExempts[currentPariwarikMonth] === false);
+                    const isExemptInMember = (m.pariwarikFineExemptions && m.pariwarikFineExemptions[currentPariwarikMonth] === false);
+                    const isFineActive = !(isExemptInSettings || isExemptInMember);
                     return `
                       <div class="flex items-center gap-1 bg-slate-100 px-1.5 py-0.5 rounded-lg border border-slate-200" title="${isFineActive ? 'Fine ON' : 'Fine OFF'}">
                         <span class="text-[8px] font-black ${isFineActive ? 'text-amber-700' : 'text-slate-400'}">${isFineActive ? 'Fine' : 'NoFine'}</span>
@@ -18214,7 +18639,9 @@
                   <!-- Toggle 1: Fine Apply (ON = Fine काउंट होगा, OFF = Fine 0 हो जाएगा) -->
                   ${(() => {
                     const fineExempts = (masterSettings && masterSettings.pariwarikFineExemptions && masterSettings.pariwarikFineExemptions[m.id]) || {};
-                    const isFineActive = (fineExempts[currentPariwarikMonth] !== false);
+                    const isExemptInSettings = (fineExempts[currentPariwarikMonth] === false);
+                    const isExemptInMember = (m.pariwarikFineExemptions && m.pariwarikFineExemptions[currentPariwarikMonth] === false);
+                    const isFineActive = !(isExemptInSettings || isExemptInMember);
                     return `
                       <div class="flex items-center gap-1 bg-slate-50 px-1.5 py-0.5 rounded-lg border border-slate-200" title="${isFineActive ? 'Fine लागू (Active): इस माह Fine काउंट हो रहा है' : 'Fine बंद (Exempt): इस माह कोई Fine नहीं लगेगा'}">
                         <span class="text-[9px] font-bold ${isFineActive ? 'text-amber-700' : 'text-slate-400'}">${isFineActive ? 'Fine' : 'NoFine'}</span>
@@ -18787,9 +19214,25 @@
           masterSettings.pariwarikFineExemptions[memberId][monthKey] = false;
         }
 
+        // Also dual-sync to member document object for 100% resilient persistence
+        const mem = (allMembers || []).find(m => m.id === memberId);
+        if (mem) {
+          if (!mem.pariwarikFineExemptions || typeof mem.pariwarikFineExemptions !== 'object') {
+            mem.pariwarikFineExemptions = {};
+          }
+          if (isEnabled) {
+            delete mem.pariwarikFineExemptions[monthKey];
+          } else {
+            mem.pariwarikFineExemptions[monthKey] = false;
+          }
+          if (typeof syncMemberToBackend === 'function') {
+            syncMemberToBackend({ id: mem.id, pariwarikFineExemptions: mem.pariwarikFineExemptions });
+          }
+        }
+
         renderPariwarikView();
 
-        // Sync to Firestore & Backend
+        // Sync to Firestore & Backend Settings
         if (typeof settingsCol !== 'undefined' && settingsCol) {
           await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
         }

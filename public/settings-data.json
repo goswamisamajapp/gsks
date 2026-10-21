@@ -67,14 +67,14 @@
   ],
   "planRates": {
     "pasyMonthlyFee": 150,
-    "membershipPremium": 200,
     "pasyFineWeek": 20,
+    "membershipPremium": 200,
     "membershipNormal": 100
   },
   "openingBalances": {
+    "bank": 34428,
     "cash": 0,
-    "bank": 0,
-    "remarks": ""
+    "remarks": "Fund Added by Admin"
   },
   "pariwarikFineWaivers": {},
   "eventTitles": [
@@ -117,51 +117,82 @@
   "vendors": [
     {
       "id": "ven_1",
-      "name": "टेंट हाउस एवं डेकोरेशन",
-      "phone": "",
-      "category": "Tent & Sound",
-      "address": "गोमो"
+      "name": "अध्यक्ष समिति शेष फंड",
+      "category": "समिति शेष फंड",
+      "phone": "7781931880",
+      "address": "GUNGHASA"
     },
     {
       "id": "ven_2",
-      "name": "साउंड एवं लाउडस्पीकर सिस्टम",
-      "phone": "",
-      "category": "Sound",
-      "address": "गोमो"
+      "name": "KUNAL GOSWAMI",
+      "category": "DJ & Sound",
+      "phone": "7004636057",
+      "address": "GUNGHASA"
     },
     {
       "id": "ven_3",
-      "name": "पूजा सामग्री व फूल भंडार",
-      "phone": "",
-      "category": "Pooja Items",
-      "address": "गुनघसा"
+      "name": "PINKU LIGHT",
+      "category": "Ligh & Generator",
+      "phone": "9031337183",
+      "address": "GUNGHASA"
     },
     {
       "id": "ven_4",
-      "name": "प्रिंटिंग प्रेस (रसीद बही/बैनर)",
-      "phone": "",
+      "name": "SHANKAR PRINTING PRESS",
       "category": "Printing",
-      "address": "धनबाद"
+      "phone": "9934112168",
+      "address": "GOMOH"
+    },
+    {
+      "id": "ven_1792575946873",
+      "name": "ESPN SPORTS",
+      "category": "Prize & Medal",
+      "phone": "7781931880",
+      "address": "GOMOH"
+    },
+    {
+      "id": "ven_1792575973451",
+      "name": "MANDAL TENT HOUSE",
+      "category": "TENT",
+      "phone": "7781931880",
+      "address": "GUNGHASA"
     }
   ],
   "pariwarikFinePaid": {},
   "pariwarikFineExemptions": {
-    "GSKS-001": {
+    "GSKS-002": {
       "2026-11": false,
-      "2026-05": false,
-      "2026-09": false,
-      "2026-03": false,
-      "2026-06": false,
-      "2026-10": false,
-      "2025-11": false,
-      "2026-01": false,
-      "2025-09": false,
-      "2026-02": false,
-      "2025-12": false,
-      "2026-07": false,
-      "2025-10": false,
+      "2026-08": false,
       "2026-04": false,
-      "2026-08": false
+      "2026-02": false,
+      "2026-07": false,
+      "2026-09": false,
+      "2025-11": false,
+      "2025-10": false,
+      "2026-05": false,
+      "2026-06": false,
+      "2026-03": false,
+      "2026-01": false,
+      "2026-10": false,
+      "2025-09": false,
+      "2025-12": false
+    },
+    "GSKS-001": {
+      "2026-01": false,
+      "2026-10": false,
+      "2025-09": false,
+      "2025-12": false,
+      "2026-11": false,
+      "2026-08": false,
+      "2026-07": false,
+      "2026-04": false,
+      "2026-02": false,
+      "2026-06": false,
+      "2026-09": false,
+      "2025-10": false,
+      "2025-11": false,
+      "2026-05": false,
+      "2026-03": false
     }
   },
   "schemes": [
@@ -236,6 +267,24 @@
       "frequency": "One-Time",
       "status": "Open",
       "description": "कन्यादान हेतु सहयोग राशि"
+    },
+    {
+      "id": "sc_1792575392178",
+      "name": "पारिवारिक फंड से सहयोग",
+      "amountType": "fixed",
+      "amount": 500,
+      "frequency": "One-Time",
+      "status": "Open",
+      "description": "पारिवारिक फंड से सहयोग"
+    },
+    {
+      "id": "sc_1792578066419",
+      "name": "छठ पूजा हेतु सहयोग राशि (2025)",
+      "amountType": "custom",
+      "amount": 0,
+      "frequency": "One-Time",
+      "status": "Closed",
+      "description": "छठ पूजा हेतु सहयोग राशि (2025)"
     }
   ],
   "statuses": [
@@ -279,7 +328,7 @@
     },
     {
       "id": "ec_3",
-      "name": "Emergency meeting",
+      "name": "Emergency Meeting",
       "color": "rose",
       "isSystem": true,
       "description": "आपातकालीन बैठक"
@@ -340,8 +389,8 @@
   "expenseSchemes": [
     {
       "id": "exs_1",
-      "name": "उत्सव एवं समारोह व्यय (Event/Festival)",
-      "description": "वार्षिक महोत्सव, शिव चर्चा, पूजा आदि व्यय"
+      "name": "मेडल एवं पुरस्कार",
+      "description": "सम्मान समारोह एवं अन्य आयोजनों हेतु"
     },
     {
       "id": "exs_2",
@@ -357,6 +406,19 @@
       "id": "exs_4",
       "name": "सामाजिक विकास एवं विविध व्यय",
       "description": "सामुदायिक कार्य एवं अन्य आकस्मिक व्यय"
+    },
+    {
+      "id": "exs_1792576487092",
+      "name": "पानी/वाहन/ पेट्रोल एवं अन्य",
+      "description": "पानी/वाहन/ पेट्रोल एवं अन्य"
+    },
+    {
+      "id": "exs_1792576528407",
+      "name": "फ्लेक्स/बैनर/प्रिंट मीडीया",
+      "description": "फ्लेक्स/बैनर/प्रिंट मीडीया"
     }
-  ]
+  ],
+  "pariwarikWinners": {
+    "2026-02": "GSKS-001"
+  }
 }
