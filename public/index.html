@@ -875,10 +875,25 @@
 
         <!-- 2. Controls & Search/Filter Strip -->
         <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
-          <!-- Left: Search Box -->
+          <!-- Left: Search Box with Clear Button -->
           <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="donation-search-input" oninput="renderDonationsList()" placeholder="दानदाता का नाम, ID या योजना..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium">
+            <input 
+              type="text" 
+              id="donation-search-input" 
+              oninput="handleDonationSearch(this.value)" 
+              placeholder="दानदाता का नाम, ID, फोन, पिता या योजना..." 
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-medium transition-all"
+            >
+            <button 
+              type="button" 
+              onclick="clearDonationSearch()" 
+              id="donation-search-clear" 
+              class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-[9px] transition-colors cursor-pointer" 
+              title="Clear Search"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
 
           <!-- Mobile Filter Button (Visible on Mobile Only) -->
@@ -15696,12 +15711,36 @@
       }
     }
 
+    let currentDonationSearchTerm = '';
+
+    function handleDonationSearch(term) {
+      currentDonationSearchTerm = (term || '').trim().toLowerCase();
+      const clearBtn = document.getElementById('donation-search-clear');
+      if (clearBtn) {
+        if (currentDonationSearchTerm) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+      renderDonationsList();
+    }
+
+    function clearDonationSearch() {
+      const input = document.getElementById('donation-search-input');
+      if (input) input.value = '';
+      handleDonationSearch('');
+    }
+
     function renderDonationsList() {
       const tbody = document.getElementById('donations-table-body');
       const mobileCards = document.getElementById('donations-mobile-cards');
       if (!tbody && !mobileCards) return;
 
-      const searchTerm = (document.getElementById('donation-search-input')?.value || '').toLowerCase().trim();
+      const rawInputVal = document.getElementById('donation-search-input')?.value || '';
+      const searchTerm = (currentDonationSearchTerm || rawInputVal.trim().toLowerCase());
+      const searchWords = searchTerm ? searchTerm.split(/\s+/).filter(Boolean) : [];
+
       const methodFilter = document.getElementById('donation-method-filter')?.value || 'ALL';
       const schemeFilter = document.getElementById('donation-scheme-filter')?.value || 'ALL';
 
@@ -15711,19 +15750,28 @@
       const filtered = sorted.filter(d => {
         const matchesMethod = (methodFilter === 'ALL' || d.method === methodFilter);
         const matchesScheme = (schemeFilter === 'ALL' || d.scheme === schemeFilter);
+        if (!matchesMethod || !matchesScheme) return false;
         
+        if (searchWords.length === 0) return true;
+
         const donorName = (d.donorName || '').toLowerCase();
         const memberId = (d.memberId || '').toLowerCase();
         const scheme = (d.scheme || '').toLowerCase();
         const receiptId = (d.id || '').toLowerCase();
+        const phone = (d.phone || '').toLowerCase();
+        const remarks = (d.remarks || '').toLowerCase();
 
-        // Also match father name if donor is a member
-        const memberObj = (d.memberId && d.memberId !== 'NON_MEMBER') ? allMembers.find(m => m.id === d.memberId) : null;
+        // Also match member details if linked
+        const memberObj = (d.memberId && d.memberId !== 'NON_MEMBER') ? (allMembers || []).find(m => m.id === d.memberId) : null;
         const fatherName = memberObj && memberObj.father ? memberObj.father.toLowerCase() : '';
+        const memberName = memberObj && memberObj.name ? memberObj.name.toLowerCase() : '';
+        const memberPhone = memberObj && memberObj.phone ? memberObj.phone.toLowerCase() : '';
 
-        const matchesSearch = !searchTerm || donorName.includes(searchTerm) || memberId.includes(searchTerm) || scheme.includes(searchTerm) || receiptId.includes(searchTerm) || fatherName.includes(searchTerm);
+        // Combine all searchable text fields for this donation record
+        const combinedText = `${receiptId} ${donorName} ${memberName} ${memberId} ${phone} ${memberPhone} ${fatherName} ${scheme} ${remarks}`;
 
-        return matchesMethod && matchesScheme && matchesSearch;
+        // Multi-word search matching: all words entered by user must match anywhere in the record
+        return searchWords.every(w => combinedText.includes(w));
       });
 
       const tableCountEl = document.getElementById('donations-table-count');
@@ -17856,6 +17904,8 @@
 
     window.handleDonationMemberSelect = handleDonationMemberSelect;
     window.handleDonationSchemeSelect = handleDonationSchemeSelect;
+    window.handleDonationSearch = handleDonationSearch;
+    window.clearDonationSearch = clearDonationSearch;
     window.handleSaveDonation = handleSaveDonation;
     window.openViewDonationModal = openViewDonationModal;
     window.closeViewDonationModal = closeViewDonationModal;
