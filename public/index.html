@@ -11785,6 +11785,11 @@
       return val;
     }
 
+    function cleanDocForFirestore(obj) {
+      if (!obj) return obj;
+      return JSON.parse(JSON.stringify(obj, (k, v) => (v === undefined ? null : v)));
+    }
+
     function parseFirestoreDocument(doc) {
       if (!doc || !doc.fields) return null;
       const res = {};
@@ -17449,7 +17454,7 @@
           try {
             if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
             if (typeof settingsCol !== 'undefined' && settingsCol) {
-              settingsCol.doc('master').set(masterSettings, { merge: true });
+              settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
             }
           } catch (e) {
             console.warn('Failed to save locked late fine:', e);
@@ -17464,7 +17469,7 @@
           try {
             if (typeof saveSettingsToBackend === 'function') saveSettingsToBackend(masterSettings);
             if (typeof settingsCol !== 'undefined' && settingsCol) {
-              settingsCol.doc('master').set(masterSettings, { merge: true });
+              settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
             }
           } catch (e) {
             console.warn('Failed to clear locked late fine:', e);
@@ -17631,7 +17636,7 @@
       // Persist to Cloud Firestore & Express API
       try {
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(masterSettings, { merge: true });
+          await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
         }
       } catch (err) {
         console.warn('Firestore settings save warning for winner:', err);
@@ -18485,7 +18490,7 @@
       // Persist to server / Firestore
       try {
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(masterSettings, { merge: true });
+          await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
         }
       } catch (err) {
         console.warn('Firestore fine waiver save warning:', err);
@@ -18628,7 +18633,7 @@
       // Persist Settings
       try {
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(masterSettings, { merge: true });
+          await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
         }
       } catch (err) {
         console.warn('Firestore fine paid status save warning:', err);
@@ -18672,7 +18677,7 @@
 
         // Sync to Firestore & Backend
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(masterSettings, { merge: true });
+          await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
         }
         await saveSettingsToBackend(masterSettings);
         console.log(`PASY Fine for ${memberId} on ${monthKey} set to ${isEnabled ? 'APPLICABLE' : 'EXEMPT/OFF'}`);
