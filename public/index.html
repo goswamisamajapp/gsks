@@ -7916,9 +7916,10 @@
 
     // ==============================================================
     // PASY FINE CALCULATION (पारिवारिक योजना विलंब शुल्क / जुर्माना गणना)
-    // Rule: Monthly fee ₹150 due by 3rd Sunday.
+    // Rule: Monthly fee ₹150 due by 3rd Sunday of prior month (1-Month Advance).
     // If unpaid past 3rd Sunday: Next Monday to 4th Sunday = ₹20.
     // Subsequent weeks / passing Sundays add +₹20 each.
+    // DUAL STREAM INDEPENDENCE: Paying the 150 installment NEVER wipes late fine!
     // ==============================================================
     function calculateMemberPasyFine(member, targetMonthKey = null) {
       if (!member) {
@@ -7977,20 +7978,23 @@
 
         // If already paid for this month:
         // Monthly installment (150) and Late Fine are strictly separate!
-        // If the installment was paid late (after 3rd Sunday) or before fine was settled, the fine is preserved!
+        // Check both member document and masterSettings for locked late fine
         const isPaidInstallment = isPariwarikPaidForMonth(member, mCfg.key);
         if (isPaidInstallment) {
-          // If member has paid for this month, they have NO late fine unless an explicit fine was recorded
-          const accruedFines = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
+          const accruedFinesSettings = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
+          const accruedFinesMember = (member.pariwarikLateFines && typeof member.pariwarikLateFines === 'object') ? member.pariwarikLateFines : {};
+          
           let monthFine = 0;
           let weekCount = 0;
 
-          if (accruedFines[mCfg.key] !== undefined) {
-            monthFine = Math.max(0, parseFloat(accruedFines[mCfg.key]) || 0);
-            weekCount = Math.round(monthFine / (getPasyFineWeekRate() || 20));
+          if (accruedFinesMember[mCfg.key] !== undefined) {
+            monthFine = Math.max(0, parseFloat(accruedFinesMember[mCfg.key]) || 0);
+          } else if (accruedFinesSettings[mCfg.key] !== undefined) {
+            monthFine = Math.max(0, parseFloat(accruedFinesSettings[mCfg.key]) || 0);
           }
 
           if (monthFine > 0) {
+            weekCount = Math.round(monthFine / (getPasyFineWeekRate() || 20));
             grossFine += monthFine;
             fineBreakdown.push({
               monthKey: mCfg.key,
@@ -8032,45 +8036,63 @@
         }
       });
 
-      // Check waiver (supports month-specific map or global number)
-      const waivers = (masterSettings && masterSettings.pariwarikFineWaivers) || {};
+      // Check waiver (supports month-specific map or global number, checks member doc + masterSettings)
+      const waiversSettings = (masterSettings && masterSettings.pariwarikFineWaivers) || {};
+      const waiversMember = (member.pariwarikFineWaivers && typeof member.pariwarikFineWaivers === 'object') ? member.pariwarikFineWaivers : {};
+      
       let waiver = 0;
       if (targetMonthKey) {
-        const memWaiver = waivers[member.id];
-        if (memWaiver && typeof memWaiver === 'object' && memWaiver[targetMonthKey] !== undefined) {
-          waiver = Math.max(0, parseFloat(memWaiver[targetMonthKey]) || 0);
-        } else if (typeof memWaiver === 'number' || typeof memWaiver === 'string') {
-          waiver = Math.max(0, parseFloat(memWaiver) || 0);
+        if (waiversMember[targetMonthKey] !== undefined) {
+          waiver = Math.max(0, parseFloat(waiversMember[targetMonthKey]) || 0);
+        } else {
+          const memWaiver = waiversSettings[member.id];
+          if (memWaiver && typeof memWaiver === 'object' && memWaiver[targetMonthKey] !== undefined) {
+            waiver = Math.max(0, parseFloat(memWaiver[targetMonthKey]) || 0);
+          } else if (typeof memWaiver === 'number' || typeof memWaiver === 'string') {
+            waiver = Math.max(0, parseFloat(memWaiver) || 0);
+          }
         }
       } else {
-        const memWaiver = waivers[member.id];
-        if (memWaiver && typeof memWaiver === 'object') {
-          waiver = Object.values(memWaiver).reduce((s, v) => s + (Math.max(0, parseFloat(v) || 0)), 0);
+        if (Object.keys(waiversMember).length > 0) {
+          waiver = Object.values(waiversMember).reduce((s, v) => s + (Math.max(0, parseFloat(v) || 0)), 0);
         } else {
-          waiver = Math.max(0, parseFloat(memWaiver) || 0);
+          const memWaiver = waiversSettings[member.id];
+          if (memWaiver && typeof memWaiver === 'object') {
+            waiver = Object.values(memWaiver).reduce((s, v) => s + (Math.max(0, parseFloat(v) || 0)), 0);
+          } else {
+            waiver = Math.max(0, parseFloat(memWaiver) || 0);
+          }
         }
       }
       const netFine = Math.max(0, grossFine - waiver);
 
-      // Check if fine is paid (supports month-specific entry or global member entry)
-      const finePaidMap = (masterSettings && masterSettings.pariwarikFinePaid) || {};
-      const paidEntry = finePaidMap[member.id];
+      // Check if fine is paid (checks BOTH member doc and masterSettings)
+      const finePaidMapSettings = (masterSettings && masterSettings.pariwarikFinePaid) || {};
+      const paidEntrySettings = finePaidMapSettings[member.id];
+      const memberFinePaidMap = (member.pariwarikFinePaid && typeof member.pariwarikFinePaid === 'object') ? member.pariwarikFinePaid : {};
+      
       let isPaid = false;
       if (targetMonthKey) {
-        if (paidEntry && typeof paidEntry === 'object' && paidEntry[targetMonthKey]) {
-          const mEntry = paidEntry[targetMonthKey];
+        if (memberFinePaidMap[targetMonthKey] === true || (memberFinePaidMap[targetMonthKey] && memberFinePaidMap[targetMonthKey].paid === true)) {
+          isPaid = true;
+        } else if (paidEntrySettings && typeof paidEntrySettings === 'object' && paidEntrySettings[targetMonthKey]) {
+          const mEntry = paidEntrySettings[targetMonthKey];
           isPaid = (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
-        } else if (paidEntry === true || (paidEntry && typeof paidEntry === 'object' && paidEntry.paid === true)) {
+        } else if (paidEntrySettings === true || (paidEntrySettings && typeof paidEntrySettings === 'object' && paidEntrySettings.paid === true)) {
           isPaid = true;
         }
       } else {
-        if (paidEntry === true || (paidEntry && typeof paidEntry === 'object' && paidEntry.paid === true)) {
+        if (paidEntrySettings === true || (paidEntrySettings && typeof paidEntrySettings === 'object' && paidEntrySettings.paid === true)) {
           isPaid = true;
-        } else if (paidEntry && typeof paidEntry === 'object') {
+        } else {
           const overdueKeys = fineBreakdown.map(b => b.monthKey);
           isPaid = overdueKeys.length > 0 && overdueKeys.every(k => {
-            const mEntry = paidEntry[k];
-            return (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
+            if (memberFinePaidMap[k] === true || (memberFinePaidMap[k] && memberFinePaidMap[k].paid === true)) return true;
+            if (paidEntrySettings && typeof paidEntrySettings === 'object') {
+              const mEntry = paidEntrySettings[k];
+              return (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
+            }
+            return false;
           });
         }
       }
@@ -19152,8 +19174,13 @@
         }
         mem.pariwarikPaidAt[currentPariwarikMonth] = new Date().toISOString();
 
-        // If member had an overdue fine for this month, lock it into masterSettings so paying 150 NEVER wipes the fine!
+        // If member had an overdue fine for this month, lock it directly into member doc and masterSettings
         if (thisMonthBreakdown && thisMonthBreakdown.fine > 0) {
+          if (!mem.pariwarikLateFines || typeof mem.pariwarikLateFines !== 'object') {
+            mem.pariwarikLateFines = {};
+          }
+          mem.pariwarikLateFines[currentPariwarikMonth] = thisMonthBreakdown.fine;
+
           if (!masterSettings) masterSettings = {};
           if (!masterSettings.pariwarikLateFines || typeof masterSettings.pariwarikLateFines !== 'object') {
             masterSettings.pariwarikLateFines = {};
@@ -19174,6 +19201,9 @@
       } else {
         if (mem.pariwarikPaidAt && mem.pariwarikPaidAt[currentPariwarikMonth]) {
           delete mem.pariwarikPaidAt[currentPariwarikMonth];
+        }
+        if (mem.pariwarikLateFines && mem.pariwarikLateFines[currentPariwarikMonth]) {
+          delete mem.pariwarikLateFines[currentPariwarikMonth];
         }
         if (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[memberId]) {
           delete masterSettings.pariwarikLateFines[memberId][currentPariwarikMonth];
@@ -19289,7 +19319,7 @@
 
       renderPariwarikView();
 
-      // Persist to Central Server
+      // Persist directly to Member Document (100% resilient)
       try {
         const payload = {
           id: memberId,
@@ -19298,6 +19328,9 @@
         };
         if (mem.pariwarikPaidAt) {
           payload.pariwarikPaidAt = mem.pariwarikPaidAt;
+        }
+        if (mem.pariwarikLateFines) {
+          payload.pariwarikLateFines = mem.pariwarikLateFines;
         }
         await syncMemberToBackend(payload);
       } catch (err) {
@@ -20271,6 +20304,10 @@
         masterSettings.pariwarikFinePaid = {};
       }
 
+      if (!member.pariwarikFinePaid || typeof member.pariwarikFinePaid !== 'object') {
+        member.pariwarikFinePaid = {};
+      }
+
       const fineInfo = calculateMemberPasyFine(member, monthKey);
       const fineDonationScheme = 'पारिवारिक योजना विलंब शुल्क (PASY Fine)';
       const monthLabel = (PARIWARIK_MONTHS.find(x => x.key === monthKey) || {}).label || monthKey;
@@ -20304,16 +20341,21 @@
           createdAt: now.toISOString()
         };
 
-        // Mark as paid in masterSettings (month-keyed)
-        if (!masterSettings.pariwarikFinePaid[memberId] || typeof masterSettings.pariwarikFinePaid[memberId] !== 'object' || masterSettings.pariwarikFinePaid[memberId].paid !== undefined) {
-          masterSettings.pariwarikFinePaid[memberId] = {};
-        }
-        masterSettings.pariwarikFinePaid[memberId][monthKey] = {
+        const paidObj = {
           paid: true,
           amount: amtToCollect,
           donationId: autoFineDonationId,
           paidAt: now.toISOString()
         };
+
+        // 1. Dual-sync on member document (Direct & resilient)
+        member.pariwarikFinePaid[monthKey] = paidObj;
+
+        // 2. Dual-sync on masterSettings
+        if (!masterSettings.pariwarikFinePaid[memberId] || typeof masterSettings.pariwarikFinePaid[memberId] !== 'object' || masterSettings.pariwarikFinePaid[memberId].paid !== undefined) {
+          masterSettings.pariwarikFinePaid[memberId] = {};
+        }
+        masterSettings.pariwarikFinePaid[memberId][monthKey] = paidObj;
 
         // Add to allDonations (Strictly Donation - Not Monthly PASY installment)
         if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
@@ -20344,13 +20386,18 @@
       } else {
         // Unchecked: Cancel fine payment and delete fine donation receipt for this month
         let delDonationId = null;
-        if (masterSettings.pariwarikFinePaid[memberId]) {
+        if (member.pariwarikFinePaid && member.pariwarikFinePaid[monthKey]) {
+          delDonationId = member.pariwarikFinePaid[monthKey].donationId;
+          delete member.pariwarikFinePaid[monthKey];
+        }
+
+        if (masterSettings.pariwarikFinePaid && masterSettings.pariwarikFinePaid[memberId]) {
           const mEntry = masterSettings.pariwarikFinePaid[memberId][monthKey];
           if (mEntry && typeof mEntry === 'object') {
-            delDonationId = mEntry.donationId;
+            if (!delDonationId) delDonationId = mEntry.donationId;
             delete masterSettings.pariwarikFinePaid[memberId][monthKey];
           } else if (masterSettings.pariwarikFinePaid[memberId].donationId) {
-            delDonationId = masterSettings.pariwarikFinePaid[memberId].donationId;
+            if (!delDonationId) delDonationId = masterSettings.pariwarikFinePaid[memberId].donationId;
             delete masterSettings.pariwarikFinePaid[memberId];
           }
         }
@@ -20387,7 +20434,16 @@
         renderMemberPasyPage(currentLoggedInMember);
       }
 
-      // Persist Settings
+      // 1. Persist directly to Member document
+      try {
+        if (typeof syncMemberToBackend === 'function') {
+          await syncMemberToBackend({ id: member.id, pariwarikFinePaid: member.pariwarikFinePaid });
+        }
+      } catch (e) {
+        console.warn('Member fine paid sync warning:', e);
+      }
+
+      // 2. Persist Settings
       try {
         if (typeof settingsCol !== 'undefined' && settingsCol) {
           await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
