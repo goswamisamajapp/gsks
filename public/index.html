@@ -19319,20 +19319,48 @@
 
       renderPariwarikView();
 
-      // Persist directly to Member Document (100% resilient)
+      // Persist directly to Member Document (Atomic field path update to prevent race conditions)
       try {
-        const payload = {
-          id: memberId,
-          pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid || {},
-          pariwarikPaid: !!mem.pariwarikPaid
+        const updatePayload = {
+          [`pariwarikMonthlyPaid.${currentPariwarikMonth}`]: !!isChecked,
+          pariwarikPaid: !!isChecked
         };
-        if (mem.pariwarikPaidAt) {
-          payload.pariwarikPaidAt = mem.pariwarikPaidAt;
+        if (isChecked) {
+          updatePayload[`pariwarikPaidAt.${currentPariwarikMonth}`] = mem.pariwarikPaidAt ? mem.pariwarikPaidAt[currentPariwarikMonth] || new Date().toISOString() : new Date().toISOString();
+          if (mem.pariwarikLateFines && mem.pariwarikLateFines[currentPariwarikMonth]) {
+            updatePayload[`pariwarikLateFines.${currentPariwarikMonth}`] = mem.pariwarikLateFines[currentPariwarikMonth];
+          }
         }
-        if (mem.pariwarikLateFines) {
-          payload.pariwarikLateFines = mem.pariwarikLateFines;
+
+        // Direct atomic update to Firestore first if available
+        if (typeof membersCol !== 'undefined' && membersCol) {
+          try {
+            await membersCol.doc(memberId).update(updatePayload);
+          } catch (updateErr) {
+            // If document didn't exist or update failed, fallback to merge set
+            const fullPayload = {
+              id: memberId,
+              pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid || {},
+              pariwarikPaid: !!mem.pariwarikPaid
+            };
+            if (mem.pariwarikPaidAt) fullPayload.pariwarikPaidAt = mem.pariwarikPaidAt;
+            if (mem.pariwarikLateFines) fullPayload.pariwarikLateFines = mem.pariwarikLateFines;
+            await membersCol.doc(memberId).set(fullPayload, { merge: true });
+          }
         }
-        await syncMemberToBackend(payload);
+
+        // Also sync to local backend Express API
+        await apiFetch('/api/members/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: memberId,
+            pariwarikMonthlyPaid: mem.pariwarikMonthlyPaid || {},
+            pariwarikPaid: !!mem.pariwarikPaid,
+            pariwarikPaidAt: mem.pariwarikPaidAt || {},
+            pariwarikLateFines: mem.pariwarikLateFines || {}
+          })
+        }).catch(err => console.warn('API sync warning:', err));
       } catch (err) {
         console.warn('Error saving pariwarik paid status:', err);
       }
