@@ -7976,38 +7976,55 @@
 
         const thirdSunday = sundays[2]; // End of 3rd Sunday of prior month: 23:59:59
 
-        // If already paid for this month:
-        // Monthly installment (150) and Late Fine are strictly separate!
-        // Check both member document and masterSettings for locked late fine
+        // Determine effective calculation date:
+        // If member already paid the basic installment, fine counting FREEZES on the payment date (paidAt/donation date)!
+        // If unpaid, fine continues counting up to today (now).
         const isPaidInstallment = isPariwarikPaidForMonth(member, mCfg.key);
+        let evalDate = now;
         if (isPaidInstallment) {
-          const accruedFinesSettings = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
-          const accruedFinesMember = (member.pariwarikLateFines && typeof member.pariwarikLateFines === 'object') ? member.pariwarikLateFines : {};
-          
-          let monthFine = 0;
-          let weekCount = 0;
-
-          if (accruedFinesMember[mCfg.key] !== undefined) {
-            monthFine = Math.max(0, parseFloat(accruedFinesMember[mCfg.key]) || 0);
-          } else if (accruedFinesSettings[mCfg.key] !== undefined) {
-            monthFine = Math.max(0, parseFloat(accruedFinesSettings[mCfg.key]) || 0);
+          let paidDateStr = null;
+          if (member.pariwarikPaidAt && member.pariwarikPaidAt[mCfg.key]) {
+            paidDateStr = member.pariwarikPaidAt[mCfg.key];
+          } else if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+            const don = allDonations.find(d => d.memberId === member.id && (d.pariwarikMonthKey === mCfg.key || (d.remarks && d.remarks.includes(mCfg.label))));
+            if (don && don.date) paidDateStr = don.date;
           }
-
-          if (monthFine > 0) {
-            weekCount = Math.round(monthFine / (getPasyFineWeekRate() || 20));
-            grossFine += monthFine;
-            fineBreakdown.push({
-              monthKey: mCfg.key,
-              label: mCfg.label,
-              weekCount,
-              fine: monthFine
-            });
+          if (paidDateStr) {
+            const pDt = new Date(paidDateStr);
+            if (!isNaN(pDt.getTime())) evalDate = pDt;
           }
-          return;
         }
 
-        if (now <= thirdSunday) {
-          // Deadline not crossed yet
+        // If locked fine exists in member document or masterSettings:
+        // Use locked fine if available, otherwise dynamically compute based on evalDate!
+        const accruedFinesSettings = (masterSettings && masterSettings.pariwarikLateFines && masterSettings.pariwarikLateFines[member.id]) || {};
+        const accruedFinesMember = (member.pariwarikLateFines && typeof member.pariwarikLateFines === 'object') ? member.pariwarikLateFines : {};
+        
+        if (isPaidInstallment) {
+          let lockedFine = null;
+          if (accruedFinesMember[mCfg.key] !== undefined) {
+            lockedFine = Math.max(0, parseFloat(accruedFinesMember[mCfg.key]) || 0);
+          } else if (accruedFinesSettings[mCfg.key] !== undefined) {
+            lockedFine = Math.max(0, parseFloat(accruedFinesSettings[mCfg.key]) || 0);
+          }
+
+          if (lockedFine !== null) {
+            if (lockedFine > 0) {
+              const weekCount = Math.round(lockedFine / (getPasyFineWeekRate() || 20));
+              grossFine += lockedFine;
+              fineBreakdown.push({
+                monthKey: mCfg.key,
+                label: mCfg.label,
+                weekCount,
+                fine: lockedFine
+              });
+            }
+            return;
+          }
+        }
+
+        if (evalDate <= thirdSunday) {
+          // Deadline not crossed at the time of payment / now
           return;
         }
 
@@ -8016,12 +8033,13 @@
         startMonday.setDate(startMonday.getDate() + 1);
         startMonday.setHours(0, 0, 0, 0);
 
-        if (now < startMonday) return;
+        if (evalDate < startMonday) return;
 
-        // Calculate weeks passed / entered
-        const diffMs = now.getTime() - startMonday.getTime();
+        // Calculate count of Sundays crossed after 3rd Sunday:
+        // Every crossed Sunday adds +₹20 (1st crossed Sunday = 4th Sunday of prior month, etc.)
+        const diffMs = evalDate.getTime() - startMonday.getTime();
         const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
-        const weekCount = Math.floor(diffDays / 7) + 1;
+        const weekCount = Math.floor((diffDays + 1) / 7);
         const finePerWeek = getPasyFineWeekRate();
         const monthFine = weekCount * finePerWeek;
 
@@ -19943,13 +19961,8 @@
     }
 
     function getPariwarikInstallmentMonthLabel(selectedMonthKey) {
-      const idx = PARIWARIK_MONTHS.findIndex(m => m.key === selectedMonthKey);
-      if (idx > 0) {
-        return PARIWARIK_MONTHS[idx - 1].label;
-      } else if (idx === 0) {
-        return 'Aug 2025';
-      }
-      return selectedMonthKey;
+      const item = PARIWARIK_MONTHS.find(m => m.key === selectedMonthKey);
+      return item ? item.label : selectedMonthKey;
     }
 
     async function sendPariwarikPushNotification(memberId, memberName, memberPhone) {
