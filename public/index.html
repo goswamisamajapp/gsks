@@ -12912,17 +12912,24 @@
       const elExpensesSplit = document.getElementById('dash-expenses-split');
       const elQuickExpensesCount = document.getElementById('quick-expenses-count');
 
-      // Calculate total pending dues (Unified: General + PASY Installments + Fine Dues)
-      let totalDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
+      // Calculate separate dues totals:
+      // 1. PASY Dues: ONLY PASY scheme 150/- installment dues (totalPasyDues)
+      // 2. Dues (Non-PASY): All other dues except PASY 150/- (e.g. general/membership dues + late fines)
+      let nonPasyDuesAmount = nonRemoved.reduce((sum, m) => sum + (Number(m.dues) || 0), 0);
       let pasyDuesAmount = 0;
       try {
         if (typeof calculateAllDuesData === 'function') {
           const allDuesObj = calculateAllDuesData();
-          if (allDuesObj && typeof allDuesObj.grandTotalDues === 'number') {
-            totalDuesAmount = allDuesObj.grandTotalDues;
-          }
-          if (allDuesObj && typeof allDuesObj.totalPasyDues === 'number') {
-            pasyDuesAmount = allDuesObj.totalPasyDues;
+          if (allDuesObj) {
+            // Dues = General/Membership + Fines (strictly excludes PASY 150/- dues)
+            const gen = Number(allDuesObj.totalGeneralDues) || 0;
+            const fine = Number(allDuesObj.totalFineDues) || 0;
+            nonPasyDuesAmount = gen + fine;
+
+            // PASY Dues = Only PASY 150/- installment dues
+            if (typeof allDuesObj.totalPasyDues === 'number') {
+              pasyDuesAmount = allDuesObj.totalPasyDues;
+            }
           }
         }
       } catch (e) {
@@ -12932,7 +12939,7 @@
       if (elTotalFund) elTotalFund.textContent = `₹ ${totalAvailableFund.toLocaleString('en-IN')}`;
       if (elBankFund) elBankFund.textContent = `₹ ${netBankAmount.toLocaleString('en-IN')}`;
       if (elCashFund) elCashFund.textContent = `₹ ${netCashInHand.toLocaleString('en-IN')}`;
-      if (elDuesFund) elDuesFund.textContent = `₹ ${totalDuesAmount.toLocaleString('en-IN')}`;
+      if (elDuesFund) elDuesFund.textContent = `₹ ${nonPasyDuesAmount.toLocaleString('en-IN')}`;
       if (elPasyDues) elPasyDues.textContent = `₹ ${pasyDuesAmount.toLocaleString('en-IN')}`;
       if (elExpensesTotal) elExpensesTotal.textContent = `₹ ${totalExpenses.toLocaleString('en-IN')}`;
       if (elExpensesSplit) elExpensesSplit.textContent = `नकद: ₹${expenseCashTotal.toLocaleString('en-IN')} | बैंक: ₹${expenseOnlineTotal.toLocaleString('en-IN')}`;
