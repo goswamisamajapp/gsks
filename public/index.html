@@ -13144,7 +13144,7 @@
               <button onclick="openEditModal('${m.id}')" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-800 font-bold rounded-lg text-[10px] sm:text-[11px] flex items-center gap-1 transition-all border border-amber-200/60 cursor-pointer" title="Edit Member">
                 <i class="fa-solid fa-pen text-[10px]"></i> <span class="hidden sm:inline">Edit</span>
               </button>
-              <button onclick="openDeleteModal('${m.id}', '${m.name}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-bold rounded-lg text-[10px] sm:text-[11px] flex items-center gap-1 transition-all border border-rose-200/60 cursor-pointer" title="Delete Member">
+              <button onclick="openDeleteModal('${m.id}', '${(m.name || '').replace(/'/g, \"\\\\'\")}')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-bold rounded-lg text-[10px] sm:text-[11px] flex items-center gap-1 transition-all border border-rose-200/60 cursor-pointer" title="Delete Member">
                 <i class="fa-solid fa-trash-can text-[10px]"></i> <span class="hidden sm:inline">Del</span>
               </button>
             </div>
@@ -13224,7 +13224,7 @@
               <button onclick="openEditModal('${m.id}')" class="w-7 h-7 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg flex items-center justify-center text-xs" title="Edit">
                 <i class="fa-solid fa-pen"></i>
               </button>
-              <button onclick="openDeleteModal('${m.id}', '${m.name}')" class="w-7 h-7 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg flex items-center justify-center text-xs" title="Delete / Archive">
+              <button onclick="openDeleteModal('${m.id}', '${(m.name || '').replace(/'/g, \"\\\\'\")}')" class="w-7 h-7 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg flex items-center justify-center text-xs" title="Delete / Archive">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
             </div>
@@ -13596,13 +13596,23 @@
     // 3. DELETE / ARCHIVE LOGIC
     // ==============================================
     function openDeleteModal(id, name) {
+      closeAllModals();
       pendingDeleteMemberId = id;
-      document.getElementById('delete-member-name').textContent = name;
-      document.getElementById('delete-confirm-modal').classList.remove('hidden');
+      const nameEl = document.getElementById('delete-member-name');
+      if (nameEl) nameEl.textContent = name || id;
+      const modal = document.getElementById('delete-confirm-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
     }
 
     function closeDeleteModal() {
-      document.getElementById('delete-confirm-modal').classList.add('hidden');
+      const modal = document.getElementById('delete-confirm-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
       pendingDeleteMemberId = null;
     }
 
@@ -13611,6 +13621,9 @@
       const id = pendingDeleteMemberId;
       closeDeleteModal();
       await syncMemberToBackend({ id: id, status: 'removed' });
+      if (typeof showAppAlert === 'function') {
+        showAppAlert('सदस्य को सफलतापूर्वक आर्काइव (हटा) दिया गया है।', 'सदस्य आर्काइव', 'success');
+      }
     }
 
     // ==============================================
@@ -22181,6 +22194,15 @@
     window.renderMemberPasyPage = renderMemberPasyPage;
     window.openMemberEventParticipantsModal = openMemberEventParticipantsModal;
     window.closeMemberEventParticipantsModal = closeMemberEventParticipantsModal;
+    window.openDeleteModal = openDeleteModal;
+    window.closeDeleteModal = closeDeleteModal;
+    window.confirmArchiveMember = confirmArchiveMember;
+    window.openEditModal = openEditModal;
+    window.closeEditModal = closeEditModal;
+    window.openViewModal = openViewModal;
+    window.closeViewModal = closeViewModal;
+    window.handleSaveMember = handleSaveMember;
+    window.handleResetMemberPassword = handleResetMemberPassword;
     window.restoreMember = restoreMember;
     window.renderArchivedList = renderArchivedList;
 
