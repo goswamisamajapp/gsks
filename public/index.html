@@ -14998,6 +14998,9 @@
       if (typeof renderBankTransactionsView === 'function') {
         renderBankTransactionsView();
       }
+      if (typeof renderPariwarikView === 'function') {
+        renderPariwarikView();
+      }
     }
 
     function renderSettingsView() {
@@ -19747,7 +19750,7 @@
                   </div>
 
                   <button type="button" 
-                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')""" 
+                          onclick="openFineWaiverModal('${m.id}', '${currentPariwarikMonth}')" 
                           class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80" 
                           title="Set Fine Waiver">
                     <i class="fa-solid fa-tags text-[10px]"></i>
@@ -20462,8 +20465,23 @@
         renderMemberPasyPage(currentLoggedInMember);
       }
 
-      // 1. Persist directly to Member document
+      // 1. Persist directly to Member document (Atomic field update)
       try {
+        if (typeof membersCol !== 'undefined' && membersCol) {
+          if (isChecked) {
+            await membersCol.doc(memberId).update({
+              [`pariwarikFinePaid.${monthKey}`]: member.pariwarikFinePaid[monthKey]
+            }).catch(async () => {
+              await membersCol.doc(memberId).set({ id: member.id, pariwarikFinePaid: member.pariwarikFinePaid }, { merge: true });
+            });
+          } else {
+            await membersCol.doc(memberId).update({
+              [`pariwarikFinePaid.${monthKey}`]: firebase.firestore.FieldValue.delete()
+            }).catch(async () => {
+              await membersCol.doc(memberId).set({ id: member.id, pariwarikFinePaid: member.pariwarikFinePaid });
+            });
+          }
+        }
         if (typeof syncMemberToBackend === 'function') {
           await syncMemberToBackend({ id: member.id, pariwarikFinePaid: member.pariwarikFinePaid });
         }
@@ -20471,10 +20489,22 @@
         console.warn('Member fine paid sync warning:', e);
       }
 
-      // 2. Persist Settings
+      // 2. Persist Settings (Atomic field update)
       try {
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
+          if (isChecked) {
+            await settingsCol.doc('master').update({
+              [`pariwarikFinePaid.${memberId}.${monthKey}`]: masterSettings.pariwarikFinePaid[memberId][monthKey]
+            }).catch(async () => {
+              await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
+            });
+          } else {
+            await settingsCol.doc('master').update({
+              [`pariwarikFinePaid.${memberId}.${monthKey}`]: firebase.firestore.FieldValue.delete()
+            }).catch(async () => {
+              await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
+            });
+          }
         }
       } catch (err) {
         console.warn('Firestore fine paid status save warning:', err);
@@ -20499,6 +20529,7 @@
     async function togglePariwarikFineApplicable(memberId, isEnabled, targetMonthKey = null) {
       try {
         const monthKey = targetMonthKey || currentPariwarikMonth;
+        if (!masterSettings) masterSettings = {};
         if (!masterSettings.pariwarikFineExemptions || typeof masterSettings.pariwarikFineExemptions !== 'object') {
           masterSettings.pariwarikFineExemptions = {};
         }
@@ -20506,10 +20537,11 @@
           masterSettings.pariwarikFineExemptions[memberId] = {};
         }
 
-        // isEnabled === true means Fine applies (default).
-        // isEnabled === false means Fine is OFF (exempt).
+        // isEnabled === true means Fine applies (Active/ON).
+        // isEnabled === false means Fine is OFF (Exempt).
+        // We explicitly set boolean true / false so Firestore merge:true never retains stale state!
         if (isEnabled) {
-          delete masterSettings.pariwarikFineExemptions[memberId][monthKey];
+          masterSettings.pariwarikFineExemptions[memberId][monthKey] = true;
         } else {
           masterSettings.pariwarikFineExemptions[memberId][monthKey] = false;
         }
@@ -20521,10 +20553,26 @@
             mem.pariwarikFineExemptions = {};
           }
           if (isEnabled) {
-            delete mem.pariwarikFineExemptions[monthKey];
+            mem.pariwarikFineExemptions[monthKey] = true;
           } else {
             mem.pariwarikFineExemptions[monthKey] = false;
           }
+          
+          // Direct atomic update to Firestore member doc
+          if (typeof membersCol !== 'undefined' && membersCol) {
+            try {
+              await membersCol.doc(memberId).update({
+                [`pariwarikFineExemptions.${monthKey}`]: !!isEnabled
+              });
+            } catch (uErr) {
+              await membersCol.doc(memberId).set({
+                id: memberId,
+                pariwarikFineExemptions: mem.pariwarikFineExemptions
+              }, { merge: true });
+            }
+          }
+
+          // Central Express server API sync
           if (typeof syncMemberToBackend === 'function') {
             syncMemberToBackend({ id: mem.id, pariwarikFineExemptions: mem.pariwarikFineExemptions });
           }
@@ -20532,9 +20580,15 @@
 
         renderPariwarikView();
 
-        // Sync to Firestore & Backend Settings
+        // Direct atomic update to Firestore master settings doc
         if (typeof settingsCol !== 'undefined' && settingsCol) {
-          await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
+          try {
+            await settingsCol.doc('master').update({
+              [`pariwarikFineExemptions.${memberId}.${monthKey}`]: !!isEnabled
+            });
+          } catch (sErr) {
+            await settingsCol.doc('master').set(cleanDocForFirestore(masterSettings), { merge: true });
+          }
         }
         await saveSettingsToBackend(masterSettings);
         console.log(`PASY Fine for ${memberId} on ${monthKey} set to ${isEnabled ? 'APPLICABLE' : 'EXEMPT/OFF'}`);
