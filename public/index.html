@@ -8035,11 +8035,12 @@
 
         if (evalDate < startMonday) return;
 
-        // Calculate count of Sundays crossed after 3rd Sunday:
-        // Every crossed Sunday adds +₹20 (1st crossed Sunday = 4th Sunday of prior month, etc.)
+        // Calculate late weeks:
+        // As soon as 3rd Sunday deadline ends and startMonday begins, member enters Week 1 (₹20).
+        // Each subsequent Monday entered adds another +₹20.
         const diffMs = evalDate.getTime() - startMonday.getTime();
         const diffDays = Math.floor(diffMs / (24 * 3600 * 1000));
-        const weekCount = Math.floor((diffDays + 1) / 7);
+        const weekCount = Math.floor(diffDays / 7) + 1;
         const finePerWeek = getPasyFineWeekRate();
         const monthFine = weekCount * finePerWeek;
 
