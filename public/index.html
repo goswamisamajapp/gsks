@@ -19945,12 +19945,42 @@
       let msg = '';
       if (!hasPaid) {
         const memberObj = (allMembers || []).find(x => x.id === memberId);
-      const cumDues = (typeof getMemberPasyCumulativeDues === 'function' && memberObj) ? getMemberPasyCumulativeDues(memberObj) : null;
-      if (cumDues && cumDues.unpaidCount > 1) {
-        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत आपके *${cumDues.unpaidCount} माह* की कुल किस्त बकाया राशि *₹${cumDues.totalDues.toLocaleString('en-IN')}* अभी तक प्राप्त नहीं हुई है।\n\n(शामिल माह: ${(cumDues.unpaidMonths || []).map(x => x.label).join(', ')})\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
-      } else {
-        msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की ₹${PARIWARIK_MONTHLY_FEE} की किस्त अभी तक प्राप्त नहीं हुई है।\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
-      }
+        const cumDues = (typeof getMemberPasyCumulativeDues === 'function' && memberObj) ? getMemberPasyCumulativeDues(memberObj) : null;
+        
+        // Calculate Fine for this member (if any)
+        let fineAmount = 0;
+        try {
+          if (typeof calculateMemberPasyFine === 'function' && memberObj) {
+            const fineInfo = calculateMemberPasyFine(memberObj);
+            if (fineInfo && !fineInfo.isPaid && fineInfo.netFine > 0) {
+              fineAmount = fineInfo.netFine;
+            }
+          }
+        } catch (e) {
+          console.warn('PASY fine calculation warning:', e);
+        }
+
+        const pasyDues = (cumDues && cumDues.totalDues > 0) ? cumDues.totalDues : PARIWARIK_MONTHLY_FEE;
+        const totalPayable = pasyDues + fineAmount;
+
+        // Breakdown formatting
+        let breakdownText = '';
+        if (cumDues && cumDues.unpaidCount > 1) {
+          breakdownText += `• पारिवारिक योजना किस्त बकाया (${cumDues.unpaidCount} माह): ₹${pasyDues.toLocaleString('en-IN')}\n  (शामिल माह: ${(cumDues.unpaidMonths || []).map(x => x.label).join(', ')})`;
+        } else {
+          breakdownText += `• पारिवारिक योजना किस्त (${installmentMonthLabel}): ₹${pasyDues.toLocaleString('en-IN')}`;
+        }
+
+        if (fineAmount > 0) {
+          breakdownText += `\n• विलंब शुल्क (Late Fine): ₹${fineAmount.toLocaleString('en-IN')}`;
+          msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत आपकी देय राशि का विवरण निम्नलिखित है:\n\n${breakdownText}\n\n*कुल देय बकाया राशि: ₹${totalPayable.toLocaleString('en-IN')}*\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+        } else {
+          if (cumDues && cumDues.unpaidCount > 1) {
+            msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत आपके *${cumDues.unpaidCount} माह* की कुल किस्त बकाया राशि *₹${pasyDues.toLocaleString('en-IN')}* अभी तक प्राप्त नहीं हुई है।\n\n(शामिल माह: ${(cumDues.unpaidMonths || []).map(x => x.label).join(', ')})\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+          } else {
+            msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की ₹${pasyDues.toLocaleString('en-IN')} की किस्त अभी तक प्राप्त नहीं हुई है।\n\nकृपया शीघ्र भुगतान कर सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
+          }
+        }
       } else {
         msg = `हर हर महादेव 🙏\n\nआदरणीय *${memberName || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* के पारिवारिक आर्थिक योजना अंतर्गत *${installmentMonthLabel}* की आपकी ₹${PARIWARIK_MONTHLY_FEE} की किस्त सफलतापूर्वक प्राप्त हो चुकी है।\n\nआपके सहयोग के लिए धन्यवाद!\n- गोस्वामी समाज कल्याण समिति`;
       }
