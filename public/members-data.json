@@ -1,3124 +1,1141 @@
 [
   {
-    "pariwarikPaid": true,
-    "dues": 0,
-    "phone": "7781931880",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        }
-      }
-    },
-    "since": "19-05-2025",
     "name": "NITISH NATH",
+    "phone": "7781931880",
+    "id": "GSKS-001",
     "donation": 0,
-    "password": "7781931880",
+    "dues": 0,
+    "address": "GUNGHASA",
     "designation": "अध्यक्ष (President)",
-    "bloodGroup": "O+",
     "status": "Prime Member",
-    "pariwarikPaidAt": {
-      "fields": {
-        "2025-10": {
-          "stringValue": "2026-10-21T08:00:50.817Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-21T08:01:25.689Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-21T08:01:06.982Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-21T08:01:30.907Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-21T08:01:42.304Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-21T08:01:35.440Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-21T08:01:37.338Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-21T08:01:03.676Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-21T08:01:33.897Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-21T08:01:19.601Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-21T08:01:08.657Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-21T08:01:11.575Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-21T08:00:39.735Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-21T08:01:22.064Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:21.278Z"
-        }
-      }
-    },
+    "password": "7781931880",
     "pariwarikMember": true,
-    "address": "GUNGHASA",
     "father": "MAHENDRA NATH GOSWAMI",
-    "id": "GSKS-001"
-  },
-  {
-    "bloodGroup": "O+",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        }
-      }
-    },
-    "name": "MAHENDRA NATH GOSWAMI",
-    "donation": 0,
-    "dues": 0,
-    "designation": "संरक्षक (Patron)",
-    "father": "LT BHOLA NATH GOSWAMI",
-    "status": "Prime Member",
-    "address": "GUNGHASA",
-    "pariwarikMember": true,
+    "since": "19-05-2025",
     "pariwarikPaid": true,
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:21.969Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-21T10:38:07.292Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-21T10:37:50.919Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-21T10:38:01.598Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-21T10:37:59.636Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-21T10:38:05.396Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-21T10:38:13.133Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-21T10:37:54.789Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-21T10:38:16.665Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-21T10:38:14.913Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-21T10:38:20.527Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-21T10:38:11.103Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-21T10:37:57.097Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-21T10:38:08.951Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-21T10:37:52.791Z"
-        }
-      }
-    },
-    "phone": "9304447057",
-    "id": "GSKS-002",
-    "since": "20-05-2025"
-  },
-  {
-    "since": "21-05-2025",
-    "id": "GSKS-003",
-    "phone": "7488162172",
-    "donation": 0,
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        }
-      }
-    },
-    "bloodGroup": "O+",
-    "address": "GUNGHASA",
-    "dues": 0,
-    "status": "Prime Member",
-    "name": "KESHAV NATH",
-    "father": "MAHENDRA NATH GOSWAMI",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        }
-      }
-    },
-    "pariwarikPaidAt": {
-      "fields": {
-        "2025-11": {
-          "stringValue": "2026-10-21T13:36:58.542Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-21T13:37:37.510Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-21T13:37:20.716Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:24.326Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-21T13:37:09.022Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-21T13:37:13.239Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-21T13:37:25.384Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-21T13:36:48.668Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-21T13:37:29.825Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-21T13:36:54.012Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-21T13:37:41.083Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-21T13:37:44.619Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-21T13:37:33.838Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-21T13:37:05.241Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-21T13:37:48.192Z"
-        }
-      }
-    },
-    "pariwarikPaid": true,
-    "designation": "मीडिया प्रभारी (Media In-charge)",
-    "pariwarikMember": true
-  },
-  {
-    "dues": 0,
-    "bloodGroup": "O+",
-    "phone": "7004312107",
-    "since": "22-05-2025",
-    "name": "PRABHU DAYAL GOSWAMI",
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-08": {
-          "stringValue": "2026-10-21T13:37:38.194Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-21T13:37:21.468Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-21T13:36:59.240Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-21T13:37:13.744Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-21T13:36:50.336Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-21T13:37:26.000Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-21T13:37:09.680Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:25.472Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-21T13:36:54.734Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-21T13:37:30.649Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-21T13:37:05.812Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-21T13:37:34.360Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-21T13:37:49.020Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-21T13:37:41.594Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-21T13:37:45.421Z"
-        }
-      }
-    },
-    "pariwarikPaid": true,
-    "pariwarikMember": true,
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        }
-      }
-    },
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        }
-      }
-    },
-    "status": "Prime Member",
-    "address": "CHIRABAD",
-    "donation": 100,
-    "father": "GUHI GOSWAMI",
-    "designation": "कोषाध्यक्ष (Treasurer)",
-    "id": "GSKS-004"
-  },
-  {
-    "designation": "सचिव (Secretary)",
-    "donation": 0,
-    "dues": 0,
-    "father": "RAMNATH GOSWAMI",
-    "pariwarikPaidAt": {
-      "fields": {
-        "2025-12": {
-          "stringValue": "2026-10-21T14:24:27.490Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-21T14:24:49.694Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-21T14:25:01.554Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-21T14:24:57.827Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-21T14:24:21.685Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-21T14:24:44.950Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-21T14:24:12.782Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-21T14:24:40.318Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-21T14:24:35.627Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-21T14:24:31.944Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:26.090Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-21T14:24:03.528Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-21T14:24:54.180Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-21T14:24:24.929Z"
-        }
-      }
-    },
-    "status": "Prime Member",
-    "pariwarikMember": true,
-    "name": "MANIK CHAND GOSWAMI",
-    "phone": "8539874118",
-    "pariwarikPaid": true,
-    "since": "21-05-2025",
-    "bloodGroup": "O+",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        }
-      }
-    },
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        }
-      }
-    },
-    "address": "GUNGHASA",
-    "id": "GSKS-005"
-  },
-  {
-    "status": "Prime Member",
-    "id": "GSKS-006",
-    "pariwarikMember": true,
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        }
-      }
-    },
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:27.456Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T05:12:17.337Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-22T05:11:54.706Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T05:12:25.953Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T05:14:02.764Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T05:14:17.387Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T05:12:42.595Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:53.269Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T05:14:10.438Z"
-        }
-      }
-    },
-    "designation": "उपाध्यक्ष (Vice President)",
-    "father": "LT RAGUNATH GIRI",
-    "dues": 0,
-    "donation": 0,
-    "since": "21-05-2025",
-    "phone": "9905666648",
-    "name": "MUNNA GOSWAMI",
-    "pariwarikPaid": true,
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        }
-      }
-    },
-    "address": "AZAD NAGAR",
     "bloodGroup": "O+"
   },
   {
-    "designation": "सक्रिय सहयोगी सदस्य (Active Mantor Member)",
+    "since": "20-05-2025",
+    "dues": 0,
+    "id": "GSKS-002",
     "address": "GUNGHASA",
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        }
-      }
-    },
-    "since": "22-05-2025",
-    "phone": "7858969496",
-    "id": "GSKS-007",
-    "status": "Prime Member",
+    "name": "MAHENDRA NATH GOSWAMI",
+    "pariwarikMember": true,
     "pariwarikPaid": true,
-    "father": "MAHABIR GOSWAMI",
+    "bloodGroup": "O+",
+    "designation": "संरक्षक (Patron)",
+    "donation": 0,
+    "phone": "9304447057",
+    "father": "LT BHOLA NATH GOSWAMI",
+    "status": "Prime Member"
+  },
+  {
+    "phone": "7488162172",
+    "address": "GUNGHASA",
+    "pariwarikPaid": true,
+    "father": "MAHENDRA NATH GOSWAMI",
+    "status": "Prime Member",
+    "id": "GSKS-003",
+    "dues": 0,
+    "since": "21-05-2025",
+    "designation": "मीडिया प्रभारी (Media In-charge)",
+    "name": "KESHAV NATH",
+    "donation": 0,
+    "bloodGroup": "O+",
+    "pariwarikMember": true
+  },
+  {
+    "status": "Prime Member",
+    "address": "CHIRABAD",
+    "father": "GUHI GOSWAMI",
+    "bloodGroup": "O+",
+    "name": "PRABHU DAYAL GOSWAMI",
+    "dues": 0,
+    "pariwarikMember": true,
+    "since": "22-05-2025",
+    "designation": "कोषाध्यक्ष (Treasurer)",
+    "donation": 100,
+    "pariwarikPaid": true,
+    "phone": "7004312107",
+    "id": "GSKS-004"
+  },
+  {
+    "donation": 0,
+    "phone": "8539874118",
+    "pariwarikPaid": true,
+    "father": "RAMNATH GOSWAMI",
+    "status": "Prime Member",
+    "bloodGroup": "O+",
+    "dues": 0,
+    "address": "GUNGHASA",
+    "since": "21-05-2025",
+    "designation": "सचिव (Secretary)",
+    "pariwarikMember": true,
+    "id": "GSKS-005",
+    "name": "MANIK CHAND GOSWAMI"
+  },
+  {
+    "since": "21-05-2025",
+    "pariwarikPaid": true,
+    "bloodGroup": "O+",
+    "father": "LT RAGUNATH GIRI",
+    "pariwarikMember": true,
+    "status": "Prime Member",
+    "id": "GSKS-006",
+    "dues": 0,
+    "donation": 0,
+    "name": "MUNNA GOSWAMI",
+    "phone": "9905666648",
+    "designation": "उपाध्यक्ष (Vice President)",
+    "address": "AZAD NAGAR"
+  },
+  {
+    "bloodGroup": "O+",
+    "phone": "7858969496",
+    "dues": 0,
+    "donation": 0,
+    "pariwarikPaid": true,
+    "designation": "सक्रिय सहयोगी सदस्य (Active Mantor Member)",
     "pariwarikMember": true,
     "name": "JAGDISH GOSWAMI",
-    "bloodGroup": "O+",
-    "pariwarikPaidAt": {
-      "fields": {
-        "2025-11": {
-          "stringValue": "2026-10-22T05:29:29.930Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T05:29:57.698Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T05:30:20.432Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T05:29:37.649Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T05:29:21.005Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T05:30:06.152Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T05:29:46.541Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:28.021Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T05:29:26.003Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T05:30:10.373Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-22T05:30:35.331Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T05:29:33.622Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T05:30:14.544Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T05:30:29.632Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T05:30:25.302Z"
-        }
-      }
-    },
+    "father": "MAHABIR GOSWAMI",
+    "status": "Prime Member",
+    "id": "GSKS-007",
+    "since": "22-05-2025",
+    "address": "GUNGHASA"
+  },
+  {
+    "since": "19-05-2025",
     "dues": 0,
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        }
-      }
-    },
+    "address": "GUNGHASA",
+    "id": "GSKS-008",
+    "donation": 0,
+    "name": "SUNDAR LAL GOSWAMI",
+    "pariwarikMember": true,
+    "phone": "9709236773",
+    "designation": "सक्रिय सहयोगी सदस्य (Active Mantor Member)",
+    "pariwarikPaid": true,
+    "father": "SADANAND GOSWAMI",
+    "bloodGroup": "O+",
+    "status": "Prime Member"
+  },
+  {
+    "name": "BISHUN GOSWAMI",
+    "since": "23-05-2025",
+    "pariwarikPaid": true,
+    "bloodGroup": "O+",
+    "designation": "वरिष्ठ मार्गदर्शक (Senior Mantor)",
+    "dues": 0,
+    "address": "AZAD NAGAR",
+    "pariwarikMember": true,
+    "status": "Prime Member",
+    "father": "BHAGANAND GOSWAMI",
+    "donation": 0,
+    "phone": "9608364134",
+    "id": "GSKS-009"
+  },
+  {
+    "name": "GAJENDRA GOSWAMI",
+    "phone": "7549013670",
+    "pariwarikMember": true,
+    "status": "Prime Member",
+    "father": "LT SUDAN GOSWAMI",
+    "dues": 0,
+    "designation": "परिवहन प्रभारी (Transport In-Charge)",
+    "id": "GSKS-010",
+    "pariwarikPaid": true,
+    "address": "GUNGHASA",
+    "since": "20-05-2025",
+    "donation": 0,
+    "bloodGroup": "O+"
+  },
+  {
+    "father": "LT ROSHAN LAL GOSWAMI",
+    "address": "GUNGHASA",
+    "dues": 0,
+    "status": "Prime Member",
+    "pariwarikPaid": true,
+    "since": "12-06-2025",
+    "name": "DINBANDHU GOSWAMI",
+    "designation": "सदस्य (Member)",
+    "bloodGroup": "O+",
+    "phone": "9905118121",
+    "pariwarikMember": true,
+    "id": "GSKS-011",
     "donation": 0
   },
   {
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:47.205Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:32.461Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:05.266Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:09.994Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:28.465Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:07.964Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:44.973Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:05.098Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-22T10:24:02.441Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:45.923Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:27.380Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:40.987Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:21.463Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:51.447Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:23.644Z"
-        }
-      }
-    },
-    "pariwarikMember": true,
-    "donation": 0,
     "address": "GUNGHASA",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        }
-      }
-    },
-    "bloodGroup": "O+",
-    "designation": "सक्रिय सहयोगी सदस्य (Active Mantor Member)",
-    "name": "SUNDAR LAL GOSWAMI",
-    "pariwarikPaid": true,
-    "phone": "9709236773",
-    "dues": 0,
-    "since": "19-05-2025",
-    "status": "Prime Member",
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        }
-      }
-    },
-    "id": "GSKS-008",
-    "father": "SADANAND GOSWAMI"
-  },
-  {
-    "bloodGroup": "O+",
-    "phone": "9608364134",
-    "donation": 0,
-    "since": "23-05-2025",
-    "id": "GSKS-009",
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        }
-      }
-    },
-    "father": "BHAGANAND GOSWAMI",
-    "pariwarikPaid": true,
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:10.554Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:33.392Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:05.961Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:47.763Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:29.287Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:05.594Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:45.493Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:08.554Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:27.969Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:46.484Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-22T10:24:03.534Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:22.067Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:41.522Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:51.969Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:24.291Z"
-        }
-      }
-    },
-    "pariwarikMember": true,
-    "status": "Prime Member",
-    "designation": "वरिष्ठ मार्गदर्शक (Senior Mantor)",
-    "name": "BISHUN GOSWAMI",
-    "address": "AZAD NAGAR",
-    "dues": 0,
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        }
-      }
-    }
-  },
-  {
-    "father": "LT SUDAN GOSWAMI",
-    "bloodGroup": "O+",
-    "pariwarikPaid": true,
-    "status": "Prime Member",
-    "phone": "7549013670",
     "since": "20-05-2025",
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        }
-      }
-    },
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:47.131Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:28.543Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:24.693Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:41.997Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:54.251Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:24.825Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:11.289Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:34.045Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:06.337Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:48.388Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:30.134Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:07.588Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:45.960Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:09.249Z"
-        }
-      }
-    },
-    "pariwarikMember": true,
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        }
-      }
-    },
-    "designation": "परिवहन प्रभारी (Transport In-Charge)",
-    "donation": 0,
     "dues": 0,
-    "id": "GSKS-010",
-    "address": "GUNGHASA",
-    "name": "GAJENDRA GOSWAMI"
-  },
-  {
-    "pariwarikMember": true,
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        }
-      }
-    },
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:11.735Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:06.860Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:34.592Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:49.180Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:31.742Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:06.668Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:47.182Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:11.646Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:47.787Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:30.808Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-22T10:24:05.869Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:23.218Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:42.645Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:52.900Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:25.393Z"
-        }
-      }
-    },
-    "bloodGroup": "O+",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        }
-      }
-    },
-    "status": "Prime Member",
-    "id": "GSKS-011",
-    "father": "LT ROSHAN LAL GOSWAMI",
-    "donation": 0,
-    "dues": 0,
-    "phone": "9905118121",
-    "since": "12-06-2025",
-    "name": "DINBANDHU GOSWAMI",
-    "address": "GUNGHASA",
-    "pariwarikPaid": true,
-    "designation": "सदस्य (Member)"
-  },
-  {
     "father": "LT GOPAL GOSWAMI",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        }
-      }
-    },
-    "pariwarikMember": true,
-    "address": "GUNGHASA",
-    "donation": 0,
     "status": "Prime Member",
-    "pariwarikPaidAt": {
-      "fields": {
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:53.631Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:26.063Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:29.459Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:48.373Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:43.305Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:25.397Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:10.426Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:47.643Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:08.195Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:51.187Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:35.077Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:07.824Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:12.275Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:32.279Z"
-        }
-      }
-    },
-    "pariwarikPaid": true,
-    "id": "GSKS-012",
-    "phone": "7004162675",
-    "since": "20-05-2025",
-    "designation": "प्रबंधक (Manager)",
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        }
-      }
-    },
+    "bloodGroup": "O+",
+    "pariwarikMember": true,
     "name": "MOHAN GOSWAMI",
-    "bloodGroup": "O+",
-    "dues": 0
+    "phone": "7004162675",
+    "donation": 0,
+    "designation": "प्रबंधक (Manager)",
+    "pariwarikPaid": true,
+    "id": "GSKS-012"
   },
   {
-    "bloodGroup": "O+",
-    "name": "MAHANAND GOSWAMI",
-    "id": "GSKS-013",
-    "pariwarikPaid": true,
-    "dues": 0,
-    "since": "27-05-2025",
+    "donation": 0,
     "phone": "7979898969",
-    "address": "GUNGHASA",
-    "donation": 0,
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-11": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        }
-      }
-    },
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:44.681Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:26.045Z"
-        },
-        "2026-11": {
-          "stringValue": "2026-10-22T10:24:09.876Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:29.964Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:49.090Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:28.666Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:55.517Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:34.933Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:51.714Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:10.936Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:35.626Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:13.543Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:11.023Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:48.088Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:08.808Z"
-        }
-      }
-    },
-    "pariwarikMember": true,
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-11": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        }
-      }
-    },
-    "designation": "सदस्य (Member)",
+    "father": "OM PRAKASH GOSWAMI",
+    "bloodGroup": "O+",
     "status": "Prime Member",
-    "father": "OM PRAKASH GOSWAMI"
+    "designation": "सदस्य (Member)",
+    "dues": 0,
+    "pariwarikMember": true,
+    "address": "GUNGHASA",
+    "since": "27-05-2025",
+    "pariwarikPaid": true,
+    "id": "GSKS-013",
+    "name": "MAHANAND GOSWAMI"
   },
   {
     "status": "Prime Member",
-    "id": "GSKS-014",
-    "designation": "शिक्षा प्रभारी (Education In-Charge)",
-    "father": "SUKAR GOSWAMI",
-    "pariwarikPaid": true,
-    "bloodGroup": "O+",
-    "dues": 0,
-    "donation": 0,
     "name": "PRABHU NATH GOSWAMI",
-    "since": "04-06-2025",
-    "phone": "7352257976",
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        }
-      }
-    },
+    "father": "SUKAR GOSWAMI",
     "pariwarikMember": true,
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:50.736Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:32.710Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:47.338Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:26.609Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:56.149Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:29.230Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:53.185Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:37.394Z"
-        },
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:08.767Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:14.019Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:33.318Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:12.337Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:48.556Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:09.408Z"
-        }
-      }
-    },
+    "designation": "शिक्षा प्रभारी (Education In-Charge)",
     "address": "CHIRABAD",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2026-08": {
-          "booleanValue": true
-        }
-      }
-    }
-  },
-  {
-    "pariwarikMember": true,
-    "address": "PIPRADIH",
-    "pariwarikPaidAt": {
-      "fields": {
-        "2026-05": {
-          "stringValue": "2026-10-22T10:22:11.744Z"
-        },
-        "2025-09": {
-          "stringValue": "2026-10-22T10:18:37.963Z"
-        },
-        "2026-02": {
-          "stringValue": "2026-10-22T10:20:14.549Z"
-        },
-        "2026-01": {
-          "stringValue": "2026-10-22T10:19:55.813Z"
-        },
-        "2026-03": {
-          "stringValue": "2026-10-22T10:21:36.080Z"
-        },
-        "2026-04": {
-          "stringValue": "2026-10-22T10:21:50.780Z"
-        },
-        "2026-08": {
-          "stringValue": "2026-10-22T10:23:10.932Z"
-        },
-        "2025-11": {
-          "stringValue": "2026-10-22T10:19:13.631Z"
-        },
-        "2025-12": {
-          "stringValue": "2026-10-22T10:19:33.170Z"
-        },
-        "2026-07": {
-          "stringValue": "2026-10-22T10:22:51.442Z"
-        },
-        "2026-10": {
-          "stringValue": "2026-10-22T10:23:45.696Z"
-        },
-        "2026-09": {
-          "stringValue": "2026-10-22T10:23:29.100Z"
-        },
-        "2025-10": {
-          "stringValue": "2026-10-22T10:18:56.518Z"
-        },
-        "2026-06": {
-          "stringValue": "2026-10-22T10:22:29.692Z"
-        }
-      }
-    },
-    "name": "PRADEEP GOSWAMI",
+    "id": "GSKS-014",
+    "since": "04-06-2025",
     "dues": 0,
-    "designation": "सदस्य (Member)",
     "pariwarikPaid": true,
-    "father": "LT PREMDHARI GOSWAMI",
-    "id": "GSKS-015",
-    "status": "Prime Member",
-    "pariwarikMonthlyPaid": {
-      "fields": {
-        "2026-08": {
-          "booleanValue": true
-        },
-        "2026-04": {
-          "booleanValue": true
-        },
-        "2025-11": {
-          "booleanValue": true
-        },
-        "2026-02": {
-          "booleanValue": true
-        },
-        "2025-09": {
-          "booleanValue": true
-        },
-        "2026-05": {
-          "booleanValue": true
-        },
-        "2026-01": {
-          "booleanValue": true
-        },
-        "2026-03": {
-          "booleanValue": true
-        },
-        "2025-10": {
-          "booleanValue": true
-        },
-        "2026-06": {
-          "booleanValue": true
-        },
-        "2026-07": {
-          "booleanValue": true
-        },
-        "2025-12": {
-          "booleanValue": true
-        },
-        "2026-09": {
-          "booleanValue": true
-        },
-        "2026-10": {
-          "booleanValue": true
-        }
-      }
-    },
-    "donation": 0,
-    "pariwarikFineExemptions": {
-      "fields": {
-        "2025-12": {
-          "booleanValue": false
-        },
-        "2026-07": {
-          "booleanValue": false
-        },
-        "2026-09": {
-          "booleanValue": false
-        },
-        "2026-10": {
-          "booleanValue": false
-        },
-        "2025-10": {
-          "booleanValue": false
-        },
-        "2026-06": {
-          "booleanValue": false
-        },
-        "2026-01": {
-          "booleanValue": false
-        },
-        "2026-02": {
-          "booleanValue": false
-        },
-        "2025-09": {
-          "booleanValue": false
-        },
-        "2026-05": {
-          "booleanValue": false
-        },
-        "2026-03": {
-          "booleanValue": false
-        },
-        "2025-11": {
-          "booleanValue": false
-        },
-        "2026-08": {
-          "booleanValue": false
-        },
-        "2026-04": {
-          "booleanValue": false
-        }
-      }
-    },
+    "phone": "7352257976",
     "bloodGroup": "O+",
+    "donation": 0
+  },
+  {
+    "pariwarikPaid": true,
+    "id": "GSKS-015",
+    "pariwarikMember": true,
+    "status": "Prime Member",
+    "father": "LT PREMDHARI GOSWAMI",
+    "since": "27-08-2025",
+    "bloodGroup": "O+",
+    "name": "PRADEEP GOSWAMI",
     "phone": "9838975177",
-    "since": "27-08-2025"
+    "designation": "सदस्य (Member)",
+    "address": "PIPRADIH",
+    "dues": 0,
+    "donation": 0
   },
   {
-    "id": "GSKS-016",
-    "name": "ANAND GOSWAMI",
-    "father": "BAJRANGI GOSWAMI",
-    "since": "19-05-2025",
+    "donation": 0,
     "phone": "8877270594",
-    "address": "GUNGHASA",
+    "father": "BAJRANGI GOSWAMI",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
+    "id": "GSKS-016",
     "pariwarikMember": false,
-    "password": "8877270594"
+    "password": "8877270594",
+    "dues": 0,
+    "designation": "सदस्य (Member)",
+    "address": "GUNGHASA",
+    "bloodGroup": "",
+    "since": "19-05-2025",
+    "name": "ANAND GOSWAMI"
   },
   {
-    "id": "GSKS-017",
-    "name": "RADHESHYAM GOSWAMI",
-    "father": "SADANAND GOSWAMI",
-    "since": "19-05-2025",
     "phone": "7004431381",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
     "dues": 0,
-    "bloodGroup": "",
+    "donation": 0,
+    "address": "GUNGHASA",
+    "name": "RADHESHYAM GOSWAMI",
     "pariwarikMember": false,
+    "father": "SADANAND GOSWAMI",
+    "designation": "सदस्य (Member)",
+    "status": "Inactive",
+    "bloodGroup": "",
+    "id": "GSKS-017",
+    "since": "19-05-2025",
     "password": "7004431381"
   },
   {
-    "id": "GSKS-018",
     "name": "UMESH KUMAR GOSWAMI",
+    "since": "21-05-2025",
+    "password": "8252561962",
+    "dues": 0,
+    "pariwarikMember": false,
+    "address": "CHIRABAD",
+    "status": "Inactive",
     "father": "KALESHWAR GOSWAMI",
-    "since": "21-05-2025",
+    "designation": "सदस्य (Member)",
+    "bloodGroup": "",
+    "donation": 0,
     "phone": "8252561962",
-    "address": "CHIRABAD",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8252561962"
+    "id": "GSKS-018"
   },
   {
+    "since": "21-05-2025",
+    "password": "7870034539",
     "id": "GSKS-019",
+    "dues": 0,
+    "bloodGroup": "",
     "name": "ARVIND KUMAR GOSWAMI",
+    "pariwarikMember": false,
     "father": "SANTOSH GOSWAMI",
-    "since": "21-05-2025",
+    "designation": "सदस्य (Member)",
+    "status": "Inactive",
+    "donation": 0,
     "phone": "7870034539",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "7870034539"
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-020",
-    "name": "RANJEET GOSWAMI",
+    "dues": 0,
+    "donation": 0,
     "father": "LAKHAN GOSWAMI",
-    "since": "21-05-2025",
-    "phone": "9931668477",
-    "address": "CHIRABAD",
     "status": "Inactive",
+    "since": "21-05-2025",
+    "name": "RANJEET GOSWAMI",
     "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
+    "password": "9931668477",
     "pariwarikMember": false,
-    "password": "9931668477"
+    "id": "GSKS-020",
+    "phone": "9931668477",
+    "address": "CHIRABAD"
   },
   {
-    "id": "GSKS-021",
-    "name": "INDER GOSWAMI",
-    "father": "SADANAND GOSWAMI",
     "since": "21-05-2025",
-    "phone": "7903981995",
-    "address": "GUNGHASA",
-    "status": "Inactive",
     "designation": "सदस्य (Member)",
+    "father": "SADANAND GOSWAMI",
+    "status": "Inactive",
+    "id": "GSKS-021",
+    "address": "GUNGHASA",
     "donation": 0,
     "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
+    "phone": "7903981995",
+    "name": "INDER GOSWAMI",
+    "bloodGroup": "",
     "password": "7903981995"
   },
   {
-    "id": "GSKS-022",
-    "name": "AMIT KUMAR GOSWAMI",
-    "father": "CHOLA NATH GOSWAMI",
+    "password": "6206819495",
+    "designation": "सदस्य (Member)",
+    "bloodGroup": "",
+    "dues": 0,
     "since": "22-05-2025",
+    "name": "AMIT KUMAR GOSWAMI",
+    "id": "GSKS-022",
+    "pariwarikMember": false,
     "phone": "6206819495",
     "address": "CHIRABAD",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
+    "father": "CHOLA NATH GOSWAMI",
     "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "6206819495"
+    "status": "Inactive"
   },
   {
-    "id": "GSKS-023",
-    "name": "VISHAL GOSWAMI",
-    "father": "LATE BASANT GOSWAMI",
-    "since": "22-05-2025",
     "phone": "9525848201",
-    "address": "GUNGHASA",
-    "status": "Inactive",
+    "pariwarikMember": false,
+    "father": "LATE BASANT GOSWAMI",
     "designation": "सदस्य (Member)",
+    "status": "Inactive",
+    "id": "GSKS-023",
     "donation": 0,
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9525848201"
+    "password": "9525848201",
+    "since": "22-05-2025",
+    "name": "VISHAL GOSWAMI",
+    "address": "GUNGHASA",
+    "bloodGroup": ""
   },
   {
-    "id": "GSKS-024",
     "name": "UTTAM KUMAR GOSWAMI",
-    "father": "LATE PREMCHAND GOSWAMI",
+    "pariwarikMember": false,
+    "id": "GSKS-024",
+    "donation": 0,
     "since": "22-05-2025",
-    "phone": "7281940422",
+    "dues": 0,
     "address": "GUNGHASA",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
-    "pariwarikMember": false,
+    "father": "LATE PREMCHAND GOSWAMI",
+    "phone": "7281940422",
+    "designation": "स���स्य (Member)",
     "password": "7281940422"
   },
   {
-    "id": "GSKS-025",
-    "name": "UMACHARAN GOSWAMI",
+    "since": "22-05-2025",
+    "designation": "सदस्य (Member)",
     "father": "LATE KALINATH GOSWAMI",
-    "since": "22-05-2025",
+    "donation": 0,
+    "status": "Inactive",
+    "dues": 0,
+    "bloodGroup": "",
+    "name": "UMACHARAN GOSWAMI",
+    "password": "8252899866",
     "phone": "8252899866",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
-    "password": "8252899866"
+    "address": "GUNGHASA",
+    "id": "GSKS-025"
   },
   {
-    "id": "GSKS-026",
-    "name": "KANHAI GOSWAMI",
-    "father": "NANDLAL GOSWAMI",
-    "since": "22-05-2025",
     "phone": "7654106293",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
+    "status": "Prime Member",
     "donation": 0,
+    "father": "NANDLAL GOSWAMI",
+    "address": "GUNGHASA",
+    "designation": "सदस्य (Member)",
+    "name": "KANHAI GOSWAMI",
+    "pariwarikMember": true,
+    "password": "7654106293",
     "dues": 0,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "7654106293"
+    "id": "GSKS-026",
+    "since": "22-05-2025"
   },
   {
+    "bloodGroup": "",
+    "donation": 0,
+    "phone": "9771288336",
+    "dues": 0,
+    "since": "22-05-2025",
     "id": "GSKS-027",
+    "father": "LATE RAMKUMAR GOSWAMI",
+    "password": "9771288336",
+    "status": "Inactive",
+    "pariwarikMember": false,
+    "address": "AZAD NAGAR",
     "name": "DILU GOSWAMI",
-    "father": "LATE RAMKUMAR GOSWAMI",
-    "since": "22-05-2025",
-    "phone": "9771288336",
-    "address": "AZAD NAGAR",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9771288336"
+    "designation": "सदस्य (Member)"
   },
   {
-    "id": "GSKS-028",
+    "bloodGroup": "",
+    "pariwarikMember": false,
     "name": "GUDDU GOSWAMI",
-    "father": "LATE RAMKUMAR GOSWAMI",
-    "since": "22-05-2025",
+    "designation": "सदस्य (Member)",
+    "dues": 0,
+    "id": "GSKS-028",
+    "donation": 0,
     "phone": "9771288336",
-    "address": "AZAD NAGAR",
+    "since": "22-05-2025",
+    "password": "9771288336",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9771288336"
+    "father": "LATE RAMKUMAR GOSWAMI",
+    "address": "AZAD NAGAR"
   },
   {
+    "pariwarikMember": false,
+    "bloodGroup": "",
+    "password": "6206985706",
     "id": "GSKS-029",
-    "name": "SANJAY GOSWAMI",
-    "father": "LATE PREMCHAND GOSWAMI",
-    "since": "22-05-2025",
+    "designation": "सदस्य (Member)",
     "phone": "6206985706",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "6206985706"
+    "since": "22-05-2025",
+    "donation": 0,
+    "father": "LATE PREMCHAND GOSWAMI",
+    "name": "SANJAY GOSWAMI",
+    "status": "Inactive",
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-030",
     "name": "BHIM GOSWAMI",
+    "since": "22-05-2025",
+    "pariwarikMember": false,
+    "donation": 0,
+    "status": "Inactive",
+    "dues": 0,
     "father": "LATE SHANKAR GOSWAMI",
-    "since": "22-05-2025",
+    "designation": "सदस्य (Member)",
+    "id": "GSKS-030",
+    "bloodGroup": "",
+    "password": "8825312140",
     "phone": "8825312140",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8825312140"
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-031",
     "name": "SUBODH GOSWAMI",
-    "father": "LATE BANSHI GOSWAMI",
-    "since": "22-05-2025",
-    "phone": "7488781827",
-    "address": "GUNGHASA",
+    "id": "GSKS-031",
     "status": "Inactive",
     "designation": "सदस्य (Member)",
-    "donation": 0,
+    "father": "LATE BANSHI GOSWAMI",
+    "phone": "7488781827",
+    "password": "7488781827",
+    "address": "GUNGHASA",
     "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
-    "password": "7488781827"
+    "donation": 0,
+    "since": "22-05-2025",
+    "bloodGroup": ""
   },
   {
+    "donation": 0,
+    "address": "GUNGHASA",
+    "pariwarikMember": false,
+    "bloodGroup": "",
+    "phone": "9113176389",
     "id": "GSKS-032",
     "name": "RAJESH GOSWAMI",
-    "father": "LATE BANSHI GOSWAMI",
+    "password": "9113176389",
     "since": "22-05-2025",
-    "phone": "9113176389",
-    "address": "GUNGHASA",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
+    "father": "LATE BANSHI GOSWAMI",
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9113176389"
+    "designation": "सदस्य (Member)"
   },
   {
+    "isPrime": true,
+    "phone": "9117048700",
+    "status": "Prime Member",
+    "father": "MAHAVIR GOSWAMI",
+    "donation": 0,
+    "bloodGroup": "",
     "id": "GSKS-033",
     "name": "ASHOK KUMAR GOSWAMI",
-    "father": "MAHAVIR GOSWAMI",
-    "since": "22-05-2025",
-    "phone": "9117048700",
-    "address": "GUNGHASA",
-    "status": "Inactive",
+    "pariwarikMember": true,
     "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9117048700"
+    "address": "GUNGHASA",
+    "password": "9117048700",
+    "since": "22-05-2025",
+    "dues": 0
   },
   {
-    "id": "GSKS-034",
-    "name": "JAWAHAR GOSWAMI",
-    "father": "LATE RATAN GOSWAMI",
-    "since": "22-05-2025",
     "phone": "6202487166",
     "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
     "dues": 0,
-    "bloodGroup": "",
+    "name": "JAWAHAR GOSWAMI",
+    "designation": "सदस्य (Member)",
+    "password": "6202487166",
     "pariwarikMember": false,
-    "password": "6202487166"
+    "bloodGroup": "",
+    "father": "LATE RATAN GOSWAMI",
+    "id": "GSKS-034",
+    "status": "Inactive",
+    "since": "22-05-2025",
+    "donation": 0
   },
   {
-    "id": "GSKS-035",
     "name": "DEBU GOSWAMI",
-    "father": "LATE CHUNU GOSWAMI",
     "since": "22-05-2025",
-    "phone": "9113793949",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
+    "dues": 0,
+    "donation": 0,
+    "designation": "सदस्य (Member)",
+    "status": "Inactive",
+    "father": "LATE CHUNU GOSWAMI",
+    "bloodGroup": "",
+    "address": "GUNGHASA",
+    "id": "GSKS-035",
+    "phone": "9113793949",
     "password": "9113793949"
   },
   {
-    "id": "GSKS-036",
-    "name": "SILET GOSWAMI",
-    "father": "LATE LALJI GOSWAMI",
-    "since": "22-05-2025",
     "phone": "9576318107",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
+    "status": "Inactive",
+    "father": "LATE LALJI GOSWAMI",
+    "password": "9576318107",
+    "designation": "सदस्य (Member)",
+    "name": "SILET GOSWAMI",
     "pariwarikMember": false,
-    "password": "9576318107"
+    "address": "GUNGHASA",
+    "donation": 0,
+    "since": "22-05-2025",
+    "id": "GSKS-036",
+    "dues": 0
   },
   {
+    "password": "9508361699",
+    "address": "GUNGHASA",
+    "designation": "सदस्य (Member)",
     "id": "GSKS-037",
+    "since": "22-05-2025",
+    "donation": 0,
     "name": "LALIT GOSWAMI",
-    "father": "LATE RAM PRASAD GOSWAMI",
-    "since": "22-05-2025",
+    "pariwarikMember": false,
+    "bloodGroup": "",
     "phone": "9508361699",
-    "address": "GUNGHASA",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9508361699"
+    "father": "LATE RAM PRASAD GOSWAMI",
+    "dues": 0
   },
   {
-    "id": "GSKS-038",
-    "name": "VIKASH GOSWAMI",
-    "father": "BAJRANGI GOSWAMI",
-    "since": "22-05-2025",
     "phone": "7004872258",
-    "address": "GUNGHASA",
-    "status": "Inactive",
     "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
+    "father": "BAJRANGI GOSWAMI",
     "bloodGroup": "",
+    "status": "Inactive",
+    "dues": 0,
+    "password": "7004872258",
+    "name": "VIKASH GOSWAMI",
+    "id": "GSKS-038",
     "pariwarikMember": false,
-    "password": "7004872258"
+    "donation": 0,
+    "since": "22-05-2025",
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-039",
-    "name": "YUDHISHTHIR GOSWAMI",
+    "pariwarikMember": false,
+    "status": "Inactive",
     "father": "LATE SUDAN GOSWAMI",
-    "since": "23-05-2025",
-    "phone": "8227965906",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8227965906"
+    "password": "8227965906",
+    "phone": "8227965906",
+    "id": "GSKS-039",
+    "address": "GUNGHASA",
+    "name": "YUDHISHTHIR GOSWAMI",
+    "since": "23-05-2025",
+    "designation": "सदस्य (Member)",
+    "dues": 0,
+    "donation": 0
   },
   {
-    "id": "GSKS-040",
     "name": "HIRA GOSWAMI",
-    "father": "RAMU GOSWAMI",
-    "since": "23-05-2025",
-    "phone": "9122535726",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
+    "id": "GSKS-040",
+    "pariwarikMember": true,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9122535726"
+    "donation": 0,
+    "designation": "सदस्य (Member)",
+    "status": "Prime Member",
+    "father": "RAMU GOSWAMI",
+    "dues": 0,
+    "address": "GUNGHASA",
+    "since": "23-05-2025",
+    "isPrime": true,
+    "password": "9122535726",
+    "phone": "9122535726"
   },
   {
     "id": "GSKS-041",
+    "since": "23-05-2025",
+    "isPrime": true,
+    "donation": 0,
+    "dues": 0,
+    "designation": "सदस्य (Member)",
+    "password": "8409788089",
+    "pariwarikMember": true,
+    "bloodGroup": "",
+    "phone": "8409788089",
     "name": "VIJAY GOSWAMI",
     "father": "MUNSHI GOSWAMI",
-    "since": "23-05-2025",
-    "phone": "8409788089",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8409788089"
+    "status": "Prime Member",
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-042",
+    "since": "23-05-2025",
+    "donation": 0,
+    "pariwarikMember": true,
+    "dues": 0,
     "name": "PRAFUL GOSWAMI",
+    "id": "GSKS-042",
+    "designation": "सदस्य (Member)",
+    "isPrime": true,
+    "password": "8340245071",
+    "address": "GUNGHASA",
     "father": "JATADHARI GOSWAMI",
-    "since": "23-05-2025",
+    "status": "Prime Member",
     "phone": "8340245071",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8340245071"
+    "bloodGroup": ""
   },
   {
+    "bloodGroup": "",
     "id": "GSKS-043",
-    "name": "ARUN GOSWAMI",
+    "donation": 0,
     "father": "BINDU GOSWAMI",
-    "since": "23-05-2025",
+    "status": "Inactive",
     "phone": "9973783352",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9973783352"
-  },
-  {
-    "id": "GSKS-044",
-    "name": "SANTOSH KUMAR GOSWAMI",
-    "father": "NANDLAL GOSWAMI",
+    "password": "9973783352",
     "since": "23-05-2025",
-    "phone": "6206794338",
-    "address": "CHIRABAD",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
+    "address": "GUNGHASA",
     "pariwarikMember": false,
-    "password": "6206794338"
+    "designation": "सदस्य (Member)",
+    "name": "ARUN GOSWAMI"
   },
   {
-    "id": "GSKS-045",
-    "name": "GOVARDHAN GOSWAMI",
-    "father": "RAMNATH GOSWAMI",
-    "since": "24-05-2025",
+    "father": "NANDLAL GOSWAMI",
+    "status": "Inactive",
+    "dues": 0,
+    "pariwarikMember": false,
+    "id": "GSKS-044",
+    "address": "CHIRABAD",
+    "since": "23-05-2025",
+    "name": "SANTOSH KUMAR GOSWAMI",
+    "bloodGroup": "",
+    "password": "6206794338",
+    "phone": "6206794338",
+    "designation": "सदस्य (Member)",
+    "donation": 0
+  },
+  {
+    "password": "7219876243",
     "phone": "7219876243",
     "address": "GUNGHASA",
-    "status": "Inactive",
     "designation": "सदस्य (Member)",
+    "id": "GSKS-045",
     "donation": 0,
-    "dues": 0,
+    "name": "GOVARDHAN GOSWAMI",
+    "status": "Inactive",
+    "father": "RAMNATH GOSWAMI",
     "bloodGroup": "",
+    "since": "24-05-2025",
     "pariwarikMember": false,
-    "password": "7219876243"
+    "dues": 0
   },
   {
-    "id": "GSKS-046",
-    "name": "RAJESH GOSWAMI",
-    "father": "BIPAT GOSWAMI",
-    "since": "24-05-2025",
     "phone": "9835965151",
-    "address": "GUNGHASA",
-    "status": "Inactive",
+    "password": "9835965151",
+    "id": "GSKS-046",
+    "pariwarikMember": false,
+    "dues": 0,
     "designation": "सदस्य (Member)",
     "donation": 0,
-    "dues": 0,
+    "father": "BIPAT GOSWAMI",
+    "status": "Inactive",
+    "since": "24-05-2025",
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9835965151"
+    "address": "GUNGHASA",
+    "name": "RAJESH GOSWAMI"
   },
   {
-    "id": "GSKS-047",
-    "name": "SITARAM GOSWAMI",
-    "father": "LT SUBAL GOSWAMI",
-    "since": "24-05-2025",
+    "donation": 0,
+    "bloodGroup": "",
+    "dues": 0,
+    "designation": "सदस्य (Member)",
     "phone": "8340522412",
+    "isPrime": true,
+    "father": "LT SUBAL GOSWAMI",
+    "status": "Prime Member",
+    "name": "SITARAM GOSWAMI",
+    "password": "8340522412",
+    "since": "24-05-2025",
+    "pariwarikMember": true,
     "address": "AZAD NAGAR",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8340522412"
+    "id": "GSKS-047"
   },
   {
-    "id": "GSKS-048",
     "name": "NIRAJ KUMAR GOSWAMI",
+    "since": "24-05-2025",
+    "dues": 0,
+    "donation": 0,
+    "pariwarikMember": false,
+    "designation": "सदस्य (Member)",
+    "id": "GSKS-048",
+    "password": "7654506355",
+    "status": "Inactive",
+    "bloodGroup": "",
     "father": "NANDLAL GOSWAMI",
-    "since": "24-05-2025",
-    "phone": "7654506355",
     "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "7654506355"
+    "phone": "7654506355"
   },
   {
-    "id": "GSKS-049",
     "name": "PRADEEP GOSWAMI",
-    "father": "BASUDEV GOSWAMI",
-    "since": "24-05-2025",
-    "phone": "8102268801",
-    "address": "CHIRABAD",
-    "status": "Inactive",
+    "password": "8102268801",
     "designation": "सदस्य (Member)",
-    "donation": 0,
+    "phone": "8102268801",
+    "status": "Inactive",
+    "address": "CHIRABAD",
     "dues": 0,
-    "bloodGroup": "",
+    "father": "BASUDEV GOSWAMI",
     "pariwarikMember": false,
-    "password": "8102268801"
+    "bloodGroup": "",
+    "donation": 0,
+    "since": "24-05-2025",
+    "id": "GSKS-049"
   },
   {
-    "id": "GSKS-050",
-    "name": "ARJUN KUMAR GOSWAMI",
+    "donation": 0,
+    "designation": "सदस्य (Member)",
+    "status": "Prime Member",
     "father": "LT PRABHU NATH GOSWAMI",
     "since": "25-05-2025",
-    "phone": "9113376913",
     "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
+    "pariwarikMember": true,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9113376913"
+    "isPrime": true,
+    "name": "ARJUN KUMAR GOSWAMI",
+    "password": "9113376913",
+    "phone": "9113376913",
+    "id": "GSKS-050",
+    "dues": 0
   },
   {
-    "id": "GSKS-051",
     "name": "DINBANDHU GOSWAMI",
-    "father": "LT NAKUL GOSWAMI",
-    "since": "25-05-2025",
-    "phone": "9762119025",
-    "address": "GUNGHASA",
-    "status": "Inactive",
     "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
+    "status": "Inactive",
+    "donation": 0,
+    "father": "LT NAKUL GOSWAMI",
+    "address": "GUNGHASA",
+    "phone": "9762119025",
+    "dues": 0,
     "pariwarikMember": false,
+    "since": "25-05-2025",
+    "id": "GSKS-051",
     "password": "9762119025"
   },
   {
+    "pariwarikMember": false,
+    "since": "27-05-2025",
+    "bloodGroup": "",
+    "password": "6202903353",
     "id": "GSKS-052",
     "name": "RAJ KUMAR GOSWAMI",
+    "designation": "सदस्य (Member)",
+    "dues": 0,
+    "donation": 0,
+    "status": "Inactive",
     "father": "BINOD GOSWAMI",
-    "since": "27-05-2025",
-    "phone": "6202903353",
     "address": "CHIRABAD",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "6202903353"
+    "phone": "6202903353"
   },
   {
+    "dues": 0,
     "id": "GSKS-053",
-    "name": "SANICHAR GOSWAMI",
-    "father": "LT MAHENDRA GOSWAMI",
-    "since": "27-05-2025",
-    "phone": "8877265617",
-    "address": "GUNGHASA",
-    "status": "Inactive",
+    "password": "8877265617",
     "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
+    "since": "27-05-2025",
+    "name": "SANICHAR GOSWAMI",
     "bloodGroup": "",
+    "phone": "8877265617",
+    "donation": 0,
+    "father": "LT MAHENDRA GOSWAMI",
+    "status": "Inactive",
     "pariwarikMember": false,
-    "password": "8877265617"
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-054",
-    "name": "JIVLAL GOSWAMI",
-    "father": "LT LAKHAN GOSWAMI",
-    "since": "27-05-2025",
     "phone": "6381957059",
     "address": "GUNGHASA",
+    "father": "LT LAKHAN GOSWAMI",
+    "password": "6381957059",
     "status": "Inactive",
+    "id": "GSKS-054",
+    "pariwarikMember": false,
+    "dues": 0,
     "designation": "सदस्य (Member)",
     "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "6381957059"
+    "since": "27-05-2025",
+    "name": "JIVLAL GOSWAMI"
   },
   {
-    "id": "GSKS-055",
-    "name": "SUNIL GOSWAMI",
-    "father": "LT CHHUTU GOSWAMI",
     "since": "28-05-2025",
-    "phone": "6203263024",
-    "address": "CHIRABAD",
+    "father": "LT CHHUTU GOSWAMI",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
+    "id": "GSKS-055",
+    "address": "CHIRABAD",
+    "donation": 0,
+    "designation": "सदस्य (Member)",
+    "dues": 0,
+    "phone": "6203263024",
+    "name": "SUNIL GOSWAMI",
     "pariwarikMember": false,
     "password": "6203263024"
   },
   {
-    "id": "GSKS-056",
-    "name": "SHANKAR GOSWAMI",
-    "father": "LT CHHUTU GOSWAMI",
-    "since": "29-05-2025",
     "phone": "8210890738",
     "address": "CHIRABAD",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
+    "father": "LT CHHUTU GOSWAMI",
     "donation": 0,
-    "dues": 0,
+    "status": "Inactive",
     "bloodGroup": "",
+    "dues": 0,
     "pariwarikMember": false,
-    "password": "8210890738"
+    "password": "8210890738",
+    "since": "29-05-2025",
+    "id": "GSKS-056",
+    "designation": "सदस्य (Member)",
+    "name": "SHANKAR GOSWAMI"
   },
   {
-    "id": "GSKS-057",
-    "name": "CHANDI GOSWAMI",
-    "father": "LT SUBAL GOSWAMI",
-    "since": "08-06-2025",
+    "password": "8340114232",
+    "dues": 0,
     "phone": "8340114232",
-    "address": "AZAD NAGAR",
+    "pariwarikMember": false,
+    "father": "LT SUBAL GOSWAMI",
+    "bloodGroup": "",
     "status": "Inactive",
+    "name": "CHANDI GOSWAMI",
     "designation": "सदस्य (Member)",
     "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8340114232"
+    "since": "08-06-2025",
+    "address": "AZAD NAGAR",
+    "id": "GSKS-057"
   },
   {
-    "id": "GSKS-058",
-    "name": "BHIM GOSWAMI",
-    "father": "LT SHAHDEO GOSWAMI",
-    "since": "11-06-2025",
+    "pariwarikMember": true,
     "phone": "9608561145",
+    "father": "LT SHAHDEO GOSWAMI",
+    "bloodGroup": "",
+    "status": "Prime Member",
     "address": "GUNGHASA",
-    "status": "Inactive",
     "designation": "सदस्य (Member)",
     "donation": 0,
+    "id": "GSKS-058",
+    "isPrime": true,
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
+    "since": "11-06-2025",
+    "name": "BHIM GOSWAMI",
     "password": "9608561145"
   },
   {
-    "id": "GSKS-059",
-    "name": "DINBANDHU GOSWAMI",
-    "father": "LT ROSHAN LAL GOSWAMI",
-    "since": "12-06-2025",
-    "phone": "9905118121",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9905118121"
-  },
-  {
-    "id": "GSKS-060",
-    "name": "DILIP GOSWAMI",
-    "father": "LT SANTOSH GOSWAMI",
-    "since": "12-06-2025",
     "phone": "8873154011",
-    "address": "GUNGHASA",
+    "password": "8873154011",
+    "pariwarikMember": false,
+    "bloodGroup": "",
+    "name": "DILIP GOSWAMI",
     "status": "Inactive",
     "designation": "सदस्य (Member)",
-    "donation": 0,
+    "father": "LT SANTOSH GOSWAMI",
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8873154011"
+    "address": "GUNGHASA",
+    "id": "GSKS-060",
+    "donation": 0,
+    "since": "12-06-2025"
   },
   {
     "id": "GSKS-061",
-    "name": "TRIVENI GOSWAMI (BATUN)",
-    "father": "LAKHI NATH GOSWAMI",
-    "since": "15-06-2025",
-    "phone": "7549082630",
+    "status": "Prime Member",
     "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
+    "father": "LAKHI NATH GOSWAMI",
     "donation": 0,
+    "designation": "सदस्य (Member)",
+    "name": "TRIVENI GOSWAMI (BATUN)",
+    "phone": "7549082630",
     "dues": 0,
+    "pariwarikMember": true,
+    "password": "7549082630",
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "7549082630"
+    "isPrime": true,
+    "since": "15-06-2025"
   },
   {
-    "id": "GSKS-062",
-    "name": "PAWAN GOSWAMI",
-    "father": "LT SIKHI GOSWAMI",
-    "since": "20-06-2025",
-    "phone": "9608483621",
+    "donation": 0,
     "address": "GUNGHASA",
     "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
+    "father": "LT SIKHI GOSWAMI",
+    "since": "20-06-2025",
     "pariwarikMember": false,
-    "password": "9608483621"
+    "password": "9608483621",
+    "name": "PAWAN GOSWAMI",
+    "dues": 0,
+    "id": "GSKS-062",
+    "bloodGroup": "",
+    "phone": "9608483621",
+    "designation": "सदस्य (Member)"
   },
   {
     "id": "GSKS-063",
-    "name": "PRITHWI NATH GOSWAMI",
-    "father": "",
-    "since": "29-06-2025",
+    "donation": 0,
     "phone": "7870987024",
     "address": "AZAD NAGAR",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
+    "archiveReason": "सदस्य की मृत्यु हो गई है।",
+    "archivedAt": "2026-10-22T11:02:48.829Z",
+    "status": "removed",
+    "father": "",
+    "name": "PRITHWI NATH GOSWAMI",
+    "password": "7870987024",
     "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
-    "password": "7870987024"
+    "bloodGroup": "",
+    "since": "29-06-2025",
+    "designation": "सदस्य (Member)"
   },
   {
     "id": "GSKS-064",
-    "name": "TAPAN GOSWAMI",
+    "password": "6204309759",
+    "address": "GUNGHASA",
+    "status": "Prime Member",
     "father": "RAMDAS GOSWAMI",
-    "since": "29-06-2025",
+    "designation": "सदस्य (Member)",
     "phone": "6204309759",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
+    "pariwarikMember": true,
     "donation": 0,
-    "dues": 0,
+    "name": "TAPAN GOSWAMI",
+    "since": "29-06-2025",
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "6204309759"
+    "dues": 0,
+    "isPrime": true
   },
   {
-    "id": "GSKS-065",
+    "pariwarikMember": false,
+    "status": "Inactive",
     "name": "RAMCHANDRA GOSWAMI",
+    "id": "GSKS-065",
     "father": "LT CHANCHU GOSWAMI",
-    "since": "07-07-2025",
+    "designation": "सदस्य (Member)",
+    "dues": 0,
+    "password": "9508215399",
     "phone": "9508215399",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9508215399"
+    "address": "GUNGHASA",
+    "since": "07-07-2025",
+    "donation": 0
   },
   {
-    "id": "GSKS-066",
-    "name": "SUNIL GOSWAMI",
-    "father": "AMRIT GOSWAMI",
+    "donation": 0,
     "since": "13-07-2025",
-    "phone": "9279704414",
     "address": "GUNGHASA",
-    "status": "Inactive",
+    "id": "GSKS-066",
+    "password": "9279704414",
+    "name": "SUNIL GOSWAMI",
     "designation": "सदस्य (Member)",
-    "donation": 0,
     "dues": 0,
     "bloodGroup": "",
+    "status": "Inactive",
     "pariwarikMember": false,
-    "password": "9279704414"
+    "father": "AMRIT GOSWAMI",
+    "phone": "9279704414"
   },
   {
+    "bloodGroup": "",
+    "donation": 0,
+    "phone": "7545951979",
+    "father": "RATAN GOSWAMI",
+    "status": "Inactive",
+    "designation": "सदस्य (Member)",
+    "since": "16-07-2025",
+    "password": "7545951979",
+    "dues": 0,
     "id": "GSKS-067",
     "name": "BHOLA GOSWAMI",
-    "father": "RATAN GOSWAMI",
-    "since": "16-07-2025",
-    "phone": "7545951979",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
-    "password": "7545951979"
+    "address": "GUNGHASA"
   },
   {
-    "id": "GSKS-068",
     "name": "KALICHARAN GOSWAMI",
+    "designation": "सदस्य (Member)",
+    "id": "GSKS-068",
+    "status": "Prime Member",
+    "password": "7004335383",
     "father": "LT GANGADHAR GOSWAMI",
-    "since": "22-07-2025",
-    "phone": "7004335383",
+    "pariwarikMember": true,
     "address": "KALYANPUR",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
+    "phone": "7004335383",
     "dues": 0,
     "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "7004335383"
+    "since": "22-07-2025",
+    "donation": 0,
+    "isPrime": true
   },
   {
-    "id": "GSKS-069",
-    "name": "AJAY GOSWAMI",
-    "father": "LT GOPAL GOSWAMI",
-    "since": "23-07-2025",
     "phone": "9934580524",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
-    "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
     "pariwarikMember": false,
-    "password": "9934580524"
+    "donation": 0,
+    "address": "GUNGHASA",
+    "id": "GSKS-069",
+    "dues": 0,
+    "father": "LT GOPAL GOSWAMI",
+    "status": "Inactive",
+    "since": "23-07-2025",
+    "password": "9934580524",
+    "bloodGroup": "",
+    "name": "AJAY GOSWAMI",
+    "designation": "सदस्य (Member)"
   },
   {
-    "id": "GSKS-070",
-    "name": "KANCHAN GOSWAMI",
+    "dues": 0,
     "father": "LT KALI GOSWAMI",
-    "since": "27-07-2025",
+    "id": "GSKS-070",
+    "status": "Prime Member",
+    "name": "KANCHAN GOSWAMI",
     "phone": "9234737123",
     "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
     "donation": 0,
-    "dues": 0,
+    "since": "27-07-2025",
     "bloodGroup": "",
-    "pariwarikMember": false,
+    "isPrime": true,
+    "pariwarikMember": true,
+    "designation": "सदस्य (Member)",
     "password": "9234737123"
   },
   {
-    "id": "GSKS-071",
     "name": "KANCHAN GOSWAMI",
-    "father": "MURLI GOSWAMI",
+    "password": "8838975177",
+    "address": "GUNGHASA",
+    "dues": 0,
     "since": "25-12-2025",
+    "status": "Prime Member",
+    "father": "MURLI GOSWAMI",
+    "isPrime": true,
     "phone": "8838975177",
-    "address": "GUNGHASA",
-    "status": "Inactive",
-    "designation": "सदस्य (Member)",
     "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "8838975177"
+    "designation": "सदस्य (Member)",
+    "id": "GSKS-071",
+    "pariwarikMember": true,
+    "bloodGroup": ""
   },
   {
-    "id": "GSKS-072",
-    "name": "RAJENDRA GOSWAMI",
-    "father": "LT LALJI GOSWAMI",
-    "since": "18-02-2026",
+    "password": "9724472256",
+    "pariwarikMember": false,
     "phone": "9724472256",
-    "address": "GUNGHASA",
-    "status": "Inactive",
     "designation": "सदस्य (Member)",
+    "since": "18-02-2026",
+    "id": "GSKS-072",
     "donation": 0,
+    "address": "GUNGHASA",
     "dues": 0,
-    "bloodGroup": "",
-    "pariwarikMember": false,
-    "password": "9724472256"
+    "father": "LT LALJI GOSWAMI",
+    "status": "Inactive",
+    "name": "RAJENDRA GOSWAMI",
+    "bloodGroup": ""
   },
   {
-    "id": "GSKS-073",
-    "name": "RAJESH GOSWAMI (MATHADIH)",
-    "father": "LT MAHADEO GOSWAMI",
-    "since": "18-02-2026",
+    "pariwarikMember": false,
+    "designation": "सदस्य (Member)",
     "phone": "7004591931",
+    "bloodGroup": "",
+    "id": "GSKS-073",
+    "password": "7004591931",
     "address": "MATHADIH",
+    "name": "RAJESH GOSWAMI (MATHADIH)",
     "status": "Inactive",
+    "father": "LT MAHADEO GOSWAMI",
+    "donation": 0,
+    "since": "18-02-2026",
+    "dues": 0
+  },
+  {
+    "since": "20-05-2025",
+    "address": "GUNGHASA",
+    "father": "LT FUNSHI GOSWAMI",
+    "pariwarikMember": true,
+    "dues": 100,
+    "designation": "सदस्य (Member)",
+    "status": "Prime Member",
+    "phone": "6203266290",
+    "donation": 0,
+    "name": "RAJESH GOSWAMI",
+    "id": "GSKS-074",
+    "bloodGroup": "O+"
+  },
+  {
+    "pariwarikMember": true,
+    "status": "Prime Member",
+    "id": "GSKS-075",
+    "father": "RAMU GOSWAMI",
+    "name": "MEGHNATH GOSWAMI",
     "designation": "सदस्य (Member)",
     "donation": 0,
-    "dues": 0,
-    "bloodGroup": "",
+    "phone": "7856039984",
+    "address": "GUNGHASA",
+    "dues": 100,
+    "bloodGroup": "O+",
+    "since": "01-12-2025"
+  },
+  {
+    "father": "PRATAP GOSWAMI",
+    "status": "removed",
+    "designation": "सदस्य (Member)",
     "pariwarikMember": false,
-    "password": "7004591931"
+    "since": "15-06-2025",
+    "address": "AZAD NAGAR",
+    "archivedAt": "2026-10-22T11:04:11.356Z",
+    "id": "GSKS-076",
+    "phone": "9999999999",
+    "dues": 0,
+    "archiveReason": "अपनी मर��जी से सदस्यता का त्याग किया है।",
+    "name": "AKASH GOSWAMI",
+    "donation": 0,
+    "bloodGroup": ""
   }
 ]

@@ -12239,6 +12239,9 @@
       } catch (e) {}
     }
 
+    let realtimeListenerInitialized = false;
+    let firestoreMembersLoaded = false;
+
     async function initFirebaseRealtime() {
       if (realtimeListenerInitialized) return;
       realtimeListenerInitialized = true;
@@ -12256,6 +12259,7 @@
             list.push(doc.data());
           });
 
+          firestoreMembersLoaded = true;
           allMembers = list;
           /* direct live sync */
           allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
@@ -12671,12 +12675,41 @@
     }
 
     async function loadMembersDataFallback() {
-      // 1. Try Live Express / Render server if available
+      // If Firestore realtime snapshot already provided live cloud members, NEVER overwrite with fallback
+      if (firestoreMembersLoaded && Array.isArray(allMembers) && allMembers.length > 0) {
+        return;
+      }
+
+      // 1. Direct Firestore REST API (First Priority Fallback)
+      try {
+        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/members?pageSize=500');
+        if (restRes.ok) {
+          const json = await restRes.json();
+          if (json && Array.isArray(json.documents)) {
+            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            if (list.length > 0) {
+              if (firestoreMembersLoaded && Array.isArray(allMembers) && allMembers.length > 0) return;
+              allMembers = list;
+              allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
+              updateStats();
+              renderMembers();
+              if (typeof renderPariwarikView === 'function') renderPariwarikView();
+              if (typeof renderArchivedList === 'function') renderArchivedList();
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Firestore REST members fetch fallback warning:', e);
+      }
+
+      // 2. Secondary Fallback: Live Express / Render server API
       try {
         const res = await apiFetch('/api/members');
         if (res.ok) {
           const list = await res.json();
           if (Array.isArray(list) && list.length > 0) {
+            if (firestoreMembersLoaded && Array.isArray(allMembers) && allMembers.length > 0) return;
             allMembers = list;
             allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
             updateStats();
@@ -12687,28 +12720,6 @@
           }
         }
       } catch (err) {}
-
-      // 3. Fallback: Fetch directly from Firestore REST API
-      try {
-        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/members?pageSize=500');
-        if (restRes.ok) {
-          const json = await restRes.json();
-          if (json && Array.isArray(json.documents)) {
-            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
-            if (list.length > 0) {
-              allMembers = list;
-              allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
-              updateStats();
-              renderMembers();
-              if (typeof renderPariwarikView === 'function') renderPariwarikView();
-              if (typeof renderArchivedList === 'function') renderArchivedList();
-              /* direct live sync */
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('Firestore REST members fetch fallback warning:', e);
-      }
     }
 
     async function loadSettingsFallback() {
