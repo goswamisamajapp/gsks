@@ -98,7 +98,7 @@ function getSettingsData() {
     }
     const raw = fs.readFileSync(SETTINGS_FILE, 'utf8');
     const parsed = JSON.parse(raw);
-    return { ...DEFAULT_SETTINGS, ...parsed };
+    return parsed && typeof parsed === 'object' ? parsed : DEFAULT_SETTINGS;
   } catch (e) {
     return DEFAULT_SETTINGS;
   }
@@ -395,6 +395,7 @@ app.post('/api/settings/save', (req, res) => {
       return res.status(400).json({ error: 'Invalid settings payload' });
     }
     const current = getSettingsData();
+    // Complete replacement of keys provided so deleted items are actually removed
     const merged = { ...current, ...updatedSettings };
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf8');
     return res.json({ success: true, settings: merged });

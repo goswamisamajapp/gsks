@@ -1,200 +1,147 @@
 {
-  "designations": [
-    {
-      "id": "des_1",
-      "name": "अध्यक्ष (President)",
-      "order": 1,
-      "badge": "amber",
-      "description": "समिति के मुख्य कार्यकारी प्रमुख",
-      "isSystem": true
-    },
-    {
-      "id": "des_2",
-      "name": "उपाध्यक्ष (Vice President)",
-      "order": 2,
-      "badge": "indigo",
-      "description": "अध्यक्ष की अनुपस्थिति में कार्यभार",
-      "isSystem": true
-    },
-    {
-      "id": "des_3",
-      "name": "सचिव (Secretary)",
-      "order": 3,
-      "badge": "blue",
-      "description": "समिति के मुख्य प्रशासनिक व पत्राचार अधिकारी",
-      "isSystem": true
-    },
-    {
-      "id": "des_4",
-      "name": "सह-सचिव (Joint Secretary)",
-      "order": 4,
-      "badge": "indigo",
-      "description": "सचिव के कार्यों में सहयोग",
-      "isSystem": true
-    },
-    {
-      "id": "des_5",
-      "name": "कोषाध्यक्ष (Treasurer)",
-      "order": 5,
-      "badge": "emerald",
-      "description": "समिति के वित्त, कोष एवं बैंक खातों के प्रभारी",
-      "isSystem": true
-    },
-    {
-      "id": "des_6",
-      "name": "उप-कोषाध्यक्ष (Deputy Treasurer)",
-      "order": 6,
-      "badge": "emerald",
-      "description": "कोषाध्यक्ष के कार्यों में सहयोग",
-      "isSystem": true
-    },
-    {
-      "id": "des_7",
-      "name": "संरक्षक (Patron / Advisor)",
-      "order": 7,
-      "badge": "purple",
-      "description": "मार्गदर्शक एवं संरक्षक मंडल",
-      "isSystem": true
-    },
-    {
-      "id": "des_8",
-      "name": "सदस्य (Member)",
-      "order": 8,
-      "badge": "slate",
-      "description": "समिति के सम्मानित पंजीकृत सदस्य",
-      "isSystem": true
-    }
-  ],
-  "planRates": {
-    "pasyMonthlyFee": 150,
-    "pasyFineWeek": 20,
-    "membershipPremium": 200,
-    "membershipNormal": 100
+  "pariwarikWinners": {
+    "2026-02": "GSKS-001",
+    "2026-04": "GSKS-005"
   },
-  "openingBalances": {
-    "bank": 34428,
-    "cash": 0,
-    "remarks": "Fund Added by Admin"
-  },
-  "pariwarikFineWaivers": {},
-  "eventTitles": [
-    {
-      "id": "et_1",
-      "title": "मासिक आम सभा",
-      "category": "General Meeting"
-    },
-    {
-      "id": "et_2",
-      "title": "मासिक आम सभा एवं पारिवारिक आर्थिक सहायता योजना हेतु सदस्य का चुनाव",
-      "category": "General Meeting"
-    },
-    {
-      "id": "et_3",
-      "title": "आपातकालीन कार्यकारिणी बैठक",
-      "category": "Emergency meeting"
-    },
-    {
-      "id": "et_4",
-      "title": "स्थापना दिवस सह विद्यार्थी प्रतिभा सम्मान समारोह",
-      "category": "Special Event"
-    }
-  ],
   "bankAccounts": [
     {
       "id": "ba_1",
       "bankName": "BANDHAN BANK LIMITED",
-      "accountNumber": "20200123658965",
-      "branchName": "Gomoh Branch",
-      "ifsc": "BDBL0001234",
+      "accountNumber": "20200132512830",
       "accountType": "Joint",
+      "branchName": "Gomoh Branch",
       "members": [
-        "NITISH NATH",
-        "MANIK CHAND GOSWAMI",
-        "PRABHU DAYAL GOSWAMI"
+        "NITISH NATH (अध्यक्ष)",
+        "MANIK CHAND GOSWAMI (सचिव)",
+        "PRABHU DAYAL GOSWAMI (कोषाध्यक्ष)"
       ],
-      "remarks": "ट्रस्ट आधिकारिक मुख्य संयुक्त खाता"
+      "remarks": "समिति का आधिकारिक बचत खाता"
     }
   ],
-  "vendors": [
-    {
-      "id": "ven_1",
-      "name": "अध्यक्ष समिति शेष फंड",
-      "category": "समिति शेष फंड",
-      "phone": "7781931880",
-      "address": "GUNGHASA"
-    },
-    {
-      "id": "ven_2",
-      "name": "KUNAL GOSWAMI",
-      "category": "DJ & Sound",
-      "phone": "7004636057",
-      "address": "GUNGHASA"
-    },
-    {
-      "id": "ven_3",
-      "name": "PINKU LIGHT",
-      "category": "Ligh & Generator",
-      "phone": "9031337183",
-      "address": "GUNGHASA"
-    },
-    {
-      "id": "ven_4",
-      "name": "SHANKAR PRINTING PRESS",
-      "category": "Printing",
-      "phone": "9934112168",
-      "address": "GOMOH"
-    },
-    {
-      "id": "ven_1792575946873",
-      "name": "ESPN SPORTS",
-      "category": "Prize & Medal",
-      "phone": "7781931880",
-      "address": "GOMOH"
-    },
-    {
-      "id": "ven_1792575973451",
-      "name": "MANDAL TENT HOUSE",
-      "category": "TENT",
-      "phone": "7781931880",
-      "address": "GUNGHASA"
-    }
-  ],
-  "pariwarikFinePaid": {},
   "pariwarikFineExemptions": {
-    "GSKS-002": {
-      "2026-11": false,
+    "GSKS-004": {
+      "2026-10": false,
       "2026-08": false,
+      "2025-12": false,
+      "2025-11": false,
+      "2026-05": false,
+      "2026-09": false,
+      "2026-07": false,
+      "2025-09": false,
       "2026-04": false,
       "2026-02": false,
+      "2026-03": false,
+      "2026-06": false,
+      "2026-11": false,
+      "2026-01": false,
+      "2025-10": false
+    },
+    "GSKS-006": {
+      "2025-09": false,
       "2026-07": false,
+      "2026-10": false,
+      "2026-05": false,
       "2026-09": false,
       "2025-11": false,
-      "2025-10": false,
-      "2026-05": false,
+      "2025-12": false,
+      "2026-08": false,
       "2026-06": false,
-      "2026-03": false,
+      "2026-11": false,
       "2026-01": false,
-      "2026-10": false,
+      "2025-10": false,
+      "2026-04": false,
+      "2026-02": false,
+      "2026-03": false
+    },
+    "GSKS-003": {
+      "2026-07": false,
       "2025-09": false,
-      "2025-12": false
+      "2026-10": false,
+      "2025-12": false,
+      "2026-08": false,
+      "2025-11": false,
+      "2026-05": false,
+      "2026-09": false,
+      "2026-06": false,
+      "2026-11": false,
+      "2026-01": false,
+      "2025-10": false,
+      "2026-04": false,
+      "2026-03": false,
+      "2026-02": false
+    },
+    "GSKS-005": {
+      "2026-04": false,
+      "2026-03": false,
+      "2026-02": false,
+      "2026-06": false,
+      "2026-01": false,
+      "2025-10": false,
+      "2026-10": false,
+      "2026-05": false,
+      "2026-09": false,
+      "2025-11": false,
+      "2025-12": false,
+      "2026-08": false,
+      "2025-09": false,
+      "2026-07": false
+    },
+    "GSKS-007": {
+      "2025-11": false,
+      "2026-05": false,
+      "2026-09": false,
+      "2025-12": false,
+      "2026-08": false,
+      "2025-09": false,
+      "2026-07": false,
+      "2026-03": false,
+      "2026-02": false,
+      "2026-04": false,
+      "2025-10": false,
+      "2026-01": false,
+      "2026-11": false,
+      "2026-06": false
+    },
+    "GSKS-002": {
+      "2026-10": false,
+      "2026-08": false,
+      "2025-12": false,
+      "2026-05": false,
+      "2026-09": false,
+      "2025-11": false,
+      "2026-07": false,
+      "2025-09": false,
+      "2026-04": false,
+      "2026-02": false,
+      "2026-03": false,
+      "2026-11": false,
+      "2026-06": false,
+      "2026-01": false,
+      "2025-10": false
     },
     "GSKS-001": {
-      "2026-01": false,
       "2026-10": false,
-      "2025-09": false,
+      "2025-11": false,
+      "2026-09": false,
+      "2026-05": false,
       "2025-12": false,
-      "2026-11": false,
       "2026-08": false,
+      "2025-09": false,
       "2026-07": false,
       "2026-04": false,
       "2026-02": false,
+      "2026-03": false,
       "2026-06": false,
-      "2026-09": false,
-      "2025-10": false,
-      "2025-11": false,
-      "2026-05": false,
-      "2026-03": false
+      "2026-11": false,
+      "2026-01": false,
+      "2025-10": false
     }
+  },
+  "planRates": {
+    "membershipPremium": 200,
+    "pasyFineWeek": 20,
+    "pasyMonthlyFee": 150,
+    "membershipNormal": 100
   },
   "schemes": [
     {
@@ -202,7 +149,7 @@
       "name": "पारिवारिक आर्थिक सहायता योजना",
       "amount": 150,
       "frequency": "Monthly",
-      "description": "पारिवारिक आर्थिक सहायता योजना हेतु सहयोग राशि",
+      "description": "पारिवारिक आर्थि�� सहायता योजना हेतु सहयोग राशि",
       "status": "Open",
       "amountType": "fixed"
     },
@@ -311,30 +258,12 @@
       "description": "निष्क्रिय सदस्य"
     }
   ],
-  "pariwarikLateFines": {},
-  "eventCategories": [
-    {
-      "id": "ec_1",
-      "name": "General Meeting",
-      "color": "blue",
-      "isSystem": true,
-      "description": "सामान्य बैठक"
-    },
-    {
-      "id": "ec_2",
-      "name": "Special Event",
-      "color": "purple",
-      "isSystem": true,
-      "description": "विशेष उत्सव/समारोह"
-    },
-    {
-      "id": "ec_3",
-      "name": "Emergency Meeting",
-      "color": "rose",
-      "isSystem": true,
-      "description": "आपातकालीन बैठक"
-    }
-  ],
+  "id": "master",
+  "openingBalances": {
+    "cash": 0,
+    "bank": 34428,
+    "remarks": "Fund Added by Admin"
+  },
   "eventVenues": [
     {
       "id": "ev_1",
@@ -353,6 +282,54 @@
       "venue": "मध्य विद्यालय प्रांगण, गुनघसा",
       "latitude": 23.864282,
       "longitude": 86.172725
+    }
+  ],
+  "pariwarikFinePaid": {},
+  "pariwarikLateFines": {
+    "GSKS-005": {
+      "2026-05": 540,
+      "2026-02": 800,
+      "2026-01": 880,
+      "2025-12": 980
+    },
+    "GSKS-007": {
+      "2026-04": 640,
+      "2026-02": 800,
+      "2026-03": 720,
+      "2026-06": 460,
+      "2026-11": 20,
+      "2026-01": 880,
+      "2025-10": 1140,
+      "2026-10": 100,
+      "2026-08": 280,
+      "2025-12": 980,
+      "2025-11": 1060,
+      "2026-05": 540,
+      "2026-09": 200,
+      "2026-07": 360,
+      "2025-09": 1240
+    }
+  },
+  "upiList": [
+    {
+      "id": "upi_1",
+      "address": "7781931880-9@ybl",
+      "payeeName": "GOSWAMI SAMAJ KALYAN SAMITI",
+      "bankName": "NITISH NATH",
+      "status": "Active",
+      "remarks": "अध्यक्ष जी का UPI ID",
+      "isPrimary": true,
+      "updatedAt": "2026-10-21T14:31:35.269Z"
+    },
+    {
+      "id": "upi_1792587940015",
+      "address": "7004312107@nyes",
+      "payeeName": "GOSWAMI SAMAJ KALYAN SAMITI",
+      "bankName": "PRABHU DAYAL GOSWAMI",
+      "status": "Active",
+      "remarks": "कोषाध्यक्ष जी का UPI ID",
+      "isPrimary": false,
+      "updatedAt": "2026-10-21T14:31:14.150Z"
     }
   ],
   "fundTypes": [
@@ -378,7 +355,7 @@
       "id": "ft_4",
       "name": "Loan",
       "isSystem": false,
-      "description": "ऋण / अग्रिम निधि"
+      "description": "ऋण / अग��रिम निधि"
     },
     {
       "id": "ft_5",
@@ -387,6 +364,7 @@
       "description": "निवेश / सावधि जमा (FD)"
     }
   ],
+  "pariwarikFineWaivers": {},
   "expenseSchemes": [
     {
       "id": "exs_1",
@@ -400,7 +378,7 @@
     },
     {
       "id": "exs_3",
-      "name": "आपातकालीन चिकित्सा व सहायता अनुदान",
+      "name": "आपातकालीन चि���ित्सा व सहायता अनुदान",
       "description": "ज़रूरतमंद परिवार को आर्थिक/चिकित्सा सहायता"
     },
     {
@@ -419,29 +397,159 @@
       "description": "फ्लेक्स/बैनर/प्रिंट मीडीया"
     }
   ],
-  "pariwarikWinners": {
-    "2026-02": "GSKS-001"
-  },
-  "upiList": [
+  "vendors": [
     {
-      "id": "upi_1",
-      "address": "7781931880-9@ybl",
-      "payeeName": "GOSWAMI SAMAJ KALYAN SAMITI",
-      "bankName": "NITISH NATH",
-      "status": "Active",
-      "remarks": "अध्यक्ष जी का UPI ID",
-      "isPrimary": false,
-      "updatedAt": "2026-10-21T13:04:21.558Z"
+      "id": "ven_1",
+      "name": "अध्यक्ष समिति शेष फंड",
+      "category": "समिति शेष फंड",
+      "phone": "7781931880",
+      "address": "GUNGHASA"
     },
     {
-      "id": "upi_1792587940015",
-      "address": "7004312107@nyes",
-      "payeeName": "GOSWAMI SAMAJ KALYAN SAMITI",
-      "bankName": "PRABHU DAYAL GOSWAMI",
-      "status": "Active",
-      "remarks": "कोषाध्यक्ष जी का UPI ID",
-      "isPrimary": true,
-      "updatedAt": "2026-10-21T13:05:40.015Z"
+      "id": "ven_2",
+      "name": "KUNAL GOSWAMI",
+      "category": "DJ & Sound",
+      "phone": "7004636057",
+      "address": "GUNGHASA"
+    },
+    {
+      "id": "ven_3",
+      "name": "PINKU LIGHT",
+      "category": "Ligh & Generator",
+      "phone": "9031337183",
+      "address": "GUNGHASA"
+    },
+    {
+      "id": "ven_4",
+      "name": "SHANKAR PRINTING PRESS",
+      "category": "Printing",
+      "phone": "9934112168",
+      "address": "GOMOH"
+    },
+    {
+      "id": "ven_1792575946873",
+      "name": "ESPN SPORTS",
+      "category": "Prize & Medal",
+      "phone": "7781931880",
+      "address": "GOMOH"
+    },
+    {
+      "id": "ven_1792575973451",
+      "name": "MANDAL TENT HOUSE",
+      "category": "TENT",
+      "phone": "7781931880",
+      "address": "GUNGHASA"
+    }
+  ],
+  "eventCategories": [
+    {
+      "id": "ec_1",
+      "name": "General Meeting",
+      "color": "blue",
+      "isSystem": true,
+      "description": "सामान्य बैठक"
+    },
+    {
+      "id": "ec_2",
+      "name": "Special Event",
+      "color": "purple",
+      "isSystem": true,
+      "description": "विशेष उत्सव/समारोह"
+    },
+    {
+      "id": "ec_3",
+      "name": "Emergency Meeting",
+      "color": "rose",
+      "isSystem": true,
+      "description": "आपातकालीन बैठक"
+    }
+  ],
+  "eventTitles": [
+    {
+      "id": "et_1",
+      "title": "मासिक आम सभा",
+      "category": "General Meeting"
+    },
+    {
+      "id": "et_2",
+      "title": "मासिक आम सभा एवं पारिवारिक आर्थिक सहायता योजना हेतु सदस्य का चुनाव",
+      "category": "General Meeting"
+    },
+    {
+      "id": "et_3",
+      "title": "आपातकालीन कार्यकारिणी बैठक",
+      "category": "Emergency meeting"
+    },
+    {
+      "id": "et_4",
+      "title": "स्थापना दिवस सह विद्यार्थी प्रतिभा सम्मान समारोह",
+      "category": "Special Event"
+    }
+  ],
+  "designations": [
+    {
+      "id": "des_1",
+      "name": "अध्यक्ष (President)",
+      "order": 1,
+      "badge": "amber",
+      "description": "समिति के मुख्य कार्यकारी प्रमुख",
+      "isSystem": true
+    },
+    {
+      "id": "des_2",
+      "name": "उपाध्यक्ष (Vice President)",
+      "order": 2,
+      "badge": "indigo",
+      "description": "अध्यक्ष की अनुपस्थिति में कार्यभार",
+      "isSystem": true
+    },
+    {
+      "id": "des_3",
+      "name": "सचिव (Secretary)",
+      "order": 3,
+      "badge": "blue",
+      "description": "समिति के मुख्य प्रशासनिक व पत्राचार अधिकारी",
+      "isSystem": true
+    },
+    {
+      "id": "des_4",
+      "name": "सह-सचिव (Joint Secretary)",
+      "order": 4,
+      "badge": "indigo",
+      "description": "सचिव के कार्यों में सहयोग",
+      "isSystem": true
+    },
+    {
+      "id": "des_5",
+      "name": "कोषाध्यक्ष (Treasurer)",
+      "order": 5,
+      "badge": "emerald",
+      "description": "समिति के वित्त, कोष एवं बैंक खातों के प्रभारी",
+      "isSystem": true
+    },
+    {
+      "id": "des_6",
+      "name": "उप-कोषाध्यक्ष (Deputy Treasurer)",
+      "order": 6,
+      "badge": "emerald",
+      "description": "कोषाध्यक्ष के कार्यों में सहयोग",
+      "isSystem": true
+    },
+    {
+      "id": "des_7",
+      "name": "संरक्षक (Patron / Advisor)",
+      "order": 7,
+      "badge": "purple",
+      "description": "मार्गदर्शक एवं संरक्षक मंडल",
+      "isSystem": true
+    },
+    {
+      "id": "des_8",
+      "name": "सदस्य (Member)",
+      "order": 8,
+      "badge": "slate",
+      "description": "समिति के सम्मानित पंजीकृत सदस्य",
+      "isSystem": true
     }
   ]
 }
