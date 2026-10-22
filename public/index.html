@@ -7796,11 +7796,13 @@
       return false;
     }
 
-    // Helper: Get real current active calendar month key (e.g. "2026-10")
+    // Helper: Get PASY active month key (Current Calendar Month + 1 month in advance, e.g. Oct 2026 -> "2026-11")
     function getPariwarikCurrentActiveMonthKey() {
       const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, '0');
+      // Advance 1 month (PASY rule: 1 month advance payment)
+      const adv = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      const y = adv.getFullYear();
+      const m = String(adv.getMonth() + 1).padStart(2, '0');
       const key = `${y}-${m}`;
       const exists = PARIWARIK_MONTHS.some(x => x.key === key);
       if (exists) return key;
@@ -7810,7 +7812,7 @@
     window.getPariwarikCurrentActiveMonthKey = getPariwarikCurrentActiveMonthKey;
 
     // Helper: Get member's cumulative PASY dues up to the current active month (or specified upToMonthKey)
-    // Counts all unpaid months from Sep 2025 up to current month (e.g. up to 2026-10)
+    // Counts all unpaid months from Sep 2025 up to advance active month (e.g. up to 2026-11)
     function getMemberPasyCumulativeDues(member, upToMonthKey = null) {
       if (!member || !isPariwarikMember(member)) {
         return { unpaidCount: 0, totalDues: 0, unpaidMonths: [], upToMonthKey: '' };
