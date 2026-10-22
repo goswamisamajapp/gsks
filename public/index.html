@@ -278,21 +278,7 @@
           </div>
           <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm">
             <div class="grid grid-cols-2 lg:grid-cols-6 gap-3">
-            <!-- Action 1: Events & Meetings -->
-            <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
-                <i class="fa-solid fa-calendar-days"></i>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5">
-                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-indigo-950 truncate">Events</h4>
-                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-200/80 text-indigo-900" id="quick-events-count">0</span>
-                </div>
-                <p class="text-[11px] text-slate-500 truncate">Meetings & Events →</p>
-              </div>
-            </button>
-
-            <!-- Action 2: Add New Member -->
+            <!-- Action 1: Add New Member -->
             <button onclick="openAddMemberModal()" class="group p-3.5 rounded-2xl bg-orange-50/60 hover:bg-orange-100/70 text-left border border-orange-200/80 hover:border-orange-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-orange-600 text-white flex items-center justify-center text-sm shadow-md shadow-orange-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
                 <i class="fa-solid fa-user-plus"></i>
@@ -303,7 +289,7 @@
               </div>
             </button>
 
-            <!-- Action 3: Donations -->
+            <!-- Action 2: Donations -->
             <button onclick="switchAdminView('donations')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/40 hover:from-emerald-100 hover:to-teal-100 text-left border border-emerald-200/80 hover:border-emerald-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
@@ -317,7 +303,7 @@
               </div>
             </button>
 
-            <!-- Action 4: Expenses -->
+            <!-- Action 3: Expenses -->
             <button onclick="switchAdminView('expenses')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-50/40 hover:from-rose-100 hover:to-pink-100 text-left border border-rose-200/80 hover:border-rose-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm shadow-md shadow-rose-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
                 <i class="fa-solid fa-receipt"></i>
@@ -331,7 +317,34 @@
               </div>
             </button>
 
-            <!-- Action 5: Bank Entries -->
+            <!-- Action 4: Events & Meetings -->
+            <button onclick="switchAdminView('events')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50/40 hover:from-indigo-100 hover:to-purple-100 text-left border border-indigo-200/80 hover:border-indigo-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-calendar-days"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-indigo-950 truncate">Events</h4>
+                  <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-200/80 text-indigo-900" id="quick-events-count">0</span>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Meetings & Events →</p>
+              </div>
+            </button>
+
+            <!-- Action 5: PASY -->
+            <button onclick="switchAdminView('pariwarik')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-50/40 hover:from-cyan-100 hover:to-sky-100 text-left border border-cyan-200/80 hover:border-cyan-400 shadow-sm transition-all flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-sm shadow-md shadow-cyan-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
+                <i class="fa-solid fa-users-rectangle"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-cyan-950 truncate">PASY</h4>
+                </div>
+                <p class="text-[11px] text-slate-500 truncate">Scheme & Relief →</p>
+              </div>
+            </button>
+
+            <!-- Action 6: Bank Entries -->
             <button onclick="switchAdminView('bank')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50/40 hover:from-blue-100 hover:to-indigo-100 text-left border border-blue-200/80 hover:border-blue-400 shadow-sm transition-all flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-sm shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
                 <i class="fa-solid fa-building-columns"></i>
@@ -342,19 +355,6 @@
                   <span class="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-200/80 text-blue-900" id="quick-bank-count">0</span>
                 </div>
                 <p class="text-[11px] text-slate-500 truncate">Passbook & Records →</p>
-              </div>
-            </button>
-
-            <!-- Action 6: PASY -->
-            <button onclick="switchAdminView('pariwarik')" class="group p-3.5 rounded-2xl bg-gradient-to-br from-cyan-50 to-sky-50/40 hover:from-cyan-100 hover:to-sky-100 text-left border border-cyan-200/80 hover:border-cyan-400 shadow-sm transition-all flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center text-sm shadow-md shadow-cyan-500/20 group-hover:scale-110 transition-transform flex-shrink-0">
-                <i class="fa-solid fa-users-rectangle"></i>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5">
-                  <h4 class="text-xs font-bold text-slate-900 group-hover:text-cyan-950 truncate">PASY</h4>
-                </div>
-                <p class="text-[11px] text-slate-500 truncate">Scheme & Relief →</p>
               </div>
             </button>
           </div>
