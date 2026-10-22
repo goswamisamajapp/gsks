@@ -141,7 +141,7 @@
           </div>
         </div>
 
-        <form onsubmit="handleMemberLogin(event)" class="space-y-4">
+        <form onsubmit="handleMemberLogin(event)" class="space-y-3.5">
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1.5">सदस्य ID या मोबाइल नंबर *</label>
             <div class="relative">
@@ -154,14 +154,32 @@
                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
               >
             </div>
-            <p class="text-[10px] text-slate-400 mt-1">💡 अपना GSKS सदस्यता कोड (ID) या मोबाइल नंबर दर्ज करें</p>
+            <p class="text-[10px] text-slate-400 mt-1">💡 अपना GSKS सदस्यता कोड (ID) या पंजीकृत मोबाइल नंबर दर्ज करें</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">पासवर्ड (Password) *</label>
+            <div class="relative">
+              <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+              <input 
+                type="password" 
+                id="member-password-input" 
+                placeholder="डिफ़ॉल्ट पासवर्ड आपका मोबाइल नंबर है" 
+                required
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 font-medium"
+              >
+              <button type="button" onclick="toggleMemberPasswordVisibility()" class="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 text-xs cursor-pointer">
+                <i id="member-pass-eye-icon" class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+            <p class="text-[10px] text-amber-700 mt-1">🔑 पहली बार लॉगिन हेतु डिफ़ॉल्ट पासवर्ड आपका <b>10-अंकीय मोबाइल नंबर</b> है।</p>
           </div>
 
           <div id="member-login-error" class="hidden text-[11px] text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200 font-medium"></div>
 
           <button 
             type="submit" 
-            class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold text-xs tracking-wide shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold text-xs tracking-wide shadow-md shadow-orange-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <i class="fa-solid fa-right-to-bracket text-xs"></i>
             <span>सदस्य डैशबोर्ड में प्रवेश करें</span>
@@ -8452,6 +8470,26 @@
       }
     }
 
+    function toggleMemberPasswordVisibility() {
+      const input = document.getElementById('member-password-input');
+      const icon = document.getElementById('member-pass-eye-icon');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) {
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        }
+      } else {
+        input.type = 'password';
+        if (icon) {
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      }
+    }
+    window.toggleMemberPasswordVisibility = toggleMemberPasswordVisibility;
+
     function handleAdminLogin(e) {
       e.preventDefault();
       const id = document.getElementById('admin-id').value.trim();
@@ -8631,13 +8669,23 @@
     async function handleMemberLogin(e) {
       if (e && e.preventDefault) e.preventDefault();
       const inputEl = document.getElementById('member-login-input');
+      const passEl = document.getElementById('member-password-input');
       const errBox = document.getElementById('member-login-error');
       if (!inputEl) return;
       const rawVal = inputEl.value.trim().toLowerCase();
+      const enteredPassword = passEl ? passEl.value.trim() : '';
 
       if (!rawVal) {
         if (errBox) {
           errBox.textContent = 'कृपया सदस्य ID या मोबाइल नंबर दर्ज करें!';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (!enteredPassword) {
+        if (errBox) {
+          errBox.textContent = 'कृपया अपना पासवर्ड दर्ज करें! (डिफ़ॉल्ट पासवर्ड आपका 10-अंकीय मोबाइल नंबर है)';
           errBox.classList.remove('hidden');
         }
         return;
@@ -8661,6 +8709,20 @@
       });
 
       if (member) {
+        // Resolve correct password: custom password if set, otherwise member's 10-digit mobile number
+        const memberCleanPhone = (member.phone || '').replace(/\D/g, '');
+        const expectedPassword = member.password && member.password.trim() !== '' 
+          ? member.password.trim() 
+          : memberCleanPhone;
+
+        if (enteredPassword !== expectedPassword) {
+          if (errBox) {
+            errBox.textContent = '❌ गलत पासवर्ड! कृपया सही पासवर्ड दर्ज करें। (डिफ़ॉल्ट पासवर्ड आपका मोबाइल नंबर है)';
+            errBox.classList.remove('hidden');
+          }
+          return;
+        }
+
         if (errBox) errBox.classList.add('hidden');
         // Clear admin auth immediately so admin dashboard can never flash or be prioritized
         localStorage.removeItem('gsks_admin_auth');
@@ -8738,6 +8800,8 @@
       }
       const inputEl = document.getElementById('member-login-input');
       if (inputEl) inputEl.value = '';
+      const passEl = document.getElementById('member-password-input');
+      if (passEl) passEl.value = '';
       const errBox = document.getElementById('member-login-error');
       if (errBox) errBox.classList.add('hidden');
       switchPortalTab('user');
@@ -13482,13 +13546,40 @@
       }
     }
 
-    function handleResetMemberPassword() {
+    async function handleResetMemberPassword() {
       const id = document.getElementById('edit-member-id').value;
       const member = allMembers.find(m => m.id === id);
-      const tempPass = `GSKS@${member.phone.slice(-4)}`;
+      if (!member) return;
+
+      const memberCleanPhone = (member.phone || '').replace(/\D/g, '');
+      const defaultPassword = memberCleanPhone || member.phone || '';
+
+      if (!defaultPassword) {
+        alert('त्रुटि: इस सदस्य का कोई मोबाइल नंबर दर्ज नहीं है!');
+        return;
+      }
+
+      // Reset password to their registered mobile number
+      member.password = defaultPassword;
+      const memIdx = (allMembers || []).findIndex(m => m.id === member.id);
+      if (memIdx !== -1) {
+        allMembers[memIdx].password = defaultPassword;
+      }
+
+      // Persist to Backend and Firestore Cloud immediately
+      try {
+        if (typeof syncMemberToBackend === 'function') {
+          await syncMemberToBackend({ id: member.id, password: defaultPassword });
+        }
+      } catch (err) {
+        console.warn('Password reset sync error:', err);
+      }
+
       const alertBox = document.getElementById('password-reset-alert');
-      alertBox.innerHTML = `✅ पासवर्ड सफलतापूर्वक रीसेट हुआ! नया डिफ़ॉल्ट पासवर्ड: <span class="font-mono font-bold text-emerald-900">${tempPass}</span> (यह बाद में यूजर लॉगिन में काम आएगा)`;
-      alertBox.classList.remove('hidden');
+      if (alertBox) {
+        alertBox.innerHTML = `✅ पासवर्ड सफलतापूर्वक रीसेट हो गया! सदस्य का नया लॉगिन पासवर्ड उसका मोबाइल नंबर: <span class="font-mono font-bold text-emerald-900">${defaultPassword}</span> सेट कर दिया गया है।`;
+        alertBox.classList.remove('hidden');
+      }
     }
 
     // ==============================================
