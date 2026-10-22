@@ -1503,8 +1503,8 @@
             </div>
             <div class="min-w-0">
               <p class="text-[10px] sm:text-[11px] font-bold text-indigo-700 uppercase tracking-wider truncate">Bank Account</p>
-              <h3 class="text-xs sm:text-sm font-black text-slate-800 font-mono truncate mt-0.5" id="bank-stat-acc-no">38294710293</h3>
-              <p class="text-[9px] sm:text-[10px] text-indigo-600 font-semibold truncate" id="bank-stat-acc-title">SBI Gomoh Branch</p>
+              <h3 class="text-xs sm:text-sm font-black text-slate-800 font-mono truncate mt-0.5" id="bank-stat-acc-no">—</h3>
+              <p class="text-[9px] sm:text-[10px] text-indigo-600 font-semibold truncate" id="bank-stat-acc-title">Loading...</p>
             </div>
           </div>
         </div>
@@ -6165,6 +6165,14 @@
         <div>
           <label class="block font-bold text-slate-700 mb-1">Remarks / Note</label>
           <input type="text" id="bankaccount-remarks" placeholder="e.g. Main committee operating account" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+        </div>
+
+        <!-- Is Primary Bank Account Checkbox -->
+        <div class="p-3 bg-blue-50/70 rounded-xl border border-blue-200/80 flex items-center gap-2.5">
+          <input type="checkbox" id="bankaccount-isprimary" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+          <label for="bankaccount-isprimary" class="font-bold text-blue-950 text-xs cursor-pointer">
+            Set as Primary Bank Account (मुख्य डिफ़ॉल्ट ट्रस्ट बैंक खाता)
+          </label>
         </div>
 
         <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
@@ -17196,11 +17204,16 @@
       if (!select) return;
       const accounts = (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0)
         ? masterSettings.bankAccounts
-        : [{ id: 'ba_1', accountNumber: '38294710293', bankName: 'SBI', branchName: 'Gomoh Branch' }];
+        : [];
+
+      if (accounts.length === 0) {
+        select.innerHTML = '<option value="">-- कोई बैंक खाता उपलब्ध नहीं --</option>';
+        return;
+      }
 
       select.innerHTML = accounts.map(a => `
-        <option value="${a.accountNumber || a.id}">
-          ${a.bankName || 'SBI'} - A/C ${a.accountNumber} (${a.branchName || 'Main Branch'})
+        <option value="${a.accountNumber || a.id}" ${a.isPrimary ? 'selected' : ''}>
+          ${a.bankName || 'Bank'} - A/C ${a.accountNumber} (${a.branchName || 'Main Branch'})${a.isPrimary ? ' ★ [Primary]' : ''}
         </option>
       `).join('');
     }
@@ -17821,6 +17834,15 @@
       }
     }
 
+    function getPrimaryBankAccount() {
+      if (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0) {
+        const found = masterSettings.bankAccounts.find(b => b.isPrimary);
+        return found || masterSettings.bankAccounts[0];
+      }
+      return null;
+    }
+    window.getPrimaryBankAccount = getPrimaryBankAccount;
+
     function openAddBankAccountModal() {
       closeAllModals();
       const modal = document.getElementById('bankaccount-modal');
@@ -17833,6 +17855,11 @@
       document.getElementById('bankaccount-acctype').value = 'Joint';
       document.getElementById('bankaccount-branch').value = '';
       document.getElementById('bankaccount-remarks').value = '';
+      
+      const isPrimaryBox = document.getElementById('bankaccount-isprimary');
+      if (isPrimaryBox) {
+        isPrimaryBox.checked = !(masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0);
+      }
 
       const membersContainer = document.getElementById('bankaccount-members-container');
       if (membersContainer) {
@@ -17860,6 +17887,11 @@
       document.getElementById('bankaccount-branch').value = item.branchName || '';
       document.getElementById('bankaccount-remarks').value = item.remarks || '';
 
+      const isPrimaryBox = document.getElementById('bankaccount-isprimary');
+      if (isPrimaryBox) {
+        isPrimaryBox.checked = !!item.isPrimary;
+      }
+
       const membersContainer = document.getElementById('bankaccount-members-container');
       if (membersContainer) {
         membersContainer.innerHTML = '';
@@ -17883,6 +17915,8 @@
       const accountType = document.getElementById('bankaccount-acctype').value;
       const branchName = document.getElementById('bankaccount-branch').value.trim();
       const remarks = document.getElementById('bankaccount-remarks').value.trim();
+      const isPrimaryBox = document.getElementById('bankaccount-isprimary');
+      const isPrimary = isPrimaryBox ? isPrimaryBox.checked : false;
 
       // Collect members from all rows
       const memberInputs = document.querySelectorAll('.bank-member-name-input');
@@ -17904,6 +17938,10 @@
 
       if (!masterSettings.bankAccounts) masterSettings.bankAccounts = [];
 
+      if (isPrimary) {
+        masterSettings.bankAccounts.forEach(b => b.isPrimary = false);
+      }
+
       const accountData = {
         id: id || 'ba_' + Date.now(),
         bankName,
@@ -17911,7 +17949,8 @@
         accountType,
         branchName,
         members,
-        remarks
+        remarks,
+        isPrimary
       };
 
       if (id) {
@@ -17923,13 +17962,50 @@
         masterSettings.bankAccounts.push(accountData);
       }
 
+      // Guarantee at least one Bank Account is marked as primary
+      const hasAnyPrimary = masterSettings.bankAccounts.some(b => !!b.isPrimary);
+      if (!hasAnyPrimary && masterSettings.bankAccounts.length > 0) {
+        masterSettings.bankAccounts[0].isPrimary = true;
+      }
+
       closeBankAccountModal();
+      renderBankAccountsGrid();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       await saveAllSettingsToCloud();
     }
 
+    async function setPrimaryBankAccount(id) {
+      if (!masterSettings.bankAccounts || masterSettings.bankAccounts.length === 0) return;
+      const target = masterSettings.bankAccounts.find(b => b.id === id);
+      if (!target) return;
+
+      masterSettings.bankAccounts.forEach(b => {
+        b.isPrimary = (b.id === id);
+      });
+
+      renderBankAccountsGrid();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+      await saveAllSettingsToCloud();
+      if (typeof showAppAlert === 'function') {
+        showAppAlert(`Primary Bank Account अब "${target.bankName} - A/C ${target.accountNumber}" सेट कर दिया गया है!`, "Primary Bank Updated", "success");
+      }
+    }
+    window.setPrimaryBankAccount = setPrimaryBankAccount;
+
     async function deleteBankAccountItem(id) {
+      const item = (masterSettings.bankAccounts || []).find(b => b.id === id);
+      if (!item) return;
+
       if (!confirm("क्या आप इस बैंक खाते को हटाना चाहते हैं?")) return;
+      const wasPrimary = item.isPrimary;
       masterSettings.bankAccounts = (masterSettings.bankAccounts || []).filter(b => b.id !== id);
+
+      if (wasPrimary && masterSettings.bankAccounts.length > 0) {
+        masterSettings.bankAccounts[0].isPrimary = true;
+      }
+
+      renderBankAccountsGrid();
+      if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
       await saveAllSettingsToCloud();
     }
 
@@ -17951,14 +18027,15 @@
 
       grid.innerHTML = accounts.map(b => {
         const isJoint = (b.accountType || '').toLowerCase() === 'joint';
+        const isPrimary = !!b.isPrimary;
         const membersList = Array.isArray(b.members) && b.members.length > 0 ? b.members : (b.member ? [b.member] : []);
 
         return `
-          <div class="relative overflow-hidden rounded-2xl p-3.5 sm:p-4 bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-800 text-white shadow-xs border border-blue-500/30 space-y-2.5 w-full">
+          <div class="relative overflow-hidden rounded-2xl p-3.5 sm:p-4 bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-800 text-white shadow-xs border ${isPrimary ? 'border-amber-400 ring-2 ring-amber-400/50' : 'border-blue-500/30'} space-y-2.5 w-full">
             <!-- Background glow accent -->
             <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
 
-            <!-- Top Row: Bank Info + Single/Joint Badge + Edit/Delete on top right -->
+            <!-- Top Row: Bank Info + Single/Joint Badge + Primary Badge + Edit/Delete on top right -->
             <div class="flex items-center justify-between gap-2 relative z-10">
               <div class="flex items-center gap-2.5 min-w-0">
                 <div class="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
@@ -17970,6 +18047,9 @@
                     <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-white/20 text-blue-100 border border-white/20">
                       ${isJoint ? '👥 Joint' : '👤 Single'}
                     </span>
+                    ${isPrimary 
+                      ? '<span class="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/40">★ Primary</span>' 
+                      : ''}
                   </div>
                   <p class="text-[10px] text-blue-200 font-medium truncate mt-0.5">${b.branchName || 'Main Trust Account'}</p>
                 </div>
@@ -17977,6 +18057,17 @@
 
               <!-- Top-Right Action Buttons -->
               <div class="flex items-center gap-1 flex-shrink-0">
+                ${!isPrimary ? `
+                  <button type="button" onclick="setPrimaryBankAccount('${b.id}')" class="px-2 py-1 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-[10px] font-bold active:scale-95 transition-all cursor-pointer flex items-center gap-1" title="Set as Primary">
+                    <i class="fa-solid fa-star"></i>
+                    <span class="hidden sm:inline">Set Primary</span>
+                  </button>
+                ` : `
+                  <span class="px-2 py-1 rounded-lg bg-amber-400 text-slate-950 text-[10px] font-black flex items-center gap-1 shadow-xs">
+                    <i class="fa-solid fa-check"></i>
+                    <span class="hidden sm:inline">Default</span>
+                  </span>
+                `}
                 <button onclick="editBankAccountItem('${b.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/20 hover:bg-white/30 active:scale-95 text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Edit">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </button>
@@ -18774,6 +18865,8 @@
     window.handleSaveBankAccount = handleSaveBankAccount;
     window.deleteBankAccountItem = deleteBankAccountItem;
     window.renderBankAccountsGrid = renderBankAccountsGrid;
+    window.setPrimaryBankAccount = setPrimaryBankAccount;
+    window.getPrimaryBankAccount = getPrimaryBankAccount;
 
     window.openAddUpiModal = openAddUpiModal;
     window.editUpiItem = editUpiItem;
@@ -21492,6 +21585,11 @@
       const list = [];
       const openBalances = (masterSettings && masterSettings.openingBalances) ? masterSettings.openingBalances : { cash: 0, bank: 0 };
       const openBank = parseFloat(openBalances.bank) || 0;
+      const activePrimaryBank = (typeof getPrimaryBankAccount === 'function' ? getPrimaryBankAccount() : null) || 
+        ((masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0) ? masterSettings.bankAccounts[0] : null);
+      const primaryBankRef = activePrimaryBank 
+        ? `A/C ${activePrimaryBank.accountNumber || ''} (${activePrimaryBank.bankName || 'Bank'})`
+        : 'A/C Primary Bank';
 
       // 1. Bank Opening Balance Entry
       if (openBank > 0) {
@@ -21503,7 +21601,7 @@
           badgeClass: 'bg-blue-50 text-blue-800 border-blue-200',
           title: 'Opening Bank Balance',
           description: openBalances.remarks || 'Opening Balance prior to 2025',
-          refNo: 'A/C 38294710293',
+          refNo: primaryBankRef,
           credit: openBank,
           debit: 0,
           rawItem: null,
@@ -21525,7 +21623,7 @@
               badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
               title: ft.party || 'Bank Deposit',
               description: ft.remarks || (isManualDeposit ? 'Direct Bank Deposit' : 'Cash Deposited to Bank'),
-              refNo: ft.refNo || ft.purpose || 'SBI Gomoh',
+              refNo: ft.refNo || ft.purpose || (activePrimaryBank ? activePrimaryBank.bankName : 'Bank Transfer'),
               credit: amt,
               debit: 0,
               rawItem: ft,
@@ -21540,7 +21638,7 @@
               badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
               title: ft.party || 'Cash Withdrawal',
               description: ft.remarks || 'Withdrawn from Bank to Cash in Hand',
-              refNo: ft.refNo || ft.purpose || 'SBI Gomoh',
+              refNo: ft.refNo || ft.purpose || (activePrimaryBank ? activePrimaryBank.bankName : 'Bank Transfer'),
               credit: 0,
               debit: amt,
               rawItem: ft,
@@ -21655,12 +21753,11 @@
       if (statOutflow) statOutflow.textContent = `₹ ${totalDebit.toLocaleString('en-IN')}`;
 
       // Primary bank account details
-      const primaryBank = (masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0)
-        ? masterSettings.bankAccounts[0]
-        : { accountNumber: '38294710293', bankName: 'State Bank of India', branchName: 'Gomoh Branch' };
+      const primaryBank = (typeof getPrimaryBankAccount === 'function' ? getPrimaryBankAccount() : null) || 
+        ((masterSettings && masterSettings.bankAccounts && masterSettings.bankAccounts.length > 0) ? masterSettings.bankAccounts[0] : null);
 
-      if (statAccNo) statAccNo.textContent = primaryBank.accountNumber || '38294710293';
-      if (statAccTitle) statAccTitle.textContent = `${primaryBank.bankName || 'SBI'} - ${primaryBank.branchName || 'Gomoh'}`;
+      if (statAccNo) statAccNo.textContent = primaryBank ? (primaryBank.accountNumber || '—') : '—';
+      if (statAccTitle) statAccTitle.textContent = primaryBank ? `${primaryBank.bankName || 'Trust Bank'} - ${primaryBank.branchName || 'Main'}` : 'No Bank Configured';
 
       // Update Filter Pill Counts (Desktop)
       const elCountAll = document.getElementById('bank-count-all');
