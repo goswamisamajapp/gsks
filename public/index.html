@@ -4708,25 +4708,54 @@
 
 
   <!-- ============================================================== -->
-  <!-- MODAL 3: DELETE CONFIRMATION (Move to Archived)                -->
+  <!-- MODAL 3: DELETE CONFIRMATION (Move to Archived with Remarks)   -->
   <!-- ============================================================== -->
   <div id="delete-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 text-center animate-in fade-in zoom-in-95 duration-200">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 text-left animate-in fade-in zoom-in-95 duration-200">
       
-      <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3">
-        <i class="fa-solid fa-box-archive"></i>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl flex-shrink-0">
+          <i class="fa-solid fa-box-archive"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-slate-900">सदस्य को आर्काइव करें?</h3>
+          <p class="text-xs text-slate-500">
+            <span id="delete-member-name" class="font-bold text-slate-800">Member</span> को Archived सूची में भेजा जाएगा।
+          </p>
+        </div>
       </div>
 
-      <h3 class="text-base font-black text-slate-900">सदस्य को आर्काइव करें?</h3>
-      <p class="text-xs text-slate-500 mt-1 mb-4">
-        <span id="delete-member-name" class="font-bold text-slate-800">Member</span> को सक्रिय सूची से हटाकर **Archived** में भेज दिया जाएगा। इसे बाद में कभी भी पुनः सक्रिय किया जा सकता है।
-      </p>
+      <!-- Remarks / Reason Selection -->
+      <div class="space-y-3 mb-5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            आर्काइव करने का कारण (Remarks) <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <select id="delete-member-reason" onchange="handleDeleteReasonChange()" class="w-full text-xs font-semibold px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all cursor-pointer">
+              <option value="अपनी मर्जी से सदस्यता का त्याग किया है।">1. अपनी मर्जी से सदस्यता का त्याग किया है।</option>
+              <option value="संस्थागत कार्यवाही के कारण सदस्यता रद्द की गई है।">2. संस्थागत कार्यवाही के कारण सदस्यता रद्द की गई है।</option>
+              <option value="सदस्य की मृत्यु हो गई है।">3. सदस्य की मृत्यु हो गई है।</option>
+              <option value="सदस्य अब यहाँ उपलब्ध नहीं हैं।">4. सदस्य अब यहाँ उपलब्ध नहीं हैं।</option>
+              <option value="अन्य">5. अन्य</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Custom Reason Textbox (visible when 'अन्य' is selected) -->
+        <div id="delete-reason-custom-container" class="hidden">
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            विवरण दर्ज करें (Custom Reason) <span class="text-rose-500">*</span>
+          </label>
+          <textarea id="delete-member-reason-custom" rows="2" placeholder="कारण यहाँ लिखें..." class="w-full text-xs font-medium px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"></textarea>
+        </div>
+      </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="confirmArchiveMember()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm">
-          हाँ, Archive करें
+        <button onclick="confirmArchiveMember()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition-colors shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-box-archive"></i> हाँ, Archive करें
         </button>
-        <button onclick="closeDeleteModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+        <button onclick="closeDeleteModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer">
           रद्द करें
         </button>
       </div>
@@ -13602,6 +13631,21 @@
     // ==============================================
     // 3. DELETE / ARCHIVE LOGIC
     // ==============================================
+    function handleDeleteReasonChange() {
+      const select = document.getElementById('delete-member-reason');
+      const customContainer = document.getElementById('delete-reason-custom-container');
+      const customInput = document.getElementById('delete-member-reason-custom');
+      if (!select || !customContainer) return;
+      if (select.value === 'अन्य') {
+        customContainer.classList.remove('hidden');
+        if (customInput) customInput.focus();
+      } else {
+        customContainer.classList.add('hidden');
+        if (customInput) customInput.value = '';
+      }
+    }
+    window.handleDeleteReasonChange = handleDeleteReasonChange;
+
     function openDeleteModal(id) {
       closeAllModals();
       pendingDeleteMemberId = id;
@@ -13609,6 +13653,15 @@
       const name = member ? member.name : id;
       const nameEl = document.getElementById('delete-member-name');
       if (nameEl) nameEl.textContent = name;
+
+      // Reset reasons to default
+      const select = document.getElementById('delete-member-reason');
+      if (select) select.selectedIndex = 0;
+      const customContainer = document.getElementById('delete-reason-custom-container');
+      if (customContainer) customContainer.classList.add('hidden');
+      const customInput = document.getElementById('delete-member-reason-custom');
+      if (customInput) customInput.value = '';
+
       const modal = document.getElementById('delete-confirm-modal');
       if (modal) {
         modal.classList.remove('hidden');
@@ -13628,8 +13681,27 @@
     async function confirmArchiveMember() {
       if (!pendingDeleteMemberId) return;
       const id = pendingDeleteMemberId;
+
+      const select = document.getElementById('delete-member-reason');
+      let reason = select ? select.value : 'अपनी मर्जी से सदस्यता का त्याग किया है।';
+      if (reason === 'अन्य') {
+        const customInput = document.getElementById('delete-member-reason-custom');
+        const customVal = customInput ? customInput.value.trim() : '';
+        if (!customVal) {
+          alert('कृपया आर्काइव करने का कारण (अन्य विवरण) दर्ज करें!');
+          if (customInput) customInput.focus();
+          return;
+        }
+        reason = customVal;
+      }
+
       closeDeleteModal();
-      await syncMemberToBackend({ id: id, status: 'removed' });
+      await syncMemberToBackend({
+        id: id,
+        status: 'removed',
+        archiveReason: reason,
+        archivedAt: new Date().toISOString()
+      });
       if (typeof showAppAlert === 'function') {
         showAppAlert('सदस्य को सफलतापूर्वक आर्काइव (हटा) दिया गया है।', 'सदस्य आर्काइव', 'success');
       }
@@ -13652,18 +13724,31 @@
         return;
       }
 
-      container.innerHTML = archived.map(m => `
-        <div class="bg-white rounded-2xl p-4 border border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
-          <div class="flex items-center gap-3">
+      container.innerHTML = archived.map(m => {
+        const reasonText = m.archiveReason || 'कारण उपलब्ध नहीं';
+        return `
+        <div class="bg-white rounded-2xl p-4 border border-rose-200 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-start sm:items-center gap-3 min-w-0 flex-1">
             <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 font-extrabold flex items-center justify-center text-xs flex-shrink-0">
               ${getInitials(m.name)}
             </div>
-            <div>
+            <div class="min-w-0">
               <h4 class="text-xs font-extrabold text-slate-800">${m.name} <span class="font-mono text-[10px] text-slate-400">(${m.id})</span></h4>
               <p class="text-[11px] text-slate-500 font-medium">पिता: ${m.father || '--'} • ${m.address || '--'}</p>
             </div>
           </div>
-          <div class="flex items-center gap-2">
+
+          <!-- Dynamic Archive Reason / Remarks Badge -->
+          <div class="flex-1 px-3 py-2 bg-rose-50/70 border border-rose-200/80 rounded-xl text-left max-w-xl">
+            <div class="flex items-center gap-1.5 text-[10px] font-bold text-rose-700 uppercase tracking-wide mb-0.5">
+              <i class="fa-solid fa-comment-dots"></i> कारण (Remarks):
+            </div>
+            <p class="text-xs font-semibold text-slate-800 leading-snug break-words">
+              ${reasonText}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 flex-shrink-0">
             <button onclick="restoreMember('${m.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs transition-colors flex items-center gap-1 border border-emerald-200 cursor-pointer">
               <i class="fa-solid fa-rotate-left"></i> Restore
             </button>
@@ -13672,7 +13757,8 @@
             </button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     async function permanentDeleteMember(memberId) {
