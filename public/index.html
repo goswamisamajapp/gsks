@@ -546,8 +546,210 @@
           </div>
         </div>
 
+        <!-- ============================================== -->
+        <!-- ORDER MANAGEMENT (ऑर्डर प्रबंधन)                 -->
+        <!-- ============================================== -->
+        <div class="mt-4">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis">
+              <i class="fa-solid fa-cart-flatbed-suitcase text-teal-600 text-sm flex-shrink-0"></i> Order Management (ऑर्डर प्रबंधन)
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+            <!-- 1. Pending Order -->
+            <div onclick="switchAdminView('order-pending')" class="cursor-pointer bg-gradient-to-br from-amber-50 via-orange-50/40 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">Pending Order</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-order-pending-count">0</p>
+                <p class="text-[10px] text-amber-700/80 font-medium mt-0.5">प्रतीक्षारत ऑर्डर →</p>
+              </div>
+            </div>
+
+            <!-- 2. Completed Order -->
+            <div onclick="switchAdminView('order-completed')" class="cursor-pointer bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl p-3 sm:p-4 border border-emerald-200/90 shadow-xs flex flex-col justify-between hover:border-emerald-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">Completed Order</span>
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-circle-check"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-emerald-950" id="dash-order-completed-count">0</p>
+                <p class="text-[10px] text-emerald-700/80 font-medium mt-0.5">पूर्ण हुए ऑर्डर →</p>
+              </div>
+            </div>
+
+            <!-- 3. Stock Management -->
+            <div onclick="switchAdminView('order-stock')" class="cursor-pointer bg-gradient-to-br from-cyan-50 via-sky-50/40 to-white rounded-2xl p-3 sm:p-4 border border-cyan-200/90 shadow-xs flex flex-col justify-between hover:border-cyan-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-cyan-900">Stock Management</span>
+                <span class="w-7 h-7 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-boxes-stacked"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-cyan-950" id="dash-order-stock-count">0</p>
+                <p class="text-[10px] text-cyan-700/80 font-medium mt-0.5">सामग्री व इन्वेंट्री स्टॉक →</p>
+              </div>
+            </div>
+
+            <!-- 4. Active Users -->
+            <div onclick="switchAdminView('order-active-users')" class="cursor-pointer bg-gradient-to-br from-purple-50 via-indigo-50/40 to-white rounded-2xl p-3 sm:p-4 border border-purple-200/90 shadow-xs flex flex-col justify-between hover:border-purple-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-purple-900">Active Users</span>
+                <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-users-viewfinder"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-purple-950" id="dash-order-active-users-count">0</p>
+                <p class="text-[10px] text-purple-700/80 font-medium mt-0.5">सक्रिय उपयोगकर्ता →</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
+
+
+      <!-- ============================================== -->
+      <!-- PAGE 1: PENDING ORDERS                         -->
+      <!-- ============================================== -->
+      <div id="view-order-pending-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 text-white p-4 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
+          <div class="flex items-center justify-between gap-3 relative z-10">
+            <div class="flex items-center gap-3">
+              <button onclick="switchAdminView('dashboard')" class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all cursor-pointer">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <div>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Pending Orders (प्रतीक्षारत ऑर्डर)</h3>
+                <p class="text-xs text-amber-100 font-medium mt-0.5">स्वीकृति एवं डिलीवरी हेतु लंबित सभी ऑर्डर</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-amber-900 shadow-sm" id="pending-orders-badge">0 Pending</span>
+          </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
+          <div class="w-16 h-16 rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <h4 class="text-sm sm:text-base font-black text-slate-800">Pending Orders Panel</h4>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">यहाँ पर सभी नए एवं प्रोसेस में चल रहे पेंडिंग ऑर्डर्स की रियल-टाइम लिस्ट प्रदर्शित होगी।</p>
+          <div class="mt-6 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">
+            लॉजिक एवं डेटा फ़ील्ड्स अगली आवश्यकतानुसार कनेक्ट करने हेतु तैयार है।
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- PAGE 2: COMPLETED ORDERS                       -->
+      <!-- ============================================== -->
+      <div id="view-order-completed-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white p-4 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
+          <div class="flex items-center justify-between gap-3 relative z-10">
+            <div class="flex items-center gap-3">
+              <button onclick="switchAdminView('dashboard')" class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all cursor-pointer">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <div>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Completed Orders (पूर्ण हुए ऑर्डर)</h3>
+                <p class="text-xs text-emerald-100 font-medium mt-0.5">सफलतापूर्वक डिलीवर और पूर्ण हो चुके सभी ऑर्डर</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-emerald-900 shadow-sm" id="completed-orders-badge">0 Completed</span>
+          </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <h4 class="text-sm sm:text-base font-black text-slate-800">Completed Orders History</h4>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">यहाँ पर सभी पूर्ण व भुगतान प्राप्त ऑर्डर्स का रिकॉर्ड एवं चालान/बिल देखा जा सकेगा।</p>
+          <div class="mt-6 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">
+            लॉजिक एवं डेटा फ़ील्ड्स अगली आवश्यकतानुसार कनेक्ट करने हेतु तैयार है।
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- PAGE 3: STOCK MANAGEMENT                       -->
+      <!-- ============================================== -->
+      <div id="view-order-stock-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 text-white p-4 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
+          <div class="flex items-center justify-between gap-3 relative z-10">
+            <div class="flex items-center gap-3">
+              <button onclick="switchAdminView('dashboard')" class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all cursor-pointer">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <div>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Stock Management (स्टॉक प्रबंधन)</h3>
+                <p class="text-xs text-cyan-100 font-medium mt-0.5">उत्पादों की उपलब्ध मात्रा, इन-स्टॉक व आउट-ऑफ-स्टॉक प्रबंधन</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-cyan-900 shadow-sm" id="stock-mgmt-badge">Live Inventory</span>
+          </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
+          <div class="w-16 h-16 rounded-3xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+            <i class="fa-solid fa-boxes-stacked"></i>
+          </div>
+          <h4 class="text-sm sm:text-base font-black text-slate-800">Inventory & Stock Controls</h4>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">सामग्रियों का स्टॉक अपडेट, कम स्टॉक चेतावनी (Low stock alert) और रीस्टॉक प्रविष्टि।</p>
+          <div class="mt-6 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">
+            लॉजिक एवं डेटा फ़ील्ड्स अगली आवश्यकतानुसार कनेक्ट करने हेतु तैयार है।
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- PAGE 4: ACTIVE USERS                           -->
+      <!-- ============================================== -->
+      <div id="view-order-active-users-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white p-4 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
+          <div class="flex items-center justify-between gap-3 relative z-10">
+            <div class="flex items-center gap-3">
+              <button onclick="switchAdminView('dashboard')" class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all cursor-pointer">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <div>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Active Users (सक्रिय उपयोगकर्ता)</h3>
+                <p class="text-xs text-purple-100 font-medium mt-0.5">ऑर्डर करने वाले एवं ऐप में सक्रिय सदस्य व खरीदार</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-purple-900 shadow-sm" id="active-users-badge">Active Buyers</span>
+          </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
+          <div class="w-16 h-16 rounded-3xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+            <i class="fa-solid fa-users-viewfinder"></i>
+          </div>
+          <h4 class="text-sm sm:text-base font-black text-slate-800">Active Users / Customers Panel</h4>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">सक्रिय ग्राहकों, उनके पिछले ऑर्डर्स और गतिविधि का रीयल-टाइम विवरण।</p>
+          <div class="mt-6 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">
+            लॉजिक एवं डेटा फ़ील्ड्स अगली आवश्यकतानुसार कनेक्ट करने हेतु तैयार है।
+          </div>
+        </div>
+      </div>
 
       <!-- ============================================== -->
       <!-- TAB 2: MEMBERS DIRECTORY PAGE                  -->
@@ -12949,6 +13151,10 @@
       const pariwarikSection = document.getElementById('view-pariwarik-section');
       const duesSection = document.getElementById('view-dues-section');
       const settingsSection = document.getElementById('view-settings-section');
+      const orderPendingSection = document.getElementById('view-order-pending-section');
+      const orderCompletedSection = document.getElementById('view-order-completed-section');
+      const orderStockSection = document.getElementById('view-order-stock-section');
+      const orderActiveUsersSection = document.getElementById('view-order-active-users-section');
       
       const navDash = document.getElementById('nav-btn-dashboard');
       const navMembers = document.getElementById('nav-btn-members');
@@ -13007,8 +13213,20 @@
       if (pariwarikSection) pariwarikSection.classList.add('hidden');
       if (duesSection) duesSection.classList.add('hidden');
       if (settingsSection) settingsSection.classList.add('hidden');
+      if (orderPendingSection) orderPendingSection.classList.add('hidden');
+      if (orderCompletedSection) orderCompletedSection.classList.add('hidden');
+      if (orderStockSection) orderStockSection.classList.add('hidden');
+      if (orderActiveUsersSection) orderActiveUsersSection.classList.add('hidden');
 
-      if (view === 'dues') {
+      if (view === 'order-pending') {
+        if (orderPendingSection) orderPendingSection.classList.remove('hidden');
+      } else if (view === 'order-completed') {
+        if (orderCompletedSection) orderCompletedSection.classList.remove('hidden');
+      } else if (view === 'order-stock') {
+        if (orderStockSection) orderStockSection.classList.remove('hidden');
+      } else if (view === 'order-active-users') {
+        if (orderActiveUsersSection) orderActiveUsersSection.classList.remove('hidden');
+      } else if (view === 'dues') {
         if (duesSection) duesSection.classList.remove('hidden');
         if (statusFilter && typeof filterDuesType === 'function') {
           filterDuesType(statusFilter.toUpperCase());
