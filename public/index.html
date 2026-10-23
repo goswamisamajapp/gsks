@@ -3026,28 +3026,132 @@
       </div><!-- End member-view-dashboard -->
 
       <!-- ============================================== -->
-      <!-- SUB-VIEW 2: ALL NOTIFICATIONS SEPARATE PAGE    -->
+      <!-- SUB-VIEW 2: EVENTS & MEETINGS (Only Events)     -->
+      <!-- ============================================== -->
+      <div id="member-view-events" class="hidden space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
+        <!-- Events Header Bar -->
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
+                कार्यक्रम एवं बैठकें (Events)
+              </h2>
+              <p class="text-[11px] text-slate-500 font-medium">
+                समिति की आगामी, चालू एवं संपन्न बैठकें
+              </p>
+            </div>
+          </div>
+          <!-- Switch to Notices button -->
+          <button 
+            type="button" 
+            onclick="switchMemberView('notifications')"
+            class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs active:scale-95"
+            title="पुश सूचनाएं देखें"
+          >
+            <i class="fa-solid fa-bell text-amber-600"></i>
+            <span class="hidden sm:inline">पुश सूचनाएं</span>
+            <span id="events-tab-notices-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-rose-600 text-white">0</span>
+          </button>
+        </div>
+
+        <!-- Filter Pill Tabs: ALL, UPCOMING, PAST/CLOSED -->
+        <div class="flex items-center justify-between gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center gap-1.5 overflow-x-auto py-0.5">
+            <button 
+              type="button" 
+              id="user-event-filter-upcoming" 
+              onclick="filterUserEventsDate('UPCOMING')" 
+              class="px-3 py-1.5 rounded-xl font-bold bg-indigo-600 text-white shadow-2xs text-xs transition-all cursor-pointer"
+            >
+              आगामी / चालू (Upcoming & Open)
+            </button>
+            <button 
+              type="button" 
+              id="user-event-filter-all" 
+              onclick="filterUserEventsDate('ALL')" 
+              class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 text-xs transition-all cursor-pointer"
+            >
+              सभी (All)
+            </button>
+            <button 
+              type="button" 
+              id="user-event-filter-past" 
+              onclick="filterUserEventsDate('PAST')" 
+              class="px-3 py-1.5 rounded-xl font-medium text-slate-600 hover:text-slate-900 text-xs transition-all cursor-pointer"
+            >
+              संपन्न (Closed / Past)
+            </button>
+          </div>
+          <span id="user-events-count" class="text-xs font-mono font-bold text-slate-500 px-2 py-1 rounded-lg bg-slate-100 flex-shrink-0">0 कार्यक्रम</span>
+        </div>
+
+        <!-- Events List Container -->
+        <div id="user-full-events-list" class="space-y-3.5">
+          <!-- Populated dynamically via renderMemberUpcomingEvents() -->
+        </div>
+      </div><!-- End member-view-events -->
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW 3: PUSH NOTIFICATIONS & NOTICES PAGE   -->
       <!-- ============================================== -->
       <div id="member-view-notifications" class="hidden space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
         
         <!-- Notifications Page Header Bar (Tight padding to save vertical height) -->
-        <div class="flex items-center gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
-            <i class="fa-solid fa-bullhorn"></i>
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
+                सूचनाएं एवं पुश अलर्ट (Notices)
+              </h2>
+              <p class="text-[11px] text-slate-500 font-medium">
+                समिति द्वारा प्रेषित आवश्यक सूचनाएं व बकाया अंशदान अलर्ट
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
-              Notifications
-            </h2>
-            <p class="text-[11px] text-slate-500 font-medium">
-              समिति की सभी सूचनाएं, आवश्यक बैठकें एवं अपडेट्स
-            </p>
-          </div>
+          <!-- Clear / Mark All Read Quick Button -->
+          <button 
+            type="button" 
+            onclick="markAllMemberNotificationsRead()"
+            class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-2xs flex-shrink-0"
+            title="सभी सूचनाएं पढ़ी हुई मार्क करें"
+          >
+            <i class="fa-solid fa-check-double text-emerald-600"></i>
+            <span class="hidden sm:inline">सब पढ़ा हुआ मार्क करें</span>
+          </button>
         </div>
 
-        <!-- Compact Search & Popup Filter Bar for Notifications -->
-        <div class="bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-2xs flex items-center gap-2">
-          <!-- Search Input -->
+        <!-- Segmented Tab: Unread (सक्रिय सूचनाएं) vs Archived (पढ़ी गई सूचनाएं) -->
+        <div class="bg-white p-1.5 rounded-2xl border border-slate-200 shadow-2xs flex items-center gap-1.5">
+          <button 
+            type="button" 
+            id="tab-btn-unread-notices"
+            onclick="switchNoticesSubTab('UNREAD')"
+            class="flex-1 py-2 px-3 rounded-xl font-bold text-xs bg-amber-500 text-white shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-bell"></i>
+            <span>नई / सक्रिय सूचनाएं</span>
+            <span id="notices-unread-tab-count" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-black bg-white text-amber-800">0</span>
+          </button>
+          <button 
+            type="button" 
+            id="tab-btn-archived-notices"
+            onclick="switchNoticesSubTab('ARCHIVED')"
+            class="flex-1 py-2 px-3 rounded-xl font-medium text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <i class="fa-solid fa-box-archive"></i>
+            <span>पढ़ी गई / आर्काइव</span>
+            <span id="notices-archived-tab-count" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-slate-200 text-slate-700">0</span>
+          </button>
+        </div>
+
+        <!-- Compact Search Bar for Notifications -->
+        <div class="bg-white p-2 rounded-2xl border border-slate-200 shadow-2xs flex items-center gap-2">
           <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
             <input 
@@ -3058,175 +3162,15 @@
               class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
             >
           </div>
-
-          <!-- Popup Filter Trigger Button -->
-          <button 
-            type="button" 
-            id="member-notice-filter-btn"
-            onclick="openNoticeFilterModal()" 
-            class="px-3 py-1.5 rounded-xl font-bold bg-slate-100 hover:bg-amber-50 hover:text-amber-700 text-slate-700 border border-slate-200 flex items-center gap-1.5 flex-shrink-0 cursor-pointer transition-all text-xs active:scale-95 shadow-2xs"
-            title="फ़िल्टर बदलें (Filter options)"
-          >
-            <i class="fa-solid fa-sliders text-amber-600 text-xs"></i>
-            <span id="member-notice-filter-current-label">सभी</span>
-            <span id="member-notice-filter-current-count" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-amber-500 text-white">0</span>
-          </button>
         </div>
 
-        <!-- NOTIFICATION FILTER POPUP MODAL (Centered Modal Dialog) -->
-        <div 
-          id="notice-filter-modal" 
-          class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
-        >
-          <!-- Backdrop click to close -->
-          <div class="fixed inset-0" onclick="closeNoticeFilterModal()"></div>
-
-          <!-- Modal Box -->
-          <div class="relative z-10 w-full max-w-sm sm:max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all my-auto">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-amber-50/70 via-orange-50/40 to-white">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs shadow-2xs">
-                  <i class="fa-solid fa-sliders"></i>
-                </div>
-                <div>
-                  <h3 class="text-sm font-extrabold text-slate-800 font-devanagari">
-                    सूचना फ़िल्टर (Filter Notices)
-                  </h3>
-                  <p class="text-[11px] text-slate-500">
-                    स्थिति अनुसार सूचनाएं देखें
-                  </p>
-                </div>
-              </div>
-              <button 
-                type="button" 
-                onclick="closeNoticeFilterModal()" 
-                class="w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs cursor-pointer transition-colors"
-              >
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            </div>
-
-            <!-- Filter Options List -->
-            <div class="p-4 space-y-2">
-              <!-- Option 1: ALL -->
-              <button 
-                type="button" 
-                onclick="applyMemberNoticeFilter('ALL')" 
-                id="filter-opt-all"
-                class="w-full flex items-center justify-between p-3 rounded-2xl border border-amber-300 bg-amber-50/60 text-slate-800 hover:bg-amber-100/70 transition-all text-left cursor-pointer group"
-              >
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
-                    <i class="fa-solid fa-layer-group"></i>
-                  </div>
-                  <div>
-                    <div class="font-extrabold text-xs text-slate-900 font-devanagari">सभी सूचनाएं (All Notices)</div>
-                    <div class="text-[11px] text-slate-500">चालू, आगामी और पूर्व की सभी सूचनाएं</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span id="modal-filter-count-all" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-200 text-amber-900">0</span>
-                  <i id="filter-check-all" class="fa-solid fa-circle-check text-amber-600 text-sm"></i>
-                </div>
-              </button>
-
-              <!-- Option 2: OPEN -->
-              <button 
-                type="button" 
-                onclick="applyMemberNoticeFilter('OPEN')" 
-                id="filter-opt-open"
-                class="w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-emerald-50/50 text-slate-800 transition-all text-left cursor-pointer group"
-              >
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
-                    <i class="fa-solid fa-bullhorn animate-pulse"></i>
-                  </div>
-                  <div>
-                    <div class="font-extrabold text-xs text-slate-900 font-devanagari flex items-center gap-1.5">
-                      <span>सक्रिय / चालू (Open Notices)</span>
-                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    </div>
-                    <div class="text-[11px] text-slate-500">वर्तमान में सक्रिय बैठक व सूचनाएं</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span id="modal-filter-count-open" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800">0</span>
-                  <i id="filter-check-open" class="fa-solid fa-circle-check text-emerald-600 text-sm hidden"></i>
-                </div>
-              </button>
-
-              <!-- Option 3: UPCOMING -->
-              <button 
-                type="button" 
-                onclick="applyMemberNoticeFilter('UPCOMING')" 
-                id="filter-opt-upcoming"
-                class="w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-blue-50/50 text-slate-800 transition-all text-left cursor-pointer group"
-              >
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
-                    <i class="fa-solid fa-calendar-days"></i>
-                  </div>
-                  <div>
-                    <div class="font-extrabold text-xs text-slate-900 font-devanagari flex items-center gap-1.5">
-                      <span>आगामी कार्यक्रम (Upcoming Events)</span>
-                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    </div>
-                    <div class="text-[11px] text-slate-500">भविष्य में आयोजित होने वाले कार्यक्रम</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span id="modal-filter-count-upcoming" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-100 text-blue-800">0</span>
-                  <i id="filter-check-upcoming" class="fa-solid fa-circle-check text-blue-600 text-sm hidden"></i>
-                </div>
-              </button>
-
-              <!-- Option 4: CLOSED -->
-              <button 
-                type="button" 
-                onclick="applyMemberNoticeFilter('CLOSED')" 
-                id="filter-opt-closed"
-                class="w-full flex items-center justify-between p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-800 transition-all text-left cursor-pointer group"
-              >
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-xl bg-slate-600 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-2xs">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                  </div>
-                  <div>
-                    <div class="font-extrabold text-xs text-slate-900 font-devanagari flex items-center gap-1.5">
-                      <span>पूर्व / संपन्न (Closed Archive)</span>
-                      <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                    </div>
-                    <div class="text-[11px] text-slate-500">पूर्व में संपन्न बैठकें और पुरानी सूचनाएं</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span id="modal-filter-count-closed" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-100 text-slate-700">0</span>
-                  <i id="filter-check-closed" class="fa-solid fa-circle-check text-slate-700 text-sm hidden"></i>
-                </div>
-              </button>
-            </div>
-
-            <!-- Footer Action -->
-            <div class="p-4 pt-2 border-t border-slate-100 bg-slate-50 flex items-center justify-end">
-              <button 
-                type="button" 
-                onclick="closeNoticeFilterModal()" 
-                class="w-full sm:w-auto px-5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-900 text-white shadow-xs cursor-pointer text-center"
-              >
-                पूर्ण (Done)
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 1. OPEN / ACTIVE NOTIFICATIONS (Top Highlighted Section) -->
+        <!-- 1. UNREAD / ACTIVE PUSH NOTICES -->
         <div id="open-notices-section" class="space-y-4">
           <div class="flex items-center gap-2 px-1">
-            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></div>
-            <h3 class="text-xs font-black uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-              <span>OPEN & ACTIVE NOTICES</span>
-              <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200" id="open-notices-badge">
+            <div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></div>
+            <h3 class="text-xs font-black uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+              <span>नई व सक्रिय सूचनाएं</span>
+              <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200" id="open-notices-badge">
                 0 Active
               </span>
             </h3>
@@ -3238,12 +3182,12 @@
           </div>
         </div>
 
-        <!-- 2. PAST / ARCHIVED NOTIFICATIONS (Previous Notices Section) -->
+        <!-- 2. ARCHIVED / READ NOTIFICATIONS -->
         <div id="past-notices-section" class="space-y-4 pt-4 border-t border-slate-200">
           <div class="flex items-center gap-2 px-1">
-            <i class="fa-solid fa-clock-rotate-left text-slate-400 text-xs"></i>
+            <i class="fa-solid fa-box-archive text-slate-400 text-xs"></i>
             <h3 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <span>PAST NOTICES ARCHIVE</span>
+              <span>पढ़ी गई सूचनाएं (Archived Notices)</span>
               <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" id="past-notices-badge">
                 0 Past
               </span>
@@ -3973,20 +3917,25 @@
       </div>
 
       <!-- Footer Buttons -->
-      <div class="flex items-center justify-between gap-3 pt-2">
+      <div class="flex items-center justify-between gap-3 pt-2" id="modal-notice-footer-actions">
         <button 
+          type="button"
           onclick="closeNoticeDetailModal(); switchMemberView('notifications');" 
           class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-center cursor-pointer"
         >
           <i class="fa-solid fa-list-ul mr-1 text-[11px]"></i>
           <span>सभी सूचनाएं देखें</span>
         </button>
-        <button 
-          onclick="closeNoticeDetailModal()" 
-          class="flex-1 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-orange-600 to-amber-600 text-white hover:from-orange-700 hover:to-amber-700 shadow-md shadow-orange-500/20 transition-all text-center cursor-pointer"
-        >
-          <span>ठीक है (Close)</span>
-        </button>
+        <div id="modal-notice-primary-btn-wrap" class="flex-1">
+          <button 
+            type="button"
+            id="modal-notice-primary-btn"
+            onclick="closeNoticeDetailModal()" 
+            class="w-full py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-orange-600 to-amber-600 text-white hover:from-orange-700 hover:to-amber-700 shadow-md shadow-orange-500/20 transition-all text-center cursor-pointer"
+          >
+            <span>ठीक है (Close)</span>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -9018,12 +8967,128 @@
     // MEMBER VIEW SWITCHING (Dashboard vs Notifications)
     // ==============================================
     let currentMemberSubView = 'dashboard';
-    let currentMemberNoticeFilter = 'ALL';
+    let currentMemberNoticeFilter = 'UNREAD'; // 'UNREAD' or 'ARCHIVED' or 'ALL'
     let currentMemberNoticeSearch = '';
+
+    // Track read notifications locally per member session
+    function getMemberReadNoticeIds() {
+      const memId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : 'guest';
+      try {
+        const raw = localStorage.getItem(`gsks_read_notices_${memId}`);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function markMemberNoticeAsRead(noticeId) {
+      if (!noticeId) return;
+      const memId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : 'guest';
+      try {
+        const list = getMemberReadNoticeIds();
+        if (!list.includes(String(noticeId))) {
+          list.push(String(noticeId));
+          localStorage.setItem(`gsks_read_notices_${memId}`, JSON.stringify(list));
+        }
+      } catch (e) {}
+
+      // Re-render dashboard notification banner and notices list
+      if (typeof renderMemberNotification === 'function') renderMemberNotification(currentLoggedInMember);
+      if (typeof renderMemberAllNotifications === 'function') renderMemberAllNotifications(currentLoggedInMember);
+      if (typeof updateMemberNotificationBellBadge === 'function') updateMemberNotificationBellBadge();
+    }
+
+    function markAllMemberNotificationsRead() {
+      const memId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : 'guest';
+      const readList = getMemberReadNoticeIds();
+      if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
+        allNotifications.forEach(n => {
+          if (n && n.id && !readList.includes(String(n.id))) {
+            readList.push(String(n.id));
+          }
+        });
+      }
+      try {
+        localStorage.setItem(`gsks_read_notices_${memId}`, JSON.stringify(readList));
+      } catch (e) {}
+
+      if (typeof renderMemberNotification === 'function') renderMemberNotification(currentLoggedInMember);
+      if (typeof renderMemberAllNotifications === 'function') renderMemberAllNotifications(currentLoggedInMember);
+      if (typeof updateMemberNotificationBellBadge === 'function') updateMemberNotificationBellBadge();
+      if (typeof showFloatingToast === 'function') {
+        showFloatingToast('🔔 सूचनाएं अद्यतन', 'सभी सूचनाएं पढ़ी हुई मार्क कर दी गई हैं।');
+      }
+    }
+
+    function updateMemberNotificationBellBadge() {
+      const headerBadge = document.getElementById('user-header-notice-badge');
+      const eventsNoticesBadge = document.getElementById('events-tab-notices-badge');
+      const readIds = getMemberReadNoticeIds();
+      const currentMemId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : '';
+
+      let unreadCount = 0;
+      if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
+        allNotifications.forEach(n => {
+          if (!n) return;
+          const target = (n.targetMemberId || '').trim().toLowerCase();
+          if (target === 'all' || target === currentMemId) {
+            const notifId = String(n.id);
+            if (!readIds.includes(notifId)) {
+              unreadCount++;
+            }
+          }
+        });
+      }
+
+      if (headerBadge) {
+        headerBadge.textContent = unreadCount;
+        if (unreadCount > 0) {
+          headerBadge.classList.remove('hidden');
+        } else {
+          headerBadge.classList.add('hidden');
+        }
+      }
+      if (eventsNoticesBadge) {
+        eventsNoticesBadge.textContent = unreadCount;
+        if (unreadCount > 0) {
+          eventsNoticesBadge.classList.remove('hidden');
+        } else {
+          eventsNoticesBadge.classList.add('hidden');
+        }
+      }
+    }
+
+    function switchNoticesSubTab(subTab) {
+      currentMemberNoticeFilter = subTab || 'UNREAD';
+      const btnUnread = document.getElementById('tab-btn-unread-notices');
+      const btnArchived = document.getElementById('tab-btn-archived-notices');
+
+      if (currentMemberNoticeFilter === 'ARCHIVED') {
+        if (btnArchived) {
+          btnArchived.className = 'flex-1 py-2 px-3 rounded-xl font-bold text-xs bg-slate-800 text-white shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer';
+        }
+        if (btnUnread) {
+          btnUnread.className = 'flex-1 py-2 px-3 rounded-xl font-medium text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center justify-center gap-2 cursor-pointer';
+        }
+      } else {
+        if (btnUnread) {
+          btnUnread.className = 'flex-1 py-2 px-3 rounded-xl font-bold text-xs bg-amber-500 text-white shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer';
+        }
+        if (btnArchived) {
+          btnArchived.className = 'flex-1 py-2 px-3 rounded-xl font-medium text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all flex items-center justify-center gap-2 cursor-pointer';
+        }
+      }
+      renderMemberAllNotifications(currentLoggedInMember);
+    }
+    window.markMemberNoticeAsRead = markMemberNoticeAsRead;
+    window.markAllMemberNotificationsRead = markAllMemberNotificationsRead;
+    window.updateMemberNotificationBellBadge = updateMemberNotificationBellBadge;
+    window.switchNoticesSubTab = switchNoticesSubTab;
 
     function switchMemberView(view) {
       currentMemberSubView = view;
       const viewDash = document.getElementById('member-view-dashboard');
+      const viewEvents = document.getElementById('member-view-events');
       const viewNotices = document.getElementById('member-view-notifications');
       const viewDonations = document.getElementById('member-view-donations');
       const viewPasy = document.getElementById('member-view-pasy');
@@ -9043,6 +9108,7 @@
 
       // Reset all views
       if (viewDash) viewDash.classList.add('hidden');
+      if (viewEvents) viewEvents.classList.add('hidden');
       if (viewNotices) viewNotices.classList.add('hidden');
       if (viewDonations) viewDonations.classList.add('hidden');
       if (viewPasy) viewPasy.classList.add('hidden');
@@ -9091,8 +9157,8 @@
           dNavProfile.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-purple-100 text-purple-900 border border-purple-300 shadow-2xs';
         }
         renderMemberProfile(currentLoggedInMember);
-      } else if (view === 'events' || view === 'notifications') {
-        if (viewNotices) viewNotices.classList.remove('hidden');
+      } else if (view === 'events') {
+        if (viewEvents) viewEvents.classList.remove('hidden');
         if (bNavEvents) {
           bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-indigo-800 bg-indigo-100/80 font-bold active:scale-95 cursor-pointer';
           const iconDiv = bNavEvents.querySelector('div');
@@ -9101,7 +9167,20 @@
         if (dNavEvents) {
           dNavEvents.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-indigo-100 text-indigo-900 border border-indigo-300 shadow-2xs';
         }
+        renderMemberUpcomingEvents();
+        updateMemberNotificationBellBadge();
+      } else if (view === 'notifications') {
+        if (viewNotices) viewNotices.classList.remove('hidden');
+        if (bNavEvents) {
+          bNavEvents.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-amber-800 bg-amber-100/80 font-bold active:scale-95 cursor-pointer';
+          const iconDiv = bNavEvents.querySelector('div');
+          if (iconDiv) iconDiv.className = 'w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-xs shadow-md shadow-orange-500/30';
+        }
+        if (dNavEvents) {
+          dNavEvents.className = 'px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs';
+        }
         renderMemberAllNotifications(currentLoggedInMember);
+        updateMemberNotificationBellBadge();
       } else if (view === 'donations') {
         if (viewDonations) viewDonations.classList.remove('hidden');
         renderMemberDonationsPage(currentLoggedInMember);
@@ -9219,415 +9298,206 @@
       const filterAllCount = document.getElementById('notice-filter-count-all');
       const openBadge = document.getElementById('open-notices-badge');
       const pastBadge = document.getElementById('past-notices-badge');
+      const unreadTabCount = document.getElementById('notices-unread-tab-count');
+      const archivedTabCount = document.getElementById('notices-archived-tab-count');
 
-      // Generate comprehensive notifications list from Events and Trust Announcements
+      // Generate PUSH NOTIFICATIONS ONLY (Events belong strictly to Events tab)
       const rawNotices = [];
       if (!window.memberNoticesMap) window.memberNoticesMap = new Map();
       window.memberNoticesMap.clear();
 
+      const readIds = getMemberReadNoticeIds();
+
       // 1. Dues Notice if member has dues
       if (member && Number(member.dues) > 0) {
+        const isDuesRead = readIds.includes('NOTICE-DUES');
         rawNotices.push({
           id: 'NOTICE-DUES',
           title: '⚠️ सदस्यता अंशदान एवं सहयोग बकाया सूचना',
           category: 'सहयोग कोष सूचना',
           date: new Date().toISOString().split('T')[0],
-          isOpen: true,
-          status: 'Open',
+          isRead: isDuesRead,
+          isSystem: true,
+          status: isDuesRead ? 'Archived' : 'Unread',
           badgeColor: 'bg-rose-100 text-rose-800 border-rose-300',
-          badgeText: 'महत्वपूर्ण बकाया (Dues Notice)',
+          badgeText: isDuesRead ? 'बकाया (पढ़ा गया)' : 'महत्वपूर्ण बकाया',
           summary: `सादर प्रणाम ${member.name} जी! आपके खाते में कुल ₹${Number(member.dues).toLocaleString('en-IN')} का सहयोग अंशदान बकाया है।`,
           details: `समिति के सामाजिक, धार्मिक एवं कल्याणकारी कार्यों को सुचारु रूप से चलाने हेतु आपसे विनम्र निवेदन है कि अपनी बकाया राशि आगामी बैठक में अथवा ट्रस्ट के अधिकृत SBI बैंक खाते/कोषाध्यक्ष के पास जमा कराएं।`,
           venue: 'कोषाध्यक्ष कार्यालय, गुनघसा',
-          time: 'तत्काल देय',
-          isSystem: true
+          time: 'तत्काल देय'
         });
       }
 
-      // 2. Events & Meetings as Notifications
-      if (typeof allEvents !== 'undefined' && Array.isArray(allEvents)) {
-        allEvents.forEach(e => {
-          const dt = e.datetime ? new Date(e.datetime) : (e.date ? new Date(e.date) : null);
-          const dtFormatted = dt && !isNaN(dt) 
-            ? dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
-            : (e.date || '--');
-          const timeFormatted = dt && !isNaN(dt)
-            ? dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' })
-            : '05:00 PM';
-
-          let badgeColor = 'bg-blue-100 text-blue-800 border-blue-200';
-          if (e.category === 'Emergency meeting') badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
-          else if (e.category === 'Special Event') badgeColor = 'bg-purple-100 text-purple-800 border-purple-200';
-
-          const effStatus = typeof getEffectiveEventStatus === 'function' ? getEffectiveEventStatus(e) : (e.status || 'Upcoming');
-          const isOpen = effStatus === 'Open';
-          const isUpcoming = effStatus === 'Upcoming';
-          const isClosed = effStatus === 'Closed' || effStatus === 'Cancelled';
-
-          // Color coded status badges matching app-wide rule:
-          // Open = Emerald/Green, Upcoming = Blue, Closed/Cancelled = Rose/Red
-          let statusBadgeClass = 'bg-blue-100 text-blue-800 border-blue-300';
-          let statusDotColor = 'bg-blue-500';
-          let statusLabel = 'आगामी (UPCOMING)';
-
-          if (isOpen) {
-            statusBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-300';
-            statusDotColor = 'bg-emerald-600 animate-pulse';
-            statusLabel = 'चालू / सक्रिय (OPEN)';
-          } else if (effStatus === 'Cancelled') {
-            statusBadgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
-            statusDotColor = 'bg-rose-600';
-            statusLabel = 'रद्द (CANCELLED)';
-          } else if (effStatus === 'Closed') {
-            statusBadgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
-            statusDotColor = 'bg-rose-600';
-            statusLabel = 'संपन्न (CLOSED)';
-          }
-
-          rawNotices.push({
-            id: e.id || 'EV-' + Math.random().toString().slice(2, 6),
-            title: e.title || 'समिति बैठक सूचना',
-            category: e.category || 'सामान्य बैठक',
-            date: e.date || (dt ? dt.toISOString().split('T')[0] : '2026-10-13'),
-            dateFormatted: dtFormatted,
-            timeFormatted,
-            status: effStatus,
-            statusLabel,
-            statusBadgeClass,
-            statusDotColor,
-            isOpen: isOpen,
-            isUpcoming: isUpcoming,
-            isClosed: isClosed,
-            badgeColor,
-            badgeText: isOpen ? '🟢 चालू' : (isUpcoming ? '🔵 आगामी' : '🔴 संपन्न'),
-            summary: e.description || 'समिति की सामान्य सभा एवं विचार-विमर्श',
-            details: e.description || 'सभी सदस्यों की समय पर गरिमामयी उपस्थिति सादर प्रार्थनीय है।',
-            venue: e.venue || 'शिव मंदिर, गुनघसा',
-            rawItem: e
-          });
-        });
-      }
-
-      // 3. Live Broadcast & Targeted Push Notifications (from Firestore notifications collection)
+      // 2. Push Notifications from Firestore notifications collection
       const currentMemId = member ? (member.id || '').trim().toLowerCase() : '';
       if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
         allNotifications.forEach(notif => {
           if (!notif) return;
           const target = (notif.targetMemberId || '').trim().toLowerCase();
-          // Show if targeted to current member or broadcast to all
           if (target === 'all' || target === currentMemId) {
+            const notifId = String(notif.id || '');
+            const isRead = readIds.includes(notifId);
             const dt = notif.createdAt ? new Date(notif.createdAt) : new Date();
             const dtFormatted = dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
             const timeFormatted = dt.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
 
             rawNotices.push({
-              id: notif.id || ('NOTIF-' + Math.random().toString().slice(2, 6)),
+              id: notifId,
               title: notif.title || '🔔 समिति आवश्यक सूचना',
-              category: notif.type === 'PASY_INSTALLMENT' ? 'पारिवारिक अंशदान' : (notif.category || 'पुश नोटिफिकेशन'),
+              category: notif.type === 'PASY_INSTALLMENT' ? 'पारिवारिक अंशदान' : (notif.category || 'पुश सूचना'),
               date: notif.createdAt ? notif.createdAt.split('T')[0] : new Date().toISOString().split('T')[0],
               dateFormatted: dtFormatted,
               timeFormatted: timeFormatted,
-              status: 'Open',
-              statusLabel: '🔔 लाइव पुश (ACTIVE)',
-              statusBadgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
-              statusDotColor: 'bg-amber-600 animate-pulse',
-              isOpen: true,
-              isUpcoming: false,
-              isClosed: false,
-              badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
-              badgeText: '🔔 पुश सूचना',
+              isRead: isRead,
+              status: isRead ? 'Archived' : 'Unread',
+              badgeColor: isRead ? 'bg-slate-100 text-slate-700 border-slate-300' : 'bg-amber-100 text-amber-900 border-amber-300',
+              badgeText: isRead ? 'पढ़ा गया (Archived)' : '🔔 नई सूचना',
               summary: notif.body || 'समिति द्वारा प्रेषित विशेष सूचना',
               details: notif.details || notif.body || '',
-              venue: notif.venue || 'गोस्वामी समाज कल्याण समिति, गुनघसा',
+              venue: notif.venue || 'समिति कार्यालय, गुनघसा',
               rawItem: notif
             });
           }
         });
       }
 
-      // Populate lookup map for instant modal opening
+      // Populate lookup map
       rawNotices.forEach(n => {
         if (n && n.id) window.memberNoticesMap.set(String(n.id), n);
       });
 
-      // Filter and Search according to filter rule:
-      // ALL = show all
-      // OPEN = show open/in-progress
-      // UPCOMING = show upcoming meetings
-      // CLOSED = show closed / past meetings
-      let filteredNotices = rawNotices.filter(n => {
-        if (currentMemberNoticeFilter === 'OPEN' && !n.isOpen) return false;
-        if (currentMemberNoticeFilter === 'UPCOMING' && !n.isUpcoming) return false;
-        if (currentMemberNoticeFilter === 'CLOSED' && !n.isClosed) return false;
+      const unreadNoticesList = rawNotices.filter(n => !n.isRead);
+      const archivedNoticesList = rawNotices.filter(n => n.isRead);
 
-        if (currentMemberNoticeSearch) {
-          const q = currentMemberNoticeSearch;
+      if (unreadTabCount) unreadTabCount.textContent = unreadNoticesList.length;
+      if (archivedTabCount) archivedTabCount.textContent = archivedNoticesList.length;
+      if (totalBadge) totalBadge.textContent = rawNotices.length;
+      if (filterAllCount) filterAllCount.textContent = rawNotices.length;
+      if (openBadge) openBadge.textContent = `${unreadNoticesList.length} Active`;
+      if (pastBadge) pastBadge.textContent = `${archivedNoticesList.length} Past`;
+
+      // Apply search filter if any
+      const filterBySearch = (list) => {
+        if (!currentMemberNoticeSearch) return list;
+        const q = currentMemberNoticeSearch;
+        return list.filter(n => {
           const matchTitle = (n.title || '').toLowerCase().includes(q);
           const matchSumm = (n.summary || '').toLowerCase().includes(q);
           const matchDet = (n.details || '').toLowerCase().includes(q);
           const matchVen = (n.venue || '').toLowerCase().includes(q);
           return matchTitle || matchSumm || matchDet || matchVen;
-        }
-        return true;
-      });
+        });
+      };
 
-      // Sort notices according to priority & date:
-      // Priority 1: OPEN (चालू - सबसे ऊपर)
-      // Priority 2: UPCOMING (आगामी - जो तारीख पहले आने वाली है, soonest first)
-      // Priority 3: CLOSED (संपन्न - हाल ही में संपन्न पहले, new to old)
-      filteredNotices.sort((a, b) => {
-        const getPriority = (item) => {
-          if (item.isOpen) return 1;
-          if (item.isUpcoming) return 2;
-          return 3;
-        };
+      const displayUnread = filterBySearch(unreadNoticesList);
+      const displayArchived = filterBySearch(archivedNoticesList);
 
-        const pa = getPriority(a);
-        const pb = getPriority(b);
-        if (pa !== pb) return pa - pb;
-
-        const da = new Date(a.date || 0);
-        const db = new Date(b.date || 0);
-        if (pa === 3) {
-          return db - da; // Closed: latest closed first
-        }
-        return da - db; // Open/Upcoming: soonest first
-      });
-
-      // Separate into Active/Upcoming (Top Highlights) and Closed/Past
-      const openNotices = filteredNotices.filter(n => n.isOpen || n.isUpcoming);
-      const pastNotices = filteredNotices.filter(n => n.isClosed);
-
-      if (totalBadge) totalBadge.textContent = rawNotices.length;
-      if (filterAllCount) filterAllCount.textContent = rawNotices.length;
-      if (headerBadge) headerBadge.textContent = rawNotices.filter(n => n.isOpen || n.isUpcoming).length;
-      if (openBadge) openBadge.textContent = `${openNotices.length} Active`;
-      if (pastBadge) pastBadge.textContent = `${pastNotices.length} Past`;
-
-      // Update popup filter modal counts
-      const modalCountAll = document.getElementById('modal-filter-count-all');
-      const modalCountOpen = document.getElementById('modal-filter-count-open');
-      const modalCountUpcoming = document.getElementById('modal-filter-count-upcoming');
-      const modalCountClosed = document.getElementById('modal-filter-count-closed');
-      const currentFilterCount = document.getElementById('member-notice-filter-current-count');
-
-      const countAll = rawNotices.length;
-      const countOpen = rawNotices.filter(n => n.isOpen).length;
-      const countUpcoming = rawNotices.filter(n => n.isUpcoming).length;
-      const countClosed = rawNotices.filter(n => n.isClosed).length;
-
-      if (modalCountAll) modalCountAll.textContent = countAll;
-      if (modalCountOpen) modalCountOpen.textContent = countOpen;
-      if (modalCountUpcoming) modalCountUpcoming.textContent = countUpcoming;
-      if (modalCountClosed) modalCountClosed.textContent = countClosed;
-
-      if (currentFilterCount) {
-        if (currentMemberNoticeFilter === 'OPEN') currentFilterCount.textContent = countOpen;
-        else if (currentMemberNoticeFilter === 'UPCOMING') currentFilterCount.textContent = countUpcoming;
-        else if (currentMemberNoticeFilter === 'CLOSED') currentFilterCount.textContent = countClosed;
-        else currentFilterCount.textContent = countAll;
+      // Section visibility based on current sub-tab
+      if (currentMemberNoticeFilter === 'ARCHIVED') {
+        if (openSection) openSection.classList.add('hidden');
+        if (pastSection) pastSection.classList.remove('hidden');
+      } else {
+        if (openSection) openSection.classList.remove('hidden');
+        if (pastSection) pastSection.classList.add('hidden');
       }
 
-      // Render Open/Upcoming Notices (Top Highlighted Cards - Structured Layout)
+      // Render Unread Notices
       if (openContainer) {
-        if (openNotices.length === 0) {
-          if (currentMemberNoticeFilter === 'CLOSED') {
-            if (openSection) openSection.classList.add('hidden');
-          } else {
-            if (openSection) openSection.classList.remove('hidden');
-            openContainer.innerHTML = `
-              <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
-                <i class="fa-solid fa-circle-check text-2xl text-emerald-500 mb-1.5"></i>
-                <p class="font-bold text-slate-700">वर्तमान में कोई खुली या आगामी सूचना नहीं है</p>
-                <p class="text-[11px] text-slate-400 mt-0.5">सभी आगामी कार्यक्रम समय पर यहाँ प्रदर्शित किए जाएंगे।</p>
-              </div>
-            `;
-          }
+        if (displayUnread.length === 0) {
+          openContainer.innerHTML = `
+            <div class="p-8 text-center bg-emerald-50/60 rounded-2xl border border-emerald-200 text-emerald-800 text-xs">
+              <i class="fa-solid fa-circle-check text-3xl text-emerald-600 mb-2"></i>
+              <p class="font-extrabold text-sm text-emerald-950">कोई नई सूचना बकाया नहीं है!</p>
+              <p class="text-[11px] text-emerald-700 mt-1">आपकी सभी सूचनाएं पढ़ी जा चुकी हैं। पूर्व सूचनाएं "पढ़ी गई / आर्काइव" में देखें।</p>
+            </div>
+          `;
         } else {
-          if (openSection) openSection.classList.remove('hidden');
-          openContainer.innerHTML = openNotices.map((n, idx) => {
-            const isActuallyOpen = n.isOpen;
-            const borderColor = isActuallyOpen ? 'border-emerald-300' : 'border-blue-200';
-            const iconBg = isActuallyOpen ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white';
-
-            return `
-            <div class="bg-white rounded-2xl p-4 border ${borderColor} shadow-xs space-y-3 transition-all">
-              <!-- 1. MEETING TITLE (Sabse Upar) -->
+          openContainer.innerHTML = displayUnread.map(n => `
+            <div class="bg-white rounded-2xl p-4 border border-amber-300 shadow-xs space-y-3 transition-all hover:border-amber-400">
+              <!-- Title -->
               <div class="flex items-start gap-2.5">
-                <div class="w-8 h-8 rounded-xl ${iconBg} flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
-                  <i class="fa-solid fa-bullhorn"></i>
+                <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
+                  <i class="fa-solid fa-bullhorn animate-pulse"></i>
                 </div>
-                <h3 class="text-base font-black text-slate-900 font-devanagari leading-snug">
-                  ${n.title}
-                </h3>
+                <div class="min-w-0 flex-1">
+                  <h3 class="text-base font-black text-slate-900 font-devanagari leading-snug">
+                    ${n.title}
+                  </h3>
+                  <div class="flex items-center gap-2 mt-1 flex-wrap">
+                    <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold border ${n.badgeColor}">
+                      ${n.category}
+                    </span>
+                    <span class="text-[11px] font-mono text-slate-500 flex items-center gap-1">
+                      <i class="fa-regular fa-calendar text-slate-400 text-[10px]"></i>
+                      ${n.dateFormatted || n.date}
+                    </span>
+                    <span class="text-[11px] font-mono text-slate-500 flex items-center gap-1">
+                      <i class="fa-regular fa-clock text-slate-400 text-[10px]"></i>
+                      ${n.timeFormatted || n.time || ''}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <!-- 2. MEETING TYPES & BADGES (Niche Meeting Types: Agami, General Meeting, etc.) -->
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full ${n.statusDotColor || 'bg-emerald-600'}"></span>
-                  <span>${n.statusLabel}</span>
-                </span>
-                <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold border ${n.badgeColor}">
-                  ${n.category}
-                </span>
+              <!-- Detail / Body -->
+              <div class="text-xs text-slate-700 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 shadow-2xs font-medium">
+                ${n.summary || n.details || ''}
               </div>
 
-              <!-- 3. DATE & TIME (Fir Date Time) -->
-              <div class="flex items-center gap-3 text-xs text-slate-700 font-medium">
-                <span class="flex items-center gap-1.5">
-                  <i class="fa-regular fa-calendar text-blue-600"></i>
-                  <span>${n.dateFormatted || n.date}</span>
-                </span>
-                <span class="text-slate-300">•</span>
-                <span class="flex items-center gap-1.5">
-                  <i class="fa-regular fa-clock text-amber-600"></i>
-                  <span>${n.timeFormatted || n.time || '05:00 PM'}</span>
-                </span>
-              </div>
-
-              <!-- 4. VENUE (Fir Venue) -->
-              <div class="flex items-start gap-1.5 text-xs text-slate-700 font-medium">
-                <i class="fa-solid fa-location-dot text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
-                <span>स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
-              </div>
-
-              <!-- 5. DETAIL (Tab Detail) -->
-              <div class="text-xs text-slate-700 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 shadow-2xs">
-                <p class="line-clamp-2">
-                  ${n.summary || n.details || ''}
-                </p>
-              </div>
-
-              <!-- 6. ACTION BUTTONS (Width badha diya & Center me rakha) -->
-              <div class="pt-2.5 border-t border-slate-100 flex items-center justify-center gap-3">
-                <!-- Vivran Button with Solid Background Color -->
+              <!-- Action Buttons: Mark as Read & View Details -->
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2.5">
                 <button 
                   type="button" 
                   onclick="openNoticeDetailModal('${n.id}')"
-                  class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-xs"
-                  title="पूरी सूचना का विवरण देखें"
+                  class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs"
                 >
-                  <i class="fa-solid fa-eye text-blue-600 text-xs"></i>
-                  <span>विवरण देखें</span>
+                  <i class="fa-solid fa-eye text-slate-600 text-xs"></i>
+                  <span>पूरा विवरण</span>
                 </button>
-
-                <!-- Upasthiti Button with Full/Equal Width -->
-                ${(n.rawItem && n.rawItem.id) ? `
-                  ${(isMemberAlreadyParticipated(n.rawItem, member ? member.id : null)) ? `
-                    <span class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-center gap-2 shadow-xs">
-                      <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
-                      <span>उपस्थिति दर्ज</span>
-                    </span>
-                  ` : `
-                    <button 
-                      type="button" 
-                      onclick="handleEventParticipation('${n.rawItem.id}')" 
-                      class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
-                      title="लाइव 20 मीटर जीपीएस लोकेशन से बैठक में उपस्थिति दर्ज करें"
-                    >
-                      <i class="fa-solid fa-hand-holding-hand text-xs"></i>
-                      <span>उपस्थिति दें</span>
-                    </button>
-                  `}
-                ` : ''}
+                <button 
+                  type="button" 
+                  onclick="markMemberNoticeAsRead('${n.id}')"
+                  class="px-4 py-2 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                >
+                  <i class="fa-solid fa-check text-xs"></i>
+                  <span>Mark as Read (पढ़ा गया)</span>
+                </button>
               </div>
             </div>
-            `;
-          }).join('');
+          `).join('');
         }
       }
 
-      // Render Past Notices (Archive Cards - Structured Layout)
+      // Render Archived Notices
       if (pastContainer) {
-        if (pastNotices.length === 0) {
-          if (currentMemberNoticeFilter === 'OPEN' || currentMemberNoticeFilter === 'UPCOMING') {
-            if (pastSection) pastSection.classList.add('hidden');
-          } else {
-            if (pastSection) pastSection.classList.remove('hidden');
-            pastContainer.innerHTML = `
-              <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
-                <p class="font-semibold text-slate-600">कोई पूर्व/संपन्न सूचना उपलब्ध नहीं है</p>
-              </div>
-            `;
-          }
+        if (displayArchived.length === 0) {
+          pastContainer.innerHTML = `
+            <div class="p-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
+              <p class="font-semibold text-slate-600">कोई पढ़ी गई / आर्काइव सूचना उपलब्ध नहीं है</p>
+            </div>
+          `;
         } else {
-          if (pastSection) pastSection.classList.remove('hidden');
-          pastContainer.innerHTML = pastNotices.map(n => `
-            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-3 hover:border-slate-300 transition-all">
-              <!-- 1. Meeting Title -->
-              <div class="flex items-start gap-2.5">
-                <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
-                  <i class="fa-solid fa-file-lines text-xs"></i>
-                </span>
-                <h4 class="text-base font-extrabold text-slate-800 font-devanagari leading-snug">
-                  ${n.title}
-                </h4>
+          pastContainer.innerHTML = displayArchived.map(n => `
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-2xs space-y-2 opacity-85 hover:opacity-100 transition-all">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-[10px]">
+                    <i class="fa-solid fa-check-double text-slate-500"></i>
+                  </span>
+                  <h4 class="text-xs font-extrabold text-slate-800 truncate">${n.title}</h4>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400">${n.dateFormatted || n.date}</span>
               </div>
-
-              <!-- 2. Badges & Category -->
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold uppercase border ${n.statusBadgeClass} flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full ${n.statusDotColor || 'bg-slate-500'}"></span>
-                  <span>${n.statusLabel}</span>
-                </span>
-                <span class="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
-                  ${n.category}
-                </span>
-              </div>
-
-              <!-- 3. Date & Time -->
-              <div class="flex items-center gap-3 text-xs text-slate-700 font-medium">
-                <span class="flex items-center gap-1.5">
-                  <i class="fa-regular fa-calendar text-slate-500"></i>
-                  <span>${n.dateFormatted || n.date}</span>
-                </span>
-                <span class="text-slate-300">•</span>
-                <span class="flex items-center gap-1.5">
-                  <i class="fa-regular fa-clock text-slate-500"></i>
-                  <span>${n.timeFormatted || n.time || '--'}</span>
-                </span>
-              </div>
-
-              <!-- 4. Venue -->
-              <div class="flex items-start gap-1.5 text-xs text-slate-700 font-medium">
-                <i class="fa-solid fa-location-dot text-rose-500 text-xs mt-0.5 flex-shrink-0"></i>
-                <span>स्थान: <strong class="text-slate-900 font-bold">${n.venue}</strong></span>
-              </div>
-
-              <!-- 5. Detail -->
-              <div class="text-xs text-slate-700 leading-relaxed bg-slate-100/80 p-3 rounded-xl border border-slate-200/60">
-                <p class="line-clamp-2">${n.summary || ''}</p>
-              </div>
-
-              <!-- 6. Action Buttons (Centered and Expanded) -->
-              <div class="pt-2.5 border-t border-slate-100 flex items-center justify-center gap-3">
+              <p class="text-xs text-slate-600 line-clamp-2 pl-8">${n.summary || ''}</p>
+              <div class="pl-8 pt-1 flex items-center justify-end">
                 <button 
                   type="button" 
                   onclick="openNoticeDetailModal('${n.id}')"
-                  class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-xs"
-                  title="पूरी सूचना का विवरण देखें"
+                  class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 cursor-pointer"
                 >
-                  <i class="fa-solid fa-eye text-blue-600 text-xs"></i>
                   <span>विवरण देखें</span>
+                  <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
-
-                ${(n.rawItem && n.rawItem.id) ? `
-                  <button 
-                    type="button" 
-                    onclick="openMemberEventParticipantsModal('${n.rawItem.id}')" 
-                    class="flex-1 max-w-[180px] py-2.5 px-4 rounded-xl text-xs font-extrabold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
-                    title="इस बैठक में उपस्थित रहे सदस्यों की सूची देखें"
-                  >
-                    <i class="fa-solid fa-users text-xs"></i>
-                    <span>प्रतिभागी</span>
-                    ${(n.rawItem.participants && n.rawItem.participants.length > 0) ? `
-                      <span class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-white text-indigo-800 border border-indigo-200 ml-0.5">
-                        ${n.rawItem.participants.length}
-                      </span>
-                    ` : ''}
-                  </button>
-                ` : ''}
               </div>
             </div>
           `).join('');
@@ -9688,13 +9558,19 @@
       }
 
       // ==============================================================
-      // PRIORITY 2: LIVE FIRESTORE PUSH NOTIFICATION (व्यक्तिगत / ब्रॉडकास्ट पुश अलर्ट)
+      // PRIORITY 2: LIVE FIRESTORE PUSH NOTIFICATION (व्यक्तिगत / ब्रॉडकास्ट पुश अलर्ट - सिर्फ Unread)
       // ==============================================================
       const memberId = member ? (member.id || '').trim().toLowerCase() : '';
+      const readIds = getMemberReadNoticeIds();
+
       const livePushNotice = (allNotifications || []).find(n => {
         if (!n) return false;
         const target = (n.targetMemberId || '').trim().toLowerCase();
-        return target === memberId || target === 'all';
+        const matchesTarget = (target === memberId || target === 'all');
+        if (!matchesTarget) return false;
+        // Check if already read / cleared by member
+        const notifId = String(n.id || '');
+        return !readIds.includes(notifId);
       });
 
       if (livePushNotice) {
@@ -9723,6 +9599,8 @@
         }
 
         currentActiveMemberNotice = {
+          type: 'push',
+          id: livePushNotice.id,
           badge: livePushNotice.type === 'PASY_INSTALLMENT' ? '🔔 पारिवारिक योजना सूचना' : '🔔 लाइव पुश सूचना',
           title: livePushNotice.title || 'समिति सूचना',
           date: dateStr,
@@ -9772,6 +9650,9 @@
         }
 
         currentActiveMemberNotice = {
+          type: 'event',
+          id: personalNotice.id,
+          eventId: personalNotice.id,
           badge: '🎯 व्यक्तिगत सूचना (Personal Alert)',
           title: personalNotice.title || 'आपके लिए विशेष सूचना',
           date: dateStr,
@@ -9834,6 +9715,9 @@
         }
 
         currentActiveMemberNotice = {
+          type: 'event',
+          id: latestEvent.id,
+          eventId: latestEvent.id,
           badge: latestEvent.category || 'आगामी बैठक',
           title: latestEvent.title || 'समिति की आगामी बैठक',
           date: dateStr,
@@ -9863,6 +9747,7 @@
         }
 
         currentActiveMemberNotice = {
+          type: 'general',
           badge: '✨ समिति संदेश',
           title: 'समिति कल्याण एवं आभार संदेश',
           date: new Date().toLocaleDateString('hi-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -9882,11 +9767,14 @@
       const timeEl = document.getElementById('modal-notice-time');
       const venueEl = document.getElementById('modal-notice-venue');
       const contentEl = document.getElementById('modal-notice-content');
+      const primaryBtnWrap = document.getElementById('modal-notice-primary-btn-wrap');
 
       let data = null;
       if (typeof noticeDataOrId === 'string' && window.memberNoticesMap && window.memberNoticesMap.has(noticeDataOrId)) {
         const item = window.memberNoticesMap.get(noticeDataOrId);
         data = {
+          id: item.id,
+          type: item.type || 'push',
           badge: item.category || item.badgeText || 'समिति सूचना',
           title: item.title || 'सूचना विवरण',
           date: item.dateFormatted || item.date || 'अद्यतन',
@@ -9898,6 +9786,7 @@
         data = noticeDataOrId;
       } else {
         data = currentActiveMemberNotice || {
+          type: 'general',
           badge: 'समिति सूचना',
           title: 'नवीनतम सूचना विवरण',
           date: 'अद्यतन',
@@ -9913,6 +9802,45 @@
       if (timeEl) timeEl.textContent = data.time;
       if (venueEl) venueEl.textContent = data.venue;
       if (contentEl) contentEl.textContent = data.description;
+
+      // Smart Button configuration based on User request:
+      // If Push Notice: "Mark as Read & Clear" button
+      // If Event Notice: "Participate / उपस्थित हों" button
+      if (primaryBtnWrap) {
+        if (data.type === 'push' || (data.id && String(data.id).startsWith('NOTIF-')) || data.id === 'NOTICE-DUES') {
+          primaryBtnWrap.innerHTML = `
+            <button 
+              type="button"
+              onclick="markMemberNoticeAsRead('${data.id}'); closeNoticeDetailModal();" 
+              class="w-full py-2.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white shadow-md shadow-emerald-500/20 transition-all text-center cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <i class="fa-solid fa-check text-xs"></i>
+              <span>Mark as Read & Clear</span>
+            </button>
+          `;
+        } else if (data.type === 'event' && data.eventId) {
+          primaryBtnWrap.innerHTML = `
+            <button 
+              type="button"
+              onclick="closeNoticeDetailModal(); openMemberEventDetailModal('${data.eventId}');" 
+              class="w-full py-2.5 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white shadow-md shadow-indigo-500/20 transition-all text-center cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <i class="fa-solid fa-hand-holding-hand text-xs"></i>
+              <span>बैठक में उपस्थिति दें (Participate)</span>
+            </button>
+          `;
+        } else {
+          primaryBtnWrap.innerHTML = `
+            <button 
+              type="button"
+              onclick="closeNoticeDetailModal()" 
+              class="w-full py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-orange-600 to-amber-600 text-white hover:from-orange-700 hover:to-amber-700 shadow-md shadow-orange-500/20 transition-all text-center cursor-pointer"
+            >
+              <span>ठीक है (Close)</span>
+            </button>
+          `;
+        }
+      }
 
       modal.classList.remove('hidden');
     }
@@ -9949,7 +9877,8 @@
     function renderMemberUpcomingEvents() {
       const listEl = document.getElementById('user-events-list');
       const countEl = document.getElementById('user-events-count');
-      if (!listEl) return;
+      const fullListEl = document.getElementById('user-full-events-list');
+      const fullCountEl = document.getElementById('user-full-events-count');
 
       const now = new Date();
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -10001,22 +9930,27 @@
       });
 
       if (countEl) countEl.textContent = `${events.length} कार्यक्रम`;
+      if (fullCountEl) fullCountEl.textContent = `${events.length} कार्यक्रम`;
+
+      const emptyMsg = currentUserEventDateFilter === 'PAST' 
+        ? 'कोई पूर्व संपन्न बैठक उपलब्ध नहीं है' 
+        : 'फिलहाल कोई आगामी बैठक या कार्यक्रम निर्धारित नहीं है';
+
+      const emptyHtml = `
+        <div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
+          <i class="fa-solid fa-calendar-xmark text-3xl mb-2 text-slate-300"></i>
+          <p class="text-xs font-bold text-slate-600">${emptyMsg}</p>
+          <p class="text-[11px] text-slate-400 mt-1">नई बैठक तय होने पर यहाँ तुरंत दिखाई देगी</p>
+        </div>
+      `;
 
       if (events.length === 0) {
-        const emptyMsg = currentUserEventDateFilter === 'PAST' 
-          ? 'कोई पूर्व संपन्न बैठक उपलब्ध नहीं है' 
-          : 'फिलहाल कोई आगामी बैठक या कार्यक्रम निर्धारित नहीं है';
-        listEl.innerHTML = `
-          <div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
-            <i class="fa-solid fa-calendar-xmark text-3xl mb-2 text-slate-300"></i>
-            <p class="text-xs font-bold text-slate-600">${emptyMsg}</p>
-            <p class="text-[11px] text-slate-400 mt-1">नई बैठक तय होने पर यहाँ तुरंत दिखाई देगी</p>
-          </div>
-        `;
+        if (listEl) listEl.innerHTML = emptyHtml;
+        if (fullListEl) fullListEl.innerHTML = emptyHtml;
         return;
       }
 
-      listEl.innerHTML = events.slice(0, 4).map(e => {
+      const buildEventCard = (e) => {
         const effStatus = getEffectiveEventStatus(e);
         const dt = e.datetime ? new Date(e.datetime) : null;
         const dateStr = dt && !isNaN(dt) 
@@ -10046,7 +9980,6 @@
 
         let leftActionBtnHtml = '';
         if (alreadyJoined) {
-          // If already joined, show Participants button
           leftActionBtnHtml = `
             <button 
               type="button" 
@@ -10059,7 +9992,6 @@
             </button>
           `;
         } else {
-          // By default show 'बैठक से जुड़ें' (Join Meeting) button
           leftActionBtnHtml = `
             <button 
               type="button" 
@@ -10115,7 +10047,14 @@
             </div>
           </div>
         `;
-      }).join('');
+      };
+
+      if (listEl) {
+        listEl.innerHTML = events.slice(0, 4).map(buildEventCard).join('');
+      }
+      if (fullListEl) {
+        fullListEl.innerHTML = events.map(buildEventCard).join('');
+      }
     }
 
     function openMemberEventDetailModal(eventId) {
