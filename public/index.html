@@ -3663,9 +3663,10 @@
 
         <!-- 2. Profile Details 9-Grid (Full Information) -->
         <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/90 shadow-sm space-y-4">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div class="space-y-3 pb-3 border-b border-slate-100">
+            <!-- Row 1: Heading -->
             <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base">
+              <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-address-card"></i>
               </div>
               <div>
@@ -3675,34 +3676,34 @@
               </div>
             </div>
 
-            <!-- Profile Action Buttons: Profile Update & Password Update & My ID Card -->
-            <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+            <!-- Row 2: Action Buttons (Equal 3-column grid on mobile, inline on desktop) -->
+            <div class="grid grid-cols-3 gap-2 w-full">
               <button 
                 type="button" 
                 onclick="openMemberIdCardModal()" 
-                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 active:scale-95 text-white transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                class="py-2.5 px-2 rounded-xl text-xs font-bold bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 active:scale-95 text-white transition-all shadow-xs flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center leading-tight"
                 title="My ID Card"
               >
-                <i class="fa-solid fa-id-card text-emerald-200 text-[11px]"></i>
-                <span>My ID Card</span>
+                <i class="fa-solid fa-id-card text-emerald-200 text-xs sm:text-sm"></i>
+                <span class="truncate">My ID Card</span>
               </button>
               <button 
                 type="button" 
                 onclick="openMemberEditProfileModal()" 
-                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 active:scale-95 text-white transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                class="py-2.5 px-2 rounded-xl text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 active:scale-95 text-white transition-all shadow-xs flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center leading-tight"
                 title="Profile Update"
               >
-                <i class="fa-solid fa-user-pen text-[11px]"></i>
-                <span>Profile Update</span>
+                <i class="fa-solid fa-user-pen text-amber-200 text-xs sm:text-sm"></i>
+                <span class="truncate">Profile Update</span>
               </button>
               <button 
                 type="button" 
                 onclick="openMemberChangePasswordModal()" 
-                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 active:scale-95 text-white transition-all shadow-xs shadow-indigo-500/25 flex items-center justify-center gap-1.5 cursor-pointer"
+                class="py-2.5 px-2 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 active:scale-95 text-white transition-all shadow-xs shadow-indigo-500/25 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 cursor-pointer text-center leading-tight"
                 title="Password Update"
               >
-                <i class="fa-solid fa-key text-[11px] text-amber-300"></i>
-                <span>Password Update</span>
+                <i class="fa-solid fa-key text-amber-300 text-xs sm:text-sm"></i>
+                <span class="truncate">Password Update</span>
               </button>
             </div>
           </div>
