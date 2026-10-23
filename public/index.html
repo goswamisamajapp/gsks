@@ -2127,7 +2127,7 @@
             type="button"
             onclick="switchSettingsTab('event')" 
             id="tab-btn-event"
-            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50/70 border border-indigo-200 hover:border-indigo-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-indigo-100 to-blue-100/90 border-2 border-indigo-500 shadow-md ring-2 ring-indigo-500/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]"
           >
             <div class="flex items-center justify-between gap-1 mb-1.5">
               <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-blue-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
@@ -2199,7 +2199,7 @@
             type="button"
             onclick="switchSettingsTab('status')" 
             id="tab-btn-status"
-            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100/90 border-2 border-orange-500 shadow-md ring-2 ring-orange-500/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50/70 border border-orange-200 hover:border-orange-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-1.5">
               <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
@@ -2252,7 +2252,7 @@
         <!-- ========================================== -->
         <!-- SUB-PAGE 1: STATUS MASTER                  -->
         <!-- ========================================== -->
-        <div id="settings-page-status" class="space-y-4">
+        <div id="settings-page-status" class="hidden space-y-4">
           <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
             <div class="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
@@ -2293,7 +2293,7 @@
         <!-- ========================================== -->
         <!-- SUB-PAGE 2: EVENT MASTER                   -->
         <!-- ========================================== -->
-        <div id="settings-page-event" class="hidden space-y-4 sm:space-y-6">
+        <div id="settings-page-event" class="space-y-4 sm:space-y-6">
           
           <!-- Section 2A: Event Categories (Types) -->
           <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs">
@@ -8942,7 +8942,7 @@
     window.calculateMemberPasyFine = calculateMemberPasyFine;
 
     // Master Settings State
-    let currentSettingsTab = 'status';
+    let currentSettingsTab = 'event';
     let currentSchemeFilter = 'ALL';
     let masterSettings = {
   "bankAccounts": [
@@ -13351,6 +13351,7 @@
         if (navSettings) navSettings.className = 'px-3.5 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/20';
         if (mobSettings) mobSettings.className = 'flex flex-col items-center gap-1 text-orange-600 font-bold';
         renderSettingsView();
+        switchSettingsTab('event');
       } else if (view === 'pariwarik') {
         if (pariwarikSection) pariwarikSection.classList.remove('hidden');
         if (mobPariwarik) {
