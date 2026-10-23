@@ -6333,6 +6333,7 @@
                 <option value="KG">KG</option>
                 <option value="Ltr">Ltr</option>
                 <option value="Pcs">Pcs</option>
+                <option value="Sticks">Sticks</option>
               </select>
             </div>
             <input type="hidden" id="sub-biz-weight">
@@ -17424,6 +17425,7 @@
           if (matchedUnit === 'G') document.getElementById('sub-biz-unit-type').value = 'g';
           else if (matchedUnit === 'KG') document.getElementById('sub-biz-unit-type').value = 'KG';
           else if (matchedUnit === 'LTR') document.getElementById('sub-biz-unit-type').value = 'Ltr';
+          else if (matchedUnit === 'STICKS') document.getElementById('sub-biz-unit-type').value = 'Sticks';
           else document.getElementById('sub-biz-unit-type').value = 'Pcs';
         } else {
           document.getElementById('sub-biz-qty-val').value = wtStr;
