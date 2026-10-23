@@ -690,31 +690,91 @@
       <!-- ============================================== -->
       <div id="view-order-stock-section" class="hidden space-y-4 sm:space-y-6 animate-in fade-in duration-200">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 text-white p-4 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
-          <div class="flex items-center justify-between gap-3 relative z-10">
+        <div class="bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 text-white p-4 sm:p-5 rounded-3xl shadow-lg relative overflow-hidden">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
             <div class="flex items-center gap-3">
-              <button onclick="switchAdminView('dashboard')" class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all cursor-pointer">
+              <button onclick="switchAdminView('dashboard')" class="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all cursor-pointer shrink-0">
                 <i class="fa-solid fa-arrow-left"></i>
               </button>
               <div>
-                <h3 class="text-base sm:text-lg font-black tracking-wide">Stock Management (स्टॉक प्रबंधन)</h3>
-                <p class="text-xs text-cyan-100 font-medium mt-0.5">उत्पादों की उपलब्ध मात्रा, इन-स्टॉक व आउट-ऑफ-स्टॉक प्रबंधन</p>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Stock Management</h3>
+                <p class="text-xs text-cyan-100 font-medium mt-0.5">सब-कैटेगरी उत्पादों का लाइव स्टॉक व इन्वेंट्री</p>
               </div>
             </div>
-            <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-cyan-900 shadow-sm" id="stock-mgmt-badge">Live Inventory</span>
+
+            <!-- Top Stats & Filter -->
+            <div class="flex items-center gap-2 self-stretch sm:self-auto flex-wrap">
+              <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-cyan-900 shadow-sm" id="stock-mgmt-total-badge">
+                0 Items
+              </span>
+              <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/30 text-white border border-white/20 shadow-sm" id="stock-mgmt-instock-badge">
+                In Stock: 0
+              </span>
+              <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/40 text-white border border-white/20 shadow-sm" id="stock-mgmt-outofstock-badge">
+                Out of Stock: 0
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- Content Card -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center">
-          <div class="w-16 h-16 rounded-3xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
-            <i class="fa-solid fa-boxes-stacked"></i>
+        <!-- Filter & Search Bar -->
+        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2 flex-1">
+            <div class="relative flex-1">
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input 
+                type="text" 
+                id="stock-search-input" 
+                oninput="renderStockManagementView()" 
+                placeholder="Item name, code खोजें..." 
+                class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500"
+              >
+            </div>
+            <select 
+              id="stock-filter-main-cat" 
+              onchange="renderStockManagementView()" 
+              class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+            >
+              <option value="ALL">All Categories</option>
+            </select>
           </div>
-          <h4 class="text-sm sm:text-base font-black text-slate-800">Inventory & Stock Controls</h4>
-          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">सामग्रियों का स्टॉक अपडेट, कम स्टॉक चेतावनी (Low stock alert) और रीस्टॉक प्रविष्टि।</p>
-          <div class="mt-6 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">
-            लॉजिक एवं डेटा फ़ील्ड्स अगली आवश्यकतानुसार कनेक्ट करने हेतु तैयार है।
+
+          <div class="flex items-center gap-2 self-end sm:self-auto">
+            <button 
+              type="button" 
+              onclick="switchAdminView('settings'); setTimeout(() => switchSettingsTab('business'), 100);" 
+              class="px-3 py-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-800 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-cyan-200 cursor-pointer"
+            >
+              <i class="fa-solid fa-briefcase"></i>
+              <span>Business Master</span>
+            </button>
           </div>
+        </div>
+
+        <!-- Mobile Cards View -->
+        <div class="space-y-2.5 sm:hidden" id="stock-items-cards-mobile">
+          <!-- Populated via JS -->
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="hidden sm:block bg-white rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                <th class="p-2.5 pl-3 rounded-l-xl w-16">Code</th>
+                <th class="p-2.5">Item / Sub Category</th>
+                <th class="p-2.5">Main Category</th>
+                <th class="p-2.5 text-center">Unit / Wt</th>
+                <th class="p-2.5 text-center">Our Price</th>
+                <th class="p-2.5 text-center w-36">Current Stock</th>
+                <th class="p-2.5 text-center">Status</th>
+                <th class="p-2.5 pr-3 text-center rounded-r-xl w-32">Quick Update</th>
+              </tr>
+            </thead>
+            <tbody id="stock-items-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -13224,6 +13284,7 @@
         if (orderCompletedSection) orderCompletedSection.classList.remove('hidden');
       } else if (view === 'order-stock') {
         if (orderStockSection) orderStockSection.classList.remove('hidden');
+        renderStockManagementView();
       } else if (view === 'order-active-users') {
         if (orderActiveUsersSection) orderActiveUsersSection.classList.remove('hidden');
       } else if (view === 'dues') {
@@ -14118,6 +14179,7 @@
       const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank + bankDirectDeposits - bankToHand - bankToParty - bankCashOut - expenseOnlineTotal);
       const totalAvailableFund = netCashInHand + netBankAmount;
 
+      if (typeof updateOrderDashboardCounts === 'function') updateOrderDashboardCounts();
       const elTotalFund = document.getElementById('dash-total-fund');
       const elBankFund = document.getElementById('dash-bank-fund');
       const elCashFund = document.getElementById('dash-cash-fund');
@@ -24275,6 +24337,203 @@
     window.renderBusinessMasterTab = renderBusinessMasterTab;
     window.filterSubCategoriesByMain = filterSubCategoriesByMain;
     window.autoGenerateSubCode = autoGenerateSubCode;
+
+    // ==============================================================
+    // STOCK MANAGEMENT VIEW & LOGIC (Sub-Categories Stock Control)
+    // ==============================================================
+    async function updateSubCategoryStock(subId, newStockQty) {
+      initBusinessMasterData();
+      const subs = masterSettings.businessSubCategories || [];
+      const item = subs.find(s => s.id === subId);
+      if (!item) return;
+
+      const qty = parseInt(newStockQty, 10);
+      item.stock = isNaN(qty) || qty < 0 ? 0 : qty;
+
+      // Realtime update in cloud
+      await saveAllSettingsToCloud();
+      renderStockManagementView();
+      updateOrderDashboardCounts();
+    }
+
+    async function adjustSubCategoryStock(subId, delta) {
+      initBusinessMasterData();
+      const subs = masterSettings.businessSubCategories || [];
+      const item = subs.find(s => s.id === subId);
+      if (!item) return;
+
+      const current = parseInt(item.stock, 10) || 0;
+      const updated = Math.max(0, current + delta);
+      item.stock = updated;
+
+      await saveAllSettingsToCloud();
+      renderStockManagementView();
+      updateOrderDashboardCounts();
+    }
+
+    function renderStockManagementView() {
+      initBusinessMasterData();
+      const subs = masterSettings.businessSubCategories || [];
+      const mains = masterSettings.businessCategories || [];
+
+      // Populate filter dropdown if empty
+      const filterSelect = document.getElementById('stock-filter-main-cat');
+      if (filterSelect && filterSelect.options.length <= 1) {
+        filterSelect.innerHTML = '<option value="ALL">All Categories</option>' +
+          mains.map(m => `<option value="${m.id}">[${m.code || '#'}] ${m.name}</option>`).join('');
+      }
+
+      const selectedMain = filterSelect ? filterSelect.value : 'ALL';
+      const searchVal = (document.getElementById('stock-search-input')?.value || '').trim().toLowerCase();
+
+      // Filter
+      let filtered = subs.filter(s => {
+        const matchMain = (selectedMain === 'ALL' || s.categoryId === selectedMain);
+        const matchSearch = !searchVal || 
+          (s.name && s.name.toLowerCase().includes(searchVal)) ||
+          (s.code && s.code.toLowerCase().includes(searchVal)) ||
+          (s.description && s.description.toLowerCase().includes(searchVal));
+        return matchMain && matchSearch;
+      });
+
+      // Stats
+      let inStockCount = 0;
+      let outOfStockCount = 0;
+      subs.forEach(s => {
+        const stk = parseInt(s.stock, 10) || 0;
+        if (stk > 0) inStockCount++;
+        else outOfStockCount++;
+      });
+
+      const totalBadge = document.getElementById('stock-mgmt-total-badge');
+      const inBadge = document.getElementById('stock-mgmt-instock-badge');
+      const outBadge = document.getElementById('stock-mgmt-outofstock-badge');
+      if (totalBadge) totalBadge.textContent = `${subs.length} Items`;
+      if (inBadge) inBadge.textContent = `In Stock: ${inStockCount}`;
+      if (outBadge) outBadge.textContent = `Out of Stock: ${outOfStockCount}`;
+
+      // Render Mobile
+      const mobileContainer = document.getElementById('stock-items-cards-mobile');
+      if (mobileContainer) {
+        if (filtered.length === 0) {
+          mobileContainer.innerHTML = '<div class="p-6 bg-white rounded-2xl border border-slate-200 text-center text-slate-400 text-xs">कोई आइटम नहीं मिला।</div>';
+        } else {
+          mobileContainer.innerHTML = filtered.map(s => {
+            const parent = mains.find(m => m.id === s.categoryId);
+            const parentName = parent ? `[${parent.code || '#'}] ${parent.name}` : 'Unassigned';
+            const stockQty = parseInt(s.stock, 10) || 0;
+            const isOut = stockQty <= 0;
+
+            return `
+              <div class="p-3.5 bg-white border border-slate-200 rounded-2xl shadow-2xs space-y-2.5">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="font-mono font-black text-xs text-teal-800 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200">${s.code || '-'}</span>
+                      <h5 class="text-xs font-black text-slate-900">${s.name}</h5>
+                    </div>
+                    <p class="text-[10px] text-teal-700 font-semibold mt-0.5">${parentName}</p>
+                    <div class="flex items-center gap-2 text-[11px] mt-1 flex-wrap">
+                      ${s.weight ? `<span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded text-[10px] font-semibold"><i class="fa-solid fa-cubes-stacked mr-1"></i>${s.weight}</span>` : ''}
+                      ${s.ourPrice != null ? `<span class="text-teal-800 font-extrabold text-[11px]">₹${s.ourPrice}</span>` : ''}
+                    </div>
+                  </div>
+                  <div>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isOut ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'}">
+                      ${isOut ? 'Out of Stock' : 'In Stock'}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Stock Controls -->
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                  <span class="text-xs font-bold text-slate-600">Stock Qty:</span>
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
+                    <input 
+                      type="number" 
+                      min="0"
+                      value="${stockQty}" 
+                      onchange="updateSubCategoryStock('${s.id}', this.value)" 
+                      class="w-14 text-center py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+                    >
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 1)" class="w-7 h-7 rounded-lg bg-cyan-600 hover:bg-cyan-700 active:scale-95 text-white font-bold flex items-center justify-center text-xs cursor-pointer">+</button>
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 10)" class="px-2 py-1 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 text-[10px] font-bold cursor-pointer">+10</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Render Desktop Table
+      const tbody = document.getElementById('stock-items-tbody');
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-slate-400 text-xs">कोई आइटम नहीं मिला।</td></tr>';
+        } else {
+          tbody.innerHTML = filtered.map(s => {
+            const parent = mains.find(m => m.id === s.categoryId);
+            const parentName = parent ? `[${parent.code || '#'}] ${parent.name}` : '<span class="text-rose-500">Unassigned</span>';
+            const stockQty = parseInt(s.stock, 10) || 0;
+            const isOut = stockQty <= 0;
+
+            return `
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-3 pl-4 font-mono font-black text-teal-800 text-xs">${s.code || '-'}</td>
+                <td class="p-3">
+                  <span class="font-extrabold text-slate-900 text-xs">${s.name}</span>
+                </td>
+                <td class="p-3">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                    ${parentName}
+                  </span>
+                </td>
+                <td class="p-3 text-center text-xs font-semibold text-slate-600">${s.weight || '-'}</td>
+                <td class="p-3 text-center text-xs font-black text-teal-800">${s.ourPrice != null ? '₹' + s.ourPrice : '-'}</td>
+                <td class="p-3 text-center">
+                  <input 
+                    type="number" 
+                    min="0"
+                    value="${stockQty}" 
+                    onchange="updateSubCategoryStock('${s.id}', this.value)" 
+                    class="w-16 text-center py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 font-mono"
+                  >
+                </td>
+                <td class="p-3 text-center">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isOut ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'}">
+                    ${isOut ? 'Out of Stock' : 'In Stock'}
+                  </span>
+                </td>
+                <td class="p-3 pr-4 text-center">
+                  <div class="flex items-center justify-center gap-1">
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', -1)" class="w-6 h-6 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs cursor-pointer active:scale-95" title="-1">-</button>
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 1)" class="w-6 h-6 rounded-md bg-cyan-600 hover:bg-cyan-700 text-white font-bold flex items-center justify-center text-xs cursor-pointer active:scale-95" title="+1">+</button>
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 5)" class="px-1.5 py-0.5 rounded-md bg-cyan-50 hover:bg-cyan-100 text-cyan-800 text-[10px] font-bold cursor-pointer active:scale-95" title="+5">+5</button>
+                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 10)" class="px-1.5 py-0.5 rounded-md bg-cyan-50 hover:bg-cyan-100 text-cyan-800 text-[10px] font-bold cursor-pointer active:scale-95" title="+10">+10</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    function updateOrderDashboardCounts() {
+      initBusinessMasterData();
+      const subs = masterSettings.businessSubCategories || [];
+      const stockBadge = document.getElementById('dash-order-stock-count');
+      if (stockBadge) {
+        let totalStockUnits = 0;
+        subs.forEach(s => {
+          totalStockUnits += (parseInt(s.stock, 10) || 0);
+        });
+        stockBadge.textContent = totalStockUnits.toLocaleString('en-IN');
+      }
+    }
+
     window.openAddMainCategoryModal = openAddMainCategoryModal;
     window.editMainCategory = editMainCategory;
     window.closeMainCategoryModal = closeMainCategoryModal;
