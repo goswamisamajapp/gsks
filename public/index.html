@@ -15906,6 +15906,10 @@
         designation: {
           active: 'group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-purple-100 to-violet-100/90 border-2 border-purple-600 shadow-md ring-2 ring-purple-600/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]',
           inactive: 'group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-purple-50 to-violet-50/70 border border-purple-200 hover:border-purple-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between'
+        },
+        business: {
+          active: 'group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-cyan-100 to-teal-100/90 border-2 border-cyan-600 shadow-md ring-2 ring-cyan-600/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]',
+          inactive: 'group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-cyan-50 to-teal-50/70 border border-cyan-200 hover:border-cyan-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between'
         }
       };
 
@@ -15947,13 +15951,12 @@
       } else if (tab === 'designation') {
         if (pageDesignation) pageDesignation.classList.remove('hidden');
         renderDesignationMasterTab();
-      renderBusinessMasterTab();
       } else {
         if (pageStatus) pageStatus.classList.remove('hidden');
       }
 
-      // Re-render whole settings view to guarantee live cards & tables reflect latest data
-      renderSettingsView();
+      // Update badge counts and drop downs without resetting active tab
+      updateSettingsBadges();
     }
 
     function applySettings(data) {
@@ -15972,6 +15975,21 @@
       if (typeof renderPariwarikView === 'function') {
         renderPariwarikView();
       }
+    }
+
+    function updateSettingsBadges() {
+      const bStatus = document.getElementById('badge-count-status');
+      const bBusiness = document.getElementById('badge-count-business');
+      const bEvent = document.getElementById('badge-count-event');
+      const bScheme = document.getElementById('badge-count-scheme');
+      const bFund = document.getElementById('badge-count-fund');
+      const bDesignation = document.getElementById('badge-count-designation');
+      if (bStatus) bStatus.textContent = (masterSettings.statuses || []).length;
+      if (bBusiness) bBusiness.textContent = (masterSettings.businessCategories || []).length;
+      if (bEvent) bEvent.textContent = (masterSettings.eventCategories || []).length;
+      if (bScheme) bScheme.textContent = (masterSettings.schemes || []).length;
+      if (bFund) bFund.textContent = (masterSettings.fundTypes || []).length;
+      if (bDesignation) bDesignation.textContent = (masterSettings.designations || []).length;
     }
 
     function renderSettingsView() {
