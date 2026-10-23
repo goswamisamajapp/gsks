@@ -14,6 +14,9 @@
   <!-- Leaflet Map for Geo-fencing & Venue GPS Location Pinning -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- HTML2Canvas & jsPDF for ID Card Export & Downloads -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -3518,6 +3521,16 @@
               <span id="user-profile-id-pill" class="hidden"></span>
             </div>
           </div>
+          <!-- My ID Card Action Button in Header -->
+          <button 
+            type="button" 
+            onclick="openMemberIdCardModal()" 
+            class="px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-black bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white flex items-center gap-1.5 shadow-sm shadow-emerald-600/25 transition-all cursor-pointer active:scale-95"
+            title="अपना डिजिटल आईडी कार्ड देखें एवं डाउनलोड करें"
+          >
+            <i class="fa-solid fa-id-card text-emerald-200 text-sm"></i>
+            <span>My ID Card</span>
+          </button>
         </div>
 
         <!-- 1. Profile Identity Hero Card (Modern, Soothing & Eye-Friendly) -->
@@ -3626,8 +3639,17 @@
               </div>
             </div>
 
-            <!-- Profile Action Buttons: Profile Update & Password Update (with vibrant colored background) -->
-            <div class="flex items-center gap-2 w-full sm:w-auto">
+            <!-- Profile Action Buttons: Profile Update & Password Update & My ID Card -->
+            <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+              <button 
+                type="button" 
+                onclick="openMemberIdCardModal()" 
+                class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 active:scale-95 text-white transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                title="My ID Card"
+              >
+                <i class="fa-solid fa-id-card text-emerald-200 text-[11px]"></i>
+                <span>My ID Card</span>
+              </button>
               <button 
                 type="button" 
                 onclick="openMemberEditProfileModal()" 
@@ -6484,6 +6506,186 @@
       </form>
     </div>
   </div>
+  <!-- ============================================================== -->
+  <!-- MODAL: MEMBER DIGITAL ID CARD (सदस्य पहचान पत्र)                -->
+  <!-- ============================================================== -->
+  <div id="member-id-card-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl border border-slate-200 relative my-6 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeMemberIdCardModal()" class="absolute right-3.5 top-3.5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-500 hover:text-slate-800 flex items-center justify-center text-sm transition-all cursor-pointer z-20">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center gap-2.5 mb-3.5 pb-2.5 border-b border-slate-100 pr-10">
+        <div class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-base shadow-2xs flex-shrink-0">
+          <i class="fa-solid fa-id-card"></i>
+        </div>
+        <div>
+          <h3 class="text-sm sm:text-base font-black text-slate-900 tracking-tight leading-none">
+            Digital Identity Card (पहचान पत्र)
+          </h3>
+          <p class="text-[10px] text-slate-500 mt-0.5">गोस्वामी समाज कल्याण समिति • अधिकृत सदस्य पहचान पत्र</p>
+        </div>
+      </div>
+
+      <!-- ID Card Preview Wrapper (Captured by html2canvas) -->
+      <div class="bg-slate-100 p-2 sm:p-2.5 rounded-2xl border border-slate-200/80 overflow-x-auto flex justify-center">
+        <div id="idcard-render-container" class="w-[340px] sm:w-[350px] bg-gradient-to-b from-orange-50 via-white to-amber-50 rounded-2xl shadow-md border-2 border-orange-500/80 overflow-hidden relative font-sans text-slate-800 flex-shrink-0">
+          
+          <!-- Top Header Strip -->
+          <div class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white px-3 py-2 text-center relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 text-white/10 text-6xl pointer-events-none">
+              <i class="fa-solid fa-om"></i>
+            </div>
+            <div class="flex items-center justify-center gap-2 relative z-10">
+              <div class="w-9 h-9 rounded-full bg-white p-0.5 border border-amber-200 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img src="/logo-opt.png" alt="GSKS Logo" class="w-full h-full object-contain rounded-full" crossorigin="anonymous">
+              </div>
+              <div class="min-w-0 text-left">
+                <div class="text-[9px] font-bold tracking-wider text-amber-200 uppercase leading-none font-mono">
+                  Akhil Bhartiya Shaiv Samaj Sewa Trust
+                </div>
+                <h4 class="text-xs sm:text-sm font-black font-devanagari tracking-tight text-white leading-tight mt-0.5">
+                  गोस्वामी समाज कल्याण समिति
+                </h4>
+                <p class="text-[8px] text-orange-100 leading-none">पंजी. कार्यालय: गुनघसा, गोमो, धनबाद (झारखंड) - 828401</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub Header: Identity Card Title + Member Type -->
+          <div class="bg-slate-900 text-white px-3 py-1 flex items-center justify-between text-[10px] font-bold">
+            <span class="tracking-wider uppercase text-amber-300 font-mono flex items-center gap-1">
+              <i class="fa-solid fa-shield-halved text-amber-400 text-[9px]"></i>
+              <span>MEMBER IDENTITY CARD</span>
+            </span>
+            <span id="idcard-type-badge" class="px-2 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-tight font-mono">
+              ACTIVE
+            </span>
+          </div>
+
+          <!-- Card Body: Photo + Primary Info -->
+          <div class="p-3 space-y-2.5">
+            <div class="flex items-center gap-3">
+              <!-- Avatar Photo Box -->
+              <div class="flex-shrink-0 text-center">
+                <div id="idcard-avatar-box" class="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-2xl font-black font-devanagari shadow-sm border-2 border-white ring-2 ring-orange-300">
+                  ग
+                </div>
+                <span class="inline-block mt-1 text-[8px] font-bold text-slate-400 font-mono uppercase tracking-tighter">VERIFIED</span>
+              </div>
+
+              <!-- Main Identity -->
+              <div class="min-w-0 flex-1 space-y-0.5">
+                <div class="text-[9px] text-orange-700 font-bold uppercase tracking-wider font-mono">सदस्य का नाम (Name)</div>
+                <h3 id="idcard-member-name" class="text-sm sm:text-base font-black text-slate-900 font-devanagari tracking-tight truncate leading-tight">
+                  --
+                </h3>
+                <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-900 border border-orange-200" id="idcard-designation">
+                    सदस्य
+                  </span>
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200" id="idcard-blood">
+                    Blood: --
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Details Table/Grid -->
+            <div class="bg-white/90 rounded-xl p-2.5 border border-orange-200/70 space-y-1 text-[11px] shadow-2xs">
+              <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                <span class="text-slate-500 font-semibold text-[10px]">सदस्य ID (Member ID):</span>
+                <span id="idcard-member-id" class="font-mono font-black text-orange-700 text-[11px]">GSKS-000</span>
+              </div>
+              <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                <span class="text-slate-500 font-semibold text-[10px]">परिवार ID (Family ID):</span>
+                <span id="idcard-family-id" class="font-mono font-bold text-slate-800 text-[10px]">FAM-000</span>
+              </div>
+              <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                <span class="text-slate-500 font-semibold text-[10px]">पिता का नाम (Father):</span>
+                <span id="idcard-father-name" class="font-bold text-slate-800 truncate max-w-[180px] text-[10px]">--</span>
+              </div>
+              <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                <span class="text-slate-500 font-semibold text-[10px]">मोबाइल नं (Mobile):</span>
+                <span id="idcard-mobile" class="font-mono font-bold text-slate-800 text-[10px]">--</span>
+              </div>
+              <div class="flex justify-between items-center py-0.5 border-b border-slate-100">
+                <span class="text-slate-500 font-semibold text-[10px]">पता / गाँव (Address):</span>
+                <span id="idcard-address" class="font-bold text-slate-800 truncate max-w-[180px] text-[10px]">--</span>
+              </div>
+              <div class="flex justify-between items-center py-0.5">
+                <span class="text-slate-500 font-semibold text-[10px]">सदस्यता वर्ष (Since):</span>
+                <span id="idcard-since" class="font-mono font-bold text-slate-800 text-[10px]">2025</span>
+              </div>
+            </div>
+
+            <!-- Footer Strip: Digital QR & Authority Signature -->
+            <div class="flex items-center justify-between pt-1 text-[9px] text-slate-500 px-1">
+              <div class="flex items-center gap-1.5">
+                <div class="w-8 h-8 rounded-lg bg-white border border-slate-300 p-0.5 flex items-center justify-center text-slate-700 text-base shadow-2xs">
+                  <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div class="leading-tight">
+                  <span class="font-mono font-bold text-[8px] text-slate-700 block">DIGITAL ID</span>
+                  <span class="text-[7px] text-slate-400">GSKS Official Portal</span>
+                </div>
+              </div>
+              <div class="text-right leading-tight">
+                <div class="font-devanagari font-black text-slate-800 text-[10px]">हस्ताक्षर / अधिकृत</div>
+                <div class="text-[8px] text-orange-700 font-bold">सचिव / कोषाध्यक्ष, GSKS</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Decorative Strip -->
+          <div class="bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 h-1.5 w-full"></div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons: PDF Download & WhatsApp Share (JPEG) -->
+      <div class="grid grid-cols-2 gap-2.5 mt-3.5 pt-3 border-t border-slate-100">
+        <!-- PDF Download -->
+        <button 
+          type="button" 
+          id="btn-download-idcard-pdf"
+          onclick="downloadMemberIdCardPdf()" 
+          class="py-2.5 px-3 rounded-xl text-xs font-bold bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 active:scale-95 text-white shadow-sm shadow-rose-500/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+        >
+          <i class="fa-solid fa-file-pdf text-sm"></i>
+          <span>PDF Download</span>
+        </button>
+
+        <!-- WhatsApp / JPEG Share -->
+        <button 
+          type="button" 
+          id="btn-share-idcard-whatsapp"
+          onclick="shareMemberIdCardWhatsApp()" 
+          class="py-2.5 px-3 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white shadow-sm shadow-emerald-600/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+        >
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>WhatsApp Share</span>
+        </button>
+      </div>
+
+      <!-- Single JPEG Save Fallback button -->
+      <div class="mt-2 text-center">
+        <button 
+          type="button"
+          onclick="downloadMemberIdCardJpeg()"
+          class="text-[11px] font-bold text-slate-500 hover:text-slate-800 underline cursor-pointer"
+        >
+          <i class="fa-solid fa-image text-[10px] mr-1"></i>गैलरी में JPEG फोटो सेव करें (Save Image)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ============================================================== -->
   <!-- MODAL: MEMBER EDIT OWN PROFILE (सदस्य प्रोफ़ाइल संपादन)       -->
   <!-- ============================================================== -->
@@ -11947,6 +12149,237 @@
       showAppAlert('आपका पासवर्ड सफलतापूर्वक बदल दिया गया है! अगली बार लॉगिन करने के लिए नए पासवर्ड का उपयोग करें।', 'Password Updated', 'success');
     }
 
+    // ==============================================
+    // MEMBER DIGITAL ID CARD LOGIC (Open, PDF, JPEG, WhatsApp)
+    // ==============================================
+    function openMemberIdCardModal() {
+      const member = currentLoggedInMember;
+      if (!member) {
+        if (typeof showAppAlert === 'function') {
+          showAppAlert('सदस्य की जानकारी प्राप्त नहीं हो सकी। कृपया पुनः लॉगिन करें।', 'त्रुटि', 'error');
+        }
+        return;
+      }
+
+      const modal = document.getElementById('member-id-card-modal');
+      const nameEl = document.getElementById('idcard-member-name');
+      const desigEl = document.getElementById('idcard-designation');
+      const bloodEl = document.getElementById('idcard-blood');
+      const idEl = document.getElementById('idcard-member-id');
+      const famIdEl = document.getElementById('idcard-family-id');
+      const fatherEl = document.getElementById('idcard-father-name');
+      const mobileEl = document.getElementById('idcard-mobile');
+      const addressEl = document.getElementById('idcard-address');
+      const sinceEl = document.getElementById('idcard-since');
+      const avatarBox = document.getElementById('idcard-avatar-box');
+      const typeBadge = document.getElementById('idcard-type-badge');
+
+      const famIdVal = member.familyId || `FAM-${member.id ? member.id.replace(/\D/g,'') : '001'}`;
+      const memStatus = (member.status || 'Active').trim();
+      const isPrime = memStatus === 'Prime Member' || memStatus.toLowerCase() === 'prime';
+      const isInactive = memStatus === 'Inactive' || memStatus.toLowerCase() === 'inactive';
+
+      if (nameEl) nameEl.textContent = member.name || '--';
+      if (desigEl) desigEl.textContent = member.designation || (isPrime ? 'विशिष्ट सदस्य' : 'सदस्य');
+      if (bloodEl) bloodEl.textContent = `Blood: ${member.bloodGroup || 'N/A'}`;
+      if (idEl) idEl.textContent = member.id || 'GSKS-000';
+      if (famIdEl) famIdEl.textContent = famIdVal;
+      if (fatherEl) fatherEl.textContent = member.father || '--';
+      if (mobileEl) mobileEl.textContent = member.phone || '--';
+      if (addressEl) addressEl.textContent = member.address || '--';
+      if (sinceEl) sinceEl.textContent = member.since || '2025';
+
+      if (typeBadge) {
+        if (isPrime) {
+          typeBadge.textContent = 'PRIME MEMBER';
+          typeBadge.className = 'px-2 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-tight font-mono';
+        } else if (isInactive) {
+          typeBadge.textContent = 'INACTIVE';
+          typeBadge.className = 'px-2 py-0.2 rounded-full text-[9px] font-black bg-slate-300 text-slate-800 uppercase tracking-tight font-mono';
+        } else {
+          typeBadge.textContent = 'ACTIVE MEMBER';
+          typeBadge.className = 'px-2 py-0.2 rounded-full text-[9px] font-black bg-emerald-400 text-slate-950 uppercase tracking-tight font-mono';
+        }
+      }
+
+      if (avatarBox) {
+        const initial = (member.name ? member.name.trim().charAt(0) : 'ग').toUpperCase();
+        avatarBox.textContent = initial;
+        avatarBox.className = `w-16 h-16 sm:w-18 sm:h-18 rounded-2xl ${typeof getAvatarBg === 'function' ? getAvatarBg(member.name || '') : 'bg-orange-500'} text-white flex items-center justify-center text-2xl font-black font-devanagari shadow-sm border-2 border-white ring-2 ring-orange-300`;
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeMemberIdCardModal() {
+      const modal = document.getElementById('member-id-card-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    async function generateIdCardCanvas() {
+      const target = document.getElementById('idcard-render-container');
+      if (!target) return null;
+      if (typeof html2canvas === 'undefined') {
+        throw new Error('html2canvas library load nahi ho saki');
+      }
+      return await html2canvas(target, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null
+      });
+    }
+
+    async function downloadMemberIdCardPdf() {
+      const btn = document.getElementById('btn-download-idcard-pdf');
+      const originalText = btn ? btn.innerHTML : '';
+      try {
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i> <span>Creating PDF...</span>';
+        }
+        const canvas = await generateIdCardCanvas();
+        if (!canvas) throw new Error('Canvas generate nahi hua');
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const { jsPDF } = window.jspdf || {};
+        if (!jsPDF) throw new Error('jsPDF library load nahi ho saki');
+
+        // Create PDF sized for standard card (CR80 or portrait page)
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const imgWidth = 95; // 95mm wide crisp card
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const x = (pageWidth - imgWidth) / 2;
+        const y = 30;
+
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(0, 0, pageWidth, pdf.internal.pageSize.getHeight(), 'F');
+
+        // Heading in PDF
+        pdf.setFontSize(14);
+        pdf.setTextColor(234, 88, 12);
+        pdf.text('Akhil Bhartiya Shaiv Samaj Sewa Trust', pageWidth / 2, 18, { align: 'center' });
+        pdf.setFontSize(10);
+        pdf.setTextColor(71, 85, 105);
+        pdf.text('Goswami Samaj Kalyan Samiti - Official Member ID Card', pageWidth / 2, 24, { align: 'center' });
+
+        pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+
+        const memId = currentLoggedInMember ? (currentLoggedInMember.id || 'GSKS').replace(/\s+/g, '_') : 'ID_CARD';
+        pdf.save(`${memId}_Identity_Card.pdf`);
+
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('📄 ID Card PDF', 'आईडी कार्ड PDF सफलतापूर्वक डाउनलोड हो गया है!');
+        } else if (typeof showAppAlert === 'function') {
+          showAppAlert('आपका डिजिटल आईडी कार्ड PDF में सफलतापूर्वक डाउनलोड हो गया है।', 'Download Complete', 'success');
+        }
+      } catch (err) {
+        console.error('ID Card PDF Error:', err);
+        if (typeof showAppAlert === 'function') {
+          showAppAlert('PDF डाउनलोड करने में त्रुटि: ' + (err.message || 'Unknown error'), 'Download Error', 'error');
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }
+    }
+
+    async function downloadMemberIdCardJpeg() {
+      try {
+        const canvas = await generateIdCardCanvas();
+        if (!canvas) throw new Error('Canvas generate nahi hua');
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const memId = currentLoggedInMember ? (currentLoggedInMember.id || 'GSKS').replace(/\s+/g, '_') : 'ID_CARD';
+        const link = document.createElement('a');
+        link.download = `${memId}_Identity_Card.jpg`;
+        link.href = imgData;
+        link.click();
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('🖼️ ID Card Image', 'आईडी कार्ड इमेज JPEG गैलरी में सुरक्षित हो गई है!');
+        }
+      } catch (err) {
+        console.error('ID Card JPEG Error:', err);
+        if (typeof showAppAlert === 'function') {
+          showAppAlert('इमेज डाउनलोड करने में त्रुटि: ' + (err.message || 'Unknown error'), 'Error', 'error');
+        }
+      }
+    }
+
+    async function shareMemberIdCardWhatsApp() {
+      const btn = document.getElementById('btn-share-idcard-whatsapp');
+      const originalText = btn ? btn.innerHTML : '';
+      try {
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i> <span>Preparing...</span>';
+        }
+        const canvas = await generateIdCardCanvas();
+        if (!canvas) throw new Error('Canvas generate nahi hua');
+
+        const member = currentLoggedInMember || {};
+        const memName = member.name || 'सदस्य';
+        const memId = member.id || 'GSKS';
+        const shareText = `*अखिल भारतीय शैव समाज सेवा ट्रस्ट (GSKS)*\n*गोस्वामी समाज कल्याण समिति, गुनघसा (गोमो)*\n\n📌 *डिजिटल सदस्य पहचान पत्र (Digital ID Card)*\n👤 *नाम:* ${memName}\n🆔 *Member ID:* ${memId}\n🏢 *कार्यालय:* गुनघसा, गोमो, धनबाद - 828401\n🌐 *पोर्टल:* https://gsks.in`;
+
+        // 1. Try Native Web Share API with File (Supported on Android Chrome / Mobile APK)
+        if (navigator.canShare) {
+          try {
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+            const file = new File([blob], `${memId}_Identity_Card.jpg`, { type: 'image/jpeg' });
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                files: [file],
+                title: `${memName} - GSKS Identity Card`,
+                text: shareText
+              });
+              return;
+            }
+          } catch (shareErr) {
+            console.warn('Native share with file failed/cancelled, falling back to download + WhatsApp link:', shareErr);
+          }
+        }
+
+        // 2. Fallback: Auto download JPEG image so user has it, then open WhatsApp with prefilled text
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a');
+        link.download = `${memId}_Identity_Card.jpg`;
+        link.href = imgData;
+        link.click();
+
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+        window.open(waUrl, '_blank');
+
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('📲 WhatsApp Share', 'कार्ड इमेज डाउनलोड हो गई है और WhatsApp खुल गया है!');
+        }
+      } catch (err) {
+        console.error('WhatsApp Share Error:', err);
+        if (typeof showAppAlert === 'function') {
+          showAppAlert('WhatsApp शेयर करने में त्रुटि: ' + (err.message || 'Unknown error'), 'Error', 'error');
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }
+    }
+
+    window.openMemberIdCardModal = openMemberIdCardModal;
+    window.closeMemberIdCardModal = closeMemberIdCardModal;
+    window.downloadMemberIdCardPdf = downloadMemberIdCardPdf;
+    window.downloadMemberIdCardJpeg = downloadMemberIdCardJpeg;
+    window.shareMemberIdCardWhatsApp = shareMemberIdCardWhatsApp;
+
     function handleMemberUpgradePlan() {
       const member = currentLoggedInMember;
       if (!member) return;
@@ -13306,6 +13739,7 @@
         'pariwarik-bulk-whatsapp-modal',
         'dues-bulk-whatsapp-modal',
         'pariwarik-fine-waiver-modal',
+        'member-id-card-modal',
         'member-edit-profile-modal',
         'member-change-password-modal',
         'expense-modal',
