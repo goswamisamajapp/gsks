@@ -6532,38 +6532,37 @@
 
       <!-- ID Card Preview Wrapper (Captured by html2canvas) -->
       <div class="bg-slate-100 p-2 sm:p-2.5 rounded-2xl border border-slate-200/80 overflow-x-auto flex justify-center">
-        <div id="idcard-render-container" class="w-[340px] sm:w-[350px] bg-gradient-to-b from-orange-50 via-white to-amber-50 rounded-2xl shadow-md border-2 border-orange-500/80 overflow-hidden relative font-sans text-slate-800 flex-shrink-0">
+        <div id="idcard-render-container" style="width: 350px; min-width: 350px; max-width: 350px; box-sizing: border-box;" class="bg-gradient-to-b from-orange-50 via-white to-amber-50 rounded-2xl shadow-md border-2 border-orange-500/80 overflow-hidden relative font-sans text-slate-800 flex-shrink-0">
           
-          <!-- Top Header Strip -->
-          <div class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white px-3 py-2 text-center relative overflow-hidden">
+          <!-- Top Header Strip (Without unwanted Trust text) -->
+          <div class="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white px-3.5 py-2.5 text-center relative overflow-hidden">
             <div class="absolute -right-4 -bottom-4 text-white/10 text-6xl pointer-events-none">
               <i class="fa-solid fa-om"></i>
             </div>
-            <div class="flex items-center justify-center gap-2 relative z-10">
-              <div class="w-9 h-9 rounded-full bg-white p-0.5 border border-amber-200 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div class="flex items-center justify-center gap-2.5 relative z-10">
+              <div class="w-10 h-10 rounded-full bg-white p-0.5 border border-amber-200 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0">
                 <img src="/logo-opt.png" alt="GSKS Logo" class="w-full h-full object-contain rounded-full" crossorigin="anonymous">
               </div>
               <div class="min-w-0 text-left">
-                <div class="text-[9px] font-bold tracking-wider text-amber-200 uppercase leading-none font-mono">
-                  Akhil Bhartiya Shaiv Samaj Sewa Trust
-                </div>
-                <h4 class="text-xs sm:text-sm font-black font-devanagari tracking-tight text-white leading-tight mt-0.5">
+                <h4 class="text-sm font-black font-devanagari tracking-tight text-white leading-tight">
                   गोस्वामी समाज कल्याण समिति
                 </h4>
-                <p class="text-[8px] text-orange-100 leading-none">पंजी. कार्यालय: गुनघसा, गोमो, धनबाद (झारखंड) - 828401</p>
+                <p class="text-[8.5px] text-orange-100 font-medium leading-tight mt-0.5">पंजी. कार्यालय: गुनघसा, गोमो, धनबाद (झारखंड) - 828401</p>
               </div>
             </div>
           </div>
 
           <!-- Sub Header: Identity Card Title + Member Type -->
-          <div class="bg-slate-900 text-white px-3 py-1 flex items-center justify-between text-[10px] font-bold">
-            <span class="tracking-wider uppercase text-amber-300 font-mono flex items-center gap-1">
-              <i class="fa-solid fa-shield-halved text-amber-400 text-[9px]"></i>
-              <span>MEMBER IDENTITY CARD</span>
-            </span>
-            <span id="idcard-type-badge" class="px-2 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-tight font-mono">
-              ACTIVE
-            </span>
+          <div class="bg-slate-900 text-white px-3 py-1.5 flex items-center justify-between text-[10px] font-bold">
+            <div class="tracking-wider uppercase text-amber-300 font-mono flex items-center gap-1.5 leading-none">
+              <i class="fa-solid fa-shield-halved text-amber-400 text-[10px]"></i>
+              <span class="tracking-widest">MEMBER IDENTITY CARD</span>
+            </div>
+            <div class="flex items-center leading-none">
+              <span id="idcard-type-badge" class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-tight font-mono inline-block">
+                ACTIVE
+              </span>
+            </div>
           </div>
 
           <!-- Card Body: Photo + Primary Info -->
@@ -6571,7 +6570,7 @@
             <div class="flex items-center gap-3">
               <!-- Avatar Photo Box -->
               <div class="flex-shrink-0 text-center">
-                <div id="idcard-avatar-box" class="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-2xl font-black font-devanagari shadow-sm border-2 border-white ring-2 ring-orange-300">
+                <div id="idcard-avatar-box" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-2xl font-black font-devanagari shadow-sm border-2 border-white ring-2 ring-orange-300">
                   ग
                 </div>
                 <span class="inline-block mt-1 text-[8px] font-bold text-slate-400 font-mono uppercase tracking-tighter">VERIFIED</span>
@@ -12228,12 +12227,37 @@
       if (typeof html2canvas === 'undefined') {
         throw new Error('html2canvas library load nahi ho saki');
       }
-      return await html2canvas(target, {
-        scale: 3,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null
-      });
+
+      // Clone target offscreen with explicit fixed dimensions and clean styling to prevent canvas displacement
+      const clone = target.cloneNode(true);
+      clone.id = 'idcard-capture-clone';
+      clone.style.position = 'fixed';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      clone.style.width = '350px';
+      clone.style.minWidth = '350px';
+      clone.style.maxWidth = '350px';
+      clone.style.zIndex = '-9999';
+      clone.style.margin = '0';
+      clone.style.transform = 'none';
+
+      document.body.appendChild(clone);
+
+      try {
+        const canvas = await html2canvas(clone, {
+          scale: 3,
+          width: 350,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+        return canvas;
+      } finally {
+        if (clone && clone.parentNode) {
+          clone.parentNode.removeChild(clone);
+        }
+      }
     }
 
     async function downloadMemberIdCardPdf() {
@@ -12247,7 +12271,7 @@
         const canvas = await generateIdCardCanvas();
         if (!canvas) throw new Error('Canvas generate nahi hua');
 
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const imgData = canvas.toDataURL('image/jpeg', 0.98);
         const { jsPDF } = window.jspdf || {};
         if (!jsPDF) throw new Error('jsPDF library load nahi ho saki');
 
@@ -12262,13 +12286,13 @@
         pdf.setFillColor(248, 250, 252);
         pdf.rect(0, 0, pageWidth, pdf.internal.pageSize.getHeight(), 'F');
 
-        // Heading in PDF
+        // Heading in PDF (Trust text removed as requested, only Samiti name)
         pdf.setFontSize(14);
         pdf.setTextColor(234, 88, 12);
-        pdf.text('Akhil Bhartiya Shaiv Samaj Sewa Trust', pageWidth / 2, 18, { align: 'center' });
+        pdf.text('Goswami Samaj Kalyan Samiti', pageWidth / 2, 20, { align: 'center' });
         pdf.setFontSize(10);
         pdf.setTextColor(71, 85, 105);
-        pdf.text('Goswami Samaj Kalyan Samiti - Official Member ID Card', pageWidth / 2, 24, { align: 'center' });
+        pdf.text('Official Member Identity Card (गुनघसा, गोमो, धनबाद)', pageWidth / 2, 26, { align: 'center' });
 
         pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
 
