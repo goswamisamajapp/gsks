@@ -2493,63 +2493,164 @@
         <!-- ========================================== -->
         <!-- SUB-PAGE 7: BUSSINESS MASTER               -->
         <!-- ========================================== -->
-        <div id="settings-page-business" class="hidden space-y-4 sm:space-y-6">
-          
-          <!-- Top Card: Business Categories & Add Button -->
-          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-base sm:text-lg shadow-2xs shrink-0">
-                <i class="fa-solid fa-briefcase"></i>
-              </div>
-              <div>
-                <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
-                  Bussiness Master (व्यवसाय व व्यापार श्रेणियाँ)
-                </h3>
-                <p class="text-[11px] text-slate-500 font-medium">सदस्यों के व्यवसाय, दुकान एवं स्वरोजगार श्रेणियों का मास्टर प्रबंधन</p>
-              </div>
-            </div>
+        <div id="settings-page-business" class="hidden space-y-5 sm:space-y-7">
 
-            <div class="shrink-0">
-              <button 
-                type="button" 
-                onclick="openAddBusinessModal()" 
-                class="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-              >
-                <i class="fa-solid fa-plus text-xs"></i>
-                <span>Add Business</span>
-              </button>
+          <!-- Header Banner -->
+          <div class="bg-gradient-to-r from-cyan-600 via-teal-600 to-sky-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white shadow-md relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 border border-white/20">
+                  <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div>
+                  <h3 class="text-base sm:text-lg font-black tracking-wide">
+                    Business Master Controls (व्यवसाय मास्टर)
+                  </h3>
+                  <p class="text-xs text-cyan-100 font-medium mt-0.5">
+                    मुख्य श्रेणियां (Main Categories: 1, 2, 3...) एवं उप-श्रेणियां (Sub Categories: 1-a, 1-b...) का रीयल-टाइम प्रबंधन
+                  </p>
+                </div>
+              </div>
+
+              <!-- Quick Action Buttons -->
+              <div class="flex items-center gap-2 self-stretch sm:self-auto">
+                <button 
+                  type="button" 
+                  onclick="openAddMainCategoryModal()" 
+                  class="flex-1 sm:flex-none px-3.5 py-2 bg-white text-cyan-800 hover:bg-cyan-50 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                >
+                  <i class="fa-solid fa-folder-plus text-cyan-600"></i>
+                  <span>+ Main Category</span>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="openAddSubCategoryModal()" 
+                  class="flex-1 sm:flex-none px-3.5 py-2 bg-cyan-900/60 hover:bg-cyan-900/80 text-white border border-white/20 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                >
+                  <i class="fa-solid fa-file-circle-plus text-cyan-300"></i>
+                  <span>+ Sub Category</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Business Categories Table Card -->
-          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs space-y-3">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h4 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-store text-cyan-600"></i> Registered Business Categories
-              </h4>
-              <span class="text-[10px] sm:text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full font-mono" id="business-master-count-badge">Total: 0</span>
+          <!-- ============================================== -->
+          <!-- SECTION 1: MAIN BUSINESS CATEGORIES            -->
+          <!-- ============================================== -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs space-y-3.5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-7 h-7 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs font-black shrink-0">1</span>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-cyan-600"></i> Main Categories (मुख्य श्रेणियां: 1, 2, 3...)
+                  </h4>
+                  <p class="text-[10px] text-slate-400 font-medium">व्यापार के प्राथमिक वर्ग</p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] sm:text-[11px] font-bold text-cyan-800 bg-cyan-50 border border-cyan-200/80 px-2.5 py-1 rounded-full font-mono" id="main-category-count-badge">Total: 0</span>
+                <button 
+                  type="button" 
+                  onclick="openAddMainCategoryModal()" 
+                  class="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+                  title="Add Main Category"
+                >
+                  <i class="fa-solid fa-plus text-[10px]"></i>
+                  <span class="hidden sm:inline">Add Main</span>
+                </button>
+              </div>
             </div>
 
-            <!-- Mobile View: Modern Cards (sm:hidden) -->
-            <div class="mt-3.5 space-y-2.5 sm:hidden" id="business-master-cards-mobile">
-              <!-- Populated dynamically via JS -->
+            <!-- Mobile View: Main Categories Cards -->
+            <div class="space-y-2.5 sm:hidden" id="business-main-cards-mobile">
+              <!-- Populated via JS -->
             </div>
 
-            <!-- Desktop View: Full Table (hidden sm:block) -->
+            <!-- Desktop View: Main Categories Table -->
             <div class="hidden sm:block overflow-x-auto">
               <table class="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr class="bg-slate-50 text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
-                    <th class="p-2.5 pl-3 rounded-l-xl">#</th>
-                    <th class="p-2.5">Business Name / Category</th>
-                    <th class="p-2.5">Description / विवरण</th>
-                    <th class="p-2.5 text-center">Theme Color</th>
-                    <th class="p-2.5 text-center">Type</th>
+                    <th class="p-2.5 pl-3 rounded-l-xl w-14">Code (#)</th>
+                    <th class="p-2.5">Main Category Name</th>
+                    <th class="p-2.5">विवरण / Description</th>
+                    <th class="p-2.5 text-center">Sub-categories</th>
+                    <th class="p-2.5 text-center">Theme</th>
                     <th class="p-2.5 pr-3 text-center rounded-r-xl">Action</th>
                   </tr>
                 </thead>
-                <tbody id="business-master-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
-                  <!-- Populated dynamically via JS -->
+                <tbody id="business-main-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- SECTION 2: SUB CATEGORIES MASTER               -->
+          <!-- ============================================== -->
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-2xs space-y-3.5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-7 h-7 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-black shrink-0">2</span>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-sitemap text-teal-600"></i> Sub Categories (उप-श्रेणियां: 1-a, 1-b, 2-a...)
+                  </h4>
+                  <p class="text-[10px] text-slate-400 font-medium">प्रत्येक मुख्य श्रेणी के अंतर्गत विशिष्ट व्यापार व सेवा प्रकार</p>
+                </div>
+              </div>
+
+              <!-- Filter & Add Button Bar -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <!-- Filter by Main Category -->
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1">
+                  <span class="text-[10px] font-bold text-slate-500">Filter:</span>
+                  <select 
+                    id="filter-business-main-cat" 
+                    onchange="filterSubCategoriesByMain(this.value)" 
+                    class="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+                  >
+                    <option value="ALL">All Categories (सभी)</option>
+                  </select>
+                </div>
+
+                <span class="text-[10px] sm:text-[11px] font-bold text-teal-800 bg-teal-50 border border-teal-200/80 px-2.5 py-1 rounded-full font-mono" id="sub-category-count-badge">Total: 0</span>
+
+                <button 
+                  type="button" 
+                  onclick="openAddSubCategoryModal()" 
+                  class="px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer active:scale-95"
+                  title="Add Sub Category"
+                >
+                  <i class="fa-solid fa-plus text-[10px]"></i>
+                  <span>Add Sub</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Mobile View: Sub Categories Cards -->
+            <div class="space-y-2.5 sm:hidden" id="business-sub-cards-mobile">
+              <!-- Populated via JS -->
+            </div>
+
+            <!-- Desktop View: Sub Categories Table -->
+            <div class="hidden sm:block overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-50 text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+                    <th class="p-2.5 pl-3 rounded-l-xl w-16">Sub Code</th>
+                    <th class="p-2.5">Sub Category Name</th>
+                    <th class="p-2.5">Belongs to Main Category</th>
+                    <th class="p-2.5">Description</th>
+                    <th class="p-2.5 pr-3 text-center rounded-r-xl w-24">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="business-sub-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                  <!-- Populated via JS -->
                 </tbody>
               </table>
             </div>
@@ -5840,44 +5941,99 @@
   <!-- ============================================================== -->
   <!-- MODAL: ADD/EDIT BUSINESS MASTER MODAL                          -->
   <!-- ============================================================== -->
-  <div id="business-master-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD/EDIT MAIN BUSINESS CATEGORY                         -->
+  <!-- ============================================================== -->
+  <div id="main-business-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
-        <h3 id="business-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-briefcase text-cyan-600"></i> नया बिज़नेस / व्यापार जोड़ें
+        <h3 id="main-business-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-folder-plus text-cyan-600"></i> मुख्य श्रेणी (Main Category) जोड़ें
         </h3>
-        <button type="button" onclick="closeBusinessMasterModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+        <button type="button" onclick="closeMainCategoryModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <form onsubmit="handleSaveBusiness(event)" class="space-y-3 text-xs">
-        <input type="hidden" id="business-item-id">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Business Name / श्रेणी *</label>
-          <input type="text" id="business-item-name" required placeholder="जैसे: किराना एवं जनरल स्टोर, साइबर कैफे" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500">
+      <form onsubmit="handleSaveMainCategory(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="main-biz-id">
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-1">
+            <label class="block font-bold text-slate-700 mb-1">Code (#) *</label>
+            <input type="text" id="main-biz-code" required placeholder="1, 2..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500">
+          </div>
+          <div class="col-span-2">
+            <label class="block font-bold text-slate-700 mb-1">रंग / थीम (Color)</label>
+            <select id="main-biz-color" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
+              <option value="cyan">Cyan (आसमानी)</option>
+              <option value="teal">Teal (गहरा नीला-हरा)</option>
+              <option value="emerald">Emerald Green (हरा)</option>
+              <option value="amber">Amber Gold (सुनहरा)</option>
+              <option value="indigo">Indigo Blue (नीला)</option>
+              <option value="purple">Purple (बैंगनी)</option>
+              <option value="rose">Rose Red (लाल)</option>
+            </select>
+          </div>
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">विवरण (Description) / सेवा प्रकार</label>
-          <input type="text" id="business-item-desc" placeholder="जैसे: खाद्य सामग्री, दैनिक आवश्यकताएं, ऑनलाइन फॉर्म" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500">
+          <label class="block font-bold text-slate-700 mb-1">Main Category Name *</label>
+          <input type="text" id="main-biz-name" required placeholder="जैसे: दुकान / रिटेल स्टोर (Shop & Retail)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500">
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">रंग / थीम (Badge Color)</label>
-          <select id="business-item-color" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:outline-none">
-            <option value="cyan">Cyan (आसमानी)</option>
-            <option value="teal">Teal (गहरा नीला-हरा)</option>
-            <option value="emerald">Emerald Green (हरा)</option>
-            <option value="amber">Amber Gold (सुनहरा)</option>
-            <option value="indigo">Indigo Blue (नीला)</option>
-            <option value="purple">Purple (बैंगनी)</option>
-            <option value="rose">Rose Red (गुलाबी/लाल)</option>
-            <option value="slate">Slate Gray (धूसर)</option>
-          </select>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / Description</label>
+          <input type="text" id="main-biz-desc" placeholder="संक्षिप्त विवरण दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500">
         </div>
         <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
-          <button type="button" onclick="closeBusinessMasterModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs">
+          <button type="button" onclick="closeMainCategoryModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs">
             रद्द करें
           </button>
-          <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 rounded-xl text-xs shadow-md shadow-cyan-600/20">
+          <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-cyan-600/20">
+            सुरक्षित करें
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD/EDIT SUB BUSINESS CATEGORY                          -->
+  <!-- ============================================================== -->
+  <div id="sub-business-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 id="sub-business-modal-heading" class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-file-circle-plus text-teal-600"></i> उप-श्रेणी (Sub Category) जोड़ें
+        </h3>
+        <button type="button" onclick="closeSubCategoryModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveSubCategory(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="sub-biz-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Main Category चुनें *</label>
+          <select id="sub-biz-parent-cat" required onchange="autoGenerateSubCode()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer">
+            <option value="">-- Main Category Select करें --</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-1">
+            <label class="block font-bold text-slate-700 mb-1">Sub Code *</label>
+            <input type="text" id="sub-biz-code" required placeholder="1-a, 1-b..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+          </div>
+          <div class="col-span-2">
+            <label class="block font-bold text-slate-700 mb-1">Sub Category Name *</label>
+            <input type="text" id="sub-biz-name" required placeholder="जैसे: किराना स्टोर, कपड़ा दुकान" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">विवरण / Description</label>
+          <input type="text" id="sub-biz-desc" placeholder="उप-श्रेणी का विवरण दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+        </div>
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeSubCategoryModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-teal-600/20">
             सुरक्षित करें
           </button>
         </div>
@@ -16489,57 +16645,126 @@
     }
 
     // ==============================================
-    // BUSSINESS MASTER FUNCTIONS
+    // BUSSINESS MASTER FUNCTIONS (2-Level Hierarchy: Main Categories 1,2,3 & Sub Categories 1-a, 1-b...)
     // ==============================================
-    function renderBusinessMasterTab() {
-      if (!masterSettings.businessCategories) {
+    let currentBusinessMainFilter = 'ALL';
+
+    function initBusinessMasterData() {
+      if (!masterSettings.businessCategories || !Array.isArray(masterSettings.businessCategories) || masterSettings.businessCategories.length === 0) {
         masterSettings.businessCategories = [
-          { id: "biz_1", name: "दुकान / रिटेल स्टोर (Shop / Retail)", description: "किराना, जनरल स्टोर, कपड़ा, मोबाइल आदि", color: "cyan", isSystem: true },
-          { id: "biz_2", name: "व्यापार / थोक विक्रेता (Wholesale / Trade)", description: "थोक व्यापार, डिस्ट्रीब्यूटर, एजेंसी", color: "teal", isSystem: true },
-          { id: "biz_3", name: "सेवा / कंसल्टेंसी (Services / Agency)", description: "ऑनलाइन सेवा, सीएससी, टूर & ट्रेवल्स, रिपेयरिंग", color: "blue", isSystem: true },
-          { id: "biz_4", name: "निर्माण / ठेकेदारी (Contractor / Building)", description: "भवन निर्माण, मटेरियल सप्लायर, कारीगरी", color: "amber", isSystem: true },
-          { id: "biz_5", name: "पेशेवर / सलाहकार (Professional / Doctor / CA)", description: "डॉक्टर, वकील, सीए, शिक्षक, इंजीनियर", color: "indigo", isSystem: true },
-          { id: "biz_6", name: "अन्य स्वरोजगार (Self-Employed / Others)", description: "कृषि, डेयरी, ट्रांसपोर्ट एवं अन्य स्वरोजगार", color: "purple", isSystem: true }
+          { id: "biz_cat_1", code: "1", name: "दुकान / रिटेल स्टोर (Shop & Retail)", description: "किराना, कपड़ा, जनरल स्टोर, इलेक्ट्रॉनिक्स आदि", color: "cyan", isSystem: true },
+          { id: "biz_cat_2", code: "2", name: "थोक व्यापार / डिस्ट्रीब्यूशन (Wholesale & Trade)", description: "थोक विक्रेता, एजेंसी, सप्लायर", color: "teal", isSystem: true },
+          { id: "biz_cat_3", code: "3", name: "सेवाएं / ऑनलाइन केंद्र (Services & Tech)", description: "CSC, साइबर कैफे, टूर & ट्रैवल्स, ऑटोमोबाइल रिपेयर", color: "blue", isSystem: true },
+          { id: "biz_cat_4", code: "4", name: "निर्माण व रियल एस्टेट (Contractor & Real Estate)", description: "भवन निर्माण, ठेकेदारी, बिल्डिंग मटेरियल", color: "amber", isSystem: true },
+          { id: "biz_cat_5", code: "5", name: "पेशेवर व सलाहकार (Professionals & Consulting)", description: "डॉक्टर, वकील, सीए, शिक्षक, इंजीनियर", color: "indigo", isSystem: true }
         ];
       }
 
-      const list = masterSettings.businessCategories;
-      const bBusiness = document.getElementById('badge-count-business');
-      if (bBusiness) bBusiness.textContent = list.length;
-      const countBadge = document.getElementById('business-master-count-badge');
-      if (countBadge) countBadge.textContent = 'Total: ' + list.length;
+      if (!masterSettings.businessSubCategories || !Array.isArray(masterSettings.businessSubCategories)) {
+        masterSettings.businessSubCategories = [
+          { id: "biz_sub_1", categoryId: "biz_cat_1", code: "1-a", name: "किराना एवं जनरल स्टोर (Grocery Store)", description: "दैनिक राशन, किराना सामान" },
+          { id: "biz_sub_2", categoryId: "biz_cat_1", code: "1-b", name: "कपड़ा एवं परिधान (Garments & Clothing)", description: "साड़ी, रेडीमेड, कपड़ा दुकान" },
+          { id: "biz_sub_3", categoryId: "biz_cat_1", code: "1-c", name: "मोबाइल एवं इलेक्ट्रॉनिक्स (Mobile & Electronics)", description: "मोबाइल बिक्री, एक्सेसरीज, रिपेयरिंग" },
+          { id: "biz_sub_4", categoryId: "biz_cat_1", code: "1-d", name: "मेडिकल स्टोर / फार्मेसी (Pharmacy)", description: "दवाएं व स्वास्थ्य उत्पाद" },
+          { id: "biz_sub_5", categoryId: "biz_cat_2", code: "2-a", "name": "खाद्यान्न थोक विक्रेता (Grains Wholesale)", description: "अनाज, तेल, मसाला थोक वितरण" },
+          { id: "biz_sub_6", categoryId: "biz_cat_2", code: "2-b", "name": "FMCG डिस्ट्रीब्यूटर (FMCG Agency)", description: "ब्रांडेड उत्पादों की एजेंसी" },
+          { id: "biz_sub_7", categoryId: "biz_cat_3", code: "3-a", "name": "ग्राहक सेवा केंद्र / CSC (Online Services)", description: "आधार, बैंकिंग, ऑनलाइन फॉर्म" },
+          { id: "biz_sub_8", categoryId: "biz_cat_3", code: "3-b", "name": "टूर, ट्रैवल्स एवं ट्रांसपोर्ट (Travels & Transport)", description: "गाड़ी बुकिंग, माल ढुलाई" },
+          { id: "biz_sub_9", categoryId: "biz_cat_4", code: "4-a", "name": "सिविल ठेकेदार (Civil Contractor)", description: "सड़क, पुल, भवन निर्माण ठेका" },
+          { id: "biz_sub_10", categoryId: "biz_cat_5", code: "5-a", "name": "अधिवक्ता / लीगल कंसल्टेंट (Lawyer & Legal)", description: "न्यायालय व विधिक सलाह" }
+        ];
+      }
+    }
 
-      // 1. Mobile Cards View
-      const cardsMobile = document.getElementById('business-master-cards-mobile');
+    function renderBusinessMasterTab() {
+      initBusinessMasterData();
+
+      const mainList = masterSettings.businessCategories || [];
+      const subList = masterSettings.businessSubCategories || [];
+
+      // Badges
+      const bBusiness = document.getElementById('badge-count-business');
+      if (bBusiness) bBusiness.textContent = mainList.length;
+
+      const mainCountBadge = document.getElementById('main-category-count-badge');
+      if (mainCountBadge) mainCountBadge.textContent = 'Total: ' + mainList.length;
+
+      const subCountBadge = document.getElementById('sub-category-count-badge');
+      if (subCountBadge) subCountBadge.textContent = 'Total: ' + subList.length;
+
+      // Update Filter Dropdown in Sub Categories section
+      populateMainCategoryFilterSelect();
+
+      // Render 1: Main Categories
+      renderMainCategoriesView(mainList, subList);
+
+      // Render 2: Sub Categories
+      renderSubCategoriesView(mainList, subList);
+    }
+
+    function populateMainCategoryFilterSelect() {
+      const select = document.getElementById('filter-business-main-cat');
+      if (!select) return;
+      const currentVal = select.value || 'ALL';
+      const mainList = masterSettings.businessCategories || [];
+
+      let opts = '<option value="ALL">All Categories (सभी)</option>';
+      mainList.forEach(c => {
+        const selected = (c.id === currentVal) ? 'selected' : '';
+        opts += `<option value="${c.id}" ${selected}>[${c.code || '#'}] ${c.name}</option>`;
+      });
+      select.innerHTML = opts;
+    }
+
+    function filterSubCategoriesByMain(val) {
+      currentBusinessMainFilter = val;
+      const mainList = masterSettings.businessCategories || [];
+      const subList = masterSettings.businessSubCategories || [];
+      renderSubCategoriesView(mainList, subList);
+    }
+
+    // -------------------------------------------------------------
+    // RENDER MAIN CATEGORIES (Mobile Cards & Desktop Table)
+    // -------------------------------------------------------------
+    function renderMainCategoriesView(mainList, subList) {
+      const cardsMobile = document.getElementById('business-main-cards-mobile');
+      const tbody = document.getElementById('business-main-tbody');
+
       if (cardsMobile) {
-        if (list.length === 0) {
-          cardsMobile.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs">कोई बिज़नेस श्रेणी उपलब्ध नहीं है। "+ Add Business" पर क्लिक करके जोड़ें।</div>';
+        if (mainList.length === 0) {
+          cardsMobile.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs">कोई मुख्य श्रेणी नहीं है। "+ Add Main" पर क्लिक करें।</div>';
         } else {
-          cardsMobile.innerHTML = list.map((b, idx) => {
-            const badgeColor = b.color || 'cyan';
+          cardsMobile.innerHTML = mainList.map(c => {
+            const subs = subList.filter(s => s.categoryId === c.id);
+            const badgeColor = c.color || 'cyan';
             return `
-              <div class="p-3 bg-slate-50/80 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-2.5 shadow-2xs">
+              <div class="p-3 bg-slate-50/90 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-2.5 shadow-2xs">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-7 h-7 rounded-xl bg-white border border-slate-200 font-mono font-bold text-xs text-slate-600 flex items-center justify-center shrink-0">
-                    ${idx + 1}
+                  <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 font-mono font-black text-xs text-cyan-800 flex items-center justify-center shrink-0 shadow-2xs">
+                    ${c.code || '-'}
                   </div>
                   <div class="min-w-0">
                     <div class="flex items-center gap-1.5 flex-wrap">
                       <span class="w-2 h-2 rounded-full ${getStatusDotClass(badgeColor)} flex-shrink-0"></span>
-                      <h5 class="text-xs font-extrabold text-slate-900 truncate">${b.name}</h5>
-                      <span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${b.isSystem ? 'bg-slate-100 text-slate-600' : 'bg-cyan-100 text-cyan-700'}">
-                        ${b.isSystem ? 'Standard' : 'Custom'}
+                      <h5 class="text-xs font-black text-slate-900 truncate">${c.name}</h5>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-medium truncate mt-0.5">${c.description || '-'}</p>
+                    <div class="flex items-center gap-2 mt-1">
+                      <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-cyan-100 text-cyan-800">
+                        ${subs.length} Sub categories
                       </span>
                     </div>
-                    <p class="text-[11px] text-slate-500 font-medium truncate mt-0.5">${b.description || '-'}</p>
                   </div>
                 </div>
 
                 <div class="flex items-center gap-1 shrink-0">
-                  <button type="button" onclick="editBusinessItem('${b.id}')" class="w-7 h-7 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs transition-all cursor-pointer" title="Edit">
+                  <button type="button" onclick="openAddSubCategoryModal('${c.id}')" class="w-7 h-7 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 flex items-center justify-center text-xs transition-all cursor-pointer" title="Add Sub Category under this">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                  <button type="button" onclick="editMainCategory('${c.id}')" class="w-7 h-7 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs transition-all cursor-pointer" title="Edit">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                  <button type="button" onclick="deleteBusinessItem('${b.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-600 flex items-center justify-center text-xs transition-all cursor-pointer" title="Delete">
+                  <button type="button" onclick="deleteMainCategory('${c.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-600 flex items-center justify-center text-xs transition-all cursor-pointer" title="Delete">
                     <i class="fa-solid fa-trash-can"></i>
                   </button>
                 </div>
@@ -16549,41 +16774,45 @@
         }
       }
 
-      // 2. Desktop Table View
-      const tbody = document.getElementById('business-master-tbody');
       if (tbody) {
-        if (list.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-400 text-xs">कोई बिज़नेस श्रेणी उपलब्ध नहीं है। ऊपर "+ Add Business" पर क्लिक करें।</td></tr>';
+        if (mainList.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-400 text-xs">कोई मुख्य श्रेणी उपलब्ध नहीं है। ऊपर "+ Main Category" पर क्लिक करें।</td></tr>';
         } else {
-          tbody.innerHTML = list.map((b, idx) => {
-            const badgeColor = b.color || 'cyan';
+          tbody.innerHTML = mainList.map(c => {
+            const subs = subList.filter(s => s.categoryId === c.id);
+            const badgeColor = c.color || 'cyan';
             return `
               <tr class="hover:bg-slate-50 transition-colors">
-                <td class="p-3 pl-4 font-mono font-bold text-slate-500">${idx + 1}</td>
+                <td class="p-3 pl-4 font-mono font-black text-cyan-800 text-xs">[${c.code || '-'}]</td>
                 <td class="p-3">
                   <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full ${getStatusDotClass(badgeColor)} flex-shrink-0"></span>
-                    <span class="font-extrabold text-slate-900 text-xs">${b.name}</span>
+                    <span class="font-extrabold text-slate-900 text-xs">${c.name}</span>
                   </div>
                 </td>
-                <td class="p-3 text-slate-600 text-xs">${b.description || '-'}</td>
+                <td class="p-3 text-slate-600 text-xs">${c.description || '-'}</td>
+                <td class="p-3 text-center">
+                  <button type="button" onclick="filterSubCategoriesByMain('${c.id}')" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-50 hover:bg-cyan-100 text-cyan-800 border border-cyan-200 transition-colors cursor-pointer" title="View these subcategories">
+                    <i class="fa-solid fa-sitemap text-[9px]"></i>
+                    <span>${subs.length} Subs</span>
+                  </button>
+                </td>
                 <td class="p-3 text-center">
                   <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
                     <span class="w-2 h-2 rounded-full ${getStatusDotClass(badgeColor)}"></span>
                     <span>${badgeColor}</span>
                   </span>
                 </td>
-                <td class="p-3 text-center">
-                  ${b.isSystem 
-                    ? '<span class="text-[10px] bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full font-bold">Standard</span>' 
-                    : '<span class="text-[10px] bg-cyan-100 text-cyan-700 px-2.5 py-0.5 rounded-full font-bold">Custom</span>'}
-                </td>
                 <td class="p-3 pr-4 text-center">
                   <div class="flex items-center justify-center gap-1.5">
-                    <button type="button" onclick="editBusinessItem('${b.id}')" class="w-7 h-7 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Edit">
+                    <button type="button" onclick="openAddSubCategoryModal('${c.id}')" class="px-2 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold text-[10px] flex items-center gap-1 transition-colors cursor-pointer" title="Add Sub Category under this">
+                      <i class="fa-solid fa-plus text-[9px]"></i>
+                      <span>Sub</span>
+                    </button>
+                    <button type="button" onclick="editMainCategory('${c.id}')" class="w-7 h-7 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Edit">
                       <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    <button type="button" onclick="deleteBusinessItem('${b.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Delete">
+                    <button type="button" onclick="deleteMainCategory('${c.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Delete">
                       <i class="fa-solid fa-trash-can"></i>
                     </button>
                   </div>
@@ -16595,62 +16824,164 @@
       }
     }
 
-    function openAddBusinessModal() {
-      const heading = document.getElementById('business-modal-heading');
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-briefcase text-cyan-600"></i> नया बिज़नेस / व्यापार जोड़ें';
-      document.getElementById('business-item-id').value = '';
-      document.getElementById('business-item-name').value = '';
-      document.getElementById('business-item-desc').value = '';
-      document.getElementById('business-item-color').value = 'cyan';
-      const modal = document.getElementById('business-master-modal');
+    // -------------------------------------------------------------
+    // RENDER SUB CATEGORIES (Mobile Cards & Desktop Table)
+    // -------------------------------------------------------------
+    function renderSubCategoriesView(mainList, subList) {
+      let filtered = [...subList];
+      if (currentBusinessMainFilter && currentBusinessMainFilter !== 'ALL') {
+        filtered = filtered.filter(s => s.categoryId === currentBusinessMainFilter);
+      }
+
+      const cardsMobile = document.getElementById('business-sub-cards-mobile');
+      const tbody = document.getElementById('business-sub-tbody');
+
+      if (cardsMobile) {
+        if (filtered.length === 0) {
+          cardsMobile.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs">कोई उप-श्रेणी उपलब्ध नहीं है। "+ Add Sub" पर क्लिक करके जोड़ें।</div>';
+        } else {
+          cardsMobile.innerHTML = filtered.map(s => {
+            const parent = mainList.find(m => m.id === s.categoryId);
+            const parentName = parent ? `[${parent.code || '#'}] ${parent.name}` : 'Unassigned';
+            const badgeColor = parent ? (parent.color || 'teal') : 'slate';
+
+            return `
+              <div class="p-3 bg-slate-50/90 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-2.5 shadow-2xs">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 font-mono font-black text-xs text-teal-800 flex items-center justify-center shrink-0 shadow-2xs">
+                    ${s.code || '-'}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <h5 class="text-xs font-black text-slate-900 truncate">${s.name}</h5>
+                    </div>
+                    <p class="text-[10px] text-teal-700 font-semibold truncate mt-0.5">
+                      <i class="fa-solid fa-arrow-turn-up rotate-90 text-[9px] mr-0.5"></i> ${parentName}
+                    </p>
+                    <p class="text-[11px] text-slate-500 font-medium truncate mt-0.5">${s.description || '-'}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1 shrink-0">
+                  <button type="button" onclick="editSubCategory('${s.id}')" class="w-7 h-7 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 flex items-center justify-center text-xs transition-all cursor-pointer" title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button type="button" onclick="deleteSubCategory('${s.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-600 flex items-center justify-center text-xs transition-all cursor-pointer" title="Delete">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-400 text-xs">कोई उप-श्रेणी उपलब्ध नहीं है। ऊपर "+ Add Sub" पर क्लिक करें।</td></tr>';
+        } else {
+          tbody.innerHTML = filtered.map(s => {
+            const parent = mainList.find(m => m.id === s.categoryId);
+            const parentName = parent ? `[${parent.code || '#'}] ${parent.name}` : '<span class="text-rose-500 font-bold">Unassigned</span>';
+            const badgeColor = parent ? (parent.color || 'teal') : 'slate';
+
+            return `
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-3 pl-4 font-mono font-black text-teal-800 text-xs">${s.code || '-'}</td>
+                <td class="p-3">
+                  <span class="font-extrabold text-slate-900 text-xs">${s.name}</span>
+                </td>
+                <td class="p-3">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                    <span class="w-2 h-2 rounded-full ${getStatusDotClass(badgeColor)}"></span>
+                    <span>${parentName}</span>
+                  </span>
+                </td>
+                <td class="p-3 text-slate-600 text-xs">${s.description || '-'}</td>
+                <td class="p-3 pr-4 text-center">
+                  <div class="flex items-center justify-center gap-1.5">
+                    <button type="button" onclick="editSubCategory('${s.id}')" class="w-7 h-7 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-700 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Edit">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" onclick="deleteSubCategory('${s.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer" title="Delete">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    // -------------------------------------------------------------
+    // MODAL ACTIONS: MAIN CATEGORY
+    // -------------------------------------------------------------
+    function openAddMainCategoryModal() {
+      const heading = document.getElementById('main-business-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-folder-plus text-cyan-600"></i> नई मुख्य श्रेणी (Main Category) जोड़ें';
+
+      const nextCode = ((masterSettings.businessCategories || []).length + 1).toString();
+      document.getElementById('main-biz-id').value = '';
+      document.getElementById('main-biz-code').value = nextCode;
+      document.getElementById('main-biz-name').value = '';
+      document.getElementById('main-biz-desc').value = '';
+      document.getElementById('main-biz-color').value = 'cyan';
+
+      const modal = document.getElementById('main-business-modal');
       if (modal) {
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
       }
     }
 
-    function editBusinessItem(id) {
-      if (!masterSettings.businessCategories) return;
-      const item = masterSettings.businessCategories.find(b => b.id === id);
+    function editMainCategory(id) {
+      initBusinessMasterData();
+      const item = (masterSettings.businessCategories || []).find(c => c.id === id);
       if (!item) return;
 
-      const heading = document.getElementById('business-modal-heading');
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-cyan-600"></i> बिज़नेस श्रेणी संपादित करें';
-      document.getElementById('business-item-id').value = item.id;
-      document.getElementById('business-item-name').value = item.name;
-      document.getElementById('business-item-desc').value = item.description || '';
-      document.getElementById('business-item-color').value = item.color || 'cyan';
+      const heading = document.getElementById('main-business-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-cyan-600"></i> मुख्य श्रेणी संपादित करें';
 
-      const modal = document.getElementById('business-master-modal');
+      document.getElementById('main-biz-id').value = item.id;
+      document.getElementById('main-biz-code').value = item.code || '';
+      document.getElementById('main-biz-name').value = item.name || '';
+      document.getElementById('main-biz-desc').value = item.description || '';
+      document.getElementById('main-biz-color').value = item.color || 'cyan';
+
+      const modal = document.getElementById('main-business-modal');
       if (modal) {
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
       }
     }
 
-    function closeBusinessMasterModal() {
-      const modal = document.getElementById('business-master-modal');
+    function closeMainCategoryModal() {
+      const modal = document.getElementById('main-business-modal');
       if (modal) {
         modal.classList.add('hidden');
         modal.style.display = 'none';
       }
     }
 
-    async function handleSaveBusiness(e) {
+    async function handleSaveMainCategory(e) {
       e.preventDefault();
-      const id = document.getElementById('business-item-id').value;
-      const name = document.getElementById('business-item-name').value.trim();
-      const desc = document.getElementById('business-item-desc').value.trim();
-      const color = document.getElementById('business-item-color').value || 'cyan';
+      const id = document.getElementById('main-biz-id').value;
+      const code = document.getElementById('main-biz-code').value.trim();
+      const name = document.getElementById('main-biz-name').value.trim();
+      const desc = document.getElementById('main-biz-desc').value.trim();
+      const color = document.getElementById('main-biz-color').value || 'cyan';
 
       if (!name) return;
       if (!masterSettings.businessCategories) masterSettings.businessCategories = [];
 
       if (id) {
-        const idx = masterSettings.businessCategories.findIndex(b => b.id === id);
+        const idx = masterSettings.businessCategories.findIndex(c => c.id === id);
         if (idx !== -1) {
           masterSettings.businessCategories[idx] = {
             ...masterSettings.businessCategories[idx],
+            code,
             name,
             description: desc,
             color
@@ -16658,7 +16989,8 @@
         }
       } else {
         masterSettings.businessCategories.push({
-          id: 'biz_' + Date.now(),
+          id: 'biz_cat_' + Date.now(),
+          code: code || ((masterSettings.businessCategories.length + 1).toString()),
           name,
           description: desc,
           color,
@@ -16666,22 +16998,169 @@
         });
       }
 
-      closeBusinessMasterModal();
+      closeMainCategoryModal();
       await saveAllSettingsToCloud();
     }
 
-    async function deleteBusinessItem(id) {
-      if (!masterSettings.businessCategories) return;
-      const item = masterSettings.businessCategories.find(b => b.id === id);
+    async function deleteMainCategory(id) {
+      initBusinessMasterData();
+      const item = (masterSettings.businessCategories || []).find(c => c.id === id);
       if (!item) return;
 
-      if (!confirm(`क्या आप वास्तव में "${item.name}" बिज़नेस श्रेणी को हटाना चाहते हैं?`)) return;
+      const subCount = (masterSettings.businessSubCategories || []).filter(s => s.categoryId === id).length;
+      let msg = `क्या आप वास्तव में मुख्य श्रेणी "${item.name}" को हटाना चाहते हैं?`;
+      if (subCount > 0) {
+        msg += `\n\nचेतावनी: इसके अंतर्गत ${subCount} उप-श्रेणियां (Sub-categories) भी जुड़ी हुई हैं, वे भी हटा दी जाएंगी!`;
+      }
 
-      masterSettings.businessCategories = masterSettings.businessCategories.filter(b => b.id !== id);
+      if (!confirm(msg)) return;
+
+      masterSettings.businessCategories = masterSettings.businessCategories.filter(c => c.id !== id);
+      masterSettings.businessSubCategories = (masterSettings.businessSubCategories || []).filter(s => s.categoryId !== id);
+
       await saveAllSettingsToCloud();
     }
 
-    // Handlers for Save (Add or Update) in Masters
+    // -------------------------------------------------------------
+    // MODAL ACTIONS: SUB CATEGORY
+    // -------------------------------------------------------------
+    function openAddSubCategoryModal(preselectedCatId = null) {
+      initBusinessMasterData();
+      const heading = document.getElementById('sub-business-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-file-circle-plus text-teal-600"></i> नई उप-श्रेणी (Sub Category) जोड़ें';
+
+      const parentSelect = document.getElementById('sub-biz-parent-cat');
+      if (parentSelect) {
+        const mainList = masterSettings.businessCategories || [];
+        parentSelect.innerHTML = '<option value="">-- Main Category Select करें --</option>' + 
+          mainList.map(c => `<option value="${c.id}">[${c.code || '#'}] ${c.name}</option>`).join('');
+
+        if (preselectedCatId) {
+          parentSelect.value = preselectedCatId;
+        } else if (currentBusinessMainFilter && currentBusinessMainFilter !== 'ALL') {
+          parentSelect.value = currentBusinessMainFilter;
+        } else if (mainList.length > 0) {
+          parentSelect.value = mainList[0].id;
+        }
+      }
+
+      document.getElementById('sub-biz-id').value = '';
+      document.getElementById('sub-biz-name').value = '';
+      document.getElementById('sub-biz-desc').value = '';
+
+      autoGenerateSubCode();
+
+      const modal = document.getElementById('sub-business-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function autoGenerateSubCode() {
+      const parentId = document.getElementById('sub-biz-parent-cat').value;
+      if (!parentId) return;
+
+      const parent = (masterSettings.businessCategories || []).find(c => c.id === parentId);
+      const parentCode = parent ? (parent.code || '1') : '1';
+
+      const existingSubs = (masterSettings.businessSubCategories || []).filter(s => s.categoryId === parentId);
+      const letterIndex = existingSubs.length;
+      const letter = String.fromCharCode(97 + (letterIndex % 26)); // 'a', 'b', 'c'...
+      const suffix = letterIndex >= 26 ? (Math.floor(letterIndex / 26) + 1).toString() : '';
+
+      document.getElementById('sub-biz-code').value = `${parentCode}-${letter}${suffix}`;
+    }
+
+    function editSubCategory(id) {
+      initBusinessMasterData();
+      const item = (masterSettings.businessSubCategories || []).find(s => s.id === id);
+      if (!item) return;
+
+      const heading = document.getElementById('sub-business-modal-heading');
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square text-teal-600"></i> उप-श्रेणी संपादित करें';
+
+      const parentSelect = document.getElementById('sub-biz-parent-cat');
+      if (parentSelect) {
+        const mainList = masterSettings.businessCategories || [];
+        parentSelect.innerHTML = '<option value="">-- Main Category Select करें --</option>' + 
+          mainList.map(c => `<option value="${c.id}">[${c.code || '#'}] ${c.name}</option>`).join('');
+        parentSelect.value = item.categoryId || '';
+      }
+
+      document.getElementById('sub-biz-id').value = item.id;
+      document.getElementById('sub-biz-code').value = item.code || '';
+      document.getElementById('sub-biz-name').value = item.name || '';
+      document.getElementById('sub-biz-desc').value = item.description || '';
+
+      const modal = document.getElementById('sub-business-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeSubCategoryModal() {
+      const modal = document.getElementById('sub-business-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    async function handleSaveSubCategory(e) {
+      e.preventDefault();
+      const id = document.getElementById('sub-biz-id').value;
+      const categoryId = document.getElementById('sub-biz-parent-cat').value;
+      const code = document.getElementById('sub-biz-code').value.trim();
+      const name = document.getElementById('sub-biz-name').value.trim();
+      const desc = document.getElementById('sub-biz-desc').value.trim();
+
+      if (!categoryId) {
+        alert('कृपया Main Category का चयन करें!');
+        return;
+      }
+      if (!name) return;
+
+      if (!masterSettings.businessSubCategories) masterSettings.businessSubCategories = [];
+
+      if (id) {
+        const idx = masterSettings.businessSubCategories.findIndex(s => s.id === id);
+        if (idx !== -1) {
+          masterSettings.businessSubCategories[idx] = {
+            ...masterSettings.businessSubCategories[idx],
+            categoryId,
+            code,
+            name,
+            description: desc
+          };
+        }
+      } else {
+        masterSettings.businessSubCategories.push({
+          id: 'biz_sub_' + Date.now(),
+          categoryId,
+          code,
+          name,
+          description: desc
+        });
+      }
+
+      closeSubCategoryModal();
+      await saveAllSettingsToCloud();
+    }
+
+    async function deleteSubCategory(id) {
+      initBusinessMasterData();
+      const item = (masterSettings.businessSubCategories || []).find(s => s.id === id);
+      if (!item) return;
+
+      if (!confirm(`क्या आप वास्तव में उप-श्रेणी "${item.name}" को हटाना चाहते हैं?`)) return;
+
+      masterSettings.businessSubCategories = masterSettings.businessSubCategories.filter(s => s.id !== id);
+      await saveAllSettingsToCloud();
+    }
+
+    // Handlers for Save (Add or Update) in Masters    // Handlers for Save (Add or Update) in Masters
     async function handleSaveStatus(e) {
       e.preventDefault();
       const id = document.getElementById('status-item-id').value;
@@ -23566,17 +24045,27 @@
 
     // Team Members / Designation Master exports
     window.renderDesignationMasterTab = renderDesignationMasterTab;
+    window.renderDesignationMasterTab = renderDesignationMasterTab;
     window.openAddDesignationModal = openAddDesignationModal;
-    window.openAddBusinessModal = openAddBusinessModal;
-    window.editBusinessItem = editBusinessItem;
-    window.closeBusinessMasterModal = closeBusinessMasterModal;
-    window.handleSaveBusiness = handleSaveBusiness;
-    window.deleteBusinessItem = deleteBusinessItem;
-    window.renderBusinessMasterTab = renderBusinessMasterTab;
     window.editDesignationItem = editDesignationItem;
     window.closeDesignationModal = closeDesignationModal;
     window.handleSaveDesignation = handleSaveDesignation;
     window.deleteDesignationItem = deleteDesignationItem;
+
+    // Business Master exports (2-tier Main & Sub categories)
+    window.renderBusinessMasterTab = renderBusinessMasterTab;
+    window.filterSubCategoriesByMain = filterSubCategoriesByMain;
+    window.autoGenerateSubCode = autoGenerateSubCode;
+    window.openAddMainCategoryModal = openAddMainCategoryModal;
+    window.editMainCategory = editMainCategory;
+    window.closeMainCategoryModal = closeMainCategoryModal;
+    window.handleSaveMainCategory = handleSaveMainCategory;
+    window.deleteMainCategory = deleteMainCategory;
+    window.openAddSubCategoryModal = openAddSubCategoryModal;
+    window.editSubCategory = editSubCategory;
+    window.closeSubCategoryModal = closeSubCategoryModal;
+    window.handleSaveSubCategory = handleSaveSubCategory;
+    window.deleteSubCategory = deleteSubCategory;
 
     // Member exports
     window.handleMemberLogin = handleMemberLogin;
