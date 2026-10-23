@@ -6325,8 +6325,17 @@
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Qty / Unit / Wt</label>
-            <input type="text" id="sub-biz-weight" placeholder="50 Sticks, 100g" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+            <label class="block font-bold text-slate-700 mb-1">Qty / Wt</label>
+            <div class="flex items-center gap-1">
+              <input type="number" step="any" min="0" id="sub-biz-qty-val" placeholder="100" class="w-1/2 bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+              <select id="sub-biz-unit-type" class="w-1/2 bg-slate-50 border border-slate-200 rounded-xl px-1 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 cursor-pointer">
+                <option value="g">G</option>
+                <option value="KG">KG</option>
+                <option value="Ltr">Ltr</option>
+                <option value="Pcs">Pcs</option>
+              </select>
+            </div>
+            <input type="hidden" id="sub-biz-weight">
           </div>
           <div>
             <label class="block font-bold text-indigo-700 mb-1">Costing (₹)</label>
@@ -17354,6 +17363,8 @@
       document.getElementById('sub-biz-id').value = '';
       document.getElementById('sub-biz-name').value = '';
       document.getElementById('sub-biz-weight').value = '';
+      if (document.getElementById('sub-biz-qty-val')) document.getElementById('sub-biz-qty-val').value = '';
+      if (document.getElementById('sub-biz-unit-type')) document.getElementById('sub-biz-unit-type').value = 'g';
       document.getElementById('sub-biz-mrp').value = '';
       document.getElementById('sub-biz-cost-price').value = '';
       document.getElementById('sub-biz-our-price').value = '';
@@ -17403,6 +17414,22 @@
       document.getElementById('sub-biz-code').value = item.code || '';
       document.getElementById('sub-biz-name').value = item.name || '';
       document.getElementById('sub-biz-weight').value = item.weight || '';
+      // Parse weight string e.g. "100 g", "50 Sticks", "1 KG", "10 Pcs"
+      if (document.getElementById('sub-biz-qty-val') && document.getElementById('sub-biz-unit-type')) {
+        const wtStr = (item.weight || '').trim();
+        const m = wtStr.match(/^([0-9.]+)s*(KG|G|Ltr|Pcs|Sticks)?/i);
+        if (m) {
+          document.getElementById('sub-biz-qty-val').value = m[1] || '';
+          let matchedUnit = (m[2] || 'g').toUpperCase();
+          if (matchedUnit === 'G') document.getElementById('sub-biz-unit-type').value = 'g';
+          else if (matchedUnit === 'KG') document.getElementById('sub-biz-unit-type').value = 'KG';
+          else if (matchedUnit === 'LTR') document.getElementById('sub-biz-unit-type').value = 'Ltr';
+          else document.getElementById('sub-biz-unit-type').value = 'Pcs';
+        } else {
+          document.getElementById('sub-biz-qty-val').value = wtStr;
+          document.getElementById('sub-biz-unit-type').value = 'g';
+        }
+      }
       document.getElementById('sub-biz-mrp').value = (item.mrp !== undefined && item.mrp !== null) ? item.mrp : '';
       document.getElementById('sub-biz-cost-price').value = (item.costPrice !== undefined && item.costPrice !== null) ? item.costPrice : '';
       document.getElementById('sub-biz-our-price').value = (item.ourPrice !== undefined && item.ourPrice !== null) ? item.ourPrice : '';
@@ -17429,7 +17456,14 @@
       const categoryId = document.getElementById('sub-biz-parent-cat').value;
       const code = document.getElementById('sub-biz-code').value.trim();
       const name = document.getElementById('sub-biz-name').value.trim();
-      const weight = document.getElementById('sub-biz-weight').value.trim();
+      let weight = '';
+      const qtyVal = document.getElementById('sub-biz-qty-val')?.value.trim();
+      const unitType = document.getElementById('sub-biz-unit-type')?.value;
+      if (qtyVal) {
+        weight = `${qtyVal} ${unitType}`;
+      } else {
+        weight = document.getElementById('sub-biz-weight').value.trim();
+      }
       const mrp = document.getElementById('sub-biz-mrp').value !== '' ? parseFloat(document.getElementById('sub-biz-mrp').value) : null;
       const costPrice = document.getElementById('sub-biz-cost-price').value !== '' ? parseFloat(document.getElementById('sub-biz-cost-price').value) : null;
       const ourPrice = document.getElementById('sub-biz-our-price').value !== '' ? parseFloat(document.getElementById('sub-biz-our-price').value) : null;
