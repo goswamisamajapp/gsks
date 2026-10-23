@@ -804,9 +804,10 @@
                 <th class="p-2.5">Main Category</th>
                 <th class="p-2.5 text-center">Unit / Wt</th>
                 <th class="p-2.5 text-center">Our Price</th>
-                <th class="p-2.5 text-center w-36">Current Stock</th>
+                <th class="p-2.5 text-center">Current Stock</th>
                 <th class="p-2.5 text-center">Stock Value</th>
-                <th class="p-2.5 pr-3 text-center rounded-r-xl">Status</th>
+                <th class="p-2.5 text-center">Status</th>
+                <th class="p-2.5 pr-3 text-center rounded-r-xl w-28">Action</th>
               </tr>
             </thead>
             <tbody id="stock-items-tbody" class="divide-y divide-slate-100 text-slate-700 font-medium">
@@ -6295,6 +6296,96 @@
   <!-- ============================================================== -->
   <!-- MODAL: ADD/EDIT SUB BUSINESS CATEGORY                          -->
   <!-- ============================================================== -->
+  
+  <!-- ============================================================== -->
+  <!-- MODAL: ADJUST / EDIT STOCK POPUP                               -->
+  <!-- ============================================================== -->
+  <div id="edit-stock-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-boxes-stacked text-cyan-600"></i>
+          <span>स्टॉक अपडेट करें (Edit Stock)</span>
+        </h3>
+        <button type="button" onclick="closeEditStockModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveStockModal(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-stock-item-id">
+
+        <!-- Product Summary Card -->
+        <div class="p-3 bg-cyan-50/70 border border-cyan-100 rounded-2xl flex items-center justify-between">
+          <div class="min-w-0">
+            <h4 class="text-xs font-black text-slate-900 truncate" id="edit-stock-item-name">-</h4>
+            <p class="text-[10px] text-cyan-700 font-semibold truncate mt-0.5" id="edit-stock-item-meta">-</p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-[9px] uppercase font-bold text-slate-400 block">Current Stock</span>
+            <span class="font-mono font-black text-sm text-cyan-900" id="edit-stock-current-display">0</span>
+          </div>
+        </div>
+
+        <!-- Mode Selection: Add, Subtract, Direct Set -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">कार्रवाई प्रकार (Select Action)</label>
+          <div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl">
+            <button type="button" onclick="setStockModalMode('add')" id="stock-mode-btn-add" class="py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all bg-emerald-600 text-white shadow-xs flex items-center justify-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-plus text-[10px]"></i> <span>Add</span>
+            </button>
+            <button type="button" onclick="setStockModalMode('sub')" id="stock-mode-btn-sub" class="py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-minus text-[10px]"></i> <span>Reduce</span>
+            </button>
+            <button type="button" onclick="setStockModalMode('set')" id="stock-mode-btn-set" class="py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-pen text-[10px]"></i> <span>Set Direct</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quantity Input -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1" id="stock-modal-qty-label">मात्रा जोड़ें (Quantity to Add) *</label>
+          <input 
+            type="number" 
+            min="0" 
+            step="1" 
+            id="stock-modal-qty-input" 
+            oninput="calcStockModalPreview()" 
+            required 
+            placeholder="संख्या दर्ज करें (e.g. 10, 50)" 
+            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 font-mono"
+          >
+        </div>
+
+        <!-- Quick increment shortcuts -->
+        <div class="flex items-center gap-1.5">
+          <span class="text-[10px] font-bold text-slate-400">Quick:</span>
+          <button type="button" onclick="addStockModalQuickVal(5)" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] cursor-pointer">+5</button>
+          <button type="button" onclick="addStockModalQuickVal(10)" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] cursor-pointer">+10</button>
+          <button type="button" onclick="addStockModalQuickVal(25)" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] cursor-pointer">+25</button>
+          <button type="button" onclick="addStockModalQuickVal(50)" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] cursor-pointer">+50</button>
+          <button type="button" onclick="addStockModalQuickVal(100)" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] cursor-pointer">+100</button>
+        </div>
+
+        <!-- Live Preview Result -->
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-600">नया कुल स्टॉक (New Total):</span>
+          <span class="font-mono font-black text-sm text-cyan-900" id="stock-modal-preview-total">0</span>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <button type="button" onclick="closeEditStockModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs cursor-pointer">
+            रद्द करें
+          </button>
+          <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-cyan-600/20 cursor-pointer active:scale-95">
+            सुरक्षित करें (Save)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="sub-business-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
@@ -24551,21 +24642,16 @@
                   </div>
                 </div>
 
-                <!-- Stock Controls -->
+                <!-- Stock Display & Edit Button -->
                 <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
-                  <span class="text-xs font-bold text-slate-600">Stock Qty:</span>
                   <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', -1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold flex items-center justify-center text-xs cursor-pointer">-</button>
-                    <input 
-                      type="number" 
-                      min="0"
-                      value="${stockQty}" 
-                      onchange="updateSubCategoryStock('${s.id}', this.value)" 
-                      class="w-14 text-center py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
-                    >
-                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 1)" class="w-7 h-7 rounded-lg bg-cyan-600 hover:bg-cyan-700 active:scale-95 text-white font-bold flex items-center justify-center text-xs cursor-pointer">+</button>
-                    <button type="button" onclick="adjustSubCategoryStock('${s.id}', 10)" class="px-2 py-1 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-800 text-[10px] font-bold cursor-pointer">+10</button>
+                    <span class="text-xs font-bold text-slate-500">Current Stock:</span>
+                    <span class="font-mono font-black text-xs bg-slate-100 px-2.5 py-0.5 rounded-lg border border-slate-200 text-slate-900">${stockQty}</span>
                   </div>
+                  <button type="button" onclick="openEditStockModal('${s.id}')" class="px-3 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 active:scale-95 text-cyan-800 border border-cyan-200 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer">
+                    <i class="fa-solid fa-boxes-stacked text-cyan-600 text-[11px]"></i>
+                    <span>Edit Stock</span>
+                  </button>
                 </div>
               </div>
             `;
@@ -24598,23 +24684,25 @@
                 <td class="p-3 text-center text-xs font-semibold text-slate-600">${s.weight || '-'}</td>
                 <td class="p-3 text-center text-xs font-black text-teal-800">${s.ourPrice != null ? '₹' + s.ourPrice : '-'}</td>
                 <td class="p-3 text-center">
-                  <input 
-                    type="number" 
-                    min="0"
-                    value="${stockQty}" 
-                    onchange="updateSubCategoryStock('${s.id}', this.value)" 
-                    class="w-16 text-center py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 font-mono"
-                  >
+                  <span class="inline-block font-mono font-black text-xs px-3 py-1 rounded-xl bg-slate-100 text-slate-900 border border-slate-200/90 shadow-2xs">
+                    ${stockQty}
+                  </span>
                 </td>
                 <td class="p-3 text-center">
                   <span class="font-mono font-black text-xs text-amber-900 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200/90 shadow-2xs">
                     ₹${(stockQty * (parseFloat(s.ourPrice) || 0)).toLocaleString('en-IN')}
                   </span>
                 </td>
-                <td class="p-3 pr-4 text-center">
+                <td class="p-3 text-center">
                   <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isOut ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'}">
                     ${isOut ? 'Out of Stock' : 'In Stock'}
                   </span>
+                </td>
+                <td class="p-3 pr-4 text-center">
+                  <button type="button" onclick="openEditStockModal('${s.id}')" class="px-2.5 py-1.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 active:scale-95 text-cyan-800 border border-cyan-200 font-bold text-xs flex items-center justify-center gap-1.5 mx-auto transition-all cursor-pointer shadow-2xs" title="Edit Stock">
+                    <i class="fa-solid fa-boxes-stacked text-[11px] text-cyan-600"></i>
+                    <span>Edit Stock</span>
+                  </button>
                 </td>
               </tr>
             `;
@@ -24635,6 +24723,138 @@
         stockBadge.textContent = totalStockUnits.toLocaleString('en-IN');
       }
     }
+
+    
+    // -------------------------------------------------------------
+    // DYNAMIC MODAL: EDIT / ADJUST STOCK
+    // -------------------------------------------------------------
+    let currentStockModalMode = 'add'; // 'add', 'sub', 'set'
+    let currentStockModalItem = null;
+
+    function openEditStockModal(subId) {
+      initBusinessMasterData();
+      const subs = masterSettings.businessSubCategories || [];
+      const item = subs.find(s => s.id === subId);
+      if (!item) return;
+
+      currentStockModalItem = item;
+      currentStockModalMode = 'add';
+
+      const mains = masterSettings.businessCategories || [];
+      const parent = mains.find(m => m.id === item.categoryId);
+      const parentName = parent ? parent.name : 'Category';
+
+      document.getElementById('edit-stock-item-id').value = item.id;
+      document.getElementById('edit-stock-item-name').textContent = item.name;
+      document.getElementById('edit-stock-item-meta').textContent = `${parentName} • ${item.weight || ''}`;
+      
+      const currentStock = parseInt(item.stock, 10) || 0;
+      document.getElementById('edit-stock-current-display').textContent = currentStock;
+      document.getElementById('stock-modal-qty-input').value = '';
+      
+      setStockModalMode('add');
+      calcStockModalPreview();
+
+      const modal = document.getElementById('edit-stock-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+      setTimeout(() => {
+        document.getElementById('stock-modal-qty-input')?.focus();
+      }, 100);
+    }
+
+    function closeEditStockModal() {
+      const modal = document.getElementById('edit-stock-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+      currentStockModalItem = null;
+    }
+
+    function setStockModalMode(mode) {
+      currentStockModalMode = mode;
+      const btnAdd = document.getElementById('stock-mode-btn-add');
+      const btnSub = document.getElementById('stock-mode-btn-sub');
+      const btnSet = document.getElementById('stock-mode-btn-set');
+      const label = document.getElementById('stock-modal-qty-label');
+
+      // Reset classes
+      [btnAdd, btnSub, btnSet].forEach(b => {
+        if (b) b.className = 'py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1 cursor-pointer';
+      });
+
+      if (mode === 'add') {
+        if (btnAdd) btnAdd.className = 'py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all bg-emerald-600 text-white shadow-xs flex items-center justify-center gap-1 cursor-pointer';
+        if (label) label.textContent = 'मात्रा जोड़ें (Quantity to Add) *';
+      } else if (mode === 'sub') {
+        if (btnSub) btnSub.className = 'py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all bg-rose-600 text-white shadow-xs flex items-center justify-center gap-1 cursor-pointer';
+        if (label) label.textContent = 'मात्रा घटाएं (Quantity to Reduce) *';
+      } else {
+        if (btnSet) btnSet.className = 'py-1.5 px-2 rounded-lg font-bold text-[11px] transition-all bg-cyan-600 text-white shadow-xs flex items-center justify-center gap-1 cursor-pointer';
+        if (label) label.textContent = 'नया कुल स्टॉक सेट करें (Set Direct Stock) *';
+      }
+
+      calcStockModalPreview();
+    }
+
+    function addStockModalQuickVal(val) {
+      const input = document.getElementById('stock-modal-qty-input');
+      if (!input) return;
+      const cur = parseInt(input.value, 10) || 0;
+      input.value = cur + val;
+      calcStockModalPreview();
+    }
+
+    function calcStockModalPreview() {
+      if (!currentStockModalItem) return;
+      const currentStock = parseInt(currentStockModalItem.stock, 10) || 0;
+      const inputVal = parseInt(document.getElementById('stock-modal-qty-input')?.value, 10) || 0;
+      
+      let finalStock = currentStock;
+      if (currentStockModalMode === 'add') {
+        finalStock = currentStock + inputVal;
+      } else if (currentStockModalMode === 'sub') {
+        finalStock = Math.max(0, currentStock - inputVal);
+      } else {
+        finalStock = Math.max(0, inputVal);
+      }
+
+      const previewEl = document.getElementById('stock-modal-preview-total');
+      if (previewEl) {
+        previewEl.textContent = finalStock;
+      }
+    }
+
+    async function handleSaveStockModal(e) {
+      e.preventDefault();
+      if (!currentStockModalItem) return;
+
+      const subId = document.getElementById('edit-stock-item-id').value;
+      const currentStock = parseInt(currentStockModalItem.stock, 10) || 0;
+      const inputVal = parseInt(document.getElementById('stock-modal-qty-input').value, 10) || 0;
+
+      let newStock = currentStock;
+      if (currentStockModalMode === 'add') {
+        newStock = currentStock + inputVal;
+      } else if (currentStockModalMode === 'sub') {
+        newStock = Math.max(0, currentStock - inputVal);
+      } else {
+        newStock = Math.max(0, inputVal);
+      }
+
+      closeEditStockModal();
+      await updateSubCategoryStock(subId, newStock);
+    }
+
+    window.openEditStockModal = openEditStockModal;
+    window.closeEditStockModal = closeEditStockModal;
+    window.setStockModalMode = setStockModalMode;
+    window.addStockModalQuickVal = addStockModalQuickVal;
+    window.calcStockModalPreview = calcStockModalPreview;
+    window.handleSaveStockModal = handleSaveStockModal;
 
     window.openAddMainCategoryModal = openAddMainCategoryModal;
     window.editMainCategory = editMainCategory;
