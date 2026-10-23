@@ -13413,6 +13413,33 @@
     // Auto-init immediately when page loads
     initFirebaseRealtime();
 
+    // Universal paginated Firestore REST loader to fetch ALL documents without 300-document limit
+    async function fetchAllFirestoreCollectionDocs(collectionName) {
+      let docs = [];
+      let pageToken = '';
+      let pageCount = 0;
+      do {
+        let url = 'https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/' + collectionName + '?pageSize=300';
+        if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
+        try {
+          const res = await fetch(url);
+          if (!res.ok) break;
+          const json = await res.json();
+          if (json && Array.isArray(json.documents)) {
+            const parsed = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
+            docs.push(...parsed);
+          }
+          pageToken = (json && json.nextPageToken) ? json.nextPageToken : '';
+          pageCount++;
+          if (pageCount > 50) break; // safety guard
+        } catch (err) {
+          console.warn('Error fetching paginated ' + collectionName + ':', err);
+          break;
+        }
+      } while (pageToken);
+      return docs;
+    }
+
     async function loadFundTransfersFallback() {
       // 1. Try Live Express / Render API
       try {
@@ -13432,22 +13459,16 @@
         console.warn('API fund transfers fetch failed, trying Firestore REST fallback:', err);
       }
 
-      // 2. Direct Firestore REST fallback
+      // 2. Direct Firestore REST fallback with pagination
       try {
-        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/fund_transfers?pageSize=500');
-        if (restRes.ok) {
-          const json = await restRes.json();
-          if (json && Array.isArray(json.documents)) {
-            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
-            if (list.length > 0) {
-              allFundTransfers = list;
-              allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-              updateStats();
-              renderFundTransfersList();
-              if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
-              return;
-            }
-          }
+        const list = await fetchAllFirestoreCollectionDocs('fund_transfers');
+        if (list && list.length > 0) {
+          allFundTransfers = list;
+          allFundTransfers.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          updateStats();
+          renderFundTransfersList();
+          if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+          return;
         }
       } catch (e) {
         console.warn('Firestore REST fund transfers fetch fallback warning:', e);
@@ -13474,23 +13495,17 @@
         console.warn('API expenses fetch failed, trying Firestore REST fallback:', err);
       }
 
-      // 2. Direct Firestore REST fallback
+      // 2. Direct Firestore REST fallback with pagination
       try {
-        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/expenses?pageSize=500');
-        if (restRes.ok) {
-          const json = await restRes.json();
-          if (json && Array.isArray(json.documents)) {
-            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
-            if (list.length > 0) {
-              allExpenses = list;
-              allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-              updateStats();
-              updateExpensesStats();
-              renderExpensesList();
-              if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
-              return;
-            }
-          }
+        const list = await fetchAllFirestoreCollectionDocs('expenses');
+        if (list && list.length > 0) {
+          allExpenses = list;
+          allExpenses.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          updateStats();
+          updateExpensesStats();
+          renderExpensesList();
+          if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+          return;
         }
       } catch (e) {
         console.warn('Firestore REST expenses fetch fallback warning:', e);
@@ -13562,29 +13577,23 @@
         }
       } catch (err) {}
 
-      // 3. Fallback: Fetch directly from Firestore REST API
+      // 3. Fallback: Fetch ALL documents directly from Firestore REST API with pagination
       try {
-        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/donations?pageSize=500');
-        if (restRes.ok) {
-          const json = await restRes.json();
-          if (json && Array.isArray(json.documents)) {
-            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
-            if (list.length > 0) {
-              allDonations = list;
-              allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-              updateDonationsStats();
-              updateStats();
-              renderDonationsList();
-              if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
-              if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
-                if (currentLoggedInMember) {
-                  renderMemberDonations(currentLoggedInMember);
-                  if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
-                }
-              }
-              /* direct live sync */
+        const list = await fetchAllFirestoreCollectionDocs('donations');
+        if (list && list.length > 0) {
+          allDonations = list;
+          allDonations.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+          updateDonationsStats();
+          updateStats();
+          renderDonationsList();
+          if (typeof renderBankTransactionsView === 'function') renderBankTransactionsView();
+          if (currentLoggedInMember || document.documentElement.classList.contains('member-logged-in')) {
+            if (currentLoggedInMember) {
+              renderMemberDonations(currentLoggedInMember);
+              if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
             }
           }
+          /* direct live sync */
         }
       } catch (e) {
         console.warn('Firestore REST donations fetch fallback warning:', e);
@@ -13634,24 +13643,18 @@
         return;
       }
 
-      // 1. Direct Firestore REST API (First Priority Fallback)
+      // 1. Direct Firestore REST API (First Priority Fallback) with pagination
       try {
-        const restRes = await fetch('https://firestore.googleapis.com/v1/projects/goswamisamajapp/databases/(default)/documents/members?pageSize=500');
-        if (restRes.ok) {
-          const json = await restRes.json();
-          if (json && Array.isArray(json.documents)) {
-            const list = json.documents.map(d => parseFirestoreDocument(d)).filter(Boolean);
-            if (list.length > 0) {
-              if (firestoreMembersLoaded && Array.isArray(allMembers) && allMembers.length > 0) return;
-              allMembers = list;
-              allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
-              updateStats();
-              renderMembers();
-              if (typeof renderPariwarikView === 'function') renderPariwarikView();
-              if (typeof renderArchivedList === 'function') renderArchivedList();
-              return;
-            }
-          }
+        const list = await fetchAllFirestoreCollectionDocs('members');
+        if (list && list.length > 0) {
+          if (firestoreMembersLoaded && Array.isArray(allMembers) && allMembers.length > 0) return;
+          allMembers = list;
+          allMembers.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
+          updateStats();
+          renderMembers();
+          if (typeof renderPariwarikView === 'function') renderPariwarikView();
+          if (typeof renderArchivedList === 'function') renderArchivedList();
+          return;
         }
       } catch (e) {
         console.warn('Firestore REST members fetch fallback warning:', e);
