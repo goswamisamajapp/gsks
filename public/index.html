@@ -1822,43 +1822,7 @@
 
         <!-- Master Settings Cards Grid (Compact, Colorful & Modern) -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 sm:gap-2.5">
-          <!-- Card 1: Status Master (Orange) -->
-          <button 
-            type="button"
-            onclick="switchSettingsTab('status')" 
-            id="tab-btn-status"
-            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100/90 border-2 border-orange-500 shadow-md ring-2 ring-orange-500/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]"
-          >
-            <div class="flex items-center justify-between gap-1 mb-1.5">
-              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
-                <i class="fa-solid fa-tags"></i>
-              </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-orange-500 text-white font-mono shadow-2xs" id="badge-count-status">3</span>
-            </div>
-            <div>
-              <h4 class="text-xs font-black text-orange-950 group-hover:text-orange-600 transition-colors truncate">Status Master</h4>
-            </div>
-          </button>
-
-          <!-- Card: Bussiness Master (Cyan/Teal) -->
-          <button 
-            type="button"
-            onclick="switchSettingsTab('business')" 
-            id="tab-btn-business"
-            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-cyan-50 to-teal-50/70 border border-cyan-200 hover:border-cyan-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
-          >
-            <div class="flex items-center justify-between gap-1 mb-1.5">
-              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-cyan-600 to-teal-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
-                <i class="fa-solid fa-briefcase"></i>
-              </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-cyan-600 text-white font-mono shadow-2xs" id="badge-count-business">6</span>
-            </div>
-            <div>
-              <h4 class="text-xs font-black text-cyan-950 group-hover:text-cyan-600 transition-colors truncate">Bussiness master</h4>
-            </div>
-          </button>
-
-          <!-- Card 2: Event Master (Indigo/Blue) -->
+          <!-- 1. Event Master (Indigo/Blue) -->
           <button 
             type="button"
             onclick="switchSettingsTab('event')" 
@@ -1876,7 +1840,7 @@
             </div>
           </button>
 
-          <!-- Card 3: Scheme Master (Amber/Gold) -->
+          <!-- 2. Scheme Master (Amber/Gold) -->
           <button 
             type="button"
             onclick="switchSettingsTab('scheme')" 
@@ -1894,25 +1858,25 @@
             </div>
           </button>
 
-          <!-- Card 4: Fund Management (Emerald/Teal) -->
+          <!-- 3. Business Master (Cyan/Teal) -->
           <button 
             type="button"
-            onclick="switchSettingsTab('fund')" 
-            id="tab-btn-fund"
-            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/70 border border-emerald-200 hover:border-emerald-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+            onclick="switchSettingsTab('business')" 
+            id="tab-btn-business"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-cyan-50 to-teal-50/70 border border-cyan-200 hover:border-cyan-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             <div class="flex items-center justify-between gap-1 mb-1.5">
-              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
-                <i class="fa-solid fa-vault"></i>
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-cyan-600 to-teal-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-briefcase"></i>
               </div>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-600 text-white font-mono shadow-2xs" id="badge-count-fund">0</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-cyan-600 text-white font-mono shadow-2xs" id="badge-count-business">6</span>
             </div>
             <div>
-              <h4 class="text-xs font-black text-emerald-950 group-hover:text-teal-600 transition-colors truncate">Fund Management</h4>
+              <h4 class="text-xs font-black text-cyan-950 group-hover:text-cyan-600 transition-colors truncate">Business Master</h4>
             </div>
           </button>
 
-          <!-- Card 5: Expense Master (Rose/Red) -->
+          <!-- 4. Expense Master (Rose/Red) -->
           <button 
             type="button"
             onclick="switchSettingsTab('expense')" 
@@ -1930,7 +1894,43 @@
             </div>
           </button>
 
-          <!-- Card 6: Team Members (Purple/Violet) -->
+          <!-- 5. Status Master (Orange) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('status')" 
+            id="tab-btn-status"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-100/90 border-2 border-orange-500 shadow-md ring-2 ring-orange-500/25 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between scale-[1.02]"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-orange-500 text-white font-mono shadow-2xs" id="badge-count-status">3</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-orange-950 group-hover:text-orange-600 transition-colors truncate">Status Master</h4>
+            </div>
+          </button>
+
+          <!-- 6. Fund Management (Emerald/Teal) -->
+          <button 
+            type="button"
+            onclick="switchSettingsTab('fund')" 
+            id="tab-btn-fund"
+            class="group p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/70 border border-emerald-200 hover:border-emerald-300 hover:shadow-xs text-left transition-all duration-200 cursor-pointer flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center text-xs shadow-2xs group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-vault"></i>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-600 text-white font-mono shadow-2xs" id="badge-count-fund">0</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-emerald-950 group-hover:text-teal-600 transition-colors truncate">Fund Management</h4>
+            </div>
+          </button>
+
+          <!-- 7. Team Members (Purple/Violet) -->
           <button 
             type="button"
             onclick="switchSettingsTab('designation')" 
