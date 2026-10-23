@@ -702,7 +702,7 @@
               </div>
             </div>
 
-            <!-- Top Stats & Filter -->
+            <!-- Top Stats -->
             <div class="flex items-center gap-2 self-stretch sm:self-auto flex-wrap">
               <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-cyan-900 shadow-sm" id="stock-mgmt-total-badge">
                 0 Items
@@ -713,9 +713,45 @@
               <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/40 text-white border border-white/20 shadow-sm" id="stock-mgmt-outofstock-badge">
                 Out of Stock: 0
               </span>
-              <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-400 text-slate-900 shadow-sm font-mono" id="stock-mgmt-total-value-badge">
-                Stock Value: ₹0
-              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 SUMMARY CARDS: Stock Value, Total Cost, Total Profit -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <!-- Card 1: Stock Value -->
+          <div class="bg-gradient-to-br from-amber-50 via-yellow-50/40 to-white rounded-2xl p-4 sm:p-5 border border-amber-200/90 shadow-xs flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider">Stock Value</span>
+              <p class="text-2xl sm:text-3xl font-black text-amber-950 mt-1 font-mono" id="stock-card-total-value">₹ 0</p>
+              <p class="text-[11px] text-amber-700/80 font-medium mt-0.5">कुल उपलब्ध स्टॉक का बिक्री मूल्य</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shadow-xs shrink-0">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Cost -->
+          <div class="bg-gradient-to-br from-indigo-50 via-blue-50/40 to-white rounded-2xl p-4 sm:p-5 border border-indigo-200/90 shadow-xs flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-indigo-900 uppercase tracking-wider">Total Cost</span>
+              <p class="text-2xl sm:text-3xl font-black text-indigo-950 mt-1 font-mono" id="stock-card-total-cost">₹ 0</p>
+              <p class="text-[11px] text-indigo-700/80 font-medium mt-0.5">कुल स्टॉक की लागत / खरीद मूल्य</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl shadow-xs shrink-0">
+              <i class="fa-solid fa-money-bill-transfer"></i>
+            </div>
+          </div>
+
+          <!-- Card 3: Total Profit -->
+          <div class="bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl p-4 sm:p-5 border border-emerald-200/90 shadow-xs flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-emerald-900 uppercase tracking-wider">Total Profit</span>
+              <p class="text-2xl sm:text-3xl font-black text-emerald-950 mt-1 font-mono" id="stock-card-total-profit">₹ 0</p>
+              <p class="text-[11px] text-emerald-700/80 font-medium mt-0.5">स्टॉक बिक्री पर संभावित कुल लाभ</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl shadow-xs shrink-0">
+              <i class="fa-solid fa-arrow-trend-up"></i>
             </div>
           </div>
         </div>
@@ -6287,18 +6323,22 @@
             <input type="text" id="sub-biz-name" required placeholder="Sub Category Name दर्ज करें" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
           </div>
         </div>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Qty / Unit / Wt (मात्रा / वज़न)</label>
-            <input type="text" id="sub-biz-weight" placeholder="उदा. 50 Sticks, 10 Pcs, 250g" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+            <label class="block font-bold text-slate-700 mb-1">Unit / Wt</label>
+            <input type="text" id="sub-biz-weight" placeholder="50 Sticks, 100g" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">MRP (₹)</label>
             <input type="number" step="any" id="sub-biz-mrp" placeholder="MRP" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
           </div>
           <div>
+            <label class="block font-bold text-indigo-700 mb-1">Cost Price (₹)</label>
+            <input type="number" step="any" id="sub-biz-cost-price" placeholder="खरीद मूल्य" class="w-full bg-indigo-50/50 border border-indigo-200 rounded-xl px-2.5 py-2 text-indigo-900 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+          </div>
+          <div>
             <label class="block font-bold text-teal-800 mb-1">Our Price (₹)</label>
-            <input type="number" step="any" id="sub-biz-our-price" placeholder="Our Price" class="w-full bg-teal-50/60 border border-teal-300 rounded-xl px-2.5 py-2 text-teal-900 font-extrabold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+            <input type="number" step="any" id="sub-biz-our-price" placeholder="बिक्री मूल्य" class="w-full bg-teal-50/60 border border-teal-300 rounded-xl px-2.5 py-2 text-teal-900 font-extrabold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
           </div>
         </div>
         <div>
@@ -17315,6 +17355,7 @@
       document.getElementById('sub-biz-name').value = '';
       document.getElementById('sub-biz-weight').value = '';
       document.getElementById('sub-biz-mrp').value = '';
+      document.getElementById('sub-biz-cost-price').value = '';
       document.getElementById('sub-biz-our-price').value = '';
       document.getElementById('sub-biz-desc').value = '';
 
@@ -17363,6 +17404,7 @@
       document.getElementById('sub-biz-name').value = item.name || '';
       document.getElementById('sub-biz-weight').value = item.weight || '';
       document.getElementById('sub-biz-mrp').value = (item.mrp !== undefined && item.mrp !== null) ? item.mrp : '';
+      document.getElementById('sub-biz-cost-price').value = (item.costPrice !== undefined && item.costPrice !== null) ? item.costPrice : '';
       document.getElementById('sub-biz-our-price').value = (item.ourPrice !== undefined && item.ourPrice !== null) ? item.ourPrice : '';
       document.getElementById('sub-biz-desc').value = item.description || '';
 
@@ -17389,6 +17431,7 @@
       const name = document.getElementById('sub-biz-name').value.trim();
       const weight = document.getElementById('sub-biz-weight').value.trim();
       const mrp = document.getElementById('sub-biz-mrp').value !== '' ? parseFloat(document.getElementById('sub-biz-mrp').value) : null;
+      const costPrice = document.getElementById('sub-biz-cost-price').value !== '' ? parseFloat(document.getElementById('sub-biz-cost-price').value) : null;
       const ourPrice = document.getElementById('sub-biz-our-price').value !== '' ? parseFloat(document.getElementById('sub-biz-our-price').value) : null;
       const desc = document.getElementById('sub-biz-desc').value.trim();
 
@@ -17410,6 +17453,7 @@
             name,
             weight,
             mrp,
+            costPrice,
             ourPrice,
             description: desc
           };
@@ -24398,26 +24442,41 @@
         return matchMain && matchSearch;
       });
 
-      // Stats & Total Stock Value
+      // Stats, Stock Value, Total Cost & Total Profit Calculation
       let inStockCount = 0;
       let outOfStockCount = 0;
       let grandStockValue = 0;
+      let grandTotalCost = 0;
+
       subs.forEach(s => {
         const stk = parseInt(s.stock, 10) || 0;
-        const price = parseFloat(s.ourPrice) || 0;
-        grandStockValue += (stk * price);
+        const sellPrice = parseFloat(s.ourPrice) || 0;
+        // Cost price fallback: if costPrice is set, use it; else if mrp is set, cost might be proportional or 0
+        const costPrice = (s.costPrice !== undefined && s.costPrice !== null && s.costPrice !== '') ? parseFloat(s.costPrice) : 0;
+
+        grandStockValue += (stk * sellPrice);
+        grandTotalCost += (stk * costPrice);
+
         if (stk > 0) inStockCount++;
         else outOfStockCount++;
       });
 
+      const grandTotalProfit = Math.max(0, grandStockValue - grandTotalCost);
+
       const totalBadge = document.getElementById('stock-mgmt-total-badge');
       const inBadge = document.getElementById('stock-mgmt-instock-badge');
       const outBadge = document.getElementById('stock-mgmt-outofstock-badge');
-      const valBadge = document.getElementById('stock-mgmt-total-value-badge');
       if (totalBadge) totalBadge.textContent = `${subs.length} Items`;
       if (inBadge) inBadge.textContent = `In Stock: ${inStockCount}`;
       if (outBadge) outBadge.textContent = `Out of Stock: ${outOfStockCount}`;
-      if (valBadge) valBadge.textContent = `Stock Value: ₹${grandStockValue.toLocaleString('en-IN')}`;
+
+      // 3 Summary Cards
+      const cardVal = document.getElementById('stock-card-total-value');
+      const cardCost = document.getElementById('stock-card-total-cost');
+      const cardProfit = document.getElementById('stock-card-total-profit');
+      if (cardVal) cardVal.textContent = `₹ ${grandStockValue.toLocaleString('en-IN')}`;
+      if (cardCost) cardCost.textContent = `₹ ${grandTotalCost.toLocaleString('en-IN')}`;
+      if (cardProfit) cardProfit.textContent = `₹ ${grandTotalProfit.toLocaleString('en-IN')}`;
 
       // Render Mobile
       const mobileContainer = document.getElementById('stock-items-cards-mobile');
