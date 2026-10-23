@@ -2707,9 +2707,9 @@
           <div class="absolute -right-8 -bottom-8 w-28 h-28 bg-purple-400/15 rounded-full blur-2xl pointer-events-none"></div>
           <div class="absolute -left-8 -top-8 w-24 h-24 bg-indigo-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-          <div class="relative z-10 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
-              <!-- FIRST LINE: Avatar (Profile Photo without ID tag) -->
+          <div class="relative z-10 flex items-start justify-between gap-2.5">
+            <div class="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
+              <!-- Avatar Circle -->
               <div class="relative flex-shrink-0">
                 <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 p-0.5 shadow-xs">
                   <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center text-orange-600 text-xl sm:text-2xl font-black font-devanagari" id="user-avatar-initial">
@@ -2719,44 +2719,48 @@
               </div>
 
               <!-- Lines Container -->
-              <div class="min-w-0 flex flex-col justify-center">
-                <!-- First line: 🚩 हर हर महादेव -->
-                <p class="text-[11px] font-black text-orange-600 font-devanagari tracking-wider flex items-center gap-1 leading-none mb-1">
-                  <span>🚩</span> हर हर महादेव
-                </p>
+              <div class="min-w-0 flex-1">
+                <!-- First line: 🚩 हर हर महादेव (Left) and Prime + PASY Badges (Right corner) -->
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <p class="text-[11px] font-black text-orange-600 font-devanagari tracking-wider flex items-center gap-1 leading-none">
+                    <span>🚩</span> हर हर महादेव
+                  </p>
+                  
+                  <!-- Badges in Top Right Corner on 1st line -->
+                  <div class="flex items-center gap-1 flex-shrink-0">
+                    <!-- Prime Status Badge -->
+                    <span id="user-card-status" class="px-2 py-0.5 rounded-lg text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center">
+                      <i class="fa-solid fa-crown text-[8px] text-amber-600 mr-1"></i>Prime
+                    </span>
+
+                    <!-- PASY Badge -->
+                    <span id="user-card-pasy-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[9px] font-bold bg-teal-50 text-teal-700 border border-teal-200 shadow-2xs font-sans">
+                      <i class="fa-solid fa-hand-holding-heart text-[8px] text-teal-600"></i>
+                      <span>PASY</span>
+                    </span>
+                  </div>
+                </div>
 
                 <!-- Second line: Member Name only -->
                 <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight truncate font-devanagari leading-snug" id="user-card-name">
                   सदस्य का नाम
                 </h3>
 
-                <!-- Third line: Designation, Prime, PASY all in a single row -->
-                <div class="mt-1 flex items-center gap-1.5 flex-nowrap overflow-x-auto scrollbar-none py-0.5">
-                  <!-- 1. Designation (Member / President / etc.) -->
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs font-devanagari flex-shrink-0" id="user-card-designation">
+                <!-- Third line: Designation only -->
+                <div class="mt-1 flex items-center gap-1.5 py-0.5">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs font-devanagari" id="user-card-designation">
                     <i class="fa-solid fa-user-tie text-[9px] text-indigo-600"></i>
                     <span id="user-card-designation-text">Member</span>
-                  </span>
-
-                  <!-- 2. Prime Status Badge -->
-                  <span id="user-card-status" class="px-2 py-0.5 rounded-lg text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs inline-flex items-center flex-shrink-0">
-                    <i class="fa-solid fa-crown text-[9px] text-amber-600 mr-1"></i>Prime
-                  </span>
-
-                  <!-- 3. PASY Badge -->
-                  <span id="user-card-pasy-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-teal-50 text-teal-700 border border-teal-200 shadow-2xs font-sans flex-shrink-0">
-                    <i class="fa-solid fa-hand-holding-heart text-[9px] text-teal-600"></i>
-                    <span>PASY</span>
                   </span>
                 </div>
               </div>
             </div>
 
-            <!-- Quick Profile Action Pill (Top Right) -->
+            <!-- Quick Profile Action Pill (Top Right Corner) -->
             <button 
               type="button" 
               onclick="switchMemberView('profile')" 
-              class="w-8 h-8 rounded-xl bg-white hover:bg-orange-50 active:scale-95 text-slate-500 hover:text-orange-600 border border-slate-200/80 shadow-2xs flex items-center justify-center text-xs transition-all cursor-pointer flex-shrink-0"
+              class="w-8 h-8 rounded-xl bg-white hover:bg-orange-50 active:scale-95 text-slate-500 hover:text-orange-600 border border-slate-200/80 shadow-2xs flex items-center justify-center text-xs transition-all cursor-pointer flex-shrink-0 mt-0.5"
               title="View Complete Profile"
             >
               <i class="fa-solid fa-id-card"></i>
