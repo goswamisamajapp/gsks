@@ -8643,49 +8643,24 @@
   },
   "pariwarikLateFines": {},
   "businessCategories": [
-  {
-    "id": "biz_1",
-    "name": "दुकान / रिटेल स्टोर (Shop / Retail)",
-    "description": "किराना, जनरल स्टोर, कपड़ा, मोबाइल आदि",
-    "color": "cyan",
-    "isSystem": true
-  },
-  {
-    "id": "biz_2",
-    "name": "व्यापार / थोक विक्रेता (Wholesale / Trade)",
-    "description": "थोक व्यापार, डिस्ट्रीब्यूटर, एजेंसी",
-    "color": "teal",
-    "isSystem": true
-  },
-  {
-    "id": "biz_3",
-    "name": "सेवा / कंसल्टेंसी (Services / Agency)",
-    "description": "ऑनलाइन सेवा, सीएससी, टूर & ट्रेवल्स, रिपेयरिंग",
-    "color": "blue",
-    "isSystem": true
-  },
-  {
-    "id": "biz_4",
-    "name": "निर्माण / ठेकेदारी (Contractor / Building)",
-    "description": "भवन निर्माण, मटेरियल सप्लायर, कारीगरी",
-    "color": "amber",
-    "isSystem": true
-  },
-  {
-    "id": "biz_5",
-    "name": "पेशेवर / सलाहकार (Professional / Doctor / CA)",
-    "description": "डॉक्टर, वकील, सीए, शिक्षक, इंजीनियर",
-    "color": "indigo",
-    "isSystem": true
-  },
-  {
-    "id": "biz_6",
-    "name": "अन्य स्वरोजगार (Self-Employed / Others)",
-    "description": "कृषि, डेयरी, ट्रांसपोर्ट एवं अन्य स्वरोजगार",
-    "color": "purple",
-    "isSystem": true
-  }
-],
+    { "id": "biz_cat_1", "code": "1", "name": "दुकान / रिटेल स्टोर (Shop & Retail)", "description": "किराना, कपड़ा, जनरल स्टोर, इलेक्ट्रॉनिक्स आदि", "color": "cyan", "isSystem": true },
+    { "id": "biz_cat_2", "code": "2", "name": "थोक व्यापार / डिस्ट्रीब्यूशन (Wholesale & Trade)", "description": "थोक विक्रेता, एजेंसी, सप्लायर", "color": "teal", "isSystem": true },
+    { "id": "biz_cat_3", "code": "3", "name": "सेवाएं / ऑनलाइन केंद्र (Services & Tech)", "description": "CSC, साइबर कैफे, टूर & ट्रैवल्स, ऑटोमोबाइल रिपेयर", "color": "blue", "isSystem": true },
+    { "id": "biz_cat_4", "code": "4", "name": "निर्माण व रियल एस्टेट (Contractor & Real Estate)", "description": "भवन निर्माण, ठेकेदारी, बिल्डिंग मटेरियल", "color": "amber", "isSystem": true },
+    { "id": "biz_cat_5", "code": "5", "name": "पेशेवर व सलाहकार (Professionals & Consulting)", "description": "डॉक्टर, वकील, सीए, शिक्षक, इंजीनियर", "color": "indigo", "isSystem": true }
+  ],
+  "businessSubCategories": [
+    { "id": "biz_sub_1", "categoryId": "biz_cat_1", "code": "1-a", "name": "किराना एवं जनरल स्टोर (Grocery Store)", "description": "दैनिक राशन, किराना सामान" },
+    { "id": "biz_sub_2", "categoryId": "biz_cat_1", "code": "1-b", "name": "कपड़ा एवं परिधान (Garments & Clothing)", "description": "साड़ी, रेडीमेड, कपड़ा दुकान" },
+    { "id": "biz_sub_3", "categoryId": "biz_cat_1", "code": "1-c", "name": "मोबाइल एवं इलेक्ट्रॉनिक्स (Mobile & Electronics)", "description": "मोबाइल बिक्री, एक्सेसरीज, रिपेयरिंग" },
+    { "id": "biz_sub_4", "categoryId": "biz_cat_1", "code": "1-d", "name": "मेडिकल स्टोर / फार्मेसी (Pharmacy)", "description": "दवाएं व स्वास्थ्य उत्पाद" },
+    { "id": "biz_sub_5", "categoryId": "biz_cat_2", "code": "2-a", "name": "खाद्यान्न थोक विक्रेता (Grains Wholesale)", "description": "अनाज, तेल, मसाला थोक वितरण" },
+    { "id": "biz_sub_6", "categoryId": "biz_cat_2", "code": "2-b", "name": "FMCG डिस्ट्रीब्यूटर (FMCG Agency)", "description": "ब्रांडेड उत्पादों की एजेंसी" },
+    { "id": "biz_sub_7", "categoryId": "biz_cat_3", "code": "3-a", "name": "ग्राहक सेवा केंद्र / CSC (Online Services)", "description": "आधार, बैंकिंग, ऑनलाइन फॉर्म" },
+    { "id": "biz_sub_8", "categoryId": "biz_cat_3", "code": "3-b", "name": "टूर, ट्रैवल्स एवं ट्रांसपोर्ट (Travels & Transport)", "description": "गाड़ी बुकिंग, माल ढुलाई" },
+    { "id": "biz_sub_9", "categoryId": "biz_cat_4", "code": "4-a", "name": "सिविल ठेकेदार (Civil Contractor)", "description": "सड़क, पुल, भवन निर्माण ठेका" },
+    { "id": "biz_sub_10", "categoryId": "biz_cat_5", "code": "5-a", "name": "अधिवक्ता / लीगल कंसल्टेंट (Lawyer & Legal)", "description": "न्यायालय व विधिक सलाह" }
+  ],
   "statuses": [
     {
       "id": "st_1",
@@ -16014,6 +15989,7 @@
       renderFundTransfersList();
       renderExpenseMasterTab();
       renderDesignationMasterTab();
+      renderBusinessMasterTab();
       populateMembershipPlanRatesInputs();
 
       // 2. Render Status Master: Mobile Cards + Desktop Table
@@ -16668,6 +16644,7 @@
     let currentBusinessMainFilter = 'ALL';
 
     function initBusinessMasterData() {
+      // 1. Ensure businessCategories exists and has code property (migrate legacy biz_1, biz_2 to biz_cat_1, biz_cat_2)
       if (!masterSettings.businessCategories || !Array.isArray(masterSettings.businessCategories) || masterSettings.businessCategories.length === 0) {
         masterSettings.businessCategories = [
           { id: "biz_cat_1", code: "1", name: "दुकान / रिटेल स्टोर (Shop & Retail)", description: "किराना, कपड़ा, जनरल स्टोर, इलेक्ट्रॉनिक्स आदि", color: "cyan", isSystem: true },
@@ -16676,9 +16653,23 @@
           { id: "biz_cat_4", code: "4", name: "निर्माण व रियल एस्टेट (Contractor & Real Estate)", description: "भवन निर्माण, ठेकेदारी, बिल्डिंग मटेरियल", color: "amber", isSystem: true },
           { id: "biz_cat_5", code: "5", name: "पेशेवर व सलाहकार (Professionals & Consulting)", description: "डॉक्टर, वकील, सीए, शिक्षक, इंजीनियर", color: "indigo", isSystem: true }
         ];
+      } else {
+        // Upgrade any legacy categories without 'code'
+        masterSettings.businessCategories.forEach((c, idx) => {
+          if (!c.code) {
+            c.code = (idx + 1).toString();
+          }
+          if (c.id === 'biz_1') c.id = 'biz_cat_1';
+          if (c.id === 'biz_2') c.id = 'biz_cat_2';
+          if (c.id === 'biz_3') c.id = 'biz_cat_3';
+          if (c.id === 'biz_4') c.id = 'biz_cat_4';
+          if (c.id === 'biz_5') c.id = 'biz_cat_5';
+          if (c.id === 'biz_6') c.id = 'biz_cat_6';
+        });
       }
 
-      if (!masterSettings.businessSubCategories || !Array.isArray(masterSettings.businessSubCategories)) {
+      // 2. Ensure businessSubCategories exists and heals legacy references
+      if (!masterSettings.businessSubCategories || !Array.isArray(masterSettings.businessSubCategories) || masterSettings.businessSubCategories.length === 0) {
         masterSettings.businessSubCategories = [
           { id: "biz_sub_1", categoryId: "biz_cat_1", code: "1-a", name: "किराना एवं जनरल स्टोर (Grocery Store)", description: "दैनिक राशन, किराना सामान" },
           { id: "biz_sub_2", categoryId: "biz_cat_1", code: "1-b", name: "कपड़ा एवं परिधान (Garments & Clothing)", description: "साड़ी, रेडीमेड, कपड़ा दुकान" },
@@ -16691,6 +16682,25 @@
           { id: "biz_sub_9", categoryId: "biz_cat_4", code: "4-a", "name": "सिविल ठेकेदार (Civil Contractor)", description: "सड़क, पुल, भवन निर्माण ठेका" },
           { id: "biz_sub_10", categoryId: "biz_cat_5", code: "5-a", "name": "अधिवक्ता / लीगल कंसल्टेंट (Lawyer & Legal)", description: "न्यायालय व विधिक सलाह" }
         ];
+      } else {
+        // Heal any sub-categories whose parentId matches either code or legacy ID
+        masterSettings.businessSubCategories.forEach(s => {
+          if (!s.categoryId || s.categoryId === 'biz_1') s.categoryId = 'biz_cat_1';
+          if (s.categoryId === 'biz_2') s.categoryId = 'biz_cat_2';
+          if (s.categoryId === 'biz_3') s.categoryId = 'biz_cat_3';
+          if (s.categoryId === 'biz_4') s.categoryId = 'biz_cat_4';
+          if (s.categoryId === 'biz_5') s.categoryId = 'biz_cat_5';
+
+          // If still not matched by id, match by code prefix like "1-a" -> "1"
+          const found = masterSettings.businessCategories.find(c => c.id === s.categoryId);
+          if (!found && s.code && s.code.includes('-')) {
+            const prefix = s.code.split('-')[0].trim();
+            const byCode = masterSettings.businessCategories.find(c => String(c.code) === prefix);
+            if (byCode) {
+              s.categoryId = byCode.id;
+            }
+          }
+        });
       }
     }
 
@@ -16859,7 +16869,7 @@
           cardsMobile.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs">कोई उप-श्रेणी उपलब्ध नहीं है। "+ Add Sub" पर क्लिक करके जोड़ें।</div>';
         } else {
           cardsMobile.innerHTML = filtered.map(s => {
-            const parent = mainList.find(m => m.id === s.categoryId);
+            const parent = mainList.find(m => m.id === s.categoryId) || (s.code && s.code.includes('-') ? mainList.find(m => String(m.code) === s.code.split('-')[0].trim()) : null);
             const parentName = parent ? `[${parent.code || '#'}] ${parent.name}` : 'Unassigned';
             const badgeColor = parent ? (parent.color || 'teal') : 'slate';
 
@@ -16899,7 +16909,7 @@
           tbody.innerHTML = '<tr><td colspan="5" class="p-6 text-center text-slate-400 text-xs">कोई उप-श्रेणी उपलब्ध नहीं है। ऊपर "+ Add Sub" पर क्लिक करें।</td></tr>';
         } else {
           tbody.innerHTML = filtered.map(s => {
-            const parent = mainList.find(m => m.id === s.categoryId);
+            const parent = mainList.find(m => m.id === s.categoryId) || (s.code && s.code.includes('-') ? mainList.find(m => String(m.code) === s.code.split('-')[0].trim()) : null);
             const parentName = parent ? `[${parent.code || '#'}] ${parent.name}` : '<span class="text-rose-500 font-bold">Unassigned</span>';
             const badgeColor = parent ? (parent.color || 'teal') : 'slate';
 
