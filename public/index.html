@@ -66,7 +66,7 @@
       </div>
 
       <!-- Portal Tabs -->
-      <div class="bg-slate-100 p-1 rounded-2xl flex text-xs font-semibold mb-6">
+      <div id="portal-tab-switcher-wrapper" class="bg-slate-100 p-1 rounded-2xl flex text-xs font-semibold mb-6">
         <button id="tab-admin" onclick="switchPortalTab('admin')" class="flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700">
           <i class="fa-solid fa-shield-halved mr-1.5"></i> Admin Portal
         </button>
@@ -8725,22 +8725,65 @@
 };
 
 // Switch between Admin and Member login portals
+    function isMemberAppMode() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('app_flavor') === 'member' || urlParams.get('mode') === 'member') return true;
+        if (window.GSKS_APP_MODE === 'member') return true;
+        if (window.GSKS_APP_VARIANT === 'member') return true;
+        if (localStorage.getItem('gsks_app_flavor') === 'member') return true;
+      } catch (e) {}
+      return false;
+    }
+
+    function applyAppMode() {
+      if (isMemberAppMode()) {
+        const switcher = document.getElementById('portal-tab-switcher-wrapper');
+        if (switcher) switcher.style.display = 'none';
+        const adminBox = document.getElementById('admin-login-box');
+        if (adminBox) {
+          adminBox.classList.add('hidden');
+          adminBox.style.display = 'none';
+        }
+        const userBox = document.getElementById('user-login-box');
+        if (userBox) {
+          userBox.classList.remove('hidden');
+          userBox.style.display = '';
+        }
+      }
+    }
+
     function switchPortalTab(type) {
+      if (isMemberAppMode()) {
+        type = 'user';
+      }
       const adminBtn = document.getElementById('tab-admin');
       const userBtn = document.getElementById('tab-user');
       const adminBox = document.getElementById('admin-login-box');
       const userBox = document.getElementById('user-login-box');
 
       if (type === 'admin') {
-        adminBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700';
-        userBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900';
-        adminBox.classList.remove('hidden');
-        userBox.classList.add('hidden');
+        if (adminBtn) adminBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700';
+        if (userBtn) userBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900';
+        if (adminBox) {
+          adminBox.classList.remove('hidden');
+          adminBox.style.display = '';
+        }
+        if (userBox) {
+          userBox.classList.add('hidden');
+          userBox.style.display = 'none';
+        }
       } else {
-        userBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700';
-        adminBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900';
-        userBox.classList.remove('hidden');
-        adminBox.classList.add('hidden');
+        if (userBtn) userBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center shadow-sm bg-white text-orange-700';
+        if (adminBtn) adminBtn.className = 'flex-1 py-2.5 rounded-xl transition-all duration-200 text-center text-slate-600 hover:text-slate-900';
+        if (userBox) {
+          userBox.classList.remove('hidden');
+          userBox.style.display = '';
+        }
+        if (adminBox) {
+          adminBox.classList.add('hidden');
+          adminBox.style.display = 'none';
+        }
       }
     }
 
@@ -23185,6 +23228,15 @@
     window.renderArchivedList = renderArchivedList;
 
     window.addEventListener('DOMContentLoaded', async () => {
+      // Check and apply Member App flavor if applicable
+      try {
+        if (typeof applyAppMode === 'function') {
+          applyAppMode();
+        }
+      } catch (e) {
+        console.warn('applyAppMode error:', e);
+      }
+
       const btnDeposit = document.getElementById('btn-add-bank-record') || document.getElementById('btn-record-bank-deposit');
       if (btnDeposit) {
         btnDeposit.addEventListener('click', (e) => {

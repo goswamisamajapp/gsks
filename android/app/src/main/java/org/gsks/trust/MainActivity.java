@@ -36,20 +36,7 @@ public class MainActivity extends BridgeActivity {
         addPermissionIfMissing(permissionsNeeded, Manifest.permission.ACCESS_FINE_LOCATION);
         addPermissionIfMissing(permissionsNeeded, Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        // 4. Contacts
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.READ_CONTACTS);
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.WRITE_CONTACTS);
-
-        // 5. Phone & Call
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.CALL_PHONE);
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.READ_PHONE_STATE);
-
-        // 6. SMS
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.SEND_SMS);
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.RECEIVE_SMS);
-        addPermissionIfMissing(permissionsNeeded, Manifest.permission.READ_SMS);
-
-        // 7. Storage / Media (Images / Photos)
+        // 4. Storage / Media (Images / Photos)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             addPermissionIfMissing(permissionsNeeded, Manifest.permission.READ_MEDIA_IMAGES);
             addPermissionIfMissing(permissionsNeeded, Manifest.permission.READ_MEDIA_AUDIO);
