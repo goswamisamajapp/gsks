@@ -8091,24 +8091,35 @@
       const memberFinePaidMap = (member.pariwarikFinePaid && typeof member.pariwarikFinePaid === 'object') ? member.pariwarikFinePaid : {};
       
       let isPaid = false;
+      let fineDonationId = null;
       if (targetMonthKey) {
         if (memberFinePaidMap[targetMonthKey] === true || (memberFinePaidMap[targetMonthKey] && memberFinePaidMap[targetMonthKey].paid === true)) {
           isPaid = true;
+          if (memberFinePaidMap[targetMonthKey] && memberFinePaidMap[targetMonthKey].donationId) {
+            fineDonationId = memberFinePaidMap[targetMonthKey].donationId;
+          }
         } else if (paidEntrySettings && typeof paidEntrySettings === 'object' && paidEntrySettings[targetMonthKey]) {
           const mEntry = paidEntrySettings[targetMonthKey];
           isPaid = (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
+          if (mEntry && mEntry.donationId) fineDonationId = mEntry.donationId;
         } else if (paidEntrySettings === true || (paidEntrySettings && typeof paidEntrySettings === 'object' && paidEntrySettings.paid === true)) {
           isPaid = true;
+          if (paidEntrySettings && paidEntrySettings.donationId) fineDonationId = paidEntrySettings.donationId;
         }
       } else {
         if (paidEntrySettings === true || (paidEntrySettings && typeof paidEntrySettings === 'object' && paidEntrySettings.paid === true)) {
           isPaid = true;
+          if (paidEntrySettings && paidEntrySettings.donationId) fineDonationId = paidEntrySettings.donationId;
         } else {
           const overdueKeys = fineBreakdown.map(b => b.monthKey);
           isPaid = overdueKeys.length > 0 && overdueKeys.every(k => {
-            if (memberFinePaidMap[k] === true || (memberFinePaidMap[k] && memberFinePaidMap[k].paid === true)) return true;
+            if (memberFinePaidMap[k] === true || (memberFinePaidMap[k] && memberFinePaidMap[k].paid === true)) {
+              if (memberFinePaidMap[k] && memberFinePaidMap[k].donationId && !fineDonationId) fineDonationId = memberFinePaidMap[k].donationId;
+              return true;
+            }
             if (paidEntrySettings && typeof paidEntrySettings === 'object') {
               const mEntry = paidEntrySettings[k];
+              if (mEntry && mEntry.donationId && !fineDonationId) fineDonationId = mEntry.donationId;
               return (mEntry === true || (mEntry && typeof mEntry === 'object' && mEntry.paid === true));
             }
             return false;
@@ -8121,6 +8132,7 @@
         waiver,
         netFine,
         isPaid,
+        donationId: fineDonationId,
         fineBreakdown,
         overdueMonthsCount: fineBreakdown.length
       };
@@ -8252,6 +8264,15 @@
       "description": "पारिवारिक आर्थिक सहायता योजना हेतु सहयोग राशि",
       "status": "Open",
       "amountType": "fixed"
+    },
+    {
+      "id": "sc_pasy_fine",
+      "name": "पारिवारिक आर्थिक सहायता योजना का विलंब दंड",
+      "amount": 20,
+      "frequency": "One-Time",
+      "description": "पारिवारिक आर्थिक सहायता योजना अंतर्गत देय विलंब दंड (Fine)",
+      "status": "Open",
+      "amountType": "custom"
     },
     {
       "id": "sc_2",
@@ -19766,6 +19787,14 @@
                       <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
                       <div class="w-7 h-3.5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
                     </label>
+                    ${fineInfo.isPaid && fineInfo.donationId ? `
+                      <button type="button" 
+                              onclick="openViewDonationModal('${fineInfo.donationId}')" 
+                              class="w-5 h-5 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 flex items-center justify-center transition-colors cursor-pointer" 
+                              title="विलंब दंड रसीद देखें/प्रिंट करें">
+                        <i class="fa-solid fa-receipt text-[9px]"></i>
+                      </button>
+                    ` : ''}
                   </div>
 
                   <button type="button" 
@@ -19929,6 +19958,14 @@
                       <input type="checkbox" onchange="togglePariwarikFinePaid('${m.id}', this.checked, '${currentPariwarikMonth}')" ${fineInfo.isPaid ? 'checked' : ''} ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'disabled' : ''} class="sr-only peer">
                       <div class="w-8 h-4 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-emerald-500 shadow-inner ${(!fineInfo.isPaid && fineInfo.netFine === 0) ? 'opacity-30 cursor-not-allowed' : ''}"></div>
                     </label>
+                    ${fineInfo.isPaid && fineInfo.donationId ? `
+                      <button type="button" 
+                              onclick="openViewDonationModal('${fineInfo.donationId}')" 
+                              class="w-5 h-5 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 flex items-center justify-center transition-colors cursor-pointer" 
+                              title="विलंब दंड रसीद देखें/प्रिंट करें">
+                        <i class="fa-solid fa-receipt text-[10px]"></i>
+                      </button>
+                    ` : ''}
                   </div>
                 </div>
               </td>
@@ -20354,9 +20391,9 @@
       }
 
       const fineInfo = calculateMemberPasyFine(member, monthKey);
-      const fineDonationScheme = 'पारिवारिक योजना विलंब शुल्क (PASY Fine)';
+      const fineDonationScheme = 'पारिवारिक आर्थिक सहायता योजना का विलंब दंड';
       const monthLabel = (PARIWARIK_MONTHS.find(x => x.key === monthKey) || {}).label || monthKey;
-      const fineRemarks = `पारिवारिक योजना विलंब शुल्क (${monthLabel}, सदस्य: ${member.name || memberId})`;
+      const fineRemarks = `पारिवारिक आर्थिक सहायता योजना का विलंब दंड (${monthLabel}, सदस्य: ${member.name || memberId})`;
 
       if (isChecked) {
         // Collect fine amount: must be > 0 (or grossFine if netFine already 0 due to waiver)
@@ -20917,7 +20954,7 @@
       let breakdownText = '';
       if (item.generalDues > 0) breakdownText += `\n• सामान्य सदस्यता बकाया: ₹${item.generalDues.toLocaleString('en-IN')}`;
       if (item.pasyDues > 0) breakdownText += `\n• पारिवारिक योजना किस्त बकाया: ₹${item.pasyDues.toLocaleString('en-IN')}`;
-      if (item.fineDues > 0) breakdownText += `\n• पारिवारिक योजना विलंब शुल्क (Fine): ₹${item.fineDues.toLocaleString('en-IN')}`;
+      if (item.fineDues > 0) breakdownText += `\n• पारिवारिक आर्थिक सहायता योजना का विलंब दंड: ₹${item.fineDues.toLocaleString('en-IN')}`;
 
       const msg = `हर हर महादेव 🙏\n\nआदरणीय *${m.name || 'सदस्य'}* जी,\n*गोस्वामी समाज कल्याण समिति* की ओर से सादर प्रणाम।\n\nआपके खाते में निम्नलिखित सहयोग राशि/अंशदान बकाया है:${breakdownText}\n\n*कुल देय बकाया राशि: ₹${item.totalDues.toLocaleString('en-IN')}*\n\nकृपया शीघ्र भुगतान कर समिति के कार्यों में सहयोग प्रदान करें।\n\nधन्यवाद!\n- गोस्वामी समाज कल्याण समिति, गुमो`;
 
