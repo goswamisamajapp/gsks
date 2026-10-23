@@ -3187,14 +3187,27 @@
 
         <!-- 2. ARCHIVED / READ NOTIFICATIONS -->
         <div id="past-notices-section" class="space-y-4 pt-4 border-t border-slate-200">
-          <div class="flex items-center gap-2 px-1">
-            <i class="fa-solid fa-box-archive text-slate-400 text-xs"></i>
-            <h3 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <span>पढ़ी गई सूचनाएं (Archived Notices)</span>
-              <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" id="past-notices-badge">
-                0 Past
-              </span>
-            </h3>
+          <div class="flex items-center justify-between gap-2 px-1">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-box-archive text-slate-400 text-xs"></i>
+              <h3 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+                <span>पढ़ी गई सूचनाएं (Archived Notices)</span>
+                <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200" id="past-notices-badge">
+                  0 Past
+                </span>
+              </h3>
+            </div>
+            <!-- Clear All Archived Notifications Button -->
+            <button 
+              type="button" 
+              onclick="clearAllArchivedNotifications()" 
+              id="btn-clear-archived-notices"
+              class="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-600 active:scale-95 text-rose-700 hover:text-white border border-rose-200 hover:border-rose-600 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
+              title="पढ़ी गई सभी आर्काइव सूचनाएं हमेशा के लिए साफ़ करें"
+            >
+              <i class="fa-solid fa-trash-can text-[11px]"></i>
+              <span>Clear All Notification</span>
+            </button>
           </div>
 
           <!-- Past Notices Cards Container -->
@@ -9182,6 +9195,105 @@
       }
     }
 
+    // Track cleared / deleted notifications per member session
+    function getMemberClearedNoticeIds() {
+      const memId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : 'guest';
+      try {
+        const raw = localStorage.getItem(`gsks_cleared_notices_${memId}`);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    async function clearAllArchivedNotifications() {
+      const member = currentLoggedInMember;
+      const memId = member ? (member.id || '').trim().toLowerCase() : 'guest';
+
+      const readIds = getMemberReadNoticeIds();
+      if (!readIds || readIds.length === 0) {
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('ℹ️ कोई सूचना नहीं', 'साफ़ करने के लिए कोई पढ़ी गई / आर्काइव सूचना नहीं है।');
+        } else if (typeof showAppAlert === 'function') {
+          showAppAlert('साफ़ करने के लिए कोई पढ़ी गई / आर्काइव सूचना नहीं है।', 'सूचना', 'info');
+        }
+        return;
+      }
+
+      // 1. Collect all notification IDs that are currently in archived/read state
+      const clearedIds = getMemberClearedNoticeIds();
+      readIds.forEach(id => {
+        if (!clearedIds.includes(String(id))) {
+          clearedIds.push(String(id));
+        }
+      });
+
+      // Save to localStorage so they never re-appear
+      try {
+        localStorage.setItem(`gsks_cleared_notices_${memId}`, JSON.stringify(clearedIds));
+      } catch (e) {}
+
+      // 2. Remove member-targeted notifications from live Firestore backend as requested ("live data se bhi")
+      if (typeof db !== 'undefined' && typeof notificationsCol !== 'undefined' && Array.isArray(allNotifications)) {
+        try {
+          const promises = [];
+          allNotifications.forEach(n => {
+            if (!n || !n.id) return;
+            const notifId = String(n.id);
+            const target = (n.targetMemberId || '').trim().toLowerCase();
+
+            // Only delete if it was read/archived
+            if (readIds.includes(notifId)) {
+              if (target === memId) {
+                // Targeted exclusively to this member -> delete doc from Firestore
+                promises.push(notificationsCol.doc(notifId).delete().catch(err => console.warn('Firestore doc delete error:', err)));
+              } else if (target === 'all') {
+                // Broadcast notice -> mark dismissed in member's user profile or leave doc intact for other members
+                if (member && member.id) {
+                  promises.push(
+                    db.collection('members').doc(member.id).set({
+                      clearedNotifications: firebase.firestore.FieldValue.arrayUnion(notifId)
+                    }, { merge: true }).catch(err => console.warn('Member cleared notif union error:', err))
+                  );
+                }
+              }
+            }
+          });
+          if (promises.length > 0) {
+            await Promise.allSettled(promises);
+          }
+        } catch (backendErr) {
+          console.warn('Backend notification cleanup warning:', backendErr);
+        }
+      }
+
+      // 3. Clear readIds storage for this member since all archived notices have been cleared
+      try {
+        localStorage.setItem(`gsks_read_notices_${memId}`, JSON.stringify([]));
+      } catch (e) {}
+
+      // Filter in-memory allNotifications if exclusively targeted to this member
+      if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
+        allNotifications = allNotifications.filter(n => {
+          if (!n) return false;
+          const notifId = String(n.id);
+          const target = (n.targetMemberId || '').trim().toLowerCase();
+          return !(readIds.includes(notifId) && target === memId);
+        });
+      }
+
+      // Re-render UI
+      if (typeof renderMemberNotification === 'function') renderMemberNotification(member);
+      if (typeof renderMemberAllNotifications === 'function') renderMemberAllNotifications(member);
+      if (typeof updateMemberNotificationBellBadge === 'function') updateMemberNotificationBellBadge();
+
+      if (typeof showFloatingToast === 'function') {
+        showFloatingToast('🗑️ सूचनाएं साफ़', 'सभी आर्काइव सूचनाएं सफलतापूर्वक साफ़ (Clear) कर दी गईं!');
+      } else if (typeof showAppAlert === 'function') {
+        showAppAlert('सभी पढ़ी गई / आर्काइव सूचनाएं सफलतापूर्वक साफ़ कर दी गई हैं।', 'सफलता', 'success');
+      }
+    }
+
     function markMemberNoticeAsRead(noticeId) {
       if (!noticeId) return;
       const memId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : 'guest';
@@ -9225,15 +9337,17 @@
       const headerBadge = document.getElementById('user-header-notice-badge');
       const eventsNoticesBadge = document.getElementById('events-tab-notices-badge');
       const readIds = getMemberReadNoticeIds();
+      const clearedIds = getMemberClearedNoticeIds();
       const currentMemId = currentLoggedInMember ? (currentLoggedInMember.id || '').trim().toLowerCase() : '';
 
       let unreadCount = 0;
       if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
         allNotifications.forEach(n => {
           if (!n) return;
+          const notifId = String(n.id);
+          if (clearedIds.includes(notifId)) return;
           const target = (n.targetMemberId || '').trim().toLowerCase();
           if (target === 'all' || target === currentMemId) {
-            const notifId = String(n.id);
             if (!readIds.includes(notifId)) {
               unreadCount++;
             }
@@ -9283,6 +9397,7 @@
     }
     window.markMemberNoticeAsRead = markMemberNoticeAsRead;
     window.markAllMemberNotificationsRead = markAllMemberNotificationsRead;
+    window.clearAllArchivedNotifications = clearAllArchivedNotifications;
     window.updateMemberNotificationBellBadge = updateMemberNotificationBellBadge;
     window.switchNoticesSubTab = switchNoticesSubTab;
 
@@ -9508,9 +9623,10 @@
       window.memberNoticesMap.clear();
 
       const readIds = getMemberReadNoticeIds();
+      const clearedIds = getMemberClearedNoticeIds();
 
       // 1. Dues Notice if member has dues
-      if (member && Number(member.dues) > 0) {
+      if (member && Number(member.dues) > 0 && !clearedIds.includes('NOTICE-DUES')) {
         const isDuesRead = readIds.includes('NOTICE-DUES');
         rawNotices.push({
           id: 'NOTICE-DUES',
@@ -9534,9 +9650,11 @@
       if (typeof allNotifications !== 'undefined' && Array.isArray(allNotifications)) {
         allNotifications.forEach(notif => {
           if (!notif) return;
+          const notifId = String(notif.id || '');
+          if (clearedIds.includes(notifId)) return; // Skip if cleared by user
+
           const target = (notif.targetMemberId || '').trim().toLowerCase();
           if (target === 'all' || target === currentMemId) {
-            const notifId = String(notif.id || '');
             const isRead = readIds.includes(notifId);
             const dt = notif.createdAt ? new Date(notif.createdAt) : new Date();
             const dtFormatted = dt.toLocaleDateString('hi-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
@@ -9725,7 +9843,10 @@
       // ==============================================================
       // PRIORITY 1: DUES NOTIFICATION (यदि सदस्य पर बकाया है - HIGHEST PRIORITY)
       // ==============================================================
-      if (duesAmt > 0) {
+      const readIds = getMemberReadNoticeIds();
+      const clearedIds = getMemberClearedNoticeIds();
+
+      if (duesAmt > 0 && !clearedIds.includes('NOTICE-DUES') && !readIds.includes('NOTICE-DUES')) {
         if (noticePanel) {
           noticePanel.className = 'bg-gradient-to-br from-rose-50 via-orange-50/40 to-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-rose-200/90 shadow-xs relative overflow-hidden text-slate-800 space-y-2';
         }
@@ -9762,7 +9883,6 @@
       // PRIORITY 2: LIVE FIRESTORE PUSH NOTIFICATION (व्यक्तिगत / ब्रॉडकास्ट पुश अलर्ट - सिर्फ Unread)
       // ==============================================================
       const memberId = member ? (member.id || '').trim().toLowerCase() : '';
-      const readIds = getMemberReadNoticeIds();
 
       const livePushNotice = (allNotifications || []).find(n => {
         if (!n) return false;
@@ -9771,7 +9891,7 @@
         if (!matchesTarget) return false;
         // Check if already read / cleared by member
         const notifId = String(n.id || '');
-        return !readIds.includes(notifId);
+        return !readIds.includes(notifId) && !clearedIds.includes(notifId);
       });
 
       if (livePushNotice) {
