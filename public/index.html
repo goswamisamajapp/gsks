@@ -16644,44 +16644,17 @@
     let currentBusinessMainFilter = 'ALL';
 
     function initBusinessMasterData() {
-      // 1. Ensure businessCategories exists and has code property (migrate legacy biz_1, biz_2 to biz_cat_1, biz_cat_2)
-      if (!masterSettings.businessCategories || !Array.isArray(masterSettings.businessCategories) || masterSettings.businessCategories.length === 0) {
-        masterSettings.businessCategories = [
-          { id: "biz_cat_1", code: "1", name: "दुकान / रिटेल स्टोर (Shop & Retail)", description: "किराना, कपड़ा, जनरल स्टोर, इलेक्ट्रॉनिक्स आदि", color: "cyan", isSystem: true },
-          { id: "biz_cat_2", code: "2", name: "थोक व्यापार / डिस्ट्रीब्यूशन (Wholesale & Trade)", description: "थोक विक्रेता, एजेंसी, सप्लायर", color: "teal", isSystem: true },
-          { id: "biz_cat_3", code: "3", name: "सेवाएं / ऑनलाइन केंद्र (Services & Tech)", description: "CSC, साइबर कैफे, टूर & ट्रैवल्स, ऑटोमोबाइल रिपेयर", color: "blue", isSystem: true },
-          { id: "biz_cat_4", code: "4", name: "निर्माण व रियल एस्टेट (Contractor & Real Estate)", description: "भवन निर्माण, ठेकेदारी, बिल्डिंग मटेरियल", color: "amber", isSystem: true },
-          { id: "biz_cat_5", code: "5", name: "पेशेवर व सलाहकार (Professionals & Consulting)", description: "डॉक्टर, वकील, सीए, शिक्षक, इंजीनियर", color: "indigo", isSystem: true }
-        ];
+      if (!masterSettings.businessCategories || !Array.isArray(masterSettings.businessCategories)) {
+        masterSettings.businessCategories = [];
       } else {
-        // Upgrade any legacy categories without 'code'
+        // Ensure every existing category has a valid code
         masterSettings.businessCategories.forEach((c, idx) => {
-          if (!c.code) {
-            c.code = (idx + 1).toString();
-          }
-          if (c.id === 'biz_1') c.id = 'biz_cat_1';
-          if (c.id === 'biz_2') c.id = 'biz_cat_2';
-          if (c.id === 'biz_3') c.id = 'biz_cat_3';
-          if (c.id === 'biz_4') c.id = 'biz_cat_4';
-          if (c.id === 'biz_5') c.id = 'biz_cat_5';
-          if (c.id === 'biz_6') c.id = 'biz_cat_6';
+          if (!c.code) c.code = (idx + 1).toString();
         });
       }
 
-      // 2. Ensure businessSubCategories exists and heals legacy references
-      if (!masterSettings.businessSubCategories || !Array.isArray(masterSettings.businessSubCategories) || masterSettings.businessSubCategories.length === 0) {
-        masterSettings.businessSubCategories = [
-          { id: "biz_sub_1", categoryId: "biz_cat_1", code: "1-a", name: "किराना एवं जनरल स्टोर (Grocery Store)", description: "दैनिक राशन, किराना सामान" },
-          { id: "biz_sub_2", categoryId: "biz_cat_1", code: "1-b", name: "कपड़ा एवं परिधान (Garments & Clothing)", description: "साड़ी, रेडीमेड, कपड़ा दुकान" },
-          { id: "biz_sub_3", categoryId: "biz_cat_1", code: "1-c", name: "मोबाइल एवं इलेक्ट्रॉनिक्स (Mobile & Electronics)", description: "मोबाइल बिक्री, एक्सेसरीज, रिपेयरिंग" },
-          { id: "biz_sub_4", categoryId: "biz_cat_1", code: "1-d", name: "मेडिकल स्टोर / फार्मेसी (Pharmacy)", description: "दवाएं व स्वास्थ्य उत्पाद" },
-          { id: "biz_sub_5", categoryId: "biz_cat_2", code: "2-a", "name": "खाद्यान्न थोक विक्रेता (Grains Wholesale)", description: "अनाज, तेल, मसाला थोक वितरण" },
-          { id: "biz_sub_6", categoryId: "biz_cat_2", code: "2-b", "name": "FMCG डिस्ट्रीब्यूटर (FMCG Agency)", description: "ब्रांडेड उत्पादों की एजेंसी" },
-          { id: "biz_sub_7", categoryId: "biz_cat_3", code: "3-a", "name": "ग्राहक सेवा केंद्र / CSC (Online Services)", description: "आधार, बैंकिंग, ऑनलाइन फॉर्म" },
-          { id: "biz_sub_8", categoryId: "biz_cat_3", code: "3-b", "name": "टूर, ट्रैवल्स एवं ट्रांसपोर्ट (Travels & Transport)", description: "गाड़ी बुकिंग, माल ढुलाई" },
-          { id: "biz_sub_9", categoryId: "biz_cat_4", code: "4-a", "name": "सिविल ठेकेदार (Civil Contractor)", description: "सड़क, पुल, भवन निर्माण ठेका" },
-          { id: "biz_sub_10", categoryId: "biz_cat_5", code: "5-a", "name": "अधिवक्ता / लीगल कंसल्टेंट (Lawyer & Legal)", description: "न्यायालय व विधिक सलाह" }
-        ];
+      if (!masterSettings.businessSubCategories || !Array.isArray(masterSettings.businessSubCategories)) {
+        masterSettings.businessSubCategories = [];
       } else {
         // Heal any sub-categories whose parentId matches either code or legacy ID
         masterSettings.businessSubCategories.forEach(s => {
@@ -16691,7 +16664,6 @@
           if (s.categoryId === 'biz_4') s.categoryId = 'biz_cat_4';
           if (s.categoryId === 'biz_5') s.categoryId = 'biz_cat_5';
 
-          // If still not matched by id, match by code prefix like "1-a" -> "1"
           const found = masterSettings.businessCategories.find(c => c.id === s.categoryId);
           if (!found && s.code && s.code.includes('-')) {
             const prefix = s.code.split('-')[0].trim();
@@ -17028,10 +17000,10 @@
 
       closeMainCategoryModal();
       await saveAllSettingsToCloud();
+      renderBusinessMasterTab();
     }
 
     async function deleteMainCategory(id) {
-      initBusinessMasterData();
       const item = (masterSettings.businessCategories || []).find(c => c.id === id);
       if (!item) return;
 
@@ -17043,10 +17015,11 @@
 
       if (!confirm(msg)) return;
 
-      masterSettings.businessCategories = masterSettings.businessCategories.filter(c => c.id !== id);
+      masterSettings.businessCategories = (masterSettings.businessCategories || []).filter(c => c.id !== id);
       masterSettings.businessSubCategories = (masterSettings.businessSubCategories || []).filter(s => s.categoryId !== id);
 
       await saveAllSettingsToCloud();
+      renderBusinessMasterTab();
     }
 
     // -------------------------------------------------------------
@@ -17175,17 +17148,18 @@
 
       closeSubCategoryModal();
       await saveAllSettingsToCloud();
+      renderBusinessMasterTab();
     }
 
     async function deleteSubCategory(id) {
-      initBusinessMasterData();
       const item = (masterSettings.businessSubCategories || []).find(s => s.id === id);
       if (!item) return;
 
       if (!confirm(`क्या आप वास्तव में उप-श्रेणी "${item.name}" को हटाना चाहते हैं?`)) return;
 
-      masterSettings.businessSubCategories = masterSettings.businessSubCategories.filter(s => s.id !== id);
+      masterSettings.businessSubCategories = (masterSettings.businessSubCategories || []).filter(s => s.id !== id);
       await saveAllSettingsToCloud();
+      renderBusinessMasterTab();
     }
 
     // Handlers for Save (Add or Update) in Masters    // Handlers for Save (Add or Update) in Masters
