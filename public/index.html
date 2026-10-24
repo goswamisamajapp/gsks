@@ -26503,16 +26503,15 @@
               '<p class="text-xs font-black text-slate-800 truncate" title="' + itemsSummary + '"><i class="fa-solid fa-box text-amber-600 mr-1.5 text-[11px]"></i>' + itemsSummary + '</p>' +
               '</div>' +
               '</div>' +
-              '<!-- Col 2: Amount, Status, Actions -->' +
+              '<!-- Col 2: Amount & Actions -->' +
               '<div class="flex items-center justify-between lg:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0">' +
               '<div class="flex items-center gap-2 shrink-0">' +
-              '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">Pending</span>' +
               '<span class="font-mono font-black text-base sm:text-lg text-amber-950">₹ ' + (parseFloat(o.totalAmount) || 0).toLocaleString('en-IN') + '</span>' +
               '</div>' +
               '<div class="flex items-center gap-1.5 shrink-0 flex-wrap">' +
               '<button type="button" onclick="openOrderDetailModal(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-eye text-teal-600"></i><span>View Order Detail</span></button>' +
-              '<button type="button" onclick="handleAdminCancelOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-ban text-[11px]"></i><span>Cancel</span></button>' +
               '<button type="button" onclick="handleAdminCompleteOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 whitespace-nowrap"><i class="fa-solid fa-circle-check text-[11px]"></i><span>Complete</span></button>' +
+              '<button type="button" onclick="handleAdminCancelOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-ban text-[11px]"></i><span>Cancel</span></button>' +
               '</div>' +
               '</div>' +
               '</div></div>';
