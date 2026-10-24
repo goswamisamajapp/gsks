@@ -631,8 +631,7 @@
                 <i class="fa-solid fa-arrow-left"></i>
               </button>
               <div>
-                <h3 class="text-base sm:text-lg font-black tracking-wide">Pending Orders (प्रतीक्षारत ऑर्डर)</h3>
-                <p class="text-xs text-amber-100 font-medium mt-0.5">स्वीकृति एवं डिलीवरी हेतु लंबित सभी ऑर्डर</p>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Pending Orders</h3>
               </div>
             </div>
             <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-amber-900 shadow-sm" id="pending-orders-badge">0 Pending</span>
@@ -665,8 +664,7 @@
                 <i class="fa-solid fa-arrow-left"></i>
               </button>
               <div>
-                <h3 class="text-base sm:text-lg font-black tracking-wide">Completed Orders (पूर्ण हुए ऑर्डर)</h3>
-                <p class="text-xs text-emerald-100 font-medium mt-0.5">सफलतापूर्वक डिलीवर और पूर्ण हो चुके सभी ऑर्डर</p>
+                <h3 class="text-base sm:text-lg font-black tracking-wide">Completed Orders</h3>
               </div>
             </div>
             <span class="px-3 py-1 rounded-full text-xs font-bold bg-white text-emerald-900 shadow-sm" id="completed-orders-badge">0 Completed</span>
@@ -8734,6 +8732,87 @@
           <span>Confirm & Place Order (ऑर्डर दर्ज करें)</span>
         </button>
       </form>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ORDER DETAILS POPUP (Admin & Member View)              -->
+  <!-- ============================================================== -->
+  <div id="order-detail-modal" class="hidden fixed inset-0 z-[999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-4 sm:p-6 shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeOrderDetailModal()" class="absolute right-3.5 top-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 pb-3 border-b border-slate-100 shrink-0">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center text-base shadow-xs flex-shrink-0">
+          <i class="fa-solid fa-receipt"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2">
+            <span class="font-mono font-black text-sm text-slate-900" id="order-detail-id">-</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold" id="order-detail-status-badge">Status</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium mt-0.5" id="order-detail-date">-</p>
+        </div>
+      </div>
+
+      <!-- Member & Delivery Details -->
+      <div class="my-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 shrink-0">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500">सदस्य (Member):</span>
+          <span class="font-bold text-slate-800" id="order-detail-member">-</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500">मोबाइल (Phone):</span>
+          <span class="font-mono font-semibold text-slate-800" id="order-detail-phone">-</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500">डिलीवरी पता:</span>
+          <span class="font-semibold text-slate-800 text-right truncate max-w-[200px]" id="order-detail-address">-</span>
+        </div>
+        <div class="flex items-center justify-between pt-1 border-t border-slate-200/60">
+          <span class="text-slate-500">UPI Ref / UTR:</span>
+          <span class="font-mono font-bold text-teal-800" id="order-detail-utr">-</span>
+        </div>
+      </div>
+
+      <!-- Order Items List (Scrollable) -->
+      <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between shrink-0">
+        <span>आइटम विवरण (Ordered Items):</span>
+        <span class="text-[11px] text-slate-400" id="order-detail-items-count">0 items</span>
+      </div>
+      <div id="order-detail-items-list" class="divide-y divide-slate-100 overflow-y-auto max-h-48 pr-1 flex-1 border border-slate-100 rounded-xl p-2 bg-slate-50/50">
+        <!-- Dynamically filled -->
+      </div>
+
+      <!-- Payment Summary Footer -->
+      <div class="pt-3 border-t border-slate-100 shrink-0 space-y-1.5 mt-2">
+        <div class="flex items-center justify-between text-xs text-slate-500">
+          <span>MRP कुल मूल्य:</span>
+          <span class="font-mono line-through" id="order-detail-mrp">₹0</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-emerald-700 font-bold">
+          <span>सदस्य बचत (Savings):</span>
+          <span class="font-mono" id="order-detail-savings">- ₹0</span>
+        </div>
+        <div class="flex items-center justify-between text-sm font-black text-slate-900 pt-1 border-t border-slate-100">
+          <span>भुगतान राशि (Amount Paid):</span>
+          <span class="font-mono text-base text-teal-800" id="order-detail-total">₹0</span>
+        </div>
+
+        <button 
+          type="button" 
+          onclick="closeOrderDetailModal()" 
+          class="w-full mt-2 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all text-center cursor-pointer active:scale-95"
+        >
+          बंद करें (Close)
+        </button>
+      </div>
 
     </div>
   </div>
@@ -26196,7 +26275,10 @@
               '<div class="flex items-center gap-2">' +
               '<span class="text-slate-500">UTR: <span class="font-mono font-bold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">' + (o.utrNumber || '-') + '</span></span>' +
               '<span class="text-emerald-700 font-bold">सदस्य बचत: ₹' + (o.totalSavings || 0) + '</span></div>' +
-              '<button type="button" onclick="handleAdminCompleteOrder(\'' + o.id + '\')" class="py-2 px-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"><i class="fa-solid fa-circle-check"></i><span>Mark as Delivered & Completed</span></button>' +
+              '<div class="flex items-center gap-2 flex-wrap">' +
+  '<button type="button" onclick="openOrderDetailModal(\'' + o.id + '\')" class="py-2 px-3.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs"><i class="fa-solid fa-eye text-teal-600"></i><span>View Order Detail</span></button>' +
+  '<button type="button" onclick="handleAdminCompleteOrder(\'' + o.id + '\')" class="py-2 px-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"><i class="fa-solid fa-circle-check"></i><span>Mark as Delivered & Completed</span></button>' +
+  '</div>' +
               '</div></div>';
           }).join('');
         }
@@ -26273,6 +26355,76 @@
     window.handleStoreOrderFinalSubmit = handleStoreOrderFinalSubmit;
     window.renderMemberOrdersLists = renderMemberOrdersLists;
     window.renderAdminOrdersViews = renderAdminOrdersViews;
+    function openOrderDetailModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const modal = document.getElementById('order-detail-modal');
+      const idEl = document.getElementById('order-detail-id');
+      const badgeEl = document.getElementById('order-detail-status-badge');
+      const dateEl = document.getElementById('order-detail-date');
+      const memEl = document.getElementById('order-detail-member');
+      const phoneEl = document.getElementById('order-detail-phone');
+      const addressEl = document.getElementById('order-detail-address');
+      const utrEl = document.getElementById('order-detail-utr');
+      const countEl = document.getElementById('order-detail-items-count');
+      const itemsListEl = document.getElementById('order-detail-items-list');
+      const mrpEl = document.getElementById('order-detail-mrp');
+      const savingsEl = document.getElementById('order-detail-savings');
+      const totalEl = document.getElementById('order-detail-total');
+
+      if (idEl) idEl.textContent = order.id;
+      if (badgeEl) {
+        const isComp = order.status === 'Completed';
+        badgeEl.textContent = isComp ? 'Delivered & Completed' : (order.status || 'Pending');
+        badgeEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold ' + (isComp ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300');
+      }
+
+      const dt = order.createdAt ? new Date(order.createdAt).toLocaleDateString('hi-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+      if (dateEl) dateEl.textContent = dt;
+      if (memEl) memEl.textContent = (order.memberName || 'सदस्य') + ' (' + (order.memberId || '-') + ')';
+      if (phoneEl) phoneEl.textContent = order.memberPhone || '-';
+      if (addressEl) addressEl.textContent = order.deliveryAddress || '-';
+      if (utrEl) utrEl.textContent = order.utrNumber || '-';
+
+      const items = order.items || [];
+      if (countEl) countEl.textContent = items.length + ' उत्पाद (' + (order.totalQuantity || items.length) + ' कुल मात्रा)';
+
+      if (itemsListEl) {
+        itemsListEl.innerHTML = items.map(it => {
+          const qty = it.quantity || 1;
+          const price = parseFloat(it.ourPrice) || 0;
+          const lineTotal = qty * price;
+
+          return '<div class="py-2 flex items-center justify-between text-xs">' +
+            '<div><span class="font-bold text-slate-800">' + it.name + '</span>' +
+            '<div class="text-[10px] text-slate-400 mt-0.5">₹' + price + ' / unit' + (it.weight ? (' • ' + it.weight) : '') + '</div></div>' +
+            '<div class="text-right"><span class="font-mono font-bold text-slate-800">' + qty + ' × ₹' + price + '</span>' +
+            '<span class="font-mono font-black text-slate-900 block">₹' + lineTotal + '</span></div>' +
+            '</div>';
+        }).join('');
+      }
+
+      if (mrpEl) mrpEl.textContent = '₹ ' + (parseFloat(order.totalMrp) || 0).toLocaleString('en-IN');
+      if (savingsEl) savingsEl.textContent = '- ₹ ' + (parseFloat(order.totalSavings) || 0).toLocaleString('en-IN');
+      if (totalEl) totalEl.textContent = '₹ ' + (parseFloat(order.totalAmount) || 0).toLocaleString('en-IN');
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeOrderDetailModal() {
+      const modal = document.getElementById('order-detail-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    window.openOrderDetailModal = openOrderDetailModal;
+    window.closeOrderDetailModal = closeOrderDetailModal;
     window.handleAdminCompleteOrder = handleAdminCompleteOrder;
 
 
