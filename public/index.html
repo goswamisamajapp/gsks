@@ -8799,102 +8799,117 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- MODAL: ORDER DETAILS POPUP (Admin & Member View)              -->
+  <!-- MODAL: ORDER DETAILS POPUP (Admin & Member View - WELL DESIGNED RECEIPT) -->
   <!-- ============================================================== -->
-  <div id="order-detail-modal" class="hidden fixed inset-0 z-[999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-4 sm:p-6 shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col">
+  <div id="order-detail-modal" class="hidden fixed inset-0 z-[999] bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full shadow-2xl border border-slate-200 relative my-auto animate-in fade-in zoom-in-95 duration-200 max-h-[94vh] flex flex-col overflow-hidden">
       
+      <!-- Top Decorative Band -->
+      <div class="h-2 bg-gradient-to-r from-teal-500 via-emerald-500 to-amber-500 w-full shrink-0"></div>
+
       <!-- Close Button -->
-      <button type="button" onclick="closeOrderDetailModal()" class="absolute right-3.5 top-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer">
+      <button type="button" onclick="closeOrderDetailModal()" class="absolute right-3.5 top-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer z-10">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <!-- Header -->
-      <div class="flex items-center gap-3 pb-3 border-b border-slate-100 shrink-0">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center text-base shadow-xs flex-shrink-0">
-          <i class="fa-solid fa-receipt"></i>
-        </div>
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center gap-2">
-            <span class="font-mono font-black text-sm text-slate-900" id="order-detail-id">-</span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold" id="order-detail-status-badge">Status</span>
+      <div class="p-4 sm:p-6 flex-1 flex flex-col overflow-y-auto space-y-3.5">
+        
+        <!-- Trust Brand Header -->
+        <div class="text-center pb-3 border-b border-dashed border-slate-200 shrink-0">
+          <div class="w-12 h-12 rounded-2xl bg-white p-1 border border-amber-200 shadow-xs mx-auto mb-1.5 flex items-center justify-center overflow-hidden">
+            <img src="/logo-opt.png" alt="GSKS Logo" class="w-full h-full object-contain rounded-xl">
           </div>
-          <p class="text-[11px] text-slate-500 font-medium mt-0.5" id="order-detail-date">-</p>
-        </div>
-      </div>
-
-      <!-- Member & Delivery Details -->
-      <div class="my-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 shrink-0">
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500">सदस्य (Member):</span>
-          <span class="font-bold text-slate-800" id="order-detail-member">-</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500">मोबाइल (Phone):</span>
-          <span class="font-mono font-semibold text-slate-800" id="order-detail-phone">-</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500">डिलीवरी पता:</span>
-          <span class="font-semibold text-slate-800 text-right truncate max-w-[200px]" id="order-detail-address">-</span>
-        </div>
-        <div class="flex items-center justify-between pt-1 border-t border-slate-200/60">
-          <span class="text-slate-500">UPI Ref / UTR:</span>
-          <span class="font-mono font-bold text-teal-800" id="order-detail-utr">-</span>
-        </div>
-        <div id="order-detail-cancellation-row" class="hidden flex items-start justify-between pt-1 border-t border-red-100 text-rose-700">
-          <span class="font-bold flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i>रद्द करने का कारण:</span>
-          <span class="font-semibold text-right max-w-[200px]" id="order-detail-cancellation-reason">-</span>
-        </div>
-      </div>
-
-      <!-- Order Items List (Scrollable) -->
-      <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between shrink-0">
-        <span>आइटम विवरण (Ordered Items):</span>
-        <span class="text-[11px] text-slate-400" id="order-detail-items-count">0 items</span>
-      </div>
-      <div id="order-detail-items-list" class="divide-y divide-slate-100 overflow-y-auto max-h-48 pr-1 flex-1 border border-slate-100 rounded-xl p-2 bg-slate-50/50">
-        <!-- Dynamically filled -->
-      </div>
-
-      <!-- Payment Summary Footer -->
-      <div class="pt-3 border-t border-slate-100 shrink-0 space-y-1.5 mt-2">
-        <div class="flex items-center justify-between text-xs text-slate-500">
-          <span>MRP कुल मूल्य:</span>
-          <span class="font-mono line-through" id="order-detail-mrp">₹0</span>
-        </div>
-        <div class="flex items-center justify-between text-xs text-emerald-700 font-bold">
-          <span>सदस्य बचत (Savings):</span>
-          <span class="font-mono" id="order-detail-savings">- ₹0</span>
-        </div>
-        <div class="flex items-center justify-between text-sm font-black text-slate-900 pt-1 border-t border-slate-100">
-          <span>भुगतान राशि (Amount Paid):</span>
-          <span class="font-mono text-base text-teal-800" id="order-detail-total">₹0</span>
+          <h3 class="text-sm font-black text-slate-900">गोस्वामी समाज कल्याण समिति</h3>
+          <p class="text-[10px] text-slate-500">ट्रस्ट स्टोर • सामग्री खरीद पावती (Order Receipt)</p>
+          
+          <div class="mt-2 flex items-center justify-center gap-2 flex-wrap">
+            <span class="font-mono font-black text-xs text-amber-950 bg-amber-100/90 px-2.5 py-0.5 rounded-lg border border-amber-300" id="order-detail-id">-</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold" id="order-detail-status-badge">Status</span>
+          </div>
+          <p class="text-[10px] text-slate-400 font-medium mt-1 flex items-center justify-center gap-1">
+            <i class="fa-solid fa-clock text-[9px]"></i>
+            <span id="order-detail-date">-</span>
+          </p>
         </div>
 
-        <!-- Buttons: Close, Print Receipt, Share WhatsApp -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2">
+        <!-- Member & Delivery Card -->
+        <div class="p-3 rounded-2xl bg-slate-50/90 border border-slate-200/90 text-xs space-y-1.5 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 font-medium">सदस्य (Member):</span>
+            <span class="font-bold text-slate-900 text-right truncate max-w-[200px]" id="order-detail-member">-</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 font-medium">मोबाइल (Phone):</span>
+            <span class="font-mono font-bold text-slate-800" id="order-detail-phone">-</span>
+          </div>
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-slate-500 font-medium shrink-0">डिलीवरी पता:</span>
+            <span class="font-semibold text-slate-800 text-right truncate max-w-[200px]" id="order-detail-address">-</span>
+          </div>
+          <div class="flex items-center justify-between pt-1 border-t border-slate-200/80">
+            <span class="text-slate-500 font-medium">UPI Ref / UTR:</span>
+            <span class="font-mono font-bold text-teal-800 bg-white px-2 py-0.5 rounded border border-teal-200" id="order-detail-utr">-</span>
+          </div>
+          <div id="order-detail-cancellation-row" class="hidden flex items-start justify-between pt-1 border-t border-red-100 text-rose-700 bg-rose-50/60 p-2 rounded-xl">
+            <span class="font-bold flex items-center gap-1 shrink-0"><i class="fa-solid fa-ban text-[10px]"></i>रद्द कारण:</span>
+            <span class="font-semibold text-right max-w-[190px]" id="order-detail-cancellation-reason">-</span>
+          </div>
+        </div>
+
+        <!-- Order Items List -->
+        <div class="shrink-0">
+          <div class="text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-basket-shopping text-teal-600"></i>सामग्री विवरण:</span>
+            <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full" id="order-detail-items-count">0 items</span>
+          </div>
+          <div id="order-detail-items-list" class="divide-y divide-slate-100 overflow-y-auto max-h-44 border border-slate-200/90 rounded-2xl p-2.5 bg-slate-50/50 space-y-1">
+            <!-- Dynamically filled -->
+          </div>
+        </div>
+
+        <!-- Payment Summary Breakdown -->
+        <div class="pt-2 border-t border-slate-100 shrink-0 space-y-1.5">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span>MRP कुल मूल्य:</span>
+            <span class="font-mono line-through text-slate-400" id="order-detail-mrp">₹0</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-emerald-700 font-bold bg-emerald-50/80 px-2.5 py-1 rounded-xl border border-emerald-200/80">
+            <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i>सदस्य कुल बचत:</span>
+            <span class="font-mono font-extrabold" id="order-detail-savings">- ₹0</span>
+          </div>
+          <div class="flex items-center justify-between text-sm font-black text-slate-900 pt-1.5 border-t border-dashed border-slate-200">
+            <span>कुल भुगतान राशि (Paid):</span>
+            <span class="font-mono text-lg text-emerald-800" id="order-detail-total">₹0</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons Footer -->
+      <div class="p-3 sm:p-4 bg-slate-50/90 border-t border-slate-200/90 shrink-0">
+        <div class="grid grid-cols-3 gap-2">
           <button 
             type="button" 
             onclick="printOrderReceiptFromModal()" 
-            class="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs"
+            class="w-full py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
           >
-            <i class="fa-solid fa-print"></i>
-            <span>रसीद प्रिंट (Print)</span>
+            <i class="fa-solid fa-print text-xs"></i>
+            <span>रसीद प्रिंट</span>
           </button>
           <button 
             type="button" 
             onclick="shareOrderReceiptOnWhatsAppFromModal()" 
-            class="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs"
+            class="w-full py-2.5 px-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
           >
             <i class="fa-brands fa-whatsapp text-sm"></i>
-            <span>WhatsApp रसीद</span>
+            <span>WhatsApp</span>
           </button>
           <button 
             type="button" 
             onclick="closeOrderDetailModal()" 
-            class="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all text-center cursor-pointer active:scale-95"
+            class="w-full py-2.5 px-2 rounded-xl bg-white hover:bg-slate-100 active:scale-95 text-slate-700 border border-slate-200 text-xs font-bold transition-all text-center cursor-pointer shadow-2xs whitespace-nowrap"
           >
-            बंद करें (Close)
+            बंद करें
           </button>
         </div>
       </div>
