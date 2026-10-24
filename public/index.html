@@ -26495,10 +26495,9 @@
               '</div>' +
               '<!-- Items List -->' +
               '<div class="bg-slate-50/80 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-200/80">' + itemsList + '</div>' +
-              '<!-- Meta: UTR & Savings -->' +
+              '<!-- Meta: UTR -->' +
               '<div class="flex items-center justify-between text-xs pt-1 border-t border-slate-100 gap-2 flex-wrap">' +
               '<span class="text-slate-500 text-[11px]">UTR: <span class="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 text-xs">' + (o.utrNumber || '-') + '</span></span>' +
-              '<span class="text-emerald-700 font-extrabold text-xs flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i>बचत: ₹' + (o.totalSavings || 0) + '</span>' +
               '</div>' +
               '<!-- Action Buttons: Clean 2 columns on mobile for effortless touch -->' +
               '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">' +
@@ -26554,14 +26553,11 @@
               '</div>' +
               '</div>' +
               '</div>' +
-              '<!-- Col 2: Amount, Savings & Action Buttons on Desktop in same line -->' +
+              '<!-- Col 2: Amount & Action Buttons on Desktop in same line -->' +
               '<div class="flex items-center justify-between lg:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0">' +
-              '<div class="text-left lg:text-right shrink-0">' +
-              '<div class="flex items-center lg:justify-end gap-1.5">' +
+              '<div class="flex items-center gap-1.5 shrink-0">' +
               '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">Delivered</span>' +
               '<span class="font-mono font-black text-base sm:text-lg text-emerald-950">₹ ' + (parseFloat(o.totalAmount) || 0).toLocaleString('en-IN') + '</span>' +
-              '</div>' +
-              '<span class="text-emerald-700 font-extrabold text-xs block mt-0.5">बचत: ₹' + (o.totalSavings || 0) + '</span>' +
               '</div>' +
               '<div class="flex items-center gap-1.5 shrink-0">' +
               '<button type="button" onclick="shareOrderReceiptOnWhatsApp(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="WhatsApp पर रसीद भेजें"><i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i><span>WhatsApp</span></button>' +
