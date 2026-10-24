@@ -3908,10 +3908,13 @@
 
         <!-- Savings Breakup by Completed Orders -->
         <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
-          <h4 class="text-xs sm:text-sm font-black text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-receipt text-indigo-600"></i>
-            ऑर्डर अनुसार बचत विवरण (Savings by Orders)
-          </h4>
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <h4 class="text-xs sm:text-sm font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-indigo-600"></i>
+              <span>ऑर्डर अनुसार बचत विवरण (Savings by Orders)</span>
+            </h4>
+            <span id="member-savings-orders-count-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono">0 Orders</span>
+          </div>
           <div id="member-savings-orders-list" class="space-y-2">
             <!-- Populated dynamically via renderMemberOrdersLists() -->
           </div>
@@ -26524,6 +26527,10 @@
 
       // 4. Savings View Breakup List
       const savingsList = document.getElementById('member-savings-orders-list');
+      const savingsCountBadge = document.getElementById('member-savings-orders-count-badge');
+      if (savingsCountBadge) {
+        savingsCountBadge.textContent = completedOrders.length + ' Orders';
+      }
       if (savingsList) {
         if (completedOrders.length === 0) {
           savingsList.innerHTML = '<div class="py-6 text-center text-slate-400 text-xs">पूर्ण ऑर्डर उपलब्ध होने पर यहाँ बचत विवरण दिखाई देगा।</div>';
