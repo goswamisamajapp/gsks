@@ -26581,9 +26581,9 @@
         }
       }
 
-      // Update Active Users Dashboard Count
+      // Update Active Users Dashboard Count (Only Completed Orders)
       const activeUsersMap = {};
-      allOrders.forEach(o => {
+      completedOrders.forEach(o => {
         const uid = o.memberId || o.memberPhone || o.memberName || 'GUEST';
         if (!activeUsersMap[uid]) {
           activeUsersMap[uid] = true;
@@ -26594,11 +26594,12 @@
       if (dashActiveUsers) dashActiveUsers.textContent = activeUsersCount;
     }
 
-    // ACTIVE USERS VIEW & LOGIC (Ordered by Total Order Value descending)
+    // ACTIVE USERS VIEW & LOGIC (Ordered by Total Order Value descending - ONLY COMPLETED ORDERS)
     function renderAdminActiveUsersView() {
       const usersMap = {};
+      const completedOnlyOrders = allOrders.filter(o => o.status === 'Completed');
 
-      allOrders.forEach(o => {
+      completedOnlyOrders.forEach(o => {
         const uid = o.memberId || o.memberPhone || o.memberName || 'GUEST';
         if (!usersMap[uid]) {
           usersMap[uid] = {
