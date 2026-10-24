@@ -556,7 +556,7 @@
             </h3>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
             <!-- 1. Pending Order -->
             <div onclick="switchAdminView('order-pending')" class="cursor-pointer bg-gradient-to-br from-amber-50 via-orange-50/40 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all group">
               <div class="flex items-center justify-between">
@@ -610,6 +610,20 @@
               <div class="mt-2">
                 <p class="text-xl sm:text-2xl font-black text-purple-950" id="dash-order-active-users-count">0</p>
                 <p class="text-[10px] text-purple-700/80 font-medium mt-0.5">सक्रिय उपयोगकर्ता →</p>
+              </div>
+            </div>
+
+            <!-- 5. Savings on Order -->
+            <div onclick="switchAdminView('order-completed')" class="cursor-pointer bg-gradient-to-br from-rose-50 via-pink-50/40 to-white rounded-2xl p-3 sm:p-4 border border-rose-200/90 shadow-xs flex flex-col justify-between hover:border-rose-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-900">Savings on Order</span>
+                <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="text-xl sm:text-2xl font-black text-rose-950" id="dash-order-savings-count">₹ 0</p>
+                <p class="text-[10px] text-rose-700/80 font-medium mt-0.5">समिति बचत / मार्जिन →</p>
               </div>
             </div>
           </div>
@@ -25816,6 +25830,7 @@
           name: currentStoreQtyItem.name,
           weight: currentStoreQtyItem.weight || '',
           mrp: parseFloat(currentStoreQtyItem.mrp) || 0,
+          costPrice: parseFloat(currentStoreQtyItem.costPrice) || 0,
           ourPrice: parseFloat(currentStoreQtyItem.ourPrice) || 0,
           quantity: qty
         });
@@ -26233,6 +26248,7 @@
       // Update Dashboard Top Badges
       const dashPending = document.getElementById('dash-order-pending-count');
       const dashCompleted = document.getElementById('dash-order-completed-count');
+      const dashSavings = document.getElementById('dash-order-savings-count');
       const badgePending = document.getElementById('pending-orders-badge');
       const badgeCompleted = document.getElementById('completed-orders-badge');
 
@@ -26240,6 +26256,30 @@
       if (dashCompleted) dashCompleted.textContent = completedOrders.length;
       if (badgePending) badgePending.textContent = pendingOrders.length + ' Pending';
       if (badgeCompleted) badgeCompleted.textContent = completedOrders.length + ' Completed';
+
+      // Calculate Total Savings on Completed Orders (Offer Price - Cost Price)
+      initBusinessMasterData();
+      const allSubs = masterSettings.businessSubCategories || [];
+      let totalTrustSavingsOnOrders = 0;
+
+      completedOrders.forEach(o => {
+        (o.items || []).forEach(it => {
+          const qty = it.quantity || 1;
+          const offerPrice = parseFloat(it.ourPrice) || 0;
+          // Look up costPrice from current item or catalog
+          let costPrice = parseFloat(it.costPrice);
+          if (isNaN(costPrice)) {
+            const catItem = allSubs.find(s => s.id === it.id);
+            costPrice = catItem && !isNaN(parseFloat(catItem.costPrice)) ? parseFloat(catItem.costPrice) : 0;
+          }
+          const itemSavings = Math.max(0, offerPrice - costPrice) * qty;
+          totalTrustSavingsOnOrders += itemSavings;
+        });
+      });
+
+      if (dashSavings) {
+        dashSavings.textContent = '₹ ' + Math.round(totalTrustSavingsOnOrders).toLocaleString('en-IN');
+      }
 
       // 1. Admin Pending Orders List
       const pendingList = document.getElementById('admin-pending-orders-list');
