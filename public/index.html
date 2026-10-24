@@ -26694,10 +26694,10 @@
               ? '<span class="w-6 h-6 rounded-full bg-amber-50 text-amber-800 font-black text-xs flex items-center justify-center border border-amber-200 shadow-2xs shrink-0">🥉</span>'
               : '<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 font-black text-[10px] flex items-center justify-center border border-slate-200 shrink-0">#' + (idx + 1) + '</span>'));
 
-        return '<div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-purple-200/90 shadow-2xs space-y-2.5 hover:shadow-xs hover:border-purple-300 transition-all">' +
-          '<!-- Top Row: Rank, Member Name, ID, Phone & Total Value -->' +
-          '<div class="flex items-center justify-between gap-2">' +
-          '<div class="flex items-center gap-2 min-w-0 flex-1">' +
+        return '<div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-purple-200/90 shadow-2xs hover:shadow-xs transition-all">' +
+          '<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">' +
+          '<!-- Col 1: Rank, Member Name, ID, Phone -->' +
+          '<div class="flex items-center gap-2.5 min-w-0 lg:w-[240px] shrink-0">' +
           rankBadge +
           '<div class="min-w-0 flex-1">' +
           '<div class="flex items-center gap-1.5 flex-wrap leading-tight">' +
@@ -26707,13 +26707,8 @@
           (u.memberPhone ? '<div class="text-[10px] text-slate-500 mt-0.5 flex items-center gap-1"><i class="fa-solid fa-phone text-slate-400 text-[9px]"></i>' + u.memberPhone + '</div>' : '') +
           '</div>' +
           '</div>' +
-          '<div class="text-right shrink-0">' +
-          '<span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Total Value</span>' +
-          '<span class="font-mono font-black text-sm sm:text-lg text-purple-950 block leading-tight">₹ ' + Math.round(u.orderValue).toLocaleString('en-IN') + '</span>' +
-          '</div>' +
-          '</div>' +
-          '<!-- 3 Metrics Grid -->' +
-          '<div class="grid grid-cols-3 gap-1.5 sm:gap-2 p-2 sm:p-2.5 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 text-center">' +
+          '<!-- Col 2: 3 Metrics in Center (1 line on PC) -->' +
+          '<div class="grid grid-cols-3 gap-1.5 sm:gap-2 p-2 sm:p-2.5 bg-slate-50/80 rounded-xl sm:rounded-2xl border border-slate-200/80 text-center flex-1 lg:max-w-[460px]">' +
           '<div>' +
           '<span class="text-[9px] sm:text-[10px] text-slate-500 font-medium block">Total Orders</span>' +
           '<span class="text-xs sm:text-sm font-black text-slate-800 font-mono mt-0.5 block">' + u.totalOrders + '</span>' +
@@ -26725,6 +26720,12 @@
           '<div>' +
           '<span class="text-[9px] sm:text-[10px] text-slate-500 font-medium block">Last Order On</span>' +
           '<span class="text-[10px] sm:text-xs font-bold text-slate-700 mt-0.5 block truncate" title="' + lastDt + '">' + (u.lastOrderOn ? new Date(u.lastOrderOn).toLocaleDateString('hi-IN', { day: '2-digit', month: 'short' }) : '-') + '</span>' +
+          '</div>' +
+          '</div>' +
+          '<!-- Col 3: Total Value on Right -->' +
+          '<div class="text-right shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 flex items-center justify-between lg:block">' +
+          '<span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Total Value</span>' +
+          '<span class="font-mono font-black text-base sm:text-lg text-purple-950 block leading-tight">₹ ' + Math.round(u.orderValue).toLocaleString('en-IN') + '</span>' +
           '</div>' +
           '</div>' +
           '</div>';
