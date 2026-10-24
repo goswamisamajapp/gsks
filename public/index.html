@@ -16154,13 +16154,13 @@
               </p>
             </div>
 
-            <!-- Col 3: Action Buttons (Restore & Delete) -->
-            <div class="flex items-center justify-end gap-1.5 pt-2 lg:pt-0 border-t lg:border-t-0 border-rose-100/80 shrink-0">
-              <button onclick="restoreMember('${m.id}')" class="py-1.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl text-xs transition-all flex items-center gap-1 border border-emerald-200 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap">
-                <i class="fa-solid fa-rotate-left text-[11px]"></i> <span>Restore</span>
+            <!-- Col 3: Action Buttons (Restore & Delete) - Centered in Card -->
+            <div class="flex items-center justify-center gap-2 pt-2.5 border-t border-rose-100/80 w-full lg:w-auto lg:pt-0 lg:border-t-0 shrink-0">
+              <button onclick="restoreMember('${m.id}')" class="flex-1 sm:flex-initial py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 border border-emerald-200 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap">
+                <i class="fa-solid fa-rotate-left text-xs text-emerald-600"></i> <span>Restore</span>
               </button>
-              <button onclick="permanentDeleteMember('${m.id}')" class="py-1.5 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center gap-1 border border-rose-200 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="Permanently delete from database">
-                <i class="fa-solid fa-trash-can text-[11px]"></i> <span>Delete Permanently</span>
+              <button onclick="permanentDeleteMember('${m.id}')" class="flex-1 sm:flex-initial py-2 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 border border-rose-200 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="Permanently delete from database">
+                <i class="fa-solid fa-trash-can text-xs text-rose-600"></i> <span>Delete Permanently</span>
               </button>
             </div>
           </div>
