@@ -26064,39 +26064,46 @@
         const parentName = parent ? parent.name : 'Trust Store';
         const descText = s.description ? s.description : 'उच्च गुणवत्ता युक्त ट्रस्ट प्रमाणित सामग्री';
 
-        let html = '<div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-teal-300 transition-all group">';
-        html += '<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">';
+        let html = '<div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-teal-300 transition-all group">';
         
-        // Col 1: Category, Name, Description, Weight
-        html += '<div class="min-w-0 flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-4">';
-        html += '<div class="shrink-0 flex items-center gap-2 flex-wrap">';
-        html += '<span class="text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-200/60 truncate">' + parentName + '</span>';
-        html += '<h4 class="text-sm font-black text-slate-900 group-hover:text-teal-700 transition-colors truncate max-w-[200px] sm:max-w-[260px]">' + s.name + '</h4>';
-        html += '</div>';
-        html += '<div class="min-w-0 flex-1 flex items-center gap-2 flex-wrap">';
-        html += '<p class="text-xs text-slate-500 truncate" title="' + descText + '">' + descText + '</p>';
-        if (s.weight) {
-          html += '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 text-[10px] font-semibold shrink-0"><i class="fa-solid fa-cube text-slate-400"></i> ' + s.weight + '</span>';
-        }
-        html += '</div>';
+        // --- TOP SECTION: Category & Stock Status ---
+        html += '<div class="flex items-center justify-between gap-2 mb-2">';
+        html += '<span class="text-[10px] font-black tracking-wide text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-lg border border-teal-200/70 inline-block uppercase">' + parentName + '</span>';
+        html += '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ' + (isOutOfStock ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200') + '">' + (isOutOfStock ? '● Out of Stock' : ('● ' + stockQty + ' in stock')) + '</span>';
         html += '</div>';
 
-        // Col 2: Stock, Pricing & Buy Button
-        html += '<div class="flex items-center justify-between lg:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0">';
-        html += '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ' + (isOutOfStock ? 'bg-rose-100 text-rose-700' : 'bg-emerald-50 text-emerald-800 border border-emerald-200') + '">' + (isOutOfStock ? 'Out of Stock' : (stockQty + ' in stock')) + '</span>';
-        html += '<div class="flex items-center gap-2 shrink-0">';
+        // --- MIDDLE SECTION: Product Name & Weight & Description ---
+        html += '<div class="mb-3">';
+        html += '<div class="flex items-baseline gap-2 flex-wrap">';
+        html += '<h4 class="text-sm sm:text-base font-black text-slate-900 group-hover:text-teal-700 transition-colors leading-snug">' + s.name + '</h4>';
+        if (s.weight) {
+          html += '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-bold shrink-0"><i class="fa-solid fa-cube text-slate-400 text-[9px]"></i>' + s.weight + '</span>';
+        }
+        html += '</div>';
+        if (descText) {
+          html += '<p class="text-xs text-slate-500 mt-1 line-clamp-1 leading-relaxed">' + descText + '</p>';
+        }
+        html += '</div>';
+
+        // --- BOTTOM SECTION: Pricing Bar + Big Vibrant Buy Button ---
+        html += '<div class="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-3">';
+        html += '<div class="min-w-0">';
+        html += '<div class="flex items-baseline gap-2">';
+        html += '<span class="text-lg sm:text-xl font-black font-mono text-slate-900">₹' + offerPrice + '</span>';
         if (mrp > 0) {
           html += '<span class="text-xs font-mono text-slate-400 line-through">₹' + mrp + '</span>';
         }
-        html += '<span class="text-base sm:text-lg font-black font-mono text-teal-700">₹' + offerPrice + '</span>';
+        html += '</div>';
         if (saving > 0) {
-          html += '<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 hidden sm:inline-block">बचत: ₹' + saving + '</span>';
+          html += '<span class="inline-flex items-center gap-1 text-[10px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80 mt-0.5"><i class="fa-solid fa-circle-check text-[9px]"></i> बचत: ₹' + saving + '</span>';
         }
         html += '</div>';
-        html += '<button type="button" onclick="openStoreQtyModal(\'' + s.id + '\')" ' + (isOutOfStock ? 'disabled' : '') + ' class="min-w-[90px] sm:min-w-[105px] px-4 sm:px-6 py-2.5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs shrink-0 whitespace-nowrap ' + (isOutOfStock ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white') + '"><i class="fa-solid fa-cart-shopping text-xs"></i><span>Buy</span></button>';
+
+        // High-Quality E-Commerce Buy Button
+        html += '<button type="button" onclick="openStoreQtyModal(\'' + s.id + '\')" ' + (isOutOfStock ? 'disabled' : '') + ' class="min-w-[100px] sm:min-w-[120px] px-5 sm:px-6 py-2.5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-xs shrink-0 whitespace-nowrap ' + (isOutOfStock ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed' : 'bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white shadow-teal-600/20 hover:shadow-md') + '"><i class="fa-solid fa-cart-shopping text-xs"></i><span>Buy</span></button>';
         html += '</div>';
         
-        html += '</div></div>';
+        html += '</div>';
         return html;
       }).join('');
 
