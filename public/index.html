@@ -8841,6 +8841,10 @@
           <span class="text-slate-500">UPI Ref / UTR:</span>
           <span class="font-mono font-bold text-teal-800" id="order-detail-utr">-</span>
         </div>
+        <div id="order-detail-cancellation-row" class="hidden flex items-start justify-between pt-1 border-t border-red-100 text-rose-700">
+          <span class="font-bold flex items-center gap-1"><i class="fa-solid fa-ban text-[10px]"></i>रद्द करने का कारण:</span>
+          <span class="font-semibold text-right max-w-[200px]" id="order-detail-cancellation-reason">-</span>
+        </div>
       </div>
 
       <!-- Order Items List (Scrollable) -->
@@ -8875,6 +8879,95 @@
           बंद करें (Close)
         </button>
       </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADMIN CANCEL ORDER REASON POPUP                         -->
+  <!-- ============================================================== -->
+  <div id="admin-cancel-order-modal" class="hidden fixed inset-0 z-[1000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-4 sm:p-6 shadow-2xl border border-red-200 relative my-auto animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeAdminCancelOrderModal()" class="absolute right-3.5 top-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition-all cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 to-red-600 text-white flex items-center justify-center text-base shadow-xs shrink-0">
+          <i class="fa-solid fa-ban"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-sm sm:text-base font-black text-slate-900">ऑर्डर रद्द करें (Cancel Order)</h3>
+          <p class="text-[11px] text-slate-500 truncate" id="cancel-order-modal-subtext">Order ID: -</p>
+        </div>
+      </div>
+
+      <!-- Form Body -->
+      <form id="admin-cancel-order-form" onsubmit="submitAdminCancelOrder(event)" class="mt-4 space-y-3.5">
+        <input type="hidden" id="cancel-order-target-id" value="" />
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1">
+            <span>रद्द करने का कारण चुनें (Select Reason):</span>
+            <span class="text-rose-600">*</span>
+          </label>
+          <div class="relative">
+            <select 
+              id="cancel-order-reason-select" 
+              required
+              onchange="handleCancelReasonChange()"
+              class="w-full px-3 py-2.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all cursor-pointer"
+            >
+              <option value="">-- कारण चुनें --</option>
+              <option value="Payment not Received">1. Payment not Received</option>
+              <option value="Cancelled by Member Side">2. Cancelled by Member Side</option>
+              <option value="Cancelled due to out of stock">3. Cancelled due to out of stock</option>
+              <option value="Other">4. Other (अन्य कारण)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Custom Reason Input (Visible only if Other is selected) -->
+        <div id="cancel-order-custom-reason-box" class="hidden space-y-1 animate-in fade-in duration-200">
+          <label class="block text-xs font-bold text-slate-700 flex items-center gap-1">
+            <span>अन्य कारण दर्ज करें (Enter Reason):</span>
+            <span class="text-rose-600">*</span>
+          </label>
+          <textarea 
+            id="cancel-order-custom-reason-input" 
+            rows="2" 
+            placeholder="रद्द करने का विस्तृत कारण यहाँ लिखें..." 
+            class="w-full p-2.5 rounded-xl border border-slate-300 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-all resize-none"
+          ></textarea>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-800 flex items-start gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 shrink-0"></i>
+          <span>आर्डर रद्द करने पर इसके सभी उत्पादों का स्टॉक पुनः इन्वेंट्री में स्वचालित रूप से वापस जोड़ दिया जाएगा।</span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+          <button 
+            type="button" 
+            onclick="closeAdminCancelOrderModal()" 
+            class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all text-center cursor-pointer active:scale-95"
+          >
+            पीछे हटें
+          </button>
+          <button 
+            type="submit" 
+            id="btn-confirm-cancel-order"
+            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white text-xs font-extrabold shadow-md shadow-red-500/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+          >
+            <i class="fa-solid fa-ban text-[11px]"></i>
+            <span>पुष्टि व रद्द करें</span>
+          </button>
+        </div>
+      </form>
 
     </div>
   </div>
@@ -26478,7 +26571,10 @@
               '</div>' +
               '<!-- Meta & Action -->' +
               '<div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 flex-wrap gap-2">' +
+              '<div class="flex items-center gap-2 flex-wrap">' +
               '<span class="text-[11px]">UTR: <span class="font-mono font-bold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 text-xs">' + (o.utrNumber || '-') + '</span></span>' +
+              (o.cancellationReason ? ('<span class="text-rose-700 font-bold text-[11px] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-lg flex items-center gap-1"><i class="fa-solid fa-ban text-[9px]"></i>' + o.cancellationReason + '</span>') : '') +
+              '</div>' +
               '<button type="button" onclick="openOrderDetailModal(\'' + o.id + '\')" class="py-1.5 px-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs ml-auto"><i class="fa-solid fa-eye text-teal-600"></i><span>View Order Detail</span></button>' +
               '</div></div>';
           }).join('')
@@ -26611,33 +26707,127 @@
       }
     }
 
-    async function handleAdminCancelOrder(orderId) {
+    function handleAdminCancelOrder(orderId) {
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
 
-      if (!confirm('क्या आप आर्डर ' + orderId + ' को रद्द (Cancel) करना चाहते हैं?\n(ध्यान दें: इसके सभी उत्पादों का स्टॉक पुनः इन्वेंट्री में जोड़ दिया जाएगा)')) {
+      const modal = document.getElementById('admin-cancel-order-modal');
+      const targetInput = document.getElementById('cancel-order-target-id');
+      const subtext = document.getElementById('cancel-order-modal-subtext');
+      const reasonSelect = document.getElementById('cancel-order-reason-select');
+      const customBox = document.getElementById('cancel-order-custom-reason-box');
+      const customInput = document.getElementById('cancel-order-custom-reason-input');
+
+      if (targetInput) targetInput.value = order.id;
+      if (subtext) subtext.textContent = 'Order ID: ' + order.id + ' • ' + (order.memberName || 'सदस्य') + ' (₹' + (order.totalAmount || 0) + ')';
+      if (reasonSelect) reasonSelect.value = '';
+      if (customInput) customInput.value = '';
+      if (customBox) customBox.classList.add('hidden');
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeAdminCancelOrderModal() {
+      const modal = document.getElementById('admin-cancel-order-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    }
+
+    function handleCancelReasonChange() {
+      const reasonSelect = document.getElementById('cancel-order-reason-select');
+      const customBox = document.getElementById('cancel-order-custom-reason-box');
+      const customInput = document.getElementById('cancel-order-custom-reason-input');
+
+      if (reasonSelect && customBox) {
+        if (reasonSelect.value === 'Other') {
+          customBox.classList.remove('hidden');
+          if (customInput) {
+            customInput.required = true;
+            customInput.focus();
+          }
+        } else {
+          customBox.classList.add('hidden');
+          if (customInput) {
+            customInput.required = false;
+            customInput.value = '';
+          }
+        }
+      }
+    }
+
+    async function submitAdminCancelOrder(e) {
+      if (e && e.preventDefault) e.preventDefault();
+
+      const targetInput = document.getElementById('cancel-order-target-id');
+      const reasonSelect = document.getElementById('cancel-order-reason-select');
+      const customInput = document.getElementById('cancel-order-custom-reason-input');
+      const submitBtn = document.getElementById('btn-confirm-cancel-order');
+
+      const orderId = targetInput ? targetInput.value : '';
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) {
+        closeAdminCancelOrderModal();
         return;
       }
 
-      order.status = 'Cancelled';
-      order.cancelledAt = new Date().toISOString();
-      await syncOrderToBackendAndCloud(order);
+      let reason = reasonSelect ? reasonSelect.value : '';
+      if (!reason) {
+        alert('कृपया आर्डर रद्द करने का कारण चुनें।');
+        return;
+      }
 
-      // Restore inventory stock
-      initBusinessMasterData();
-      const subs = masterSettings.businessSubCategories || [];
-      (order.items || []).forEach(it => {
-        const sItem = subs.find(s => s.id === it.id);
-        if (sItem) {
-          const curStock = parseInt(sItem.stock, 10) || 0;
-          sItem.stock = curStock + (it.quantity || 1);
+      if (reason === 'Other') {
+        const customText = customInput ? customInput.value.trim() : '';
+        if (!customText) {
+          alert('कृपया अन्य कारण में विवरण दर्ज करें।');
+          if (customInput) customInput.focus();
+          return;
         }
-      });
-      await saveAllSettingsToCloud(false);
-      if (typeof updateOrderDashboardCounts === 'function') updateOrderDashboardCounts();
+        reason = 'Other: ' + customText;
+      }
 
-      if (typeof showFloatingToast === 'function') {
-        showFloatingToast('❌ आर्डर रद्द', 'आर्डर ' + orderId + ' रद्द कर दिया गया है एवं स्टॉक वापस जोड़ दिया गया है।');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> रद्द हो रहा है...';
+      }
+
+      try {
+        order.status = 'Cancelled';
+        order.cancellationReason = reason;
+        order.cancelledAt = new Date().toISOString();
+        await syncOrderToBackendAndCloud(order);
+
+        // Restore inventory stock
+        initBusinessMasterData();
+        const subs = masterSettings.businessSubCategories || [];
+        (order.items || []).forEach(it => {
+          const sItem = subs.find(s => s.id === it.id);
+          if (sItem) {
+            const curStock = parseInt(sItem.stock, 10) || 0;
+            sItem.stock = curStock + (it.quantity || 1);
+          }
+        });
+        await saveAllSettingsToCloud(false);
+        if (typeof updateOrderDashboardCounts === 'function') updateOrderDashboardCounts();
+
+        closeAdminCancelOrderModal();
+
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('❌ आर्डर रद्द', 'आर्डर ' + orderId + ' रद्द कर दिया गया (' + reason + ') एवं सामग्री स्टॉक पुनः वापस जोड़ दिया गया।');
+        }
+      } catch (err) {
+        console.error('Error cancelling order:', err);
+        alert('आर्डर रद्द करने में त्रुटि आई: ' + (err.message || 'Unknown error'));
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-ban text-[11px]"></i><span>पुष्टि व रद्द करें</span>';
+        }
       }
     }
 
@@ -26666,6 +26856,9 @@
     window.renderAdminActiveUsersView = renderAdminActiveUsersView;
     window.handleAdminCompleteOrder = handleAdminCompleteOrder;
     window.handleAdminCancelOrder = handleAdminCancelOrder;
+    window.closeAdminCancelOrderModal = closeAdminCancelOrderModal;
+    window.handleCancelReasonChange = handleCancelReasonChange;
+    window.submitAdminCancelOrder = submitAdminCancelOrder;
     function openOrderDetailModal(orderId) {
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
@@ -26698,6 +26891,17 @@
       if (phoneEl) phoneEl.textContent = order.memberPhone || '-';
       if (addressEl) addressEl.textContent = order.deliveryAddress || '-';
       if (utrEl) utrEl.textContent = order.utrNumber || '-';
+
+      const cancelRow = document.getElementById('order-detail-cancellation-row');
+      const cancelReasonEl = document.getElementById('order-detail-cancellation-reason');
+      if (cancelRow && cancelReasonEl) {
+        if (order.status === 'Cancelled' && order.cancellationReason) {
+          cancelReasonEl.textContent = order.cancellationReason;
+          cancelRow.classList.remove('hidden');
+        } else {
+          cancelRow.classList.add('hidden');
+        }
+      }
 
       const items = order.items || [];
       if (countEl) countEl.textContent = items.length + ' उत्पाद (' + (order.totalQuantity || items.length) + ' कुल मात्रा)';
