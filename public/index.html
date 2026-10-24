@@ -3616,7 +3616,7 @@
             <button type="button" onclick="openStoreCartModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 border border-teal-200 text-teal-900 font-bold text-xs transition-all cursor-pointer active:scale-95 shadow-2xs">
               <div class="relative">
                 <i class="fa-solid fa-cart-shopping text-sm text-teal-700"></i>
-                <span id="store-cart-badge-count" class="absolute -top-2 -right-2.5 bg-rose-500 text-white rounded-full w-4 h-4 text-[9px] flex items-center justify-center font-black">0</span>
+                <span id="store-cart-badge-count" class="hidden absolute -top-2 -right-2.5 bg-rose-500 text-white rounded-full w-4 h-4 text-[9px] flex items-center justify-center font-black">0</span>
               </div>
               <span class="hidden sm:inline">Cart:</span>
               <span id="store-cart-top-price" class="font-mono text-teal-800 font-black">₹0</span>
@@ -25549,7 +25549,14 @@
         totalAmount += (it.quantity || 1) * (parseFloat(it.ourPrice) || 0);
       });
 
-      if (badge) badge.textContent = totalItems;
+      if (badge) {
+        badge.textContent = totalItems;
+        if (totalItems > 0) {
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
       if (topPrice) topPrice.textContent = '₹ ' + totalAmount.toLocaleString('en-IN');
       if (payBtn) {
         if (totalItems > 0) {
@@ -25784,6 +25791,7 @@
         if (totalMrpEl) totalMrpEl.textContent = '₹0';
         if (totalSavingsEl) totalSavingsEl.textContent = '- ₹0';
         if (finalTotalEl) finalTotalEl.textContent = '₹0';
+        updateStoreCartUI();
         return;
       }
 
