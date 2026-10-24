@@ -26531,31 +26531,21 @@
 
             return '<div class="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 border border-emerald-200/90 shadow-2xs hover:shadow-xs transition-all">' +
               '<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">' +
-              '<!-- Col 1: ID, Member & Items Info -->' +
+              '<!-- Col 1: ID, Date, Name, Items -->' +
               '<div class="min-w-0 flex-1 flex flex-col md:flex-row md:items-center gap-2 md:gap-4">' +
-              '<div class="min-w-[190px] shrink-0">' +
-              '<div class="flex items-center gap-1.5 flex-wrap">' +
+              '<div class="shrink-0 flex items-center gap-2 flex-wrap">' +
               '<span class="font-mono font-black text-xs text-emerald-950 bg-emerald-100/80 px-2 py-0.5 rounded-lg border border-emerald-300">' + o.id + '</span>' +
-              '<span class="text-xs font-black text-slate-900 truncate max-w-[130px] sm:max-w-[180px]">' + (o.memberName || 'सदस्य') + '</span>' +
-              '<span class="text-[10px] text-slate-500 font-mono">(' + (o.memberId || '-') + ')</span>' +
+              '<span class="text-[11px] text-slate-500 flex items-center gap-1 font-medium"><i class="fa-solid fa-calendar-day text-slate-400 text-[10px]"></i>' + dt + '</span>' +
+              '<span class="text-xs font-black text-slate-900 truncate max-w-[150px] sm:max-w-[200px]">' + (o.memberName || 'सदस्य') + '</span>' +
               '</div>' +
-              '<div class="text-[11px] text-slate-500 mt-1 flex items-center gap-2 flex-wrap">' +
-              '<span><i class="fa-solid fa-calendar-day text-slate-400 mr-1 text-[10px]"></i>' + dt + '</span>' +
-              (o.deliveryAddress ? ('<span class="truncate max-w-[140px]"><i class="fa-solid fa-location-dot text-slate-400 mr-1 text-[10px]"></i>' + o.deliveryAddress + '</span>') : '') +
-              '</div>' +
-              '</div>' +
-              '<!-- Items summary -->' +
+              '<!-- Items -->' +
               '<div class="min-w-0 flex-1">' +
               '<p class="text-xs font-black text-slate-800 truncate" title="' + itemsSummary + '"><i class="fa-solid fa-box text-emerald-600 mr-1.5 text-[11px]"></i>' + itemsSummary + '</p>' +
-              '<div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">' +
-              '<span>UTR: <span class="font-mono font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 text-xs">' + (o.utrNumber || '-') + '</span></span>' +
-              (o.memberPhone ? ('<span><i class="fa-solid fa-phone text-slate-400 text-[10px] mr-1"></i>' + o.memberPhone + '</span>') : '') +
               '</div>' +
               '</div>' +
-              '</div>' +
-              '<!-- Col 2: Amount & Action Buttons on Desktop in same line -->' +
+              '<!-- Col 2: Amount, Status, WhatsApp, Order Detail -->' +
               '<div class="flex items-center justify-between lg:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 shrink-0">' +
-              '<div class="flex items-center gap-1.5 shrink-0">' +
+              '<div class="flex items-center gap-2 shrink-0">' +
               '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">Delivered</span>' +
               '<span class="font-mono font-black text-base sm:text-lg text-emerald-950">₹ ' + (parseFloat(o.totalAmount) || 0).toLocaleString('en-IN') + '</span>' +
               '</div>' +
