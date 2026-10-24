@@ -8517,10 +8517,13 @@
         <p class="text-[11px] text-slate-500 font-medium pt-1" id="store-qty-modal-stock-hint">उपलब्ध स्टॉक: 0</p>
       </div>
 
-      <!-- Live Total Summary -->
-      <div class="mt-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-        <span class="font-bold text-slate-600">कुल देय राशि:</span>
-        <span class="font-mono font-black text-sm text-slate-900" id="store-qty-modal-total">₹0</span>
+      <!-- Live Total & Savings Summary -->
+      <div class="mt-2.5 p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/90 flex items-center justify-between text-xs shadow-2xs">
+        <div class="flex items-center gap-1.5 font-extrabold text-emerald-800">
+          <i class="fa-solid fa-piggy-bank text-sm text-emerald-600"></i>
+          <span>कुल बचत (Total Savings):</span>
+        </div>
+        <span class="font-mono font-black text-sm sm:text-base text-emerald-700" id="store-qty-modal-total-savings">₹ 0</span>
       </div>
 
       <!-- Action Buttons (Step 4 Requirements: Add More Item & Pay and Place Order) -->
@@ -25702,11 +25705,15 @@
     function recalcStoreQtyModalPreview() {
       if (!currentStoreQtyItem) return;
       const input = document.getElementById('store-qty-modal-input');
-      const totalEl = document.getElementById('store-qty-modal-total');
+      const savingsEl = document.getElementById('store-qty-modal-total-savings');
       const qty = Math.max(1, parseInt(input?.value, 10) || 1);
+      const mrp = parseFloat(currentStoreQtyItem.mrp) || 0;
       const price = parseFloat(currentStoreQtyItem.ourPrice) || 0;
-      if (totalEl) {
-        totalEl.textContent = '₹ ' + (qty * price).toLocaleString('en-IN');
+      const unitSaving = Math.max(0, mrp - price);
+      const totalSaving = qty * unitSaving;
+
+      if (savingsEl) {
+        savingsEl.textContent = '₹ ' + totalSaving.toLocaleString('en-IN');
       }
     }
 
