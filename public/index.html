@@ -26710,9 +26710,10 @@
               '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">Delivered</span>' +
               '<span class="font-mono font-black text-base sm:text-lg text-emerald-950">₹ ' + (parseFloat(o.totalAmount) || 0).toLocaleString('en-IN') + '</span>' +
               '</div>' +
-              '<div class="flex items-center gap-1.5 shrink-0">' +
+              '<div class="flex items-center gap-1.5 shrink-0 flex-wrap">' +
               '<button type="button" onclick="shareOrderReceiptOnWhatsApp(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="WhatsApp पर रसीद भेजें"><i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i><span>WhatsApp</span></button>' +
               '<button type="button" onclick="openOrderDetailModal(\'' + o.id + '\')" class="py-1.5 px-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-receipt text-teal-600"></i><span>View Order Detail</span></button>' +
+              '<button type="button" onclick="handleAdminDeleteOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-rose-600 hover:text-white hover:border-rose-600 text-slate-600 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="आर्डर हमेशा के लिए डिलीट करें"><i class="fa-solid fa-trash-can text-[11px]"></i><span>Delete</span></button>' +
               '</div>' +
               '</div>' +
               '</div></div>';
@@ -26754,9 +26755,10 @@
               '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-900 border border-red-200">Cancelled</span>' +
               '<span class="font-mono font-black text-base sm:text-lg text-rose-950">₹ ' + (parseFloat(o.totalAmount) || 0).toLocaleString('en-IN') + '</span>' +
               '</div>' +
-              '<div class="flex items-center gap-1.5 shrink-0">' +
+              '<div class="flex items-center gap-1.5 shrink-0 flex-wrap">' +
               '<button type="button" onclick="shareOrderReceiptOnWhatsApp(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="WhatsApp पर विवरण भेजें"><i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i><span>WhatsApp</span></button>' +
               '<button type="button" onclick="openOrderDetailModal(\'' + o.id + '\')" class="py-1.5 px-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-receipt text-teal-600"></i><span>View Order Detail</span></button>' +
+              '<button type="button" onclick="handleAdminDeleteOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-rose-600 hover:text-white hover:border-rose-600 text-slate-600 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="आर्डर हमेशा के लिए डिलीट करें"><i class="fa-solid fa-trash-can text-[11px]"></i><span>Delete</span></button>' +
               '</div>' +
               '</div>' +
               '</div></div>';
@@ -27020,27 +27022,36 @@
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
 
-      const confirmMsg = '⚠️ क्या आप पेंडिंग आर्डर ' + orderId + ' को हमेशा के लिए डिलीट (Delete) करना चाहते हैं?\n\nसदस्य: ' + (order.memberName || 'सदस्य') + '\nकुल राशि: ₹' + (order.totalAmount || 0) + '\n\nडिलीट करने पर इस आर्डर की सामग्री का स्टॉक स्वतः वापस जुड़ जाएगा।';
+      const orderStatus = order.status || 'Pending';
+      const isPending = (orderStatus !== 'Completed' && orderStatus !== 'Cancelled');
+
+      let confirmMsg = '⚠️ क्या आप ' + orderStatus + ' आर्डर ' + orderId + ' को हमेशा के लिए डिलीट (Delete) करना चाहते हैं?\n\nसदस्य: ' + (order.memberName || 'सदस्य') + '\nकुल राशि: ₹' + (order.totalAmount || 0);
+      if (isPending) {
+        confirmMsg += '\n\nनोट: पेंडिंग आर्डर डिलीट करने पर सामग्री का स्टॉक स्वतः वापस जुड़ जाएगा।';
+      }
+
       if (!confirm(confirmMsg)) return;
 
       try {
-        // Restore inventory stock automatically before deletion
-        initBusinessMasterData();
-        const subs = masterSettings.businessSubCategories || [];
-        (order.items || []).forEach(it => {
-          const sItem = subs.find(s => s.id === it.id);
-          if (sItem) {
-            const curStock = parseInt(sItem.stock, 10) || 0;
-            sItem.stock = curStock + (it.quantity || 1);
-          }
-        });
-        await saveAllSettingsToCloud(false);
+        // If order was pending, restore inventory stock automatically
+        if (isPending) {
+          initBusinessMasterData();
+          const subs = masterSettings.businessSubCategories || [];
+          (order.items || []).forEach(it => {
+            const sItem = subs.find(s => s.id === it.id);
+            if (sItem) {
+              const curStock = parseInt(sItem.stock, 10) || 0;
+              sItem.stock = curStock + (it.quantity || 1);
+            }
+          });
+          await saveAllSettingsToCloud(false);
+        }
 
         // Delete from local, backend server & Firestore
         await deleteOrderFromBackendAndCloud(orderId);
 
         if (typeof showFloatingToast === 'function') {
-          showFloatingToast('🗑️ आर्डर हटाया गया', 'आर्डर ' + orderId + ' सफलतापूवर्क डिलीट कर दिया गया एवं स्टॉक वापस जोड़ दिया गया।');
+          showFloatingToast('🗑️ आर्डर हटाया गया', 'आर्डर ' + orderId + ' सफलतापूवर्क डिलीट कर दिया गया।');
         }
       } catch (err) {
         console.error('Error deleting order:', err);
