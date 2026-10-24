@@ -3456,6 +3456,87 @@
         </div>
       </section>
 
+      <!-- ============================================== -->
+      <!-- MEMBER SHOPPING & ORDERS SECTION (शॉपिंग व ऑर्डर) -->
+      <!-- ============================================== -->
+      <section class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-200/90 shadow-2xs sm:shadow-sm space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center text-xs shadow-2xs">
+              <i class="fa-solid fa-store"></i>
+            </div>
+            <div>
+              <h3 class="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">
+                Trust Store & Orders (समिति स्टोर व ऑर्डर)
+              </h3>
+            </div>
+          </div>
+          <span class="text-[10px] sm:text-[11px] font-bold text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200/80">
+            विशेष रियायती दर
+          </span>
+        </div>
+
+        <!-- 4 Cards Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          <!-- Card 1: Shopping -->
+          <div onclick="switchMemberView('shopping')" class="cursor-pointer bg-gradient-to-br from-teal-50 via-emerald-50/40 to-white rounded-2xl p-2.5 sm:p-3 border border-teal-200/90 shadow-2xs flex flex-col justify-between hover:border-teal-400 hover:shadow-xs transition-all group active:scale-95">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 rounded-xl bg-teal-600 text-white flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <i class="fa-solid fa-cart-shopping"></i>
+              </div>
+              <span class="text-[9px] sm:text-[10px] font-bold text-teal-800 bg-teal-100/80 px-2 py-0.5 rounded-md truncate">Buy Now →</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-teal-700 transition-colors">Shopping</h4>
+              <p class="text-[10px] sm:text-[11px] text-teal-700 font-semibold mt-0.5 truncate" id="user-shop-items-count">उत्पाद देखें</p>
+            </div>
+          </div>
+
+          <!-- Card 2: Pending Orders -->
+          <div onclick="switchMemberView('member-orders-pending')" class="cursor-pointer bg-gradient-to-br from-amber-50 via-orange-50/40 to-white rounded-2xl p-2.5 sm:p-3 border border-amber-200/90 shadow-2xs flex flex-col justify-between hover:border-amber-400 hover:shadow-xs transition-all group active:scale-95">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <span class="text-[10px] font-black text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded-full font-mono" id="user-pending-orders-badge">0</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-amber-700 transition-colors">Pending Orders</h4>
+              <p class="text-[10px] sm:text-[11px] text-amber-700 font-semibold mt-0.5 truncate">प्रतीक्षारत ऑर्डर →</p>
+            </div>
+          </div>
+
+          <!-- Card 3: Completed Orders -->
+          <div onclick="switchMemberView('member-orders-completed')" class="cursor-pointer bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white rounded-2xl p-2.5 sm:p-3 border border-emerald-200/90 shadow-2xs flex flex-col justify-between hover:border-emerald-400 hover:shadow-xs transition-all group active:scale-95">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <span class="text-[10px] font-black text-emerald-900 bg-emerald-200/80 px-2 py-0.5 rounded-full font-mono" id="user-completed-orders-badge">0</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-emerald-700 transition-colors">Completed Orders</h4>
+              <p class="text-[10px] sm:text-[11px] text-emerald-700 font-semibold mt-0.5 truncate">पूर्ण हुए ऑर्डर →</p>
+            </div>
+          </div>
+
+          <!-- Card 4: My Savings -->
+          <div onclick="switchMemberView('member-savings')" class="cursor-pointer bg-gradient-to-br from-indigo-50 via-purple-50/40 to-white rounded-2xl p-2.5 sm:p-3 border border-indigo-200/90 shadow-2xs flex flex-col justify-between hover:border-indigo-400 hover:shadow-xs transition-all group active:scale-95">
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <div class="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xs shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+              <span class="text-[9px] sm:text-[10px] font-bold text-indigo-800 bg-indigo-100/80 px-2 py-0.5 rounded-md truncate">Savings</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-700 transition-colors">My Savings</h4>
+              <h3 class="text-base sm:text-lg font-black text-indigo-700 font-mono tracking-tight leading-none mt-0.5" id="user-total-savings">₹ 0</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
       <!-- 2. UPCOMING MEETINGS & EVENTS (आगामी बैठकें एवं कार्यक्रम) -->
       <section class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs sm:shadow-sm space-y-3.5">
         <div class="flex items-center gap-2 pb-2.5 border-b border-slate-100">
@@ -3524,6 +3605,155 @@
       </section>
 
       </div><!-- End member-view-dashboard -->
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW: SHOPPING (ट्रस्ट स्टोर / शॉपिंग)      -->
+      <!-- ============================================== -->
+      <div id="member-view-shopping" class="hidden space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="switchMemberView('dashboard')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition-colors cursor-pointer active:scale-95" title="वापस जाएं">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
+                Shopping (ट्रस्ट उत्पाद स्टोर)
+              </h2>
+              <p class="text-[11px] text-slate-500 font-medium">
+                विशेष रियायती दरों पर उत्पाद खरीदें
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="switchMemberView('dashboard')" class="text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 border border-teal-200/80 px-3 py-1.5 rounded-xl cursor-pointer">
+            <i class="fa-solid fa-house mr-1"></i> Dashboard
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center">
+          <div class="w-16 h-16 mx-auto rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-2xl mb-3 border border-teal-100">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </div>
+          <h3 class="text-base font-black text-slate-800">स्टोर में उत्पाद लोड हो रहे हैं...</h3>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">
+            ट्रस्ट के रियायती उत्पाद कैटलॉग व कार्ट जल्द ही यहाँ उपलब्ध होंगे।
+          </p>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW: PENDING ORDERS (प्रतीक्षारत ऑर्डर)    -->
+      <!-- ============================================== -->
+      <div id="member-view-orders-pending" class="hidden space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="switchMemberView('dashboard')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition-colors cursor-pointer active:scale-95" title="वापस जाएं">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
+                Pending Orders (प्रतीक्षारत ऑर्डर)
+              </h2>
+              <p class="text-[11px] text-slate-500 font-medium">
+                स्वीकृति या डिलीवरी की प्रतीक्षा में ऑर्डर
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="switchMemberView('dashboard')" class="text-xs font-bold text-amber-700 hover:text-amber-800 bg-amber-50 border border-amber-200/80 px-3 py-1.5 rounded-xl cursor-pointer">
+            <i class="fa-solid fa-house mr-1"></i> Dashboard
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center">
+          <div class="w-16 h-16 mx-auto rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-3 border border-amber-100">
+            <i class="fa-solid fa-box-open"></i>
+          </div>
+          <h3 class="text-base font-black text-slate-800">कोई प्रतीक्षारत ऑर्डर नहीं है</h3>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">
+            आपके द्वारा दिए गए सक्रिय व लंबित ऑर्डर का स्टेटस यहाँ दिखाई देगा।
+          </p>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW: COMPLETED ORDERS (पूर्ण हुए ऑर्डर)   -->
+      <!-- ============================================== -->
+      <div id="member-view-orders-completed" class="hidden space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="switchMemberView('dashboard')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition-colors cursor-pointer active:scale-95" title="वापस जाएं">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
+                Completed Orders (पूर्ण हुए ऑर्डर)
+              </h2>
+              <p class="text-[11px] text-slate-500 font-medium">
+                आपके सभी पूर्व डिलीवर किए गए ऑर्डर का इतिहास
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="switchMemberView('dashboard')" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-3 py-1.5 rounded-xl cursor-pointer">
+            <i class="fa-solid fa-house mr-1"></i> Dashboard
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-6 border border-slate-200/90 shadow-2xs text-center">
+          <div class="w-16 h-16 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-3 border border-emerald-100">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+          <h3 class="text-base font-black text-slate-800">पूर्ण ऑर्डर का इतिहास</h3>
+          <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">
+            आपके डिलीवर किए गए पुराने ऑर्डर एवं इनवॉइस रसीद यहाँ प्रदर्शित होंगी।
+          </p>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SUB-VIEW: MY SAVINGS (कुल बचत)                -->
+      <!-- ============================================== -->
+      <div id="member-view-savings" class="hidden space-y-3.5 sm:space-y-5 animate-in fade-in duration-200">
+        <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-2xs">
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="switchMemberView('dashboard')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition-colors cursor-pointer active:scale-95" title="वापस जाएं">
+              <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center text-base sm:text-lg shadow-sm flex-shrink-0">
+              <i class="fa-solid fa-piggy-bank"></i>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-tight">
+                My Savings (मेरी कुल बचत)
+              </h2>
+              <p class="text-[11px] text-slate-500 font-medium">
+                ट्रस्ट की विशेष सदस्यता छूट से हुई कुल बचत
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="switchMemberView('dashboard')" class="text-xs font-bold text-indigo-700 hover:text-indigo-800 bg-indigo-50 border border-indigo-200/80 px-3 py-1.5 rounded-xl cursor-pointer">
+            <i class="fa-solid fa-house mr-1"></i> Dashboard
+          </button>
+        </div>
+
+        <div class="bg-gradient-to-br from-indigo-50 via-purple-50/50 to-white rounded-2xl sm:rounded-3xl p-6 border border-indigo-200/90 shadow-2xs text-center">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mb-3 shadow-md">
+            <i class="fa-solid fa-hand-holding-dollar"></i>
+          </div>
+          <span class="text-xs font-bold text-indigo-700 uppercase tracking-wider">कुल बचत राशि</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-indigo-900 font-mono my-2" id="user-savings-total-view">₹ 0</h1>
+          <p class="text-xs text-slate-600 mt-1 max-w-md mx-auto">
+            बाजार मूल्य (MRP) की तुलना में ट्रस्ट विशेष सदस्य दर पर की गई कुल बचत राशि।
+          </p>
+        </div>
+      </div>
 
       <!-- ============================================== -->
       <!-- SUB-VIEW 2: EVENTS & MEETINGS (Only Events)     -->
@@ -10184,6 +10414,10 @@
       const viewDonations = document.getElementById('member-view-donations');
       const viewPasy = document.getElementById('member-view-pasy');
       const viewProfile = document.getElementById('member-view-profile');
+      const viewShopping = document.getElementById('member-view-shopping');
+      const viewOrdersPending = document.getElementById('member-view-orders-pending');
+      const viewOrdersCompleted = document.getElementById('member-view-orders-completed');
+      const viewSavings = document.getElementById('member-view-savings');
 
       // Bottom Navigation Buttons
       const bNavDash = document.getElementById('member-bottom-nav-dashboard');
@@ -10204,6 +10438,10 @@
       if (viewDonations) viewDonations.classList.add('hidden');
       if (viewPasy) viewPasy.classList.add('hidden');
       if (viewProfile) viewProfile.classList.add('hidden');
+      if (viewShopping) viewShopping.classList.add('hidden');
+      if (viewOrdersPending) viewOrdersPending.classList.add('hidden');
+      if (viewOrdersCompleted) viewOrdersCompleted.classList.add('hidden');
+      if (viewSavings) viewSavings.classList.add('hidden');
 
       // Helper to reset bottom nav buttons with distinctive colorful base styling
       const resetBottomNav = () => {
@@ -10237,7 +10475,15 @@
 
       resetBottomNav();
 
-      if (view === 'profile') {
+      if (view === 'shopping') {
+        if (viewShopping) viewShopping.classList.remove('hidden');
+      } else if (view === 'member-orders-pending') {
+        if (viewOrdersPending) viewOrdersPending.classList.remove('hidden');
+      } else if (view === 'member-orders-completed') {
+        if (viewOrdersCompleted) viewOrdersCompleted.classList.remove('hidden');
+      } else if (view === 'member-savings') {
+        if (viewSavings) viewSavings.classList.remove('hidden');
+      } else if (view === 'profile') {
         if (viewProfile) viewProfile.classList.remove('hidden');
         if (bNavProfile) {
           bNavProfile.className = 'flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all text-purple-800 bg-purple-100/80 font-bold active:scale-95 cursor-pointer';
