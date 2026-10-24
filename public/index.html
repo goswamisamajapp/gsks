@@ -13549,18 +13549,42 @@
       // Member's direct benefit record if saved on member object
       const directBenefit = Number(member.totalUtilized || member.utilizedAmount || 0);
 
-      const totalUtilized = Math.max(winnerAmount + memberAssistanceAmount, directBenefit);
+      // Order savings from completed orders
+      let memberOrderSavings = 0;
+      if (typeof allOrders !== 'undefined' && Array.isArray(allOrders)) {
+        allOrders.forEach(o => {
+          if (!o || o.status !== 'Completed') return;
+          const oMemId = (o.memberId || '').trim().toLowerCase();
+          const oMemPhone = (o.memberPhone || '').trim();
+          const oMemName = (o.memberName || '').trim().toLowerCase();
+
+          const isMatchingOrder = (mId && oMemId === mId) ||
+            (mPhone && oMemPhone && oMemPhone.includes(mPhone)) ||
+            (mName && oMemName === mName);
+
+          if (isMatchingOrder) {
+            memberOrderSavings += (parseFloat(o.totalSavings) || 0);
+          }
+        });
+      }
+
+      const totalUtilized = Math.max(winnerAmount + memberAssistanceAmount, directBenefit) + memberOrderSavings;
 
       const elStatTotalUtilized = document.getElementById('user-stat-total-utilized');
       const elStatTotalUtilizedCount = document.getElementById('user-stat-total-utilized-count');
       if (elStatTotalUtilized) elStatTotalUtilized.textContent = `₹ ${totalUtilized.toLocaleString('en-IN')}`;
       if (elStatTotalUtilizedCount) {
-        if (winCount > 0) {
-          elStatTotalUtilizedCount.textContent = `🏆 ${winCount}x Benefit (₹4k/mo)`;
+        const parts = [];
+        if (winCount > 0) parts.push(`🏆 ${winCount}x Benefit`);
+        if (memberAssistanceAmount > 0) parts.push('Assistance');
+        if (memberOrderSavings > 0) parts.push(`+₹${memberOrderSavings.toLocaleString('en-IN')} Store Saving`);
+
+        if (parts.length > 0) {
+          elStatTotalUtilizedCount.textContent = parts.join(' • ');
         } else if (totalUtilized > 0) {
-          elStatTotalUtilizedCount.textContent = 'Assistance Received';
+          elStatTotalUtilizedCount.textContent = 'Benefit & Savings';
         } else {
-          elStatTotalUtilizedCount.textContent = 'No Assistance Claimed';
+          elStatTotalUtilizedCount.textContent = 'No Benefit Claimed';
         }
       }
     }
@@ -26436,6 +26460,11 @@
 
       if (totalSavingsEl) totalSavingsEl.textContent = '₹ ' + grandSavings.toLocaleString('en-IN');
       if (viewSavingsEl) viewSavingsEl.textContent = '₹ ' + grandSavings.toLocaleString('en-IN');
+
+      // Refresh Member Quick Stats so BENEFIT card immediately reflects the latest store order savings
+      if (typeof renderMemberQuickStats === 'function' && currentLoggedInMember) {
+        renderMemberQuickStats(currentLoggedInMember);
+      }
 
       // 2. Pending Orders View List
       const pendingList = document.getElementById('member-pending-orders-list');
