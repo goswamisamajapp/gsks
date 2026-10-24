@@ -8850,10 +8850,6 @@
             <span class="text-slate-500 font-medium">UPI Ref / UTR:</span>
             <span class="font-mono font-bold text-teal-800 bg-white px-2 py-0.5 rounded border border-teal-200" id="order-detail-utr">-</span>
           </div>
-          <div id="order-detail-cancellation-row" class="hidden flex items-start justify-between pt-1 border-t border-red-100 text-rose-700 bg-rose-50/60 p-2 rounded-xl">
-            <span class="font-bold flex items-center gap-1 shrink-0"><i class="fa-solid fa-ban text-[10px]"></i>रद्द कारण:</span>
-            <span class="font-semibold text-right max-w-[190px]" id="order-detail-cancellation-reason">-</span>
-          </div>
         </div>
 
         <!-- Order Items List -->
@@ -8880,6 +8876,15 @@
           <div class="flex items-center justify-between text-sm font-black text-slate-900 pt-1.5 border-t border-dashed border-slate-200">
             <span>कुल भुगतान राशि (Paid):</span>
             <span class="font-mono text-lg text-emerald-800" id="order-detail-total">₹0</span>
+          </div>
+
+          <!-- Cancellation Reason Highlight (Prominently shown below Amount Paid if order is cancelled) -->
+          <div id="order-detail-cancellation-row" class="hidden p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 space-y-1">
+            <div class="flex items-center gap-1.5 font-bold text-rose-900">
+              <i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i>
+              <span>ऑर्डर रद्द करने का कारण (Cancellation Reason):</span>
+            </div>
+            <p class="font-bold text-xs pl-5 text-rose-700 bg-white/80 p-1.5 rounded-lg border border-rose-100" id="order-detail-cancellation-reason">-</p>
           </div>
         </div>
 
