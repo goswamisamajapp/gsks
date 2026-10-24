@@ -25867,6 +25867,35 @@
       }
     }
 
+    async function deleteOrderFromBackendAndCloud(orderId) {
+      if (!orderId) return;
+      allOrders = allOrders.filter(o => o.id !== orderId);
+
+      if (typeof renderAdminOrdersViews === 'function') renderAdminOrdersViews();
+      if (typeof renderMemberOrdersLists === 'function') renderMemberOrdersLists();
+      if (typeof updateOrderDashboardCounts === 'function') updateOrderDashboardCounts();
+
+      // 1. Delete from Express API
+      try {
+        await apiFetch('/api/orders/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: orderId })
+        });
+      } catch (e) {
+        console.warn('Delete order from server API warning:', e);
+      }
+
+      // 2. Delete from Firestore
+      try {
+        if (typeof ordersCol !== 'undefined' && ordersCol) {
+          await ordersCol.doc(orderId).delete();
+        }
+      } catch (fErr) {
+        console.warn('Delete order from Firestore warning:', fErr);
+      }
+    }
+
     // Update Top Cart & Order Stats
     function updateStoreCartUI() {
       const badge = document.getElementById('store-cart-badge-count');
@@ -26638,6 +26667,7 @@
               '<button type="button" onclick="openOrderDetailModal(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-eye text-teal-600"></i><span>View Order Detail</span></button>' +
               '<button type="button" onclick="handleAdminCompleteOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 whitespace-nowrap"><i class="fa-solid fa-circle-check text-[11px]"></i><span>Complete</span></button>' +
               '<button type="button" onclick="handleAdminCancelOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap"><i class="fa-solid fa-ban text-[11px]"></i><span>Cancel</span></button>' +
+              '<button type="button" onclick="handleAdminDeleteOrder(\'' + o.id + '\')" class="py-1.5 px-2.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-rose-600 hover:text-white hover:border-rose-600 text-slate-600 font-bold text-xs transition-all flex items-center gap-1 cursor-pointer active:scale-95 shadow-2xs whitespace-nowrap" title="आर्डर हमेशा के लिए डिलीट करें"><i class="fa-solid fa-trash-can text-[11px]"></i><span>Delete</span></button>' +
               '</div>' +
               '</div>' +
               '</div></div>';
@@ -26986,6 +27016,38 @@
       }
     }
 
+    async function handleAdminDeleteOrder(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const confirmMsg = '⚠️ क्या आप पेंडिंग आर्डर ' + orderId + ' को हमेशा के लिए डिलीट (Delete) करना चाहते हैं?\n\nसदस्य: ' + (order.memberName || 'सदस्य') + '\nकुल राशि: ₹' + (order.totalAmount || 0) + '\n\nडिलीट करने पर इस आर्डर की सामग्री का स्टॉक स्वतः वापस जुड़ जाएगा।';
+      if (!confirm(confirmMsg)) return;
+
+      try {
+        // Restore inventory stock automatically before deletion
+        initBusinessMasterData();
+        const subs = masterSettings.businessSubCategories || [];
+        (order.items || []).forEach(it => {
+          const sItem = subs.find(s => s.id === it.id);
+          if (sItem) {
+            const curStock = parseInt(sItem.stock, 10) || 0;
+            sItem.stock = curStock + (it.quantity || 1);
+          }
+        });
+        await saveAllSettingsToCloud(false);
+
+        // Delete from local, backend server & Firestore
+        await deleteOrderFromBackendAndCloud(orderId);
+
+        if (typeof showFloatingToast === 'function') {
+          showFloatingToast('🗑️ आर्डर हटाया गया', 'आर्डर ' + orderId + ' सफलतापूवर्क डिलीट कर दिया गया एवं स्टॉक वापस जोड़ दिया गया।');
+        }
+      } catch (err) {
+        console.error('Error deleting order:', err);
+        alert('आर्डर डिलीट करने में त्रुटि आई: ' + (err.message || 'Unknown error'));
+      }
+    }
+
     // Window Exports for Store & Orders
     window.loadOrdersFallback = loadOrdersFallback;
     window.syncOrderToBackendAndCloud = syncOrderToBackendAndCloud;
@@ -27011,6 +27073,7 @@
     window.renderAdminActiveUsersView = renderAdminActiveUsersView;
     window.handleAdminCompleteOrder = handleAdminCompleteOrder;
     window.handleAdminCancelOrder = handleAdminCancelOrder;
+    window.handleAdminDeleteOrder = handleAdminDeleteOrder;
     window.closeAdminCancelOrderModal = closeAdminCancelOrderModal;
     window.handleCancelReasonChange = handleCancelReasonChange;
     window.submitAdminCancelOrder = submitAdminCancelOrder;

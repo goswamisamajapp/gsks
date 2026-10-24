@@ -435,6 +435,23 @@ app.post('/api/orders/update-status', (req, res) => {
   }
 });
 
+app.post('/api/orders/delete', (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'Order ID is required' });
+    if (!fs.existsSync(ORDERS_FILE)) fs.writeFileSync(ORDERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(ORDERS_FILE, 'utf8');
+    let orders = JSON.parse(raw);
+
+    const initialLen = orders.length;
+    orders = orders.filter(o => o.id !== id);
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
+    return res.json({ success: true, deleted: orders.length < initialLen });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete order' });
+  }
+});
+
 // MASTER SETTINGS APIS
 app.get('/api/settings', (req, res) => {
   try {
