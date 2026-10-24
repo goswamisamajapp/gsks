@@ -18,6 +18,7 @@ const SETTINGS_FILE = path.join(__dirname, 'public', 'settings-data.json');
 const DONATIONS_FILE = path.join(__dirname, 'public', 'donations-data.json');
 const FUND_TRANSFERS_FILE = path.join(__dirname, 'public', 'fund-transfers-data.json');
 const EXPENSES_FILE = path.join(__dirname, 'public', 'expenses-data.json');
+const ORDERS_FILE = path.join(__dirname, 'public', 'orders-data.json');
 
 const DEFAULT_SETTINGS = {
   fundTypes: [
@@ -374,6 +375,63 @@ app.post('/api/expenses/delete', (req, res) => {
     return res.json({ success: true, message: 'Expense deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete expense' });
+  }
+});
+
+// STORE ORDERS APIS (Realtime Member Shopping & Orders)
+app.get('/api/orders', (req, res) => {
+  try {
+    if (!fs.existsSync(ORDERS_FILE)) fs.writeFileSync(ORDERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(ORDERS_FILE, 'utf8');
+    const orders = JSON.parse(raw);
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read orders' });
+  }
+});
+
+app.post('/api/orders/save', (req, res) => {
+  try {
+    const item = req.body;
+    if (!item || !item.id) return res.status(400).json({ error: 'Invalid order data' });
+    if (!fs.existsSync(ORDERS_FILE)) fs.writeFileSync(ORDERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(ORDERS_FILE, 'utf8');
+    let orders = JSON.parse(raw);
+
+    const index = orders.findIndex(o => o.id === item.id);
+    if (index !== -1) {
+      orders[index] = { ...orders[index], ...item };
+    } else {
+      orders.unshift(item);
+    }
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
+    return res.json({ success: true, order: item });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save order' });
+  }
+});
+
+app.post('/api/orders/update-status', (req, res) => {
+  try {
+    const { id, status, updatedBy, adminRemarks } = req.body;
+    if (!id || !status) return res.status(400).json({ error: 'Order ID and status required' });
+    if (!fs.existsSync(ORDERS_FILE)) fs.writeFileSync(ORDERS_FILE, '[]', 'utf8');
+    const raw = fs.readFileSync(ORDERS_FILE, 'utf8');
+    let orders = JSON.parse(raw);
+
+    const index = orders.findIndex(o => o.id === id);
+    if (index !== -1) {
+      orders[index].status = status;
+      orders[index].updatedAt = new Date().toISOString();
+      if (updatedBy) orders[index].updatedBy = updatedBy;
+      if (adminRemarks) orders[index].adminRemarks = adminRemarks;
+      fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
+      return res.json({ success: true, order: orders[index] });
+    }
+    return res.status(404).json({ error: 'Order not found' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update order status' });
   }
 });
 
