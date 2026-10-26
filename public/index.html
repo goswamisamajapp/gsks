@@ -365,6 +365,62 @@
       </div>
 
         <!-- Membership Stats (Dynamic Breakdown) -->
+        <div class="mb-5 sm:mb-6">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis">
+              <i class="fa-solid fa-credit-card text-emerald-600 text-sm flex-shrink-0"></i> Payment (भुगतान)
+            </h3>
+            <button onclick="switchAdminView('donations')" class="text-xs text-emerald-600 font-semibold hover:underline">
+              पूरी सूची देखें →
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5">
+            <!-- Card 1: Pending for Approval -->
+            <div onclick="switchAdminView('donations')" class="cursor-pointer bg-gradient-to-br from-amber-50 via-yellow-50/30 to-white rounded-2xl p-3 sm:p-4 border border-amber-200/90 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">Pending for Approval</span>
+                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <p class="text-xl sm:text-2xl font-black text-amber-950" id="dash-payment-pending-count">0</p>
+                <span class="text-xs font-bold text-amber-700 font-mono" id="dash-payment-pending-amount">₹ 0</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Today's Collection -->
+            <div onclick="switchAdminView('donations')" class="cursor-pointer bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white rounded-2xl p-3 sm:p-4 border border-emerald-200/90 shadow-xs flex flex-col justify-between hover:border-emerald-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">Today's Collection</span>
+                <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-calendar-day"></i>
+                </span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <p class="text-xl sm:text-2xl font-black text-emerald-950" id="dash-payment-today-amount">₹ 0</p>
+                <span class="text-xs font-bold text-emerald-700" id="dash-payment-today-count">0 रसीद</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Total Month Collection -->
+            <div onclick="switchAdminView('donations')" class="cursor-pointer bg-gradient-to-br from-blue-50 via-indigo-50/30 to-white rounded-2xl p-3 sm:p-4 border border-blue-200/90 shadow-xs flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition-all group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-blue-900">Total Month Collection</span>
+                <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs group-hover:scale-110 transition-transform shadow-xs">
+                  <i class="fa-solid fa-calendar-days"></i>
+                </span>
+              </div>
+              <div class="mt-2 flex items-baseline justify-between">
+                <p class="text-xl sm:text-2xl font-black text-blue-950" id="dash-payment-month-amount">₹ 0</p>
+                <span class="text-xs font-bold text-blue-700" id="dash-payment-month-count">0 रसीद</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership Stats (Dynamic Breakdown) -->
         <div>
           <div class="flex items-center justify-between mb-3 px-1">
             <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
@@ -15383,6 +15439,59 @@
       if (fundStatTotal) fundStatTotal.textContent = `₹ ${totalAvailableFund.toLocaleString('en-IN')}`;
       if (fundStatBank) fundStatBank.textContent = `₹ ${netBankAmount.toLocaleString('en-IN')}`;
       if (fundStatCash) fundStatCash.textContent = `₹ ${netCashInHand.toLocaleString('en-IN')}`;
+      if (typeof updatePaymentSectionStats === 'function') updatePaymentSectionStats();
+    }
+
+    
+    function updatePaymentSectionStats() {
+      const now = new Date();
+      const todayStr = now.toISOString().slice(0, 10);
+      const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+      let todayAmount = 0;
+      let todayCount = 0;
+      let monthAmount = 0;
+      let monthCount = 0;
+      let pendingCount = 0;
+      let pendingAmount = 0;
+
+      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
+        allDonations.forEach(d => {
+          if (!d) return;
+          const amt = parseFloat(d.amount) || 0;
+          const dtStr = (d.date || d.createdAt || '').slice(0, 10);
+
+          if (dtStr === todayStr) {
+            todayAmount += amt;
+            todayCount++;
+          }
+
+          if (dtStr.startsWith(currentYearMonth)) {
+            monthAmount += amt;
+            monthCount++;
+          }
+
+          const isPending = d.status === 'Pending' || d.status === 'pending' || d.isApproved === false || d.pendingApproval === true;
+          if (isPending) {
+            pendingCount++;
+            pendingAmount += amt;
+          }
+        });
+      }
+
+      const elPendingCount = document.getElementById('dash-payment-pending-count');
+      const elPendingAmount = document.getElementById('dash-payment-pending-amount');
+      const elTodayAmount = document.getElementById('dash-payment-today-amount');
+      const elTodayCount = document.getElementById('dash-payment-today-count');
+      const elMonthAmount = document.getElementById('dash-payment-month-amount');
+      const elMonthCount = document.getElementById('dash-payment-month-count');
+
+      if (elPendingCount) elPendingCount.textContent = pendingCount;
+      if (elPendingAmount) elPendingAmount.textContent = `₹ ${pendingAmount.toLocaleString('en-IN')}`;
+      if (elTodayAmount) elTodayAmount.textContent = `₹ ${todayAmount.toLocaleString('en-IN')}`;
+      if (elTodayCount) elTodayCount.textContent = `${todayCount} रसीद${todayCount === 1 ? '' : 'ें'}`;
+      if (elMonthAmount) elMonthAmount.textContent = `₹ ${monthAmount.toLocaleString('en-IN')}`;
+      if (elMonthCount) elMonthCount.textContent = `${monthCount} रसीद${monthCount === 1 ? '' : 'ें'}`;
     }
 
     function handleSearchMembers(term) {
