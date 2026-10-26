@@ -9578,13 +9578,11 @@
       { key: '2028-02', label: 'Feb 2028', defaultPaid: false }
     ];
 
-    // Dynamic Default Selected Month: Current Month se next month (e.g. Current Oct 2026 -> Nov 2026)
+    // Dynamic Default Selected Month: Current Month (e.g. Current Oct 2026)
     function getDefaultPariwarikMonth() {
       const now = new Date();
-      // Next month
-      const nextMonthDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      const y = nextMonthDate.getFullYear();
-      const m = String(nextMonthDate.getMonth() + 1).padStart(2, '0');
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
       const targetKey = `${y}-${m}`;
 
       // Check if targetKey exists in our 30 months list
@@ -9592,10 +9590,10 @@
       if (exists) return targetKey;
       
       // If outside range (before Sep 2025 or after Feb 2028), pick reasonable default
-      return '2026-11';
+      return '2026-10';
     }
 
-    let currentPariwarikMonth = getDefaultPariwarikMonth(); // By default next month selected (e.g. Nov 2026)
+    let currentPariwarikMonth = getDefaultPariwarikMonth(); // Defaults to current active month (e.g. Oct 2026)
 
     function isPariwarikMember(m) {
       if (!m) return false;
@@ -17377,6 +17375,17 @@
       if (masterSettings.planRates && typeof masterSettings.planRates.pasyMonthlyFee === 'number') {
         PARIWARIK_MONTHLY_FEE = masterSettings.planRates.pasyMonthlyFee;
       }
+      // Migration / Data correction: If Jagdish Goswami GSKS-007 was mistakenly set as Nov 2026 winner, move to Oct 2026
+      if (masterSettings.pariwarikWinners && typeof masterSettings.pariwarikWinners === 'object') {
+        if (masterSettings.pariwarikWinners['2026-11'] === 'GSKS-007') {
+          masterSettings.pariwarikWinners['2026-10'] = 'GSKS-007';
+          delete masterSettings.pariwarikWinners['2026-11'];
+          // Save corrected setting in background
+          if (typeof saveSettingsToBackend === 'function') {
+            saveSettingsToBackend(masterSettings);
+          }
+        }
+      }
       updateDropdownsFromSettings();
       renderSettingsView();
       updateStats();
@@ -22340,6 +22349,17 @@
       const existingWinnerForMonth = masterSettings.pariwarikWinners[currentPariwarikMonth];
 
       if (isChecked) {
+        // Validation: Winner can ONLY be declared for Current or Past months, NEVER for future months
+        const now = new Date();
+        const currentYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        if (currentPariwarikMonth > currentYearMonth) {
+          const mCfg = PARIWARIK_MONTHS.find(pm => pm.key === currentPariwarikMonth);
+          const mLabel = mCfg ? mCfg.label : currentPariwarikMonth;
+          alert(`⚠️ भविष्य के माह ("${mLabel}") के लिए विजेता घोषित नहीं किया जा सकता!\n\nविजेता केवल चालू माह या पूर्व के माह में ही चुना जा सकता है।`);
+          renderPariwarikView();
+          return;
+        }
+
         // Rule 1: Only 1 winner per month. Cannot mark another member until existing winner is turned off
         if (existingWinnerForMonth && existingWinnerForMonth !== memberId) {
           const prevWinnerMem = allMembers.find(m => m.id === existingWinnerForMonth);
