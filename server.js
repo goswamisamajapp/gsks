@@ -19,7 +19,6 @@ const DONATIONS_FILE = path.join(__dirname, 'public', 'donations-data.json');
 const FUND_TRANSFERS_FILE = path.join(__dirname, 'public', 'fund-transfers-data.json');
 const EXPENSES_FILE = path.join(__dirname, 'public', 'expenses-data.json');
 const ORDERS_FILE = path.join(__dirname, 'public', 'orders-data.json');
-const PAYMENT_REQUESTS_FILE = path.join(__dirname, 'public', 'payment-requests-data.json');
 
 const DEFAULT_SETTINGS = {
   fundTypes: [
@@ -450,64 +449,6 @@ app.post('/api/orders/delete', (req, res) => {
     return res.json({ success: true, deleted: orders.length < initialLen });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete order' });
-  }
-});
-
-// PAYMENT REQUESTS APIS (Pending / Approved / Rejected UPI Payments)
-app.get('/api/payment-requests', (req, res) => {
-  try {
-    if (!fs.existsSync(PAYMENT_REQUESTS_FILE)) fs.writeFileSync(PAYMENT_REQUESTS_FILE, '[]', 'utf8');
-    const raw = fs.readFileSync(PAYMENT_REQUESTS_FILE, 'utf8');
-    const requests = JSON.parse(raw);
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-    res.json(requests);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to read payment requests' });
-  }
-});
-
-app.post('/api/payment-requests/save', (req, res) => {
-  try {
-    const item = req.body;
-    if (!item || !item.id) return res.status(400).json({ error: 'Invalid payment request data' });
-    if (!fs.existsSync(PAYMENT_REQUESTS_FILE)) fs.writeFileSync(PAYMENT_REQUESTS_FILE, '[]', 'utf8');
-    const raw = fs.readFileSync(PAYMENT_REQUESTS_FILE, 'utf8');
-    let requests = JSON.parse(raw);
-
-    const index = requests.findIndex(r => r.id === item.id);
-    if (index !== -1) {
-      requests[index] = { ...requests[index], ...item };
-    } else {
-      requests.unshift(item);
-    }
-    fs.writeFileSync(PAYMENT_REQUESTS_FILE, JSON.stringify(requests, null, 2), 'utf8');
-    return res.json({ success: true, paymentRequest: item });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to save payment request' });
-  }
-});
-
-app.post('/api/payment-requests/update-status', (req, res) => {
-  try {
-    const { id, status, updatedBy, adminRemarks, receiptId } = req.body;
-    if (!id || !status) return res.status(400).json({ error: 'Request ID and status required' });
-    if (!fs.existsSync(PAYMENT_REQUESTS_FILE)) fs.writeFileSync(PAYMENT_REQUESTS_FILE, '[]', 'utf8');
-    const raw = fs.readFileSync(PAYMENT_REQUESTS_FILE, 'utf8');
-    let requests = JSON.parse(raw);
-
-    const index = requests.findIndex(r => r.id === id);
-    if (index !== -1) {
-      requests[index].status = status;
-      requests[index].updatedAt = new Date().toISOString();
-      if (updatedBy) requests[index].updatedBy = updatedBy;
-      if (adminRemarks) requests[index].adminRemarks = adminRemarks;
-      if (receiptId) requests[index].receiptId = receiptId;
-      fs.writeFileSync(PAYMENT_REQUESTS_FILE, JSON.stringify(requests, null, 2), 'utf8');
-      return res.json({ success: true, paymentRequest: requests[index] });
-    }
-    return res.status(404).json({ error: 'Payment request not found' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to update payment request status' });
   }
 });
 
