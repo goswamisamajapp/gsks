@@ -9890,7 +9890,10 @@
       if (upiText) upiText.textContent = upiId;
       if (payeeNameEl) payeeNameEl.textContent = payeeDisplayName;
 
-      const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeDisplayName)}&am=${amountVal > 0 ? amountVal : 0}&cu=INR&tn=${encodeURIComponent(note.substring(0, 45))}`;
+      // Clean ASCII-only note for banking security compliance (NPCI rejects special characters & unicode in deep links)
+      const cleanNote = 'GSKS Trust Donation';
+      const cleanPayee = (payeeDisplayName || 'GSKS Trust').replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'GSKS Trust';
+      const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(cleanPayee)}&am=${amountVal > 0 ? amountVal : 0}&cu=INR&tn=${encodeURIComponent(cleanNote)}`;
 
       if (qrImg) {
         qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUri)}`;
@@ -9925,6 +9928,11 @@
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
 
       if (isMobile) {
+        // Auto-copy UPI ID to clipboard as a seamless fallback
+        if (navigator.clipboard && upiId) {
+          navigator.clipboard.writeText(upiId).catch(() => {});
+        }
+
         // Mobile flow: trigger native UPI intent directly
         // This launches the installed UPI apps chooser (PhonePe, GPay, Paytm, BHIM, Cred, etc.)
         window.location.href = upiUri;
