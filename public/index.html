@@ -8635,8 +8635,8 @@
         </div>
       </form>
 
-      <!-- Toggle button for QR on Mobile, always open on Desktop -->
-      <div id="pasy-pay-qr-toggle-bar" class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between md:hidden">
+      <!-- Toggle button for QR on Mobile (Hidden by default since QR is open) -->
+      <div id="pasy-pay-qr-toggle-bar" class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between md:hidden hidden">
         <span class="text-[10px] text-slate-500 font-semibold">फोन में सीधे UPI ऐप नहीं खुला?</span>
         <button 
           type="button" 
@@ -8645,12 +8645,12 @@
           class="text-[10px] font-extrabold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer"
         >
           <i class="fa-solid fa-qrcode text-xs"></i>
-          <span id="pasy-mobile-qr-toggle-text">QR कोड दिखाएं</span>
+          <span id="pasy-mobile-qr-toggle-text">QR कोड छुपाएं</span>
         </button>
       </div>
 
-      <!-- Desktop / PC QR & Primary UPI Details Container (Visible on PC or toggled on Mobile) -->
-      <div id="pasy-pay-qr-container" class="mt-3 pt-3 border-t border-slate-100 text-center space-y-2.5 hidden md:block">
+      <!-- QR & Primary UPI Details Container (Always visible by default on all devices) -->
+      <div id="pasy-pay-qr-container" class="mt-3 pt-3 border-t border-slate-100 text-center space-y-2.5 block">
         
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold">
           <span id="pasy-pay-device-note">Primary UPI QR कोड से स्कैन करें</span>
@@ -8693,25 +8693,26 @@
           </div>
         </div>
 
-        <!-- Verification Submit Action Box -->
-        <div class="mt-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border border-amber-200 text-left space-y-2">
+        <!-- Verification Submit Action Box (Active only after Pay button or QR payment) -->
+        <div id="pasy-verify-action-box" class="mt-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-2xl border border-slate-200 text-left space-y-2 transition-all">
           <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-xs">
+            <span id="pasy-verify-badge-icon" class="w-6 h-6 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center text-xs flex-shrink-0 shadow-xs transition-colors">
               <i class="fa-solid fa-shield-halved"></i>
             </span>
             <div class="min-w-0">
               <h5 class="text-xs font-bold text-slate-900 leading-tight">भुगतान कर दिया है?</h5>
-              <p class="text-[10px] text-slate-500">पुष्टि व रसीद पाने हेतु सत्यापन अनुरोध सबमिट करें</p>
+              <p id="pasy-verify-hint-text" class="text-[10px] text-slate-500">पहले ऊपर 'पे करें' बटन दबाएं या QR स्कैन करें, फिर सबमिट करें</p>
             </div>
           </div>
           <button 
             type="button" 
             onclick="submitPaymentForVerification()" 
             id="pasy-verify-submit-btn"
-            class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            disabled
+            class="w-full py-2.5 px-3 rounded-xl bg-slate-300 text-slate-500 font-extrabold text-xs transition-all flex items-center justify-center gap-1.5 cursor-not-allowed shadow-none"
           >
             <i class="fa-solid fa-paper-plane text-xs"></i>
-            <span>सत्यापन हेतु सबमिट करें (Submit for Approval)</span>
+            <span id="pasy-verify-btn-label">सत्यापन हेतु सबमिट करें (Submit for Approval)</span>
           </button>
         </div>
 
@@ -9401,6 +9402,31 @@
     }
     window.syncPaymentRequestToBackendAndCloud = syncPaymentRequestToBackendAndCloud;
 
+    // Helper to toggle activation of the Submit for Approval button
+    function setPaymentVerificationActive(isActive) {
+      const btn = document.getElementById('pasy-verify-submit-btn');
+      const box = document.getElementById('pasy-verify-action-box');
+      const icon = document.getElementById('pasy-verify-badge-icon');
+      const hint = document.getElementById('pasy-verify-hint-text');
+
+      if (!btn) return;
+
+      if (isActive) {
+        btn.disabled = false;
+        btn.className = 'w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer animate-pulse';
+        if (box) box.className = 'mt-3 p-3 bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border-2 border-amber-400 text-left space-y-2 transition-all shadow-sm';
+        if (icon) icon.className = 'w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-xs transition-colors';
+        if (hint) hint.innerHTML = '<span class="text-amber-700 font-bold">✔ भुगतान संपन्न होने पर अब नीचे सबमिट बटन दबाएं!</span>';
+      } else {
+        btn.disabled = true;
+        btn.className = 'w-full py-2.5 px-3 rounded-xl bg-slate-300 text-slate-500 font-extrabold text-xs transition-all flex items-center justify-center gap-1.5 cursor-not-allowed shadow-none';
+        if (box) box.className = 'mt-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-2xl border border-slate-200 text-left space-y-2 transition-all';
+        if (icon) icon.className = 'w-6 h-6 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center text-xs flex-shrink-0 shadow-xs transition-colors';
+        if (hint) hint.textContent = "पहले ऊपर 'पे करें' बटन दबाएं या QR स्कैन करें, फिर सबमिट करें";
+      }
+    }
+    window.setPaymentVerificationActive = setPaymentVerificationActive;
+
     // Submit payment verification request from user
     async function submitPaymentForVerification() {
       const details = (typeof updatePasyPayDetailsDisplay === 'function') ? updatePasyPayDetailsDisplay() : null;
@@ -9701,6 +9727,9 @@
       const modal = document.getElementById('pasy-pay-modal');
       if (!modal) return;
 
+      // Reset verification submit button to locked state initially
+      setPaymentVerificationActive(false);
+
       // Dynamically sync and refresh UPI & Payee display immediately when modal opens
       updatePasyPayDetailsDisplay();
 
@@ -9889,6 +9918,9 @@
         if (amtInput) amtInput.focus();
         return;
       }
+
+      // Activate verification submit button when Pay button is clicked
+      setPaymentVerificationActive(true);
 
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
 
