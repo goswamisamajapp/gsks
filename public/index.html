@@ -10024,28 +10024,42 @@
       const cleanPayee = (payeeDisplayName || 'GSKS Trust').replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'GSKS Trust';
       const upiParams = 'pa=' + encodeURIComponent(upiId) + '&pn=' + encodeURIComponent(cleanPayee) + '&am=' + amt + '&cu=INR';
 
-      // Launch specific app directly using intents or direct protocols without generic fallback
+      // Launch specific app directly using proprietary deep-links & exact intent schemes so PhonePe doesn't intercept
       const isAndroid = /android/i.test(navigator.userAgent || '');
+      let targetUrl = '';
+      let appLabel = 'UPI ऐप';
+
       if (appName === 'gpay') {
-        if (isAndroid) {
-          window.location.href = 'intent://pay?' + upiParams + '#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end';
-        } else {
-          window.location.href = 'gpay://upi/pay?' + upiParams;
-        }
+        appLabel = 'Google Pay';
+        // Google Pay registers scheme 'tez' for payments
+        targetUrl = isAndroid
+          ? 'intent://upi/pay?' + upiParams + '#Intent;scheme=tez;package=com.google.android.apps.nbu.paisa.user;end;'
+          : 'tez://upi/pay?' + upiParams;
       } else if (appName === 'paytm') {
-        if (isAndroid) {
-          window.location.href = 'intent://pay?' + upiParams + '#Intent;scheme=upi;package=net.one97.paytm;end';
-        } else {
-          window.location.href = 'paytmmp://pay?' + upiParams;
-        }
+        appLabel = 'Paytm';
+        // Paytm registers scheme 'paytmmp'
+        targetUrl = isAndroid
+          ? 'intent://pay?' + upiParams + '#Intent;scheme=paytmmp;package=net.one97.paytm;end;'
+          : 'paytmmp://pay?' + upiParams;
       } else if (appName === 'phonepe') {
-        if (isAndroid) {
-          window.location.href = 'intent://pay?' + upiParams + '#Intent;scheme=upi;package=com.phonepe.app;end';
-        } else {
-          window.location.href = 'phonepe://pay?' + upiParams;
-        }
+        appLabel = 'PhonePe';
+        // PhonePe registers scheme 'phonepe'
+        targetUrl = isAndroid
+          ? 'intent://pay?' + upiParams + '#Intent;scheme=phonepe;package=com.phonepe.app;end;'
+          : 'phonepe://pay?' + upiParams;
       } else {
-        window.location.href = 'upi://pay?' + upiParams;
+        targetUrl = 'upi://pay?' + upiParams;
+      }
+
+      // Trigger navigation using anchor element click for robust mobile web dispatch
+      try {
+        const link = document.createElement('a');
+        link.href = targetUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (e) {
+        window.location.href = targetUrl;
       }
 
       setTimeout(() => {
