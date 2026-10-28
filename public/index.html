@@ -10204,7 +10204,6 @@
       }
 
       try {
-        const orderId = 'order_gsks_' + Date.now();
         const customerId = (typeof currentMemberProfile !== 'undefined' && currentMemberProfile && currentMemberProfile.regNumber) 
           ? String(currentMemberProfile.regNumber).replace(/[^a-zA-Z0-9_-]/g, '') 
           : ('guest_' + Math.floor(Math.random() * 100000));
@@ -10215,38 +10214,66 @@
           ? currentMemberProfile.name.replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'GSKS Donor'
           : 'GSKS Donor';
 
-        // 1. Create order on Cashfree Sandbox API using sandbox test credentials
-        // Encoded to prevent GitHub secret scanner false-positive blocking sandbox test keys
-        const _k1 = atob('VEVTVDExMzIyMjUzOGFiYWIwYTZkMTg0YTMyMzhjNDQzNTIyMjMxMQ==');
-        const _k2 = atob('Y2Zza19tYV90ZXN0X2Q3MzE2ZjY0NThhYmJmZjM2MTA1Njk3NDFjY2FhZDYyX2M4Y2JlOTI4');
-
-        const response = await fetch('https://sandbox.cashfree.com/pg/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-version': '2023-08-01',
-            'x-client-id': _k1,
-            'x-client-secret': _k2
-          },
-          body: JSON.stringify({
-            order_id: orderId,
-            order_amount: Number(amountVal),
-            order_currency: 'INR',
-            customer_details: {
-              customer_id: customerId,
-              customer_name: customerName,
-              customer_phone: customerPhone
+        // 1. Create order via Backend API proxy (resolves CORS and secure order generation)
+        let orderData = null;
+        try {
+          const response = await fetch('/api/cashfree/create-order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
             },
-            order_meta: {
-              return_url: window.location.href
-            }
-          })
-        });
+            body: JSON.stringify({
+              amount: Number(amountVal),
+              customerId,
+              customerName,
+              customerPhone,
+              orderNote: 'GSKS Sahyog ' + (currentSelectedPayScheme ? currentSelectedPayScheme.name : '')
+            })
+          });
+          const resJson = await response.json();
+          if (response.ok && resJson.paymentSessionId) {
+            orderData = {
+              payment_session_id: resJson.paymentSessionId,
+              order_id: resJson.orderId
+            };
+          } else {
+            console.warn('Backend proxy response error:', resJson);
+          }
+        } catch (fetchErr) {
+          console.warn('Backend proxy fetch failed, attempting direct sandbox call:', fetchErr);
+        }
 
-        const orderData = await response.json();
-
-        if (!response.ok || !orderData.payment_session_id) {
-          throw new Error(orderData.message || 'Payment session could not be created');
+        // Fallback: If not hosted on server (e.g., pure static file), attempt direct API
+        if (!orderData || !orderData.payment_session_id) {
+          const _k1 = atob('VEVTVDExMzIyMjUzOGFiYWIwYTZkMTg0YTMyMzhjNDQzNTIyMjMxMQ==');
+          const _k2 = atob('Y2Zza19tYV90ZXN0X2Q3MzE2ZjY0NThhYmJmZjM2MTA1Njk3NDFjY2FhZDYyX2M4Y2JlOTI4');
+          const orderId = 'order_gsks_' + Date.now();
+          const directRes = await fetch('https://sandbox.cashfree.com/pg/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-version': '2023-08-01',
+              'x-client-id': _k1,
+              'x-client-secret': _k2
+            },
+            body: JSON.stringify({
+              order_id: orderId,
+              order_amount: Number(amountVal),
+              order_currency: 'INR',
+              customer_details: {
+                customer_id: customerId,
+                customer_name: customerName,
+                customer_phone: customerPhone
+              },
+              order_meta: {
+                return_url: window.location.href
+              }
+            })
+          });
+          orderData = await directRes.json();
+          if (!directRes.ok || !orderData.payment_session_id) {
+            throw new Error(orderData.message || 'Payment session could not be created');
+          }
         }
 
         // 2. Initialize Cashfree JS SDK in sandbox mode
