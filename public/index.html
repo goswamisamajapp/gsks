@@ -8626,32 +8626,44 @@
           <!-- 1-Tap Direct UPI App Selectors for Mobile (Placed ABOVE Pay button) -->
           <div class="pt-0.5">
             <p class="text-[10px] font-bold text-slate-500 mb-1.5 flex items-center justify-between">
-              <span>सीधे अपने पसंदीदा ऐप से पे करें:</span>
-              <span class="text-emerald-700 font-extrabold">ID स्वतः कॉपी होगी</span>
+              <span>UPI ऐप चुनें (जिससे भुगतान करना है):</span>
+              <span class="text-emerald-700 font-extrabold" id="pasy-selected-app-indicator">PhonePe चुना गया</span>
             </p>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid grid-cols-3 gap-2" id="pasy-upi-app-selector-group">
               <button 
                 type="button" 
-                onclick="launchSpecificUpiApp('phonepe')"
-                class="py-2 px-1.5 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100/80 text-indigo-900 font-bold text-[11px] flex flex-col items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer"
+                id="pasy-app-btn-phonepe"
+                onclick="selectUpiApp('phonepe')"
+                class="relative py-2 px-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-extrabold text-[11px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer ring-2 ring-indigo-500/20"
               >
-                <i class="fa-solid fa-mobile-screen text-indigo-600 text-sm"></i>
+                <span class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-indigo-600 text-white rounded-full flex items-center justify-center text-[9px] shadow-xs" id="pasy-app-check-phonepe">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+                <i class="fa-solid fa-mobile-screen text-indigo-600 text-base"></i>
                 <span>PhonePe</span>
               </button>
               <button 
                 type="button" 
-                onclick="launchSpecificUpiApp('gpay')"
-                class="py-2 px-1.5 rounded-xl border border-blue-200 bg-blue-50/70 hover:bg-blue-100/80 text-blue-900 font-bold text-[11px] flex flex-col items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer"
+                id="pasy-app-btn-gpay"
+                onclick="selectUpiApp('gpay')"
+                class="relative py-2 px-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[11px] flex flex-col items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer"
               >
-                <i class="fa-brands fa-google text-blue-600 text-sm"></i>
+                <span class="hidden absolute -top-1.5 -right-1.5 w-4 h-4 bg-blue-600 text-white rounded-full flex items-center justify-center text-[9px] shadow-xs" id="pasy-app-check-gpay">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+                <i class="fa-brands fa-google text-blue-600 text-base"></i>
                 <span>Google Pay</span>
               </button>
               <button 
                 type="button" 
-                onclick="launchSpecificUpiApp('paytm')"
-                class="py-2 px-1.5 rounded-xl border border-sky-200 bg-sky-50/70 hover:bg-sky-100/80 text-sky-900 font-bold text-[11px] flex flex-col items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer"
+                id="pasy-app-btn-paytm"
+                onclick="selectUpiApp('paytm')"
+                class="relative py-2 px-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[11px] flex flex-col items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer"
               >
-                <i class="fa-solid fa-wallet text-sky-600 text-sm"></i>
+                <span class="hidden absolute -top-1.5 -right-1.5 w-4 h-4 bg-sky-600 text-white rounded-full flex items-center justify-center text-[9px] shadow-xs" id="pasy-app-check-paytm">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+                <i class="fa-solid fa-wallet text-sky-600 text-base"></i>
                 <span>Paytm</span>
               </button>
             </div>
@@ -8662,8 +8674,8 @@
             id="pasy-pay-submit-btn"
             class="w-full py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
           >
-            <i class="fa-solid fa-copy text-amber-300"></i>
-            <span id="pasy-pay-btn-label">UPI ID कॉपी करें व ऐप खोलें</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-amber-300"></i>
+            <span id="pasy-pay-btn-label">पे करें (PhonePe खोलें)</span>
             <span id="pasy-pay-btn-amount-badge" class="px-2 py-0.5 rounded-full bg-white/20 text-white font-mono text-[11px] font-bold">₹150</span>
           </button>
         </div>
@@ -9770,6 +9782,11 @@
       // Reset verification submit button to locked state initially
       setPaymentVerificationActive(false);
 
+      // Default selected app to phonepe on opening modal
+      if (typeof selectUpiApp === 'function') {
+        selectUpiApp('phonepe');
+      }
+
       // Dynamically sync and refresh UPI & Payee display immediately when modal opens
       updatePasyPayDetailsDisplay();
 
@@ -9950,6 +9967,53 @@
       }
     });
 
+    let selectedPasyUpiApp = 'phonepe'; // default selected app
+
+    function selectUpiApp(appName) {
+      selectedPasyUpiApp = appName;
+      
+      const apps = ['phonepe', 'gpay', 'paytm'];
+      apps.forEach(app => {
+        const btn = document.getElementById('pasy-app-btn-' + app);
+        const check = document.getElementById('pasy-app-check-' + app);
+        if (!btn) return;
+        
+        if (app === appName) {
+          // Active state with prominent selection border, background and check badge
+          if (app === 'phonepe') {
+            btn.className = 'relative py-2 px-1.5 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-900 font-extrabold text-[11px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer ring-2 ring-indigo-500/20';
+          } else if (app === 'gpay') {
+            btn.className = 'relative py-2 px-1.5 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-900 font-extrabold text-[11px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer ring-2 ring-blue-500/20';
+          } else if (app === 'paytm') {
+            btn.className = 'relative py-2 px-1.5 rounded-xl border-2 border-sky-600 bg-sky-50 text-sky-900 font-extrabold text-[11px] flex flex-col items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer ring-2 ring-sky-500/20';
+          }
+          if (check) check.classList.remove('hidden');
+        } else {
+          // Inactive state
+          btn.className = 'relative py-2 px-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[11px] flex flex-col items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer';
+          if (check) check.classList.add('hidden');
+        }
+      });
+
+      const labelMap = {
+        phonepe: 'PhonePe',
+        gpay: 'Google Pay',
+        paytm: 'Paytm'
+      };
+      const appTitle = labelMap[appName] || 'UPI ऐप';
+
+      const indicator = document.getElementById('pasy-selected-app-indicator');
+      if (indicator) {
+        indicator.textContent = appTitle + ' चुना गया';
+      }
+
+      const btnLabel = document.getElementById('pasy-pay-btn-label');
+      if (btnLabel) {
+        btnLabel.textContent = 'पे करें (' + appTitle + ' खोलें)';
+      }
+    }
+    window.selectUpiApp = selectUpiApp;
+
     function handlePasyPaySubmit(e) {
       if (e) e.preventDefault();
 
@@ -9962,31 +10026,14 @@
         return;
       }
 
-      // Activate verification submit button when Pay button is clicked
-      setPaymentVerificationActive(true);
-
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
 
       if (isMobile) {
-        // 1. Auto-copy UPI ID to clipboard seamlessly
-        if (navigator.clipboard && upiId) {
-          navigator.clipboard.writeText(upiId).catch(() => {});
-        }
-
-        // 2. Launch UPI app chooser with minimal clean URI without force-filling bank transaction,
-        // so user can select their installed UPI app or paste the copied UPI ID
-        const cleanChooserUri = 'upi://pay?pa=' + encodeURIComponent(upiId) + '&pn=' + encodeURIComponent(payeeDisplayName || 'GSKS Trust') + '&am=' + amountVal + '&cu=INR';
-        window.location.href = cleanChooserUri;
-
-        // 3. Inform user that UPI ID is copied and ready to paste if app prompts for UPI ID
-        setTimeout(() => {
-          showAppAlert(
-            'UPI ID (' + upiId + ') कॉपी हो गई है!\n\nअपने PhonePe / GPay / Paytm में "To UPI ID" पर जाकर इसे पेस्ट करें और ₹' + amountVal + ' का भुगतान करें।\n\nभुगतान संपन्न होने के बाद नीचे "सत्यापन हेतु सबमिट करें" बटन दबाएं।',
-            'UPI ID कॉपी संपन्न',
-            'success'
-          );
-        }, 1000);
+        // Launch the user's explicitly selected UPI app directly!
+        launchSpecificUpiApp(selectedPasyUpiApp || 'phonepe');
       } else {
+        // Activate verification button on Desktop as well
+        setPaymentVerificationActive(true);
         // PC / Desktop flow: smoothly scroll to the QR code & details
         const qrContainer = document.getElementById('pasy-pay-qr-container');
         if (qrContainer) {
