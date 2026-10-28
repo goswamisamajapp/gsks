@@ -9740,10 +9740,14 @@
           targetScheme = pasyScheme;
         }
       } else if (monthKey === 'DONATION') {
-        // Came from Donate button
-        const genScheme = schemes.find(s => s.name && (s.name.includes('सामान्य') || s.name.includes('Donation') || s.amountType === 'custom')) || schemes[0];
+        // Came from Donate button - strictly prioritize General Donation / सहयोग राशि
+        const genScheme = schemes.find(s => s.name && (
+          s.name.includes('General Donation') || 
+          s.name.includes('सहयोग राशि') || 
+          s.name.includes('सामान्य सहयोग')
+        )) || schemes.find(s => s.name && s.name.includes('Donation')) || schemes[0];
         if (genScheme) targetScheme = genScheme;
-        initialRemarks = 'सहयोग दान';
+        initialRemarks = 'सामान्य सहयोग दान';
       }
 
       if (purposeSelect && targetScheme) {
