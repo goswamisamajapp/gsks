@@ -9928,20 +9928,19 @@
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
 
       if (isMobile) {
-        // Auto-copy UPI ID to clipboard as a seamless fallback
+        // 1. Auto-copy UPI ID to clipboard seamlessly
         if (navigator.clipboard && upiId) {
           navigator.clipboard.writeText(upiId).catch(() => {});
         }
 
-        // Mobile flow: trigger native UPI intent directly
-        // This launches the installed UPI apps chooser (PhonePe, GPay, Paytm, BHIM, Cred, etc.)
+        // 2. Try launching PhonePe / UPI app directly
         window.location.href = upiUri;
 
-        // Also inform user
+        // 3. Clear, helpful prompt informing user that UPI ID is copied & ready to paste or scan
         setTimeout(() => {
           showAppAlert(
-            `UPI ऐप खुल रहा है...\nयदि स्वतः न खुले तो नीचे दिए गए QR कोड को स्कैन करें अथवा Primary UPI ID (${upiId}) पर ₹${amountVal} का भुगतान करें।`, 
-            'भुगतान प्रक्रिया', 
+            `UPI ID (${upiId}) क्लिपबोर्ड में कॉपी हो गई है!\n\nयदि PhonePe में सुरक्षा अस्वीकृति (Security Decline) दिखे, तो अपने PhonePe / GPay में 'To UPI ID' पर जाकर इसे पेस्ट करें अथवा नीचे दिए गए QR कोड को स्कैन करके ₹${amountVal} का भुगतान करें।\n\nभुगतान उपरांत नीचे 'सत्यापन हेतु सबमिट करें' बटन दबाएं।`, 
+            'UPI ID कॉपी हो गई', 
             'info'
           );
         }, 1200);
