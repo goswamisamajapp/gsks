@@ -10071,52 +10071,22 @@
       const cleanPayee = (payeeDisplayName || 'GSKS Trust').replace(/[^a-zA-Z0-9 ]/g, '').trim() || 'GSKS Trust';
       const upiParams = 'pa=' + encodeURIComponent(upiId) + '&pn=' + encodeURIComponent(cleanPayee) + '&am=' + amt + '&cu=INR';
 
-      // Launch specific app directly using proprietary deep-links & exact intent schemes so PhonePe doesn't intercept
-      const isAndroid = /android/i.test(navigator.userAgent || '');
       let targetUrl = '';
-      let appLabel = 'UPI ऐप';
-
       if (appName === 'gpay') {
-        appLabel = 'Google Pay';
-        // Google Pay registers scheme 'tez' for payments
-        targetUrl = isAndroid
-          ? 'intent://upi/pay?' + upiParams + '#Intent;scheme=tez;package=com.google.android.apps.nbu.paisa.user;end;'
-          : 'tez://upi/pay?' + upiParams;
+        // Direct package intent for Google Pay (Android Tez)
+        targetUrl = 'intent://pay?' + upiParams + '#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end;';
       } else if (appName === 'paytm') {
-        appLabel = 'Paytm';
-        // Paytm registers scheme 'paytmmp'
-        targetUrl = isAndroid
-          ? 'intent://pay?' + upiParams + '#Intent;scheme=paytmmp;package=net.one97.paytm;end;'
-          : 'paytmmp://pay?' + upiParams;
+        // Direct package intent for Paytm
+        targetUrl = 'intent://pay?' + upiParams + '#Intent;scheme=upi;package=net.one97.paytm;end;';
       } else if (appName === 'phonepe') {
-        appLabel = 'PhonePe';
-        // PhonePe registers scheme 'phonepe'
-        targetUrl = isAndroid
-          ? 'intent://pay?' + upiParams + '#Intent;scheme=phonepe;package=com.phonepe.app;end;'
-          : 'phonepe://pay?' + upiParams;
+        // Direct package intent for PhonePe
+        targetUrl = 'intent://pay?' + upiParams + '#Intent;scheme=upi;package=com.phonepe.app;end;';
       } else {
         targetUrl = 'upi://pay?' + upiParams;
       }
 
-      // Trigger navigation using anchor element click for robust mobile web dispatch
-      try {
-        const link = document.createElement('a');
-        link.href = targetUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (e) {
-        window.location.href = targetUrl;
-      }
-
-      setTimeout(() => {
-        const appLabel = appName === 'gpay' ? 'Google Pay' : (appName === 'paytm' ? 'Paytm' : (appName === 'phonepe' ? 'PhonePe' : 'UPI ऐप'));
-        showAppAlert(
-          'UPI ID (' + upiId + ') कॉपी हो गई है!\n\n' + appLabel + ' में "To UPI ID" या सर्च बार में पेस्ट करके ₹' + amt + ' का भुगतान करें।\nभुगतान उपरांत नीचे "सत्यापन हेतु सबमिट करें" बटन दबाएं।',
-          'UPI ID कॉपी संपन्न',
-          'success'
-        );
-      }, 900);
+      // Open target app directly
+      window.location.href = targetUrl;
     }
     window.launchSpecificUpiApp = launchSpecificUpiApp;
 
