@@ -15788,8 +15788,10 @@
       }
 
       // Net In Hand Cash & Bank Fund (Including Opening Balances minus Expenses)
-      const netCashInHand = Math.max(0, openCash + donationCashTotal + bankToHand - handToBank - cashToParty - expenseCashTotal);
-      const netBankAmount = Math.max(0, openBank + donationOnlineTotal + handToBank + bankDirectDeposits - bankToHand - bankToParty - bankCashOut - expenseOnlineTotal);
+      // NOTE: All donations (Cash & Online/UPI) are collected in Hand / President/Treasurer UPI first,
+      // so they are calculated in Cash in Hand until manually deposited into Samiti Bank via Hand to Bank / Bank Deposit.
+      const netCashInHand = Math.max(0, openCash + donationCashTotal + donationOnlineTotal + bankToHand - handToBank - cashToParty - expenseCashTotal);
+      const netBankAmount = Math.max(0, openBank + handToBank + bankDirectDeposits - bankToHand - bankToParty - bankCashOut - expenseOnlineTotal);
       const totalAvailableFund = netCashInHand + netBankAmount;
 
       if (typeof updateOrderDashboardCounts === 'function') updateOrderDashboardCounts();
@@ -25565,30 +25567,8 @@
         });
       }
 
-      // 3. Online Donations (Received in Bank)
-      if (typeof allDonations !== 'undefined' && Array.isArray(allDonations)) {
-        allDonations.forEach(d => {
-          const method = d.method || 'Cash';
-          if (method !== 'Cash') {
-            const amt = parseFloat(d.amount) || 0;
-            list.push({
-              id: d.id,
-              date: d.date || d.createdAt || '',
-              type: 'ONLINE_DONATION',
-              typeLabel: `📱 ${method} Donation`,
-              badgeClass: 'bg-teal-50 text-teal-800 border-teal-200',
-              title: `${d.name || 'Donor'} (${d.memberId || 'Guest'})`,
-              description: `${d.scheme || 'General Donation'}${d.remarks ? ` - ${d.remarks}` : ''}`,
-              refNo: d.transactionId || d.utr || 'Online/UPI',
-              credit: amt,
-              debit: 0,
-              rawItem: d,
-              canEdit: false,
-              isDonation: true
-            });
-          }
-        });
-      }
+      // 3. Online Donations (Received in UPI - tracked in Cash in Hand, only Samiti Bank deposits enter bank passbook)
+      // Note: Kept for reference or filtering if needed, but not credited to Samiti Bank passbook credit column.
 
       // 4. Online Expenses paid via Bank
       if (typeof allExpenses !== 'undefined' && Array.isArray(allExpenses)) {
