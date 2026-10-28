@@ -10294,19 +10294,22 @@
 
         const cashfree = Cashfree({ mode: 'sandbox' });
         
-        // 3. Open Drop-in / Checkout Modal
+        // 3. Open Checkout - use '_self' on mobile devices so browser triggers native mobile checkout & UPI apps properly
+        const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
+        const targetMode = isMobileDevice ? '_self' : '_modal';
+
         cashfree.checkout({
           paymentSessionId: orderData.payment_session_id,
-          redirectTarget: '_modal'
+          redirectTarget: targetMode
         }).then(function(result) {
-          if (result.error) {
+          if (result && result.error) {
             showAppAlert(result.error.message || 'Payment me samasya aayi.', 'Payment Alert', 'warning');
           }
-          if (result.order) {
+          if (result && result.order) {
             // Check status or auto-verify
             setPaymentVerificationActive(true);
             showAppAlert(
-              'गेटवे भुगतान प्रक्रिया संपन्न!\n\nऑर्डर ID: ' + orderId + '\nस्थिति: ' + (result.order.status || 'प्रक्रियाधीन') + '\n\nकृपया अब "सत्यापन हेतु सबमिट करें" पर क्लिक करें।',
+              'गेटवे भुगतान प्रक्रिया संपन्न!\n\nऑर्डर ID: ' + (orderData.order_id || '') + '\nस्थिति: ' + (result.order.status || 'प्रक्रियाधीन') + '\n\nकृपया अब "सत्यापन हेतु सबमिट करें" पर क्लिक करें।',
               'Payment Processed',
               'success'
             );
