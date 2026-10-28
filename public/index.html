@@ -9474,8 +9474,11 @@
       closePasyPayModal();
 
       if (typeof updatePaymentSectionStats === 'function') updatePaymentSectionStats();
-      if (typeof currentLoggedInMember !== 'undefined' && currentLoggedInMember && typeof renderMemberProfile === 'function') {
-        renderMemberProfile(currentLoggedInMember);
+      if (typeof currentLoggedInMember !== 'undefined' && currentLoggedInMember) {
+        if (typeof renderMemberProfile === 'function') renderMemberProfile(currentLoggedInMember);
+        if (typeof renderMemberDonations === 'function') renderMemberDonations(currentLoggedInMember);
+        if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
+        if (typeof renderMemberDashboard === 'function') renderMemberDashboard(currentLoggedInMember);
       }
 
       showAppAlert(
@@ -9655,8 +9658,11 @@
       if (typeof renderDonationsList === 'function') renderDonationsList();
       renderPendingPaymentsModalView();
 
-      if (typeof currentLoggedInMember !== 'undefined' && currentLoggedInMember && typeof renderMemberProfile === 'function') {
-        renderMemberProfile(currentLoggedInMember);
+      if (typeof currentLoggedInMember !== 'undefined' && currentLoggedInMember) {
+        if (typeof renderMemberProfile === 'function') renderMemberProfile(currentLoggedInMember);
+        if (typeof renderMemberDonations === 'function') renderMemberDonations(currentLoggedInMember);
+        if (typeof renderMemberQuickStats === 'function') renderMemberQuickStats(currentLoggedInMember);
+        if (typeof renderMemberDashboard === 'function') renderMemberDashboard(currentLoggedInMember);
       }
 
       showAppAlert(
@@ -14058,13 +14064,15 @@
         : [];
 
       const generalDonationsSum = userDonations.reduce((sum, d) => sum + (parseFloat(d.amount) || 0), 0);
-      const totalGeneralDonation = generalDonationsSum > 0 ? generalDonationsSum : (Number(member.donation) || 0);
+      // Member opening/base donation plus all newly added general donation receipts
+      const baseMemberDonation = Number(member.donation) || 0;
+      const totalGeneralDonation = Math.max(baseMemberDonation, generalDonationsSum);
 
       const elStatTotalDonation = document.getElementById('user-stat-total-donation');
       const elStatTotalDonationCount = document.getElementById('user-stat-total-donation-count');
       if (elStatTotalDonation) elStatTotalDonation.textContent = `₹ ${totalGeneralDonation.toLocaleString('en-IN')}`;
       if (elStatTotalDonationCount) {
-        const count = userDonations.length > 0 ? userDonations.length : (totalGeneralDonation > 0 ? 1 : 0);
+        const count = Math.max(userDonations.length, totalGeneralDonation > 0 ? 1 : 0);
         elStatTotalDonationCount.textContent = `${count} Receipt${count === 1 ? '' : 's'}`;
       }
 
