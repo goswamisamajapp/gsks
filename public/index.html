@@ -6520,9 +6520,6 @@
         <button type="button" onclick="filterPendingPaymentsModal('ALL')" id="pending-filter-tab-ALL" class="px-3 py-1.5 rounded-xl text-xs font-extrabold bg-amber-500 text-white shadow-xs cursor-pointer">
           लंबित (Pending)
         </button>
-        <button type="button" onclick="filterPendingPaymentsModal('APPROVED')" id="pending-filter-tab-APPROVED" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">
-          स्वीकृत (Approved)
-        </button>
         <button type="button" onclick="filterPendingPaymentsModal('REJECTED')" id="pending-filter-tab-REJECTED" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer">
           अस्वीकृत (Rejected)
         </button>
@@ -9640,7 +9637,7 @@
 
     function filterPendingPaymentsModal(filter) {
       currentPendingModalFilter = filter || 'ALL';
-      ['ALL', 'APPROVED', 'REJECTED'].forEach(f => {
+      ['ALL', 'REJECTED'].forEach(f => {
         const tab = document.getElementById('pending-filter-tab-' + f);
         if (tab) {
           if (f === currentPendingModalFilter) {
@@ -9665,8 +9662,6 @@
       let filtered = (allPaymentRequests || []);
       if (currentPendingModalFilter === 'ALL') {
         filtered = filtered.filter(p => p.status === 'Pending Approval');
-      } else if (currentPendingModalFilter === 'APPROVED') {
-        filtered = filtered.filter(p => p.status === 'Approved');
       } else if (currentPendingModalFilter === 'REJECTED') {
         filtered = filtered.filter(p => p.status === 'Rejected');
       }
